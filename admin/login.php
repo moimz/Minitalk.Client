@@ -12,7 +12,7 @@ BODY {background:#2F2F2F; margin:0px; padding:0px;}
 .layoutfixed {width:100%; table-layout:fixed;}
 
 .loginTitle {height:80px; background:#000000;}
-.loginTitle DIV {width:440px; height:80px; margin:0 auto; background:url(../images/login_title.gif);}
+.loginTitle DIV {width:440px; height:80px; margin:0 auto; background:url(./images/login_title.gif);}
 .loginBox {width:420px; padding:10px; margin:10px auto; border:5px solid #4F4F4F; background:#000000;}
 .loginBox .inputbox {border:2px solid #4F4F4F; background:#2F2F2F; color:#EEEEEE; font-family:verdana; font-size:16px; padding:3px; width:290px; height:18px;}
 .loginBox .checkbox {width:13px; height:13px;}
@@ -36,14 +36,14 @@ BODY {background:#2F2F2F; margin:0px; padding:0px;}
 			<table cellspacing="0" cellpadding="0" class="layoutfixed">
 			<col width="105" /><col width="100%" />
 			<tr>
-				<td><img src="../images/text_user_id.gif" alt="아이디" /></td>
+				<td><img src="./images/text_user_id.gif" alt="아이디" /></td>
 				<td><input type="text" name="user_id" class="inputbox" /></td>
 			</tr>
 			<tr class="height10">
 				<td colspan="2"></td>
 			</tr>
 			<tr>
-				<td><img src="../images/text_password.gif" alt="패스워드" /></td>
+				<td><img src="./images/text_password.gif" alt="패스워드" /></td>
 				<td><input type="password" name="password" class="inputbox" /></td>
 			</tr>
 			</table>
@@ -53,7 +53,7 @@ BODY {background:#2F2F2F; margin:0px; padding:0px;}
 				<col width="100%" /><col width="65" />
 				<tr>
 					<td></td>
-					<td><input type="image" src="../images/btn_login.gif" /></td>
+					<td><input type="image" src="./images/btn_login.gif" /></td>
 				</tr>
 				</table>
 			</div>
