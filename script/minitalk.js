@@ -139,11 +139,11 @@ if (isMiniTalkIncluded === undefined) {
 		this.sns = opt.sns ? opt.sns : "";
 		this.device = opt.device ? opt.device : "PC";
 		this.skin = opt.skin;
-		this.type = opt.type;
+		this.type = opt.type ? opt.type : "auto";
 		this.title = opt.title ? opt.title : LANG.title;
 		this.language = opt.language;
 		
-		this.userListWidth = opt.userListWidth ? opt.userListWidth : 150;
+		this.userListWidth = opt.userListWidth ? opt.userListWidth : 160;
 		this.userListHeight = opt.userListHeight ? opt.userListHeight : 100;
 		this.viewUser = opt.viewUser === false ? false : true;
 		this.viewUserLimit = opt.viewUserLimit ? opt.viewUserLimit : "ALL";
