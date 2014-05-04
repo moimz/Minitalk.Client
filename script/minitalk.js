@@ -208,9 +208,9 @@ if (isMiniTalkIncluded === undefined) {
 		this.onMessage = [];
 		this.beforeWhisper = [];
 		this.onWhisper = [];
-		this.beforeInvite = [];
-		this.onInvite = [];
+		this.beforeCall = [];
 		this.onCall = [];
+		this.beforeInvite = [];
 		this.onInvite = [];
 		
 		/* cookie */
@@ -1048,6 +1048,18 @@ if (isMiniTalkIncluded === undefined) {
 			var user = m.userTag(sender,false);
 			var message = m.decodeMessage(message,true);
 			
+			if (type == "chat" && sender.nickname != m.myinfo.nickname) {
+				if (typeof m.listeners.beforeMessage == "function") {
+					if (m.listeners.beforeMessage(m,sender,message,time) == false) return;
+				}
+				
+				for (var i=0, loop=m.beforeMessage.length;i<loop;i++) {
+					if (typeof m.beforeMessage[i] == "function") {
+						if (m.beforeMessage[i](m,sender,message,time) == false) return;
+					}
+				}
+			}
+			
 			var item = $("<div>").addClass(type);
 			if (sender.nickname == m.myinfo.nickname) item.addClass("mymessage");
 			item.append(user);
@@ -1059,6 +1071,18 @@ if (isMiniTalkIncluded === undefined) {
 			
 			$(".chatArea").append(item);
 			m.autoScroll();
+			
+			if (type == "chat" && sender.nickname != m.myinfo.nickname) {
+				if (typeof m.listeners.onMessage == "function") {
+					m.listeners.onMessage(m,sender,message,time)
+				}
+				
+				for (var i=0, loop=m.onMessage.length;i<loop;i++) {
+					if (typeof m.onMessage[i] == "function") {
+						m.onMessage[i](m,sender,message,time)
+					}
+				}
+			}
 		}
 		
 		this.printWhisperMessage = function(type,sender,to,message,time) {
@@ -1075,6 +1099,18 @@ if (isMiniTalkIncluded === undefined) {
 			
 			var message = m.decodeMessage(message,true);
 			
+			if (type == "whisper" && sender.nickname != m.myinfo.nickname) {
+				if (typeof m.listeners.beforeWhisper == "function") {
+					if (m.listeners.beforeWhisper(m,sender,message,time) == false) return;
+				}
+				
+				for (var i=0, loop=m.beforeWhisper.length;i<loop;i++) {
+					if (typeof m.beforeWhisper[i] == "function") {
+						if (m.beforeWhisper[i](m,sender,message,time) == false) return;
+					}
+				}
+			}
+			
 			$(item.find(".whisperTag")).append(user);
 			
 			var message = $("<span>").addClass("body").html(m.splitString+message);
@@ -1084,6 +1120,18 @@ if (isMiniTalkIncluded === undefined) {
 			
 			$(".chatArea").append(item);
 			m.autoScroll();
+			
+			if (type == "whisper" && sender.nickname != m.myinfo.nickname) {
+				if (typeof m.listeners.onWhisper == "function") {
+					m.listeners.onWhisper(m,sender,message,time)
+				}
+				
+				for (var i=0, loop=m.onWhisper.length;i<loop;i++) {
+					if (typeof m.onWhisper[i] == "function") {
+						m.onWhisper[i](m,sender,message,time)
+					}
+				}
+			}
 		}
 		
 		this.printUser = function(users) {
@@ -2109,9 +2157,29 @@ if (isMiniTalkIncluded === undefined) {
 			if (data.from.nickname == m.myinfo.nickname) {
 				m.printMessage("system",LANG.action.call.replace("{nickname}","<b><u>"+data.to.nickname+"</u></b>"));
 			} else {
+				if (typeof m.listeners.beforeCall == "function") {
+					if (m.listeners.beforeCall(m,data.from,m.myinfo) == false) return false;
+				}
+				
+				for (var i=0, loop=m.beforeCall.length;i<loop;i++) {
+					if (typeof m.beforeCall[i] == "function") {
+						if (m.beforeCall[i](m,data.from,m.myinfo) == false) return false;
+					}
+				}
+				
 				m.printMessage("system",LANG.action.callNotify.replace("{nickname}","<b><u>"+data.from.nickname+"</u></b>"));
 				m.playSound("IRCCALL");
 				m.doPush("[MiniTalk6] "+LANG.action.callNotify.replace("{nickname}",data.from.nickname),"channel : "+m.channel);
+				
+				if (typeof m.listeners.onCall == "function") {
+					m.listeners.onCall(m,data.from,m.myinfo);
+				}
+				
+				for (var i=0, loop=m.onCall.length;i<loop;i++) {
+					if (typeof m.onCall[i] == "function") {
+						m.onCall[i](m,data.from,m.myinfo);
+					}
+				}
 			}
 		}
 		
