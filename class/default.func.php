@@ -108,13 +108,11 @@ function GetMiniTalkAPI($data) {
 	$curlsession = curl_init();
 	curl_setopt($curlsession,CURLOPT_URL,'http://api.minitalk.kr/');
 	curl_setopt($curlsession,CURLOPT_POST,1);
-	curl_setopt($curlsession,CURLOPT_POSTFIELDS,array('d'=>json_encode($data)));
-	curl_setopt($curlsession,CURLOPT_TIMEOUT,10);
+	curl_setopt($curlsession,CURLOPT_POSTFIELDS,array('d'=>json_encode($data),'rnd'=>time()));
+	curl_setopt($curlsession,CURLOPT_TIMEOUT,15);
 	curl_setopt($curlsession,CURLOPT_RETURNTRANSFER,1);
 	$buffer = curl_exec($curlsession);
 	curl_close($curlsession);
-	
-//	echo $buffer;
 	
 	if ($buffer) return json_decode($buffer,true);
 	else return array('result'=>false);
