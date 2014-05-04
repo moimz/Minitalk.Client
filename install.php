@@ -1,5 +1,6 @@
 <?php
 REQUIRE_ONCE './config/default.conf.php';
+unset($_SESSION['logged']);
 
 $checking_php = preg_match('/5\.(0|1|2|3|4|5)\.[0-9]+/',@phpversion()) == true;
 $checking_mcrypt = function_exists('mcrypt_encrypt');
