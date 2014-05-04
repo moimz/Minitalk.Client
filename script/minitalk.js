@@ -47,10 +47,12 @@ if (isMiniTalkIncluded === undefined) {
 	}
 	
 	var Minitalk = function(opt) {
+		this.id = opt.id ? opt.id : "MiniTalk"+Math.ceil(Math.random()*10000000);
+		
 		var form = document.createElement("form");
 		form.setAttribute("action",GetScriptPath().replace("/script","/minitalk.php"));
 		form.setAttribute("method","POST");
-		form.setAttribute("target",opt.id+"MiniTalkFrame");
+		form.setAttribute("target",this.id+"MiniTalkFrame");
 		form.style.display = "none";
 		form.style.margin = "0px";
 		form.style.padding = "0px";
@@ -83,7 +85,6 @@ if (isMiniTalkIncluded === undefined) {
 		
 		opt.width = opt.width ? opt.width : 200;
 		opt.height = opt.height ? opt.height : 600;
-		this.id = opt.id ? opt.id : "MiniTalk".Math.ceil(Math.random()*10000000);
 		this.width = opt.width.toString().indexOf("%") < 0 ? opt.width+"px" : opt.width;
 		this.height = opt.height.toString().indexOf("%") < 0 ? opt.height+"px" : opt.height;
 		this.position = opt.position ? opt.position : "default";

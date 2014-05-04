@@ -170,12 +170,9 @@ if ($action == 'channel') {
 		$source.= "\t".'$value = json_encode(array(\'opper\'=>$opper,\'ip\'=>$_SERVER[\'REMOTE_ADDR\']));'."\n";
 		$source.= "\t".'return urlencode(MiniTalkEncoder($value));'."\n";
 		$source.= '}'."\n";
-		$source.= 'function GetAuthCode() {'."\n";
-		$source.= "\t".'return MiniTalkEncoder(time());'."\n";
-		$source.= '}'."\n";
 		$source.= '?>'."\n";
 		
-		$source.= '<script type="text/javascript" src="http://'.$_SERVER['HTTP_HOST'].$_ENV['dir'].'/script/minitalk.js.php" charset="UTF-8"></script>'."\n";
+		$source.= '<script type="text/javascript" src="http://'.$_SERVER['HTTP_HOST'].$_ENV['dir'].'/script/minitalk.js" charset="UTF-8"></script>'."\n";
 		$source.= '<script type="text/javascript">'."\n";
 		$source.= 'new Minitalk({'."\n";
 		$source.= "\t".'channel:"'.$channel['channel'].'",'."\n";
@@ -190,14 +187,13 @@ if ($action == 'channel') {
 		$source.= "\t".'encode:"'.$value['encode'].'",'."\n";
 		$source.= "\t".'viewAlert:'.($value['viewAlert'] == 'on' ? 'false' : 'true').','."\n";
 		$source.= "\t".'viewAlertLimit:"'.$value['alertLimit'].'",'."\n";
-		$source.= "\t".'logLimit:'.$value['logLimit'].','."\n";
 		$source.= "\t".'nickname:"<?php echo $nickname; // 고정닉네임을 줄경우 $nickname 변수에 고정닉네임설정; ?>",'."\n";
 		$source.= "\t".'<?php if ($isAdmin == true) { // 관리자권한을 줘야하는경우, $isAdmin 변수에 true 설정 ?>'."\n";
 		$source.= "\t".'opperCode:"<?php echo GetOpperCode(\'ADMIN\'); ?>",'."\n";
 		$source.= "\t".'<?php } elseif ($isMember == true) { // 회원권한을 줘야하는경우, $isMember 변수에 true 설정 ?>'."\n";
 		$source.= "\t".'opperCode:"<?php echo GetOpperCode(\'ADMIN\'); ?>",'."\n";
 		$source.= "\t".'<?php } ?>'."\n";
-		$source.= "\t".'authCode:"<?php echo GetAuthCode(); ?>"'."\n";
+		$source.= "\t".'logLimit:'.$value['logLimit']."\n";
 		$source.= '});'."\n";
 		$source.= '</script>';
 		$return['success'] = true;
