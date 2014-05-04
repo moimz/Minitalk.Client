@@ -35,7 +35,7 @@ if ($step == '2') {
 		@fclose($dbFile);
 		
 		$adminFile = @fopen('../config/admin.conf.php.temp','w');
-		@fwrite($adminFile,"<?php /*\n".MiniTalkEncoder(json_encode(array('user_id'=>$admin_id,'password'=>$admin_password)))."\n*/ ?>");
+		@fwrite($adminFile,"<?php /*\n".MiniTalkEncoder(json_encode(array('user_id'=>$admin_id,'password'=>$admin_password)),$key)."\n*/ ?>");
 		@fclose($adminFile);
 	}
 } elseif ($step == '4') {

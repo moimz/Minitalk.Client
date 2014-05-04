@@ -25,9 +25,9 @@ if ($action == 'master') {
 	
 	if ($do == 'modify') {
 		$errors = array();
-		$user_id = strtolower(Request('user_id'));
-		$password1 = strtolower(Request('password1'));
-		$password2 = strtolower(Request('password2'));
+		$user_id = Request('user_id');
+		$password1 = Request('password1');
+		$password2 = Request('password2');
 		
 		if ($password1 != $password2) {
 			$errors['password1'] = $errors['password2'] = '패스워드와 패스워드확인이 일치하지 않습니다.';
@@ -38,7 +38,7 @@ if ($action == 'master') {
 			
 			$password = md5($password1);
 			$adminFile = @fopen('../../config/admin.conf.php','w');
-			@fwrite($adminFile,"<?php /*\n".MiniTalkEncoder(serialize(array('user_id'=>$user_id,'password'=>$password)))."\n*/ ?>");
+			@fwrite($adminFile,"<?php /*\n".MiniTalkEncoder(json_encode(array('user_id'=>$user_id,'password'=>$password)))."\n*/ ?>");
 			@fclose($adminFile);
 			@chmod('../../config/admin.conf.php',0707);
 		} else {
