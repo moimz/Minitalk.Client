@@ -98,7 +98,7 @@ if ($check_pass_step1 == false && $step != '1') $step = 1;
 				<form class="form" role="form" method="post" target="execFrame" action="./install/install.do.php">
 					<input type="hidden" name="step" value="2">
 					<div class="form-group">
-						<input type="text" name="key" class="form-control" placeholder="암호화 KEY">
+						<input type="text" name="key" class="form-control" placeholder="암호화 KEY" maxlength="32">
 						<div class="help-block">암호화에 사용할 32자리의 KEY를 영어, 숫자, 점(.)를 이용하여 입력하여 주십시오.</div>
 					</div>
 					

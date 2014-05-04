@@ -50,11 +50,11 @@ function GetOpperCode($opper) {
 	return urlencode(MiniTalkEncoder($value));
 }
 ?>
-<script type="text/javascript" src="http://www.yourdomain.com/MiniTalk6/script/minitalk.js" charset="UTF-8"></script>
+<script type="text/javascript" src="./script/minitalk.js" charset="UTF-8"></script>
 <script type="text/javascript">
 var m = new Minitalk({
 	id:"minitalk",
-	channel:"arzzcom",
+	channel:"example",
 	width:600,
 	height:400,
 	skin:"default",
