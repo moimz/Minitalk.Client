@@ -28,15 +28,14 @@ if ($step == '2') {
 		@fwrite($keyFile,"<?php /*\n".$key."\n*/ ?>");
 		@fclose($keyFile);
 
-		$db = ArzzEncoder(json_encode(array('host'=>$db_host,'id'=>$db_id,'password'=>$db_password,'dbname'=>$db_name)),$key);
+		$db = MiniTalkEncoder(json_encode(array('host'=>$db_host,'id'=>$db_id,'password'=>$db_password,'dbname'=>$db_name)),$key);
 		
 		$dbFile = @fopen('../config/db.conf.php.temp','w');
 		@fwrite($dbFile,"<?php /*\n".$db."\n*/ ?>");
 		@fclose($dbFile);
-//		@chmod('../config/db.conf.php',0707);
 		
 		$adminFile = @fopen('../config/admin.conf.php.temp','w');
-		@fwrite($adminFile,"<?php /*\n".ArzzEncoder(json_encode(array('user_id'=>$admin_id,'password'=>$admin_password)))."\n*/ ?>");
+		@fwrite($adminFile,"<?php /*\n".MiniTalkEncoder(json_encode(array('user_id'=>$admin_id,'password'=>$admin_password)))."\n*/ ?>");
 		@fclose($adminFile);
 	}
 } elseif ($step == '4') {
