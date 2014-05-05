@@ -128,10 +128,10 @@ if ($action == 'channel') {
 	}
 	
 	if ($get == 'skin') {
-		$skinPath = @opendir('../skin');
+		$skinPath = @opendir('../../skin');
 		$i = 0;
 		while ($skin = @readdir($skinPath)) {
-			if ($skin != '.' && $skin != '..' && is_dir('../skin/'.$skin) == true) {
+			if ($skin != '.' && $skin != '..' && is_dir('../../skin/'.$skin) == true) {
 				$lists[$i] = array('skin'=>$skin);
 				$i++;
 			}
@@ -172,7 +172,7 @@ if ($action == 'channel') {
 		$source.= '}'."\n";
 		$source.= '?>'."\n";
 		
-		$source.= '<script type="text/javascript" src="http://'.$_SERVER['HTTP_HOST'].$_ENV['dir'].'/script/minitalk.js" charset="UTF-8"></script>'."\n";
+		$source.= '<script type="text/javascript" src="'.$_ENV['url'].'/script/minitalk.js" charset="UTF-8"></script>'."\n";
 		$source.= '<script type="text/javascript">'."\n";
 		$source.= 'new Minitalk({'."\n";
 		$source.= "\t".'channel:"'.$channel['channel'].'",'."\n";
