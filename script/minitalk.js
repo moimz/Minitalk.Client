@@ -2253,14 +2253,13 @@ if (isMiniTalkIncluded === undefined) {
 		}
 		
 		this.reconnect = function(count) {
-			if (m.reconnecting == true) return;
 			if (m.reconnected == false) return;
-			
-			m.reconnecting = true;
-			
 			if (count == undefined) {
 				count = 10;
 			}
+			
+			if (m.reconnecting == true && count == 10) return;
+			m.reconnecting = true;
 			
 			if (count == 0) {
 				m.reconnecting = false;
