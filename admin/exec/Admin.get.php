@@ -139,6 +139,19 @@ if ($action == 'channel') {
 		@closedir($skinPath);
 	}
 	
+	if ($get == 'language') {
+		$langPath = @opendir('../../language');
+		$i = 0;
+		while ($lang = @readdir($langPath)) {
+			if ($lang != '.' && $lang != '..' && is_dir('../../language/'.$lang) == false) {
+				if (preg_match('/var LANGNAME = "(.*?)";/',file_get_contents('../../language/'.$lang),$match) == true) {
+					$lists[] = array('lang'=>str_replace('.js','',$lang),'title'=>$match[1]);
+				}
+			}
+		}
+		@closedir($langPath);
+	}
+	
 	if ($get == 'source') {
 		$channel = Request('channel');
 		$channel = $mDB->DBfetch('minitalk_channel_table','*',"where `channel`='$channel'");

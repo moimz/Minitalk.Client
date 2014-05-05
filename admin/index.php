@@ -1493,12 +1493,21 @@ Ext.onReady(function () {
 																							fieldLabel:"언어팩",
 																							name:"language",
 																							inputWidth:100,
-																							store:new Ext.data.ArrayStore({
-																								fields:["display","value"],
-																								data:[["한국어","ko"],["영어","en"],["일본어","jp"],["몽골어","mn"]]
+																							store:new Ext.data.JsonStore({
+																								proxy:{
+																									type:"ajax",
+																									simpleSortMode:true,
+																									url:"./exec/Admin.get.php",
+																									reader:{type:"json",root:"lists",totalProperty:"totalCount"},
+																									extraParams:{action:"channel",get:"language"}
+																								},
+																								remoteSort:false,
+																								sorters:[{property:"sort",direction:"ASC"}],
+																								autoLoad:true,
+																								fields:["lang","title"]
 																							}),
-																							displayField:"display",
-																							valueField:"value",
+																							displayField:"title",
+																							valueField:"lang",
 																							typeAhead:true,
 																							mode:"local",
 																							triggerAction:"all",
