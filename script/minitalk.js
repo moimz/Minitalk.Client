@@ -175,6 +175,7 @@ if (isMiniTalkIncluded === undefined) {
 		/* private */
 		this.connected = false;
 		this.reconnected = true;
+		this.reconnecting = false;
 		this.socket = null;
 		this.server = null;
 		this.serverCode = null;
@@ -2236,7 +2237,10 @@ if (isMiniTalkIncluded === undefined) {
 					
 				}
 			});
-
+		}
+		
+		this.setReconnect = function(value) {
+			m.reconnected = value;
 		}
 		
 		this.connect = function() {
@@ -2249,14 +2253,17 @@ if (isMiniTalkIncluded === undefined) {
 		}
 		
 		this.reconnect = function(count) {
-			//m.socket = null;
+			if (m.reconnecting == true) return;
 			if (m.reconnected == false) return;
+			
+			m.reconnecting = true;
 			
 			if (count == undefined) {
 				count = 10;
 			}
 			
 			if (count == 0) {
+				m.reconnecting = false;
 				m.checkServer(true);
 			} else {
 				if (count == 10 || count <= 5) m.printMessage("system",LANG.action.waitReconnect.replace("{count}","<b>"+count+"</b>"));
