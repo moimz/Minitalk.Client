@@ -1,7 +1,6 @@
 <?php
 REQUIRE_ONCE './config/default.conf.php';
 
-$myinfo = Request('myinfo-'.$_POST['channel:string'],'cookie');
 $_POST['language:string'] = isset($_POST['language:string']) == true && $_POST['language:string'] ? $_POST['language:string'] : 'ko';
 $_POST['skin:string'] = isset($_POST['skin:string']) == true && $_POST['skin:string'] ? $_POST['skin:string'] : 'default';
 $_POST['userCode:string'] = md5($_SERVER['REMOTE_ADDR'].time());
@@ -16,30 +15,7 @@ if (isset($_POST['plugin:object']) == true && $_POST['plugin:object']) {
 	$usePlugin = false;
 	$pluginList = json_decode($_POST['plugin:object'],true);
 }
-unset($_POST['plugin:object']);
-/*
-if ($myinfo != null) {
-	$myinfo = json_decode(urldecode($myinfo),true);
 
-	$_POST['nickname:string'] = $myinfo['nickname'];
-	
-	if ($_POST['opperCode:string']) $setOpper = GetOpper($_POST['opperCode:string']);
-	else $setOpper = '';
-	
-	if ($myinfo['opper'] != '') {
-		$opperCode = array('*'=>'ADMIN','+'=>'MEMBER','-'=>'NICKGUEST');
-		$cookieOpper = $opperCode[$myinfo['opper']];
-	} else {
-		$cookieOpper = '';
-	}
-	
-	if ($setOpper == 'ADMIN' || ($setOpper == 'MEMBER' && ($cookieOpper == 'NICKGUEST' || $cookieOpper == '')) || ($setOpper == 'NICKGUEST' && $cookieOpper == '')) {
-		$_POST['opperCode:string'] = GetOpperCode($setOpper);
-	} else {
-		$_POST['opperCode:string'] = $cookieOpper ? GetOpperCode($cookieOpper) : '';
-	}
-}
-*/
 $emoticons = array();
 $emoticonPath = @opendir($_ENV['path'].'/emoticon');
 while ($emoticon = @readdir($emoticonPath)) {

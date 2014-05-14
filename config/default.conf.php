@@ -9,7 +9,9 @@ if (file_exists($_ENV['path'].'/config/key.conf.php') == true) {
 	$_ENV['key'] = '';
 }
 
-session_start();
+if (preg_match('/admin/',$_SERVER['PHP_SELF']) == true) {
+	session_start();
+}
 
 REQUIRE_ONCE $_ENV['path'].'/class/default.func.php';
 

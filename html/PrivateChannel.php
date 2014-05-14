@@ -7,6 +7,21 @@ $owner = Request('owner');
 $myinfo = json_decode(Request('myinfo'),true);
 $config = json_decode(Request('config'),true);
 $invite = Request('invite');
+
+$plugin = Request('plugin');
+
+$device = 'PC';
+if (preg_match('/(iPhone|iPad|iPod)/',$_SERVER['HTTP_USER_AGENT']) == true) $device = 'iOS';
+if (preg_match('/(Android)/',$_SERVER['HTTP_USER_AGENT']) == true) $device = 'Android';
+
+$usePlugin = true;
+$pluginList = array();
+if (isset($plugin) == true && $plugin == 'NONE') $usePlugin = false;
+if (isset($plugin) == true && $plugin != 'ALL' && $plugin != 'NONE') {
+	$usePlugin = false;
+	$pluginList = json_decode($plugin,true);
+}
+
 $emoticons = array();
 $emoticonPath = @opendir($_ENV['path'].'/emoticon');
 while ($emoticon = @readdir($emoticonPath)) {
@@ -56,6 +71,8 @@ HTML, BODY {padding:0px; margin:0px; overflow:hidden; width:100%; height:100%;}
 		nickname:"<?php echo $myinfo['nickname']; ?>",
 		opperCode:"<?php echo $owner == $myinfo['nickname'] ? GetOpperCode('ADMIN') : ''; ?>",
 		title:LANG.privateTitle.replace("{nickname}","<?php echo $owner; ?>"),
+		device:"<?php echo $device; ?>",
+		plugin:<?php if ($plugin == 'ALL' || $plugin == 'NONE') { ?>"<?php echo $plugin; ?>"<?php } else { ?><?php echo $plugin; ?><?php } ?>,
 		skin:"<?php echo $config['skin']; ?>",
 		emoticons:[<?php echo implode(',',$emoticons); ?>],
 		listeners:{
@@ -70,8 +87,10 @@ HTML, BODY {padding:0px; margin:0px; overflow:hidden; width:100%; height:100%;}
 	<?php
 	$pluginPath = @opendir($_ENV['path'].'/plugin');
 	while ($plugin = @readdir($pluginPath)) {
-		if ($plugin != '.' && $plugin != '..' && is_dir($_ENV['path'].'/plugin/'.$plugin) == true) {
-			echo '<script type="text/javascript" src="../plugin/'.$plugin.'/plugin.js"></script>'."\n";
+		if ($usePlugin == true || in_array($plugin,$pluginList) == true) {
+			if ($plugin != '.' && $plugin != '..' && is_dir($_ENV['path'].'/plugin/'.$plugin) == true) {
+				echo '<script type="text/javascript" src="../plugin/'.$plugin.'/plugin.js"></script>'."\n";
+			}
 		}
 	}
 	@closedir($pluginPath);

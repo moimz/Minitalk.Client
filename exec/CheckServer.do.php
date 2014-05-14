@@ -62,6 +62,7 @@ function GetFindServer() {
 if (isset($check['channel']) == true) {
 	if ($check['server'] != '0') {
 		$serverInfo = CheckOnline($check['server']);
+		
 		if ($serverInfo === false) {
 			$mDB->DBupdate('minitalk_channel_table',array('server'=>0),'',"where `channel`='$channel'");
 			$serverInfo = GetFindServer();
@@ -82,7 +83,10 @@ if (isset($check['channel']) == true) {
 		}
 	}
 	
-	if ($result['server'] !== false) $result['server']['maxuser'] = $check['maxuser'];
+	if ($result['server'] !== false) {
+		$result['server']['maxuser'] = $check['maxuser'];
+	}
+	
 	$result['success'] = true;
 } else {
 	$result['success'] = false;

@@ -80,6 +80,7 @@ LANG.error.reservedProtocol = "{protocol}프로토콜명은 미니톡에 의해 
 LANG.error.whisperMe = "자기자신에게 귓속말을 보낼 수 없습니다.";
 LANG.error.whisperCommandError = "/w(공백)받는사람닉네임(공백)할말 형식으로 귓속말을 보낼 수 있습니다.";
 LANG.error.allowPush = "브라우저의 푸시알림사용여부를 묻는 확인창에서 푸시권한을 승인해주셔야 사용이 가능합니다.";
+LANG.error.popup = "팝업이 차단되어 있습니다. 팝업허용을 하신 후 다시 시도하여 주시기 바랍니다.";
 
 LANG.confirm = {};
 LANG.confirm.clearlog = "서버에 저장된 이전대화기록도 삭제하시겠습니까?";
