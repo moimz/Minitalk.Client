@@ -1561,7 +1561,7 @@ if (isMiniTalkIncluded === undefined) {
 		}
 		
 		/* plugin channel */
-		this.openPluginChannel = function(plugin,code,width,height,data,reopenObject) {
+		this.openPluginChannel = function(plugin,code,width,height,data) {
 			var windowLeft = Math.ceil((screen.width-width)/2);
 			var windowTop = Math.ceil((screen.height-height)/2 > 2);
 			
