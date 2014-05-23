@@ -820,8 +820,8 @@ if (isMiniTalkIncluded === undefined) {
 			
 			if (listStart > 0) {
 				var moreButton = $("<div>").addClass("toolButtonMore");
-				moreButton.on("mouseover",function() { if ($(this).attr("disabled") == false) $(this).addClass("mouseover"); });
-				moreButton.on("mouseout",function() { if ($(this).attr("disabled") == false) $(this).removeClass("mouseover"); });
+				moreButton.on("mouseover",function() { if ($(this).attr("disabled") != "disabled") $(this).addClass("mouseover"); });
+				moreButton.on("mouseout",function() { if ($(this).attr("disabled") != "disabled") $(this).removeClass("mouseover"); });
 				$(".toolArea").append(moreButton);
 				
 				for (var i=listStart, loop=m.toolList.length;i<loop;i++) {
@@ -845,7 +845,7 @@ if (isMiniTalkIncluded === undefined) {
 				}
 				
 				moreButton.on("click",function() {
-					if ($(this).attr("disabled") == false) {
+					if ($(this).attr("disabled") != "disabled") {
 						if ($(".toolListLayer").css("display") == "none") {
 							$(".toolListLayer").show();
 							var height = $(".toolListLayer").outerHeight(true);
