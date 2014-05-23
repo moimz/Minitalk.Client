@@ -38,7 +38,7 @@ if ($step == '2') {
 		@fwrite($adminFile,"<?php /*\n".MiniTalkEncoder(json_encode(array('user_id'=>$admin_id,'password'=>$admin_password)),$key)."\n*/ ?>");
 		@fclose($adminFile);
 	}
-} elseif ($step == '4') {
+} elseif ($step == '3') {
 	@copy('../config/key.conf.php.temp','../config/key.conf.php');
 	@chmod('../config/key.conf.php',0707);
 	@unlink('../config/key.conf.php.temp');
@@ -158,9 +158,6 @@ if ($step == '2') {
 		parent.location.href = "../install.php?step=3";
 		<?php } ?>
 	<?php } elseif ($step == '3') { ?>
-		parent.$("button").button("loading");
-		location.href = "./install.do.php?step=4";
-	<?php } elseif ($step == '4') { ?>
 		parent.location.href = "../install.php?step=4";
 	<?php } ?>
 	</script>

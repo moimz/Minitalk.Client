@@ -10,6 +10,8 @@ if (file_exists($_ENV['path'].'/config/key.conf.php') == true) {
 }
 
 if (preg_match('/admin/',$_SERVER['PHP_SELF']) == true) {
+	session_save_path(str_replace('/config/default.conf.php','/session',__FILE__));
+	session_cache_expire(3600);
 	session_start();
 }
 

@@ -177,7 +177,7 @@ if ($check_pass_step1 == false && $step != '1') $step = 1;
 						<div class="col-xs-8"></div>
 						
 						<div class="col-xs-2">
-							<button type="submit" class="btn btn btn-primary btn-block" data-loading-text="완료중..">설치완료</button>
+							<button type="submit" class="btn btn btn-primary btn-block" data-loading-text="완료중.." onclick="$(this).button('loading');">설치완료</button>
 						</div>
 					</div>
 				</form>
