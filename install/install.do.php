@@ -24,33 +24,24 @@ if ($step == '2') {
 	$check_pass_step = $check_key && $check_db && $check_dbname && $check_admin_id && $check_admin_password;
 	
 	if ($check_pass_step == true) {
-		$keyFile = @fopen('../config/key.conf.php.temp','w');
+		$keyFile = @fopen('../config/key.conf.php','w');
 		@fwrite($keyFile,"<?php /*\n".$key."\n*/ ?>");
 		@fclose($keyFile);
+		@chmod('../config/key.conf.php',0707);
 
 		$db = MiniTalkEncoder(json_encode(array('host'=>$db_host,'id'=>$db_id,'password'=>$db_password,'dbname'=>$db_name)),$key);
 		
-		$dbFile = @fopen('../config/db.conf.php.temp','w');
+		$dbFile = @fopen('../config/db.conf.php','w');
 		@fwrite($dbFile,"<?php /*\n".$db."\n*/ ?>");
 		@fclose($dbFile);
+		@chmod('../config/db.conf.php',0707);
 		
-		$adminFile = @fopen('../config/admin.conf.php.temp','w');
+		$adminFile = @fopen('../config/admin.conf.php','w');
 		@fwrite($adminFile,"<?php /*\n".MiniTalkEncoder(json_encode(array('user_id'=>$admin_id,'password'=>$admin_password)),$key)."\n*/ ?>");
 		@fclose($adminFile);
+		@unlink('../config/admin.conf.php.temp');
 	}
 } elseif ($step == '3') {
-	@copy('../config/key.conf.php.temp','../config/key.conf.php');
-	@chmod('../config/key.conf.php',0707);
-	@unlink('../config/key.conf.php.temp');
-	
-	@copy('../config/db.conf.php.temp','../config/db.conf.php');
-	@chmod('../config/db.conf.php',0707);
-	@unlink('../config/db.conf.php.temp');
-	
-	@copy('../config/admin.conf.php.temp','../config/admin.conf.php');
-	@chmod('../config/admin.conf.php',0707);
-	@unlink('../config/admin.conf.php.temp');
-	
 	$mDB = new DB();
 	
 	$XMLData = file_get_contents($_ENV['path'].'/install/db.xml');

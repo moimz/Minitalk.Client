@@ -13,13 +13,11 @@ $checking_log = is_dir('./log') == true && (substr(sprintf('%o',fileperms('./log
 $checking_session = is_dir('./session') == true && (substr(sprintf('%o',fileperms('./session')),2,3) == 707 || substr(sprintf('%o',fileperms('./session')),2,3) == 777);
 $checking_server = is_dir('./server') == true && (substr(sprintf('%o',fileperms('./server')),2,3) == 707 || substr(sprintf('%o',fileperms('./server')),2,3) == 777);
 $checking_older_info = file_exists('./config/key.conf.php') == false && file_exists('./config/db.conf.php') == false && file_exists('./config/admin.conf.php') == false;
-$checking_older_info = true;
+
 $check_pass_step1 = $checking_php && $checking_mcrypt && $checking_json && $checking_xml && $checking_curl && $checking_mysql && $checking_config && $checking_log && $checking_session && $checking_older_info;
-$check_pass_step3 = file_exists('./config/key.conf.php.temp') && file_exists('./config/db.conf.php.temp') && file_exists('./config/admin.conf.php.temp');
 
 $step = Request('step') ? Request('step') : '1';
-if ($check_pass_step3 == false && $step == '3') $step = '2';
-if ($check_pass_step1 == false && $step != '1') $step = 1;
+if ($check_pass_step1 == false && $step == '2') $step = 1;
 ?>
 <!DOCTYPE html>
 <html>
