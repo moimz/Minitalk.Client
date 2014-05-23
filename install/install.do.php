@@ -39,7 +39,7 @@ if ($step == '2') {
 		$adminFile = @fopen('../config/admin.conf.php','w');
 		@fwrite($adminFile,"<?php /*\n".MiniTalkEncoder(json_encode(array('user_id'=>$admin_id,'password'=>$admin_password)),$key)."\n*/ ?>");
 		@fclose($adminFile);
-		@unlink('../config/admin.conf.php.temp');
+		@chmod('../config/admin.conf.php',0707);
 	}
 } elseif ($step == '3') {
 	$mDB = new DB();
