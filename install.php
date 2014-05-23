@@ -5,14 +5,16 @@ unset($_SESSION['logged']);
 $checking_php = preg_match('/5\.(0|1|2|3|4|5)\.[0-9]+/',@phpversion()) == true;
 $checking_mcrypt = function_exists('mcrypt_encrypt');
 $checking_json = function_exists('json_encode');
+$checking_xml = class_exists('SimpleXMLElement');
 $checking_curl = function_exists('curl_init');
 $checking_mysql = preg_match('/5\.[0-9]+\.[0-9]+/',@mysql_get_client_info()) == true;
 $checking_config = is_dir('./config') == true && (substr(sprintf('%o',fileperms('./config')),2,3) == 707 || substr(sprintf('%o',fileperms('./config')),2,3) == 777);
 $checking_log = is_dir('./log') == true && (substr(sprintf('%o',fileperms('./log')),2,3) == 707 || substr(sprintf('%o',fileperms('./log')),2,3) == 777);
+$checking_session = is_dir('./session') == true && (substr(sprintf('%o',fileperms('./session')),2,3) == 707 || substr(sprintf('%o',fileperms('./session')),2,3) == 777);
 $checking_server = is_dir('./server') == true && (substr(sprintf('%o',fileperms('./server')),2,3) == 707 || substr(sprintf('%o',fileperms('./server')),2,3) == 777);
 $checking_older_info = file_exists('./config/key.conf.php') == false && file_exists('./config/db.conf.php') == false && file_exists('./config/admin.conf.php') == false;
 $checking_older_info = true;
-$check_pass_step1 = $checking_php && $checking_mcrypt && $checking_json && $checking_curl && $checking_mysql && $checking_config && $checking_log && $checking_older_info;
+$check_pass_step1 = $checking_php && $checking_mcrypt && $checking_json && $checking_xml && $checking_curl && $checking_mysql && $checking_config && $checking_log && $checking_session && $checking_older_info;
 $check_pass_step3 = file_exists('./config/key.conf.php.temp') && file_exists('./config/db.conf.php.temp') && file_exists('./config/admin.conf.php.temp');
 
 $step = Request('step') ? Request('step') : '1';
@@ -57,6 +59,8 @@ if ($check_pass_step1 == false && $step != '1') $step = 1;
 				
 				<p><?php echo $checking_json == true ? '<span class="label label-primary">확인됨</span>' : '<span class="label label-danger">확인필요</span>'; ?> PHP JSON Module<?php if ($checking_json == false) { ?><br /><small class="text-danger">미니톡홈페이지의 PHP설치요구사항 문서를 참고하여 PHP를 다시 설치하여 주십시오.</small><?php } ?></p>
 				
+				<p><?php echo $checking_xml == true ? '<span class="label label-primary">확인됨</span>' : '<span class="label label-danger">확인필요</span>'; ?> PHP XML Module<?php if ($checking_xml == false) { ?><br /><small class="text-danger">미니톡홈페이지의 PHP설치요구사항 문서를 참고하여 PHP를 다시 설치하여 주십시오.</small><?php } ?></p>
+				
 				<p><?php echo $checking_curl == true ? '<span class="label label-primary">확인됨</span>' : '<span class="label label-danger">확인필요</span>'; ?> PHP CURL Module<?php if ($checking_curl == false) { ?><br /><small class="text-danger">미니톡홈페이지의 PHP설치요구사항 문서를 참고하여 PHP를 다시 설치하여 주십시오.</small><?php } ?></p>
 				
 				<p><?php echo $checking_mysql == true ? '<span class="label label-primary">확인됨</span>' : '<span class="label label-danger">확인필요</span>'; ?> MySQL 버전 5.0 이상 (현재 버전 : <?php echo @mysql_get_client_info(); ?>)<?php if ($checking_mysql == false) { ?><br /><small class="text-danger">MySQL 최신버전을 설치하여 주십시오.</small><?php } ?></p>
@@ -64,6 +68,8 @@ if ($check_pass_step1 == false && $step != '1') $step = 1;
 				<p><?php echo $checking_config == true ? '<span class="label label-primary">확인됨</span>' : '<span class="label label-danger">확인필요</span>'; ?> config 폴더 퍼미션<?php if ($checking_config == false) { ?><br /><small class="text-danger">미니톡폴더내의 config 폴더의 퍼미션을 707 또는 777로 변경하여 주십시오.</small><?php } ?></p>
 				
 				<p><?php echo $checking_log == true ? '<span class="label label-primary">확인됨</span>' : '<span class="label label-danger">확인필요</span>'; ?> log 폴더 퍼미션<?php if ($checking_log == false) { ?><br /><small class="text-danger">미니톡폴더내의 log 폴더의 퍼미션을 707 또는 777로 변경하여 주십시오.</small><?php } ?></p>
+				
+				<p><?php echo $checking_session == true ? '<span class="label label-primary">확인됨</span>' : '<span class="label label-danger">확인필요</span>'; ?> session 폴더 퍼미션<?php if ($checking_session == false) { ?><br /><small class="text-danger">미니톡폴더내의 session 폴더의 퍼미션을 707 또는 777로 변경하여 주십시오.</small><?php } ?></p>
 				
 				<?php if (is_dir($_ENV['path'].'/server') == true) { ?>
 				<hr>
