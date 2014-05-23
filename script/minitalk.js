@@ -1072,7 +1072,7 @@ if (isMiniTalkIncluded === undefined) {
 			item.append(user);
 			
 			var message = $("<span>").addClass("body").html(m.splitString+message);
-			message.attr("title",m.getTime(time,"full"));
+			if (time) message.attr("title",m.getTime(time,"full"));
 			item.append(message);
 			if (time) item.append($("<span>").addClass("time").html(" ("+m.getTime(time,"time")+")"));
 			
@@ -1121,7 +1121,7 @@ if (isMiniTalkIncluded === undefined) {
 			$(item.find(".whisperTag")).append(user);
 			
 			var message = $("<span>").addClass("body").html(m.splitString+message);
-			message.attr("title",m.getTime(time,"full"));
+			if (time) message.attr("title",m.getTime(time,"full"));
 			item.append(message);
 			if (time) item.append($("<span>").addClass("time").html(" ("+m.getTime(time,"time")+")"));
 			
