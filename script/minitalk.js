@@ -9,8 +9,8 @@ if (isMiniTalkIncluded === undefined) {
 			}
 		}
 	}
-		
-	if (typeof $ != "function") {
+	
+	if (typeof $ != "function" && typeof jQuery != "function") {
 		var script = document.createElement("script");
 		script.setAttribute("src",GetScriptPath()+"/jquery.1.9.0.min.js");
 		document.documentElement.appendChild(script);
@@ -103,7 +103,7 @@ if (isMiniTalkIncluded === undefined) {
 			sHTML+= '</div>';
 			document.write(sHTML);
 		} else {
-			document.write('<iframe name="'+this.id+'MiniTalkFrame" style="width:'+this.width+'; height:'+this.height+'; vertical-align:middle; padding:0px; margin:0px;" frameborder="0" scrollbar="0"></iframe>');
+			document.write('<div style="width:'+this.width+'; height:'+this.height+';"><iframe name="'+this.id+'MiniTalkFrame" style="width:'+this.width+'; height:'+this.height+'; vertical-align:middle; padding:0px; margin:0px;" frameborder="0" scrollbar="0"></iframe></div>');
 		}
 		for (var param in opt) {
 			if (param == "width" || param == "height" || param == "id" || param == "position") continue;
@@ -126,6 +126,10 @@ if (isMiniTalkIncluded === undefined) {
 		
 		document.body.appendChild(form);
 		form.submit();
+		
+		document.body.onorientationchange = function() {
+			form.submit();
+		}
 	};
 	
 	
@@ -1144,29 +1148,33 @@ if (isMiniTalkIncluded === undefined) {
 		this.printUser = function(users) {
 			if ($(".userList").css("display") == "none") {
 				if (m.type == "vertical") {
+					var width = $(".chatArea").innerWidth();
 					var height = $(".frame").innerHeight() - $(".titleArea").outerHeight(true) - $(".actionArea").outerHeight(true);
 					$(".userList").height(1);
 					$(".userList").show();
 					$(".userList").animate({height:m.userListHeight},{step:function(now,fx) {
 						$(".chatArea").css("marginTop",$(".userList").outerHeight(true));
+						$(".chatArea").width(width);
 						$(".chatArea").outerHeight(height,true);
 						
 						if (now == m.userListHeight) {
 							$(".chatArea").css("marginTop",m.userListHeight);
 							$(".chatArea").outerHeight(height,true);
+							$(".chatArea").width(width);
 							m.autoScroll();
 						}
 					}});
 				} else {
+					var width = $(".chatArea").outerWidth(true);
 					$(".userList").width(1);
 					$(".userList").show();
 					$(".userList").animate({width:m.userListWidth},{step:function(now,fx) {
 						$(".chatArea").css("marginRight",$(".userList").outerWidth(true));
-						$(".chatArea").outerWidth($(".frame").innerWidth(),true);
+						$(".chatArea").outerWidth(width,true);
 						
 						if (now == m.userListWidth) {
 							$(".chatArea").css("marginRight",m.userListWidth);
-							$(".chatArea").outerWidth($(".frame").innerWidth(),true);
+							$(".chatArea").outerWidth(width,true);
 							m.autoScroll();
 						}
 					}});

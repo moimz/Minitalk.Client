@@ -31,7 +31,7 @@ function CheckOnline($idx) {
 			return array('idx'=>$check['idx'],'ip'=>$_SERVER['SERVER_ADDR'],'port'=>intval($check['port']),'serverCode'=>urlencode(MinitalkEncoder(json_encode(array('ip'=>$_SERVER['REMOTE_ADDR'])))),'channelCode'=>'');
 		}
 	} else {
-		$minitalk = GetMiniTalkAPI(array('action'=>'check_server','ip'=>$_SERVER['REMOTE_ADDR'],'mcode'=>$check['mcode'],'scode'=>md5($_SERVER['SERVER_ADDR'].str_replace('://www.','://',$_ENV['url']))));
+		$minitalk = GetMiniTalkAPI(array('action'=>'check_server','ip'=>$_SERVER['REMOTE_ADDR'],'mcode'=>$check['mcode'],'scode'=>md5($_SERVER['SERVER_ADDR'].str_replace('://www.','://',$_ENV['url'])),'key'=>$_ENV['key']));
 		if ($minitalk['success'] == true) {
 			$minitalk['server']['idx'] = $check['idx'];
 			return $minitalk['server'];

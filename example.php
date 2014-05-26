@@ -6,6 +6,7 @@
 <style>
 HTML, BODY {padding:10px; margin:0px; overflow:hidden; width:100%; height:100%;}
 </style>
+<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 </head>
 <body>
 
