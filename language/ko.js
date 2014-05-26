@@ -9,6 +9,9 @@ LANG.time.time = "{hour}:{minute}:{second}";
 LANG.title = "미니톡6";
 LANG.privateTitle = "{nickname}님의 개인채널";
 
+LANG.me = "나";
+LANG.personCount = "{count}명";
+
 LANG.status = {};
 LANG.status.online = "온라인";
 LANG.status.away = "자리비움";
@@ -72,6 +75,7 @@ LANG.error = {};
 LANG.error.storage = "브라우져의 로컬저장소를 사용할 수 없습니다. IE8이상 또는 크롬, 사파리, 파이어폭스 등 최신브라우져를 사용하시거나, 개인정보보호 브라우징을 종료하신 후 사용해보시기 바랍니다.";
 LANG.error.notSupportBrowser = "현재 사용하고 있는 브라우저에서는 지원되지 않는 기능입니다.";
 LANG.error.notAllowFontSetting = "폰트설정권한이 없습니다.";
+LANG.error.notAllowChat = "채팅참여 권한이 없습니다.";
 LANG.error.connectFail = "채팅서버에 접속중 에러가 발생하였습니다. 10초 뒤 다시 접속을 시도합니다.";
 LANG.error.reconnectFail = "채팅서버에 재접속을 시도하였으나, 접속하지 못하였습니다. 10초 뒤 다시 접속을 시도합니다.";
 LANG.error.disconnect = "서버와의 접속이 끊어졌습니다.";

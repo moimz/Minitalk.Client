@@ -167,7 +167,7 @@ if (isMiniTalkIncluded === undefined) {
 		this.emoticons = opt.emoticons;
 		
 		this.logLimit = opt.logLimit !== undefined ? opt.logLimit : 15;
-		
+		this.chatLimit = opt.chatLimit ? opt.chatLimit : "ALL";
 		this.fontSettingLimit = opt.fontSettingLimit ? opt.fontSettingLimit : "ALL";
 		this.fontSettingHide = opt.fontSettingHide === true ? true : false;
 		
@@ -1250,7 +1250,7 @@ if (isMiniTalkIncluded === undefined) {
 		
 		this.printUserCount = function(count) {
 			if (count > 0) {
-				$(".userCount").text("("+count+"명)");
+				$(".userCount").text(LANG.personCount.replace('{count}',count));
 			} else {
 				$(".userCount").text("");
 			}
@@ -1277,6 +1277,10 @@ if (isMiniTalkIncluded === undefined) {
 		}
 		
 		this.sendMessage = function(message,isRaw) {
+			if (m.checkLimit(m.chatLimit,m.myinfo.opper) == false) {
+				m.printMessage("error",LANG.error.notAllowChat);
+				return;
+			}
 			if (message.replace(/ /g,'').length == 0) return;
 			
 			isRaw = isRaw === true ? true : false;
@@ -1625,7 +1629,7 @@ if (isMiniTalkIncluded === undefined) {
 			message = message.replace(/\[B\](.*?)\[\/B\]/g,'<b>$1</b>');
 			message = message.replace(/\[I\](.*?)\[\/I\]/g,'<i>$1</i>');
 			message = message.replace(/\[U\](.*?)\[\/U\]/g,'<span style="text-decoration:underline;">$1</span>');
-			message = message.replace(/((http|ftp|https):\/\/[^ \(\)]+)/g,'<a href="$1" target="_blank">$1</a>');
+			message = message.replace(/((http|ftp|https):\/\/[^ \(\)<>]+)/g,'<a href="$1" target="_blank">$1</a>');
 			message = message.replace(/\[EMO:(.*?)\]/g,'<img src="'+m.getRootPath()+'/emoticon/$1" style="vertical-align:middle" onload="m.autoScroll();" />');
 			
 			return message;
@@ -1986,7 +1990,7 @@ if (isMiniTalkIncluded === undefined) {
 			}
 			
 			if (isUserList == true && m.myinfo.nickname == user.nickname) {
-				sHTML+= "(나)";
+				sHTML+= "("+LANG.me+")";
 			} else {
 				tag.attr("code",user.nickname);
 			}

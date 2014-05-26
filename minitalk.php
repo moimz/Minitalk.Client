@@ -34,6 +34,8 @@ if ($mDB->DBcount('minitalk_ipban_table',"where `ip`='{$_SERVER['REMOTE_ADDR']}'
 		$_POST['isNickname:boolean'] = $channel['is_nickname'] == 'TRUE' ? 'true' : 'false';
 		$_POST['isBroadcast:boolean'] = $channel['is_broadcast'] == 'TRUE' ? 'true' : 'false';
 		$_POST['notice:string'] = $channel['notice'];
+		$_POST['chatLimit:string'] = $channel['grade_chat'];
+		$_POST['fontSettingLimit:string'] = $channel['grade_font'];
 	} else {
 		$errorCode = 101;
 	}
