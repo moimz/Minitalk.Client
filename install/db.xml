@@ -31,8 +31,8 @@
 			<field name="server" type="int" length="11">서버</field>
 			<field name="is_nickname" type="enum" length="TRUE,FALSE" default="TRUE">닉네임변경여부</field>
 			<field name="is_broadcast" type="enum" length="TRUE,FALSE" default="TRUE">브로드캐스트여부</field>
-			<field name="grade_font" type="enum" length="ALL,ADMIN,MEMBER" default="ALL">글꼴설정여부</field>
-			<field name="grade_chat" type="enum" length="ALL,ADMIN,MEMBER" default="ALL">채팅여부</field>
+			<field name="grade_font" type="enum" length="ALL,ADMIN,POWERUSER,MEMBER" default="ALL">글꼴설정여부</field>
+			<field name="grade_chat" type="enum" length="ALL,ADMIN,POWERUSER,MEMBER" default="ALL">채팅여부</field>
 			<field name="notice" type="varchar" length="255">공지메세지</field>
 			<index name="channel" type="primary" />
 			<index name="category1" type="index" />

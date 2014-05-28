@@ -147,7 +147,7 @@ var ChannelForm = function(channel) {
 								name:"grade_chat",
 								store:new Ext.data.ArrayStore({
 									fields:["display","value"],
-									data:[["전체","ALL"],["관리자만","ADMIN"],["회원권한이상","MEMBER"]]
+									data:[["전체","ALL"],["관리자만","ADMIN"],["파워유저이상","POWERUSER"],["회원권한이상","MEMBER"]]
 								}),
 								displayField:"display",
 								valueField:"value",
@@ -163,7 +163,7 @@ var ChannelForm = function(channel) {
 								name:"grade_font",
 								store:new Ext.data.ArrayStore({
 									fields:["display","value"],
-									data:[["전체","ALL"],["관리자만","ADMIN"],["회원권한이상","MEMBER"]]
+									data:[["전체","ALL"],["관리자만","ADMIN"],["파워유저이상","POWERUSER"],["회원권한이상","MEMBER"]]
 								}),
 								displayField:"display",
 								valueField:"value",
@@ -370,7 +370,7 @@ var ChannelStore = new Ext.data.JsonStore({
 	sorters:[{property:"channel",direction:"DESC"}],
 	autoLoad:false,
 	pageSize:50,
-	fields:["idx","category1","category2","channel","title","apikey","font","fontsize","is_nickname","use_broadcast","grade_font","grade_chat","notice","user","maxuser","server"]
+	fields:["idx","category1","category2","channel","title","apikey","font","fontsize","is_nickname","is_broadcast","grade_font","grade_chat","notice","user","maxuser","server"]
 });
 
 var LogStore = new Ext.data.JsonStore({
@@ -1276,18 +1276,20 @@ Ext.onReady(function () {
 									},{
 										header:"글꼴권한",
 										dataIndex:"grade_font",
-										width:70,
+										width:80,
 										renderer:function(value) {
 											if (value == "ADMIN") return '<span style="color:red;">관리자만</span>';
+											else if (value == "POWERUSER") return '<span style="color:green;">파워유저이상</span>';
 											else if (value == "MEMBER") return '<span style="color:green;">회원이상</span>';
 											else return '<span style="color:blue;">전체</span>';
 										}
 									},{
 										header:"대화권한",
 										dataIndex:"grade_chat",
-										width:70,
+										width:80,
 										renderer:function(value) {
 											if (value == "ADMIN") return '<span style="color:red;">관리자만</span>';
+											else if (value == "POWERUSER") return '<span style="color:green;">파워유저이상</span>';
 											else if (value == "MEMBER") return '<span style="color:green;">회원이상</span>';
 											else return '<span style="color:blue;">전체</span>';
 										}
@@ -1547,7 +1549,7 @@ Ext.onReady(function () {
 																							flex:1,
 																							store:new Ext.data.ArrayStore({
 																								fields:["display","value"],
-																								data:[["관리자 접속/종료시에만 알림메세지를 출력","ADMIN"],["회원권한이상 접속/종료시에만 알림메세지를 출력","MEMBER"],["닉네임을 설정한 유저이상 접속/종료시에만 알림메세지를 출력","NICKGUEST"],["전제유저의 접속/종료 알림메세지를 출력","ALL"]]
+																								data:[["관리자 접속/종료시에만 알림메세지를 출력","ADMIN"],["파워유저이상 접속/종료시에만 알림메세지를 출력","POWERUSER"],["회원권한이상 접속/종료시에만 알림메세지를 출력","MEMBER"],["닉네임을 설정한 유저이상 접속/종료시에만 알림메세지를 출력","NICKGUEST"],["전제유저의 접속/종료 알림메세지를 출력","ALL"]]
 																							}),
 																							displayField:"display",
 																							valueField:"value",
@@ -1573,7 +1575,7 @@ Ext.onReady(function () {
 																					flex:1,
 																					store:new Ext.data.ArrayStore({
 																						fields:["display","value"],
-																						data:[["관리자만 유저목록에 표시","ADMIN"],["회원권한이상 유저만 유저목록에 표시","MEMBER"],["닉네임을 설정한 모든 유저 유저목록에 표시","NICKGUEST"],["전제유저를 유저목록에 표시","ALL"]]
+																						data:[["관리자만 유저목록에 표시","ADMIN"],["파워유저권한이상 유저만 유저목록에 표시","POWERUSER"],["회원권한이상 유저만 유저목록에 표시","MEMBER"],["닉네임을 설정한 모든 유저 유저목록에 표시","NICKGUEST"],["전제유저를 유저목록에 표시","ALL"]]
 																					}),
 																					displayField:"display",
 																					valueField:"value",

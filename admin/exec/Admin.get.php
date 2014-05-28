@@ -203,8 +203,10 @@ if ($action == 'channel') {
 		$source.= "\t".'nickname:"<?php echo $nickname; // 고정닉네임을 줄경우 $nickname 변수에 고정닉네임설정; ?>",'."\n";
 		$source.= "\t".'<?php if ($isAdmin == true) { // 관리자권한을 줘야하는경우, $isAdmin 변수에 true 설정 ?>'."\n";
 		$source.= "\t".'opperCode:"<?php echo GetOpperCode(\'ADMIN\'); ?>",'."\n";
+		$source.= "\t".'<?php } elseif ($isPowerUser == true) { // 파워유저권한을 줘야하는경우, $isPowerUser 변수에 true 설정 ?>'."\n";
+		$source.= "\t".'opperCode:"<?php echo GetOpperCode(\'POWERUSER\'); ?>",'."\n";
 		$source.= "\t".'<?php } elseif ($isMember == true) { // 회원권한을 줘야하는경우, $isMember 변수에 true 설정 ?>'."\n";
-		$source.= "\t".'opperCode:"<?php echo GetOpperCode(\'ADMIN\'); ?>",'."\n";
+		$source.= "\t".'opperCode:"<?php echo GetOpperCode(\'MEMBER\'); ?>",'."\n";
 		$source.= "\t".'<?php } ?>'."\n";
 		$source.= "\t".'logLimit:'.$value['logLimit']."\n";
 		$source.= '});'."\n";
@@ -222,7 +224,7 @@ if ($action == 'channel') {
 		$data = $mDB->DBfetch('minitalk_channel_table','*',"where `channel`='$channel'");
 		
 		$data['is_nickname'] = $data['is_nickname'] == 'TRUE' ? 'on' : 'off';
-		$data['use_broadcast'] = $data['use_broadcast'] == 'TRUE' ? 'on' : 'off';
+		$data['is_broadcast'] = $data['is_broadcast'] == 'TRUE' ? 'on' : 'off';
 		$return['success'] = true;
 		$return['data'] = $data;
 		exit(json_encode($return));

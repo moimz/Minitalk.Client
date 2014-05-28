@@ -1026,9 +1026,9 @@ if (isMiniTalkIncluded === undefined) {
 		this.checkLimit = function(limit,target) {
 			if (limit == "") limit = "ALL";
 			if (target == "") target = "ALL";
-			var levels = ["ALL","NICKGUEST","MEMBER","ADMIN","NONE"];
+			var levels = ["ALL","NICKGUEST","MEMBER","POWERUSER","ADMIN","NONE"];
 			
-			return levels.indexOf(limit) <= levels.indexOf(target);
+			return $.inArray(limit,levels) <= $.inArray(target,levels);
 		}
 		
 		/* UI Actions */
@@ -1075,9 +1075,9 @@ if (isMiniTalkIncluded === undefined) {
 			if (sender.nickname == m.myinfo.nickname) item.addClass("mymessage");
 			item.append(user);
 			
-			var message = $("<span>").addClass("body").html(m.splitString+message);
-			if (time) message.attr("title",m.getTime(time,"full"));
-			item.append(message);
+			var messageObject = $("<span>").addClass("body").html(m.splitString+message);
+			if (time) messageObject.attr("title",m.getTime(time,"full"));
+			item.append(messageObject);
 			if (time) item.append($("<span>").addClass("time").html(" ("+m.getTime(time,"time")+")"));
 			
 			$(".chatArea").append(item);
@@ -1124,9 +1124,9 @@ if (isMiniTalkIncluded === undefined) {
 			
 			$(item.find(".whisperTag")).append(user);
 			
-			var message = $("<span>").addClass("body").html(m.splitString+message);
-			if (time) message.attr("title",m.getTime(time,"full"));
-			item.append(message);
+			var messageObject = $("<span>").addClass("body").html(m.splitString+message);
+			if (time) messageObject.attr("title",m.getTime(time,"full"));
+			item.append(messageObject);
 			if (time) item.append($("<span>").addClass("time").html(" ("+m.getTime(time,"time")+")"));
 			
 			$(".chatArea").append(item);
@@ -1183,7 +1183,7 @@ if (isMiniTalkIncluded === undefined) {
 			
 			$(".toggleUserList").removeClass("toggleUserListOff").addClass("toggleUserListOn");
 			
-			var sortUserCode = {"ADMIN":"*","MEMBER":"+","NICKGUEST":"-"};
+			var sortUserCode = {"ADMIN":"#","POWERUSER":"*","MEMBER":"+","NICKGUEST":"-"};
 			
 			m.viewUserListStatus = true;
 			m.viewUserListSort = [];
@@ -1199,7 +1199,7 @@ if (isMiniTalkIncluded === undefined) {
 			$(".userList").append(m.userTag(m.myinfo,true));
 			
 			for (var i=0, loop=m.viewUserListSort.length;i<loop;i++) {
-				var nickname = m.viewUserListSort[i].replace(/^\[(\*|\+|\-)?(.*?)\]$/,"$2");
+				var nickname = m.viewUserListSort[i].replace(/^\[(#|\*|\+|\-)?(.*?)\]$/,"$2");
 				var user = m.userTag(m.viewUserListStore[nickname],true);
 				
 				if (m.viewUserListStore[nickname].nickname == m.myinfo.nickname) {
@@ -1250,7 +1250,7 @@ if (isMiniTalkIncluded === undefined) {
 		
 		this.printUserCount = function(count) {
 			if (count > 0) {
-				$(".userCount").text(LANG.personCount.replace('{count}',count));
+				$(".userCount").text("("+LANG.personCount.replace('{count}',count)+")");
 			} else {
 				$(".userCount").text("");
 			}
@@ -1545,15 +1545,15 @@ if (isMiniTalkIncluded === undefined) {
 
 			var formObject = $("<form>").css("display","none").attr("action",m.getRootPath()+"/html/PrivateChannel.php").attr("target",target).attr("method","POST");
 			
-			formObject.append($("<input>").attr("name","channel").val(m.channel));
-			formObject.append($("<input>").attr("name","owner").val(data.from.nickname));
-			formObject.append($("<input>").attr("name","myinfo").val(JSON.stringify(m.myinfo)));
-			formObject.append($("<input>").attr("name","config").val(JSON.stringify({skin:m.skin,language:m.language})));
-			formObject.append($("<input>").attr("name","code").val(data.code));
-			formObject.append($("<input>").attr("name","plugin").val(JSON.stringify(m.plugin)));
+			formObject.append($("<input>").attr("name","channel").attr("value",m.channel));
+			formObject.append($("<input>").attr("name","owner").attr("value",data.from.nickname));
+			formObject.append($("<input>").attr("name","myinfo").attr("value",JSON.stringify(m.myinfo)));
+			formObject.append($("<input>").attr("name","config").attr("value",JSON.stringify({skin:m.skin,language:m.language})));
+			formObject.append($("<input>").attr("name","code").attr("value",data.code));
+			formObject.append($("<input>").attr("name","plugin").attr("value",JSON.stringify(m.plugin)));
 				
 			if (data.from.nickname == m.myinfo.nickname) {
-				formObject.append($("<input>").attr("name","invite").val(data.to.nickname));
+				formObject.append($("<input>").attr("name","invite").attr("value",data.to.nickname));
 			}
 			$("body").append(formObject);
 
@@ -1581,13 +1581,13 @@ if (isMiniTalkIncluded === undefined) {
 
 			var formObject = $("<form>").css("display","none").attr("action",m.getRootPath()+"/html/PluginChannel.php").attr("target",target).attr("method","POST");
 			
-			formObject.append($("<input>").attr("name","channel").val(m.channel));
-			formObject.append($("<input>").attr("name","code").val(code));
-			formObject.append($("<input>").attr("name","parent").val(m.isPrivate ? m.private : m.channel));
-			formObject.append($("<input>").attr("name","myinfo").val(JSON.stringify(m.myinfo)));
-			formObject.append($("<input>").attr("name","config").val(JSON.stringify({skin:m.skin,language:m.language})));
-			formObject.append($("<input>").attr("name","plugin").val(plugin));
-			formObject.append($("<input>").attr("name","data").val(JSON.stringify(data)));
+			formObject.append($("<input>").attr("name","channel").attr("value",m.channel));
+			formObject.append($("<input>").attr("name","code").attr("value",code));
+			formObject.append($("<input>").attr("name","parent").attr("value",m.isPrivate ? m.private : m.channel));
+			formObject.append($("<input>").attr("name","myinfo").attr("value",JSON.stringify(m.myinfo)));
+			formObject.append($("<input>").attr("name","config").attr("value",JSON.stringify({skin:m.skin,language:m.language})));
+			formObject.append($("<input>").attr("name","plugin").attr("value",plugin));
+			formObject.append($("<input>").attr("name","data").attr("value",JSON.stringify(data)));
 			$("body").append(formObject);
 
 			var popup = window.open("",target,"top="+windowTop+",left="+windowLeft+",width="+width+",height="+height+",scrollbars=0");
@@ -2017,14 +2017,14 @@ if (isMiniTalkIncluded === undefined) {
 				}
 			}
 			
-			var sortUserCode = {"ADMIN":"*","MEMBER":"+","NICKGUEST":"-"};
+			var sortUserCode = {"ADMIN":"#","POWERUSER":"*","MEMBER":"+","NICKGUEST":"-"};
 			
 			if (m.viewUserListStatus == true) {
 				if (m.checkLimit(m.viewUserLimit,user.opper) == true) {
 					m.viewUserListSort.push("["+(user.opper ? sortUserCode[user.opper] : "")+user.nickname+"]");
 					m.viewUserListStore[user.nickname] = user;
 					m.viewUserListSort.sort();
-					var position = m.viewUserListSort.indexOf("["+(user.opper ? sortUserCode[user.opper] : "")+user.nickname+"]");
+					var position = $.inArray("["+(user.opper ? sortUserCode[user.opper] : "")+user.nickname+"]",m.viewUserListSort);
 	
 					if ($(".userList > span").length < position) {
 						$(".userList").append(m.userTag(user,true));
@@ -2055,11 +2055,11 @@ if (isMiniTalkIncluded === undefined) {
 				}
 			}
 			
-			var sortUserCode = {"ADMIN":"*","MEMBER":"+","NICKGUEST":"-"};
+			var sortUserCode = {"ADMIN":"#","POWERUSER":"*","MEMBER":"+","NICKGUEST":"-"};
 			
 			if (m.viewUserListStatus == true) {
 				if (m.checkLimit(m.viewUserLimit,user.opper) == true) {
-					m.viewUserListSort.splice(m.viewUserListSort.indexOf("["+(user.opper ? sortUserCode[user.opper] : "")+user.nickname+"]"),1);
+					m.viewUserListSort.splice($.inArray("["+(user.opper ? sortUserCode[user.opper] : "")+user.nickname+"]",m.viewUserListSort),1);
 					delete m.viewUserListStore[user.nickname];
 					$(".userList").find("[code='"+user.nickname+"']").remove();
 				}
@@ -2097,11 +2097,11 @@ if (isMiniTalkIncluded === undefined) {
 				m.printMessage("system",LANG.action.changeStatus.replace("{nickname}","<b><u>"+after.nickname+"</u></b>").replace("{status}","<b><u>"+LANG.status[after.status]+"</u></b>"));
 			}
 			
-			var sortUserCode = {"ADMIN":"*","MEMBER":"+","NICKGUEST":"-"};
+			var sortUserCode = {"ADMIN":"#","POWERUSER":"*","MEMBER":"+","NICKGUEST":"-"};
 			
 			if (m.viewUserListStatus == true) {
-				if (m.viewUserListSort.indexOf("["+before.opper+before.nickname+"]") >= 0) {
-					m.viewUserListSort.splice(m.viewUserListSort.indexOf("["+(before.opper ? sortUserCode[before.opper] : "")+before.nickname+"]"),1);
+				if ($.inArray("["+before.opper+before.nickname+"]",m.viewUserListSort) >= 0) {
+					m.viewUserListSort.splice($.inArray("["+(before.opper ? sortUserCode[before.opper] : "")+before.nickname+"]",m.viewUserListSort),1);
 				}
 				if (m.viewUserListStore[before.nickname] != undefined) {
 					delete m.viewUserListStore[before.nickname];
@@ -2112,7 +2112,7 @@ if (isMiniTalkIncluded === undefined) {
 					m.viewUserListSort.push("["+(after.opper ? sortUserCode[after.opper] : "")+after.nickname+"]");
 					m.viewUserListStore[after.nickname] = after;
 					m.viewUserListSort.sort();
-					var position = m.viewUserListSort.indexOf("["+(after.opper ? sortUserCode[after.opper] : "")+after.nickname+"]");
+					var position = $.inArray("["+(after.opper ? sortUserCode[after.opper] : "")+after.nickname+"]",m.viewUserListSort);
 					var user = m.userTag(after,true);
 					
 					if (after.nickname == m.myinfo.nickname) {
