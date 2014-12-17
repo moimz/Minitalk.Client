@@ -2572,7 +2572,7 @@ Ext.onReady(function () {
 											new Ext.Panel({
 												title:"채널스크립트API",
 												border:false,
-												html:'<iframe src="http://api.minitalk.kr/document.php?ver=<?php echo $version; ?>" frameborder="0" scrolling="auto" style="width:100%; height:100%;"></iframe>'
+												html:'<iframe src="http://www.minitalk.kr/api/document.php?ver=<?php echo $version; ?>" frameborder="0" scrolling="auto" style="width:100%; height:100%;"></iframe>'
 											}),
 											new Ext.Panel({
 												title:"채널생성API",

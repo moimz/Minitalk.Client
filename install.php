@@ -79,8 +79,8 @@ if ($check_pass_step1 == false && $step == '2') $step = 1;
 				
 				<div class="well">
 					<p>1. SSH를 이용하여 서버에 접속합니다.</p>
-					<p>2. MiniTalk 폴더내의 lib/node-v0.10.25 폴더로 이동합니다.</p>
-					<p><code>$ move /YourMiniTalkFolder/lib/node-v0.10.25</code></p>
+					<p>2. MiniTalk 폴더내의 lib/node-v0.10.33 폴더로 이동합니다.</p>
+					<p><code>$ move /YourMiniTalkFolder/lib/node-v0.10.33</code></p>
 					<p>3. 아래의 명령어를 차례로 입력합니다.</p>
 					<p><code>$ ./configure</code></p>
 					<p><code>$ make && make install</code></p>

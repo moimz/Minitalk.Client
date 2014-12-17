@@ -10,6 +10,48 @@ if (isMiniTalkIncluded === undefined) {
 		}
 	}
 	
+	function SetToggleStatus(name,value) {
+		if (window.sessionStorage === undefined) {
+			return;
+		}
+		
+		var storage = {};
+		if (window.sessionStorage.MiniTalkToggleStatus !== undefined) {
+			try {
+				storage = JSON.parse(window.sessionStorage.MiniTalkToggleStatus);
+			} catch (e) {
+				storage = {};
+			}
+		}
+		
+		try {
+			storage[name] = value;
+			window.sessionStorage.MiniTalkToggleStatus = JSON.stringify(storage);
+		} catch (e) {
+		}
+	}
+	
+	function GetToggleStatus(name) {
+		if (window.sessionStorage === undefined) {
+			return false;
+		}
+		
+		var storage = {};
+		if (window.sessionStorage.MiniTalkToggleStatus !== undefined) {
+			try {
+				storage = JSON.parse(window.sessionStorage.MiniTalkToggleStatus);
+			} catch (e) {
+				storage = {};
+			}
+		}
+		
+		if (storage[name] != undefined) {
+			return storage[name];
+		} else {
+			return false;
+		}
+	}
+	
 	if (typeof $ != "function" && typeof jQuery != "function") {
 		var script = document.createElement("script");
 		script.setAttribute("src",GetScriptPath()+"/jquery.1.9.0.min.js");
@@ -21,26 +63,46 @@ if (isMiniTalkIncluded === undefined) {
 		var MiniTalkNowOpened = {};
 		
 		var MiniTalkToggle = function(id) {
+			if (typeof $ != "function") {
+				setTimeout(MiniTalkToggle,500,id);
+				return;
+			}
+			
 			var frame = $("#"+id+"Frame");
-			if ($("#"+id+"ToggleLayer").css("display") == "none") {
+			if ($("#"+id+"ToggleLayer").is(":visible") == false) {
 				delete MiniTalkNowOpened[id];
-				frame.animate({height:26});
+				$("#"+id+"IFrame").animate({height:frame.attr("setDefaultHeight")});
 				$("#"+id+"ToggleLayer").show();
+				$("#"+id+"Close").hide();
 			} else {
 				var maxHeight = $(window).height() - 100 > parseInt(frame.attr("setHeight")) ? frame.attr("setHeight") : $(window).height() - 100;
-				$("#"+id+"IFrame").height(maxHeight);
-				frame.animate({height:maxHeight},"fast",function() { MiniTalkNowOpened[id] = true; $("#"+id+"IFrame").height(maxHeight); });
+				$("#"+id+"IFrame").find("iframe").css("height",maxHeight);
+				$("#"+id+"IFrame").animate({height:maxHeight});
 				$("#"+id+"ToggleLayer").hide();
+				if (frame.attr("showCloseButton") == "TRUE") $("#"+id+"Close").show();
+			}
+			
+			if (frame.attr("saveStatus") == "TRUE") {
+				SetToggleStatus(frame.attr("setPosition"),!$("#"+id+"ToggleLayer").is(":visible"));
 			}
 			
 			if (MiniTalkIsRegisterEvent == false) {
-				$(document).on("click",function() {
-					if ($("#"+id+"ToggleLayer").css("display") == "none") {
-						for (var openID in MiniTalkNowOpened) {
-							MiniTalkToggle(openID);
+				if (frame.attr("autoHide") == true) {
+					$(document).on("click",function() {
+						if ($("#"+id+"ToggleLayer").is(":visible") == false) {
+							for (var openID in MiniTalkNowOpened) {
+								MiniTalkToggle(openID);
+							}
 						}
-					}
-				});
+					});
+				}
+				
+				if (frame.attr("showCloseButton") == "TRUE") {
+					$("#"+id+"Close").on("click",function() {
+						MiniTalkToggle(id);
+					});
+				}
+				
 				MiniTalkIsRegisterEvent = true;
 			}
 		}
@@ -88,25 +150,51 @@ if (isMiniTalkIncluded === undefined) {
 		this.width = opt.width.toString().indexOf("%") < 0 ? opt.width+"px" : opt.width;
 		this.height = opt.height.toString().indexOf("%") < 0 ? opt.height+"px" : opt.height;
 		this.position = opt.position ? opt.position : "default";
+		this.positionOption = {autoShow:false,autoHide:true,saveStatus:true,defaultHeight:26,showCloseButton:true,closeButtonImage:GetScriptPath().replace("/script","/images/close.png"),closeButtonWidth:24,closeButtonHeight:24};
+		if (typeof opt.positionOption == "object") {
+			if (opt.positionOption.autoShow != undefined) this.positionOption.autoShow = opt.positionOption.autoShow;
+			if (opt.positionOption.autoHide != undefined) this.positionOption.autoHide = opt.positionOption.autoHide;
+			if (opt.positionOption.saveStatus != undefined) this.positionOption.saveStatus = opt.positionOption.saveStatus;
+			if (opt.positionOption.defaultHeight != undefined) this.positionOption.defaultHeight = opt.positionOption.defaultHeight;
+			if (opt.positionOption.showCloseButton != undefined) this.positionOption.showCloseButton = opt.positionOption.showCloseButton;
+			if (opt.positionOption.closeButtonImage != undefined) this.positionOption.closeButtonImage = opt.positionOption.closeButtonImage;
+			if (opt.positionOption.closeButtonWidth != undefined) this.positionOption.closeButtonWidth = opt.positionOption.closeButtonWidth;
+			if (opt.positionOption.closeButtonHeight != undefined) this.positionOption.closeButtonHeight = opt.positionOption.closeButtonHeight;
+		}
 		
 		if (this.position == "TL" || this.position == "TR" || this.position == "BL" || this.position == "BR") {
-			if (this.position == "TL") var css = "top:0px; left:10px;";
-			else if (this.position == "TR") var css = "top:0px; right:10px;";
-			else if (this.position == "BL") var css = "bottom:0px; left:10px;";
-			else if (this.position == "BR") var css = "bottom:0px; right:10px;";
+			if (this.position == "TL") {
+				var css = "top:0px; left:10px;";
+				var buttonCss = "bottom:-"+this.positionOption.closeButtonHeight+"px; left:0px;";
+			} else if (this.position == "TR") {
+				var css = "top:0px; right:10px;";
+				var buttonCss = "bottom:-"+this.positionOption.closeButtonHeight+"px; right:0px;";
+			} else if (this.position == "BL") {
+				var css = "bottom:0px; left:10px;";
+				var buttonCss = "top:-"+this.positionOption.closeButtonHeight+"px; left:0px;";
+			} else if (this.position == "BR") {
+				var css = "bottom:0px; right:10px;";
+				var buttonCss = "top:-"+this.positionOption.closeButtonHeight+"px; right:0px;";
+			}
 			
-			var sHTML = '<div id="'+this.id+'Frame" style="'+css+' position:fixed; width:'+this.width+'; height:26px; overflow:hidden;" setHeight="'+this.height+'">';
+			var sHTML = '<div id="'+this.id+'Frame" style="'+css+' position:fixed; width:'+this.width+';" setHeight="'+this.height+'" setDefaultHeight="'+this.positionOption.defaultHeight+'" showCloseButton="'+(this.positionOption.showCloseButton == true ? "TRUE" : "FALSE")+'" setPosition="'+this.position+'" saveStatus="'+(this.positionOption.saveStatus == true ? "TRUE" : "FALSE")+'">';
 			sHTML+= '<div style="position:relative; width:'+this.width+';">';
-			sHTML+= '<div id="'+this.id+'ToggleLayer" style="position:absolute; top:0px; left:0px; z-index:2; cursor:pointer; width:'+this.width+'; height:26px;" onclick="MiniTalkToggle(\''+this.id+'\');"></div>';
-			sHTML+= '<div style="position:absolute; top:0px; left:0px; z-index:1;"><iframe id="'+this.id+'IFrame" name="'+this.id+'MiniTalkFrame" style="width:'+this.width+'; height:'+this.height+'; vertical-align:middle; padding:0px; margin:0px;" frameborder="0" scrollbar="0"></iframe></div>';
+			sHTML+= '<div id="'+this.id+'Close" style="'+buttonCss+' width:'+this.positionOption.closeButtonWidth+'px; height:'+this.positionOption.closeButtonHeight+'px; background:url('+this.positionOption.closeButtonImage+') no-repeat 0 0; cursor:pointer; position:absolute; z-index:20; display:none;"></div>';
+			sHTML+= '<div id="'+this.id+'ToggleLayer" style="position:absolute; top:0px; left:0px; z-index:10; cursor:pointer; width:'+this.width+'; height:'+this.positionOption.defaultHeight+'px;" onclick="MiniTalkToggle(\''+this.id+'\');"></div>';
+			sHTML+= '<div id="'+this.id+'IFrame" style="width:100%; height:'+this.positionOption.defaultHeight+'px; overflow:hidden;"><iframe name="'+this.id+'MiniTalkFrame" style="width:'+this.width+'; height:'+this.height+'; vertical-align:middle; padding:0px; margin:0px;" frameborder="0" scrollbar="0"></iframe></div>';
 			sHTML+= '</div>';
 			sHTML+= '</div>';
 			document.write(sHTML);
+			
+			if (this.positionOption.autoShow == true || (this.positionOption.saveStatus == true && GetToggleStatus(this.position) == true)) {
+				MiniTalkToggle(this.id);
+			}
 		} else {
 			document.write('<div style="width:'+this.width+'; height:'+this.height+';"><iframe name="'+this.id+'MiniTalkFrame" style="width:'+this.width+'; height:'+this.height+'; vertical-align:middle; padding:0px; margin:0px;" frameborder="0" scrollbar="0"></iframe></div>');
 		}
+		
 		for (var param in opt) {
-			if (param == "width" || param == "height" || param == "id" || param == "position") continue;
+			if (param == "width" || param == "height" || param == "id" || param == "position" || param == "positionOption") continue;
 			
 			var input = document.createElement("textarea");
 			input.setAttribute("name",param+":"+typeof opt[param]);
@@ -170,6 +258,8 @@ if (isMiniTalkIncluded === undefined) {
 		this.chatLimit = opt.chatLimit ? opt.chatLimit : "ALL";
 		this.fontSettingLimit = opt.fontSettingLimit ? opt.fontSettingLimit : "ALL";
 		this.fontSettingHide = opt.fontSettingHide === true ? true : false;
+		
+		this.showChannelConnectMessage = opt.showChannelConnectMessage === false ? false : true;
 		
 		/* listeners */
 		this.listeners = opt.listeners ? opt.listeners : {};
@@ -2425,9 +2515,9 @@ if (isMiniTalkIncluded === undefined) {
 				m.setStorage("myinfo",m.myinfo);
 				if (data.channel.indexOf("#") == 0 && data.channel.split(":").length == 3) {
 					var temp = data.channel.split(":");
-					m.printMessage("system",LANG.action.connected.replace("{channel}","<b><u>"+temp[1]+"</u></b>"));
+					if (m.showChannelConnectMessage == true) m.printMessage("system",LANG.action.connected.replace("{channel}","<b><u>"+temp[1]+"</u></b>"));
 				} else {
-					m.printMessage("system",LANG.action.connected.replace("{channel}","<b><u>"+data.channel+"</u></b>"));
+					if (m.showChannelConnectMessage == true) m.printMessage("system",LANG.action.connected.replace("{channel}","<b><u>"+data.channel+"</u></b>"));
 				}
 				m.printUserCount(data.usercount);
 				

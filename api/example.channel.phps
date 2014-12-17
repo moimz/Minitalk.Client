@@ -4,6 +4,7 @@ header('Content-type: text/html; charset=utf-8',true);
 $apiURL = '{$domain}api/channel.php';
 $protocol = array();
 $protocol['channel'] = '채널명'; // *필수* 채널명 (영문 및 숫자 30자 이내)
+$protocol['key'] = '암호화키'; // *필수* 미니톡 설치시 입력한 암호화키 32자리
 $protocol['category1'] = '1차카테고리명'; // *필수* 생성되어 있지 않은 카테고리일 경우 카테고리가 자동으로 생성됨
 $protocol['category2'] = '2차카테고리명'; // *선택* 생성되어 있지 않은 카테고리일 경우 카테고리가 자동으로 생성됨
 $protocol['title'] = '채널타이틀'; // *필수*

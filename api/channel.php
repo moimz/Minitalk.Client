@@ -11,9 +11,11 @@ if (is_array($protocol) == false) {
 	$result['success'] = false;
 	$result['errormsg'] = 'protocol 인수가 잘못전달되었습니다.';
 } else {
-	if (isset($protocol['category1']) == true && isset($protocol['channel']) == true && isset($protocol['title']) == true && isset($protocol['apikey']) == true) {
+	if (isset($protocol['category1']) == true && isset($protocol['channel']) == true && isset($protocol['title']) == true && isset($protocol['key']) == true) {
 		$insert = array();
 		$errors = array();
+		if ($protocol['key'] != $_ENV['key']) $errors[] = '암호화키가 일치하지 않습니다.';
+		
 		// check channel
 		if (preg_match('/^[a-z0-9]+$/',$protocol['channel']) == false || strlen($protocol['channel']) > 30) {
 			$errors[] = '채널명은 30자 이내의 영문 및 숫자로만 이루어져야합니다.';
@@ -33,15 +35,15 @@ if (is_array($protocol) == false) {
 		// check category2
 		$insert['category2'] = isset($protocol['category2']) == true ? $protocol['category2'] : '';
 		
-		// check use_broadcast
+		// check is_broadcast
 		if (isset($protocol['is_broadcast']) == true) {
 			if (preg_match('/^(TRUE|FALSE)$/',$protocol['is_broadcast']) == false) {
 				$errors[] = '브로드캐스트메세지 수신여부는 TRUE 또는 FALSE 값만 가능합니다.';
 			} else {
-				$insert['use_broadcast'] = $protocol['use_broadcast'];
+				$insert['is_broadcast'] = $protocol['is_broadcast'];
 			}
 		} else {
-			$insert['use_broadcast'] = 'TRUE';
+			$insert['is_broadcast'] = 'TRUE';
 		}
 		
 		// check is_nickname
@@ -89,6 +91,7 @@ if (is_array($protocol) == false) {
 					$insert['category2'] = $check['idx'];
 				}
 			}
+			
 			$mDB->DBinsert('minitalk_channel_table',$insert);
 		} else {
 			$result['success'] = false;
