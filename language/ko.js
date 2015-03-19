@@ -69,6 +69,8 @@ LANG.errorcode.code403 = "현재 아이피는 차단아이피목록에 있어 �
 LANG.errorcode.code404 = "해당 닉네임을 가진 유저를 찾을 수 없습니다.";
 LANG.errorcode.code501 = "해당채널은 설정된 최대최대접속자를 초과하여 접속할 수 없습니다. 잠시 후 다시 시도하여 주시기 바랍니다.";
 LANG.errorcode.code601 = "현재 사용하고 있는 브라우져에서는 개인채널을 이용할 수 없습니다. IE8이상, 파이어폭스, 크롬, 사파리 등 최신 브라우져를 사용하여 주시기 바랍니다.";
+LANG.errorcode.code997 = "접속자를 확인할 수 없어 로그인할 수 없습니다.";
+LANG.errorcode.code998 = "접속자를 확인할 수 없습니다. 페이지를 새로고침하시거나, 정상적인 방법으로 접근하시기 바랍니다.";
 LANG.errorcode.code999 = "잘못된 접근입니다. 페이지를 새로고침하시거나, 정상적인 방법으로 접근하시기 바랍니다.";
 
 LANG.error = {};
@@ -83,8 +85,11 @@ LANG.error.nolistenProtocol = "{protocol}프로토콜명은 이벤트를 수신�
 LANG.error.reservedProtocol = "{protocol}프로토콜명은 미니톡에 의해 예약된 프로토콜로 사용할 수 없습니다.";
 LANG.error.whisperMe = "자기자신에게 귓속말을 보낼 수 없습니다.";
 LANG.error.whisperCommandError = "/w(공백)받는사람닉네임(공백)할말 형식으로 귓속말을 보낼 수 있습니다.";
+LANG.error.callCommandError = "/call(공백)호출받을사람닉네임 형식으로 접속자를 호출할 수 있습니다.";
+LANG.error.loginCommandError = "/login(공백)채널패스워드 형식으로 채널관리자권한을 얻을 수 있습니다.";
 LANG.error.allowPush = "브라우저의 푸시알림사용여부를 묻는 확인창에서 푸시권한을 승인해주셔야 사용이 가능합니다.";
 LANG.error.popup = "팝업이 차단되어 있습니다. 팝업허용을 하신 후 다시 시도하여 주시기 바랍니다.";
+LANG.error.loginError = "채널패스워드와 일치하지 않습니다. 채널패스워드를 다시 확인하여 주시기 바랍니다.";
 
 LANG.confirm = {};
 LANG.confirm.clearlog = "서버에 저장된 이전대화기록도 삭제하시겠습니까?";
@@ -122,6 +127,8 @@ LANG.action.inviteNotifyLayer = "{nickname}님이 {time}에 개인채널에 초�
 LANG.action.inviteConfirm = "개인채널초대를 수락하시겠습니까? 확인을 클릭하면 해당 개인채널에 참여합니다.";
 LANG.action.inviteReject = "{nickname}님이 개인채널초대를 거절하였습니다.";
 LANG.action.inviteRejected = "{nickname}님의 개인채널초대를 거절하였습니다.";
+LANG.action.login = "로그인중입니다. 잠시만 기다려주십시오.";
+LANG.action.logged = "성공적으로 로그인하여 관리자권한을 획득하였습니다. 관리자권한은 재접속하기전까지 유지됩니다.";
 
 LANG.whisper = {};
 LANG.whisper.from = "{nickname}님의 귓속말";

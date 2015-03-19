@@ -130,6 +130,39 @@ function GetOpper($oppercode) {
 	else return '';
 }
 
+function CheckOnline($idx,$forceCheck=false) {
+	global $mDB;
+	
+	$check = $mDB->DBfetch('minitalk_server_table','*',"where `idx`='$idx'");
+
+	if (isset($check['idx']) == false) return false;
+	
+	if ($check['type'] == 'SELF') {
+		if ($check['status'] == 'OFFLINE' || $forceCheck == true) {
+			$fs = @fsockopen($_SERVER['SERVER_ADDR'],$check['port'],$errno,$errstr,10);
+			if (!$fs) {
+				if ($check['status'] == 'ONLINE') $mDB->DBupdate('minitalk_server_table',array('status'=>'OFFLINE','user'=>0,'channel'=>0,'check_time'=>time()),'',"where `idx`='$idx'");
+				return false;
+			} else {
+				if ($check['status'] == 'OFFLINE') {
+					$mDB->DBupdate('minitalk_server_table',array('status'=>'ONLINE','check_time'=>time()),'',"where `idx`='$idx'");
+				}
+				return array('idx'=>$check['idx'],'ip'=>$_SERVER['SERVER_ADDR'],'port'=>intval($check['port']),'serverCode'=>urlencode(MinitalkEncoder(json_encode(array('ip'=>$_SERVER['REMOTE_ADDR'])))),'channelCode'=>'');
+			}
+		} else {
+			return array('idx'=>$check['idx'],'ip'=>$_SERVER['SERVER_ADDR'],'port'=>intval($check['port']),'serverCode'=>urlencode(MinitalkEncoder(json_encode(array('ip'=>$_SERVER['REMOTE_ADDR'])))),'channelCode'=>'');
+		}
+	} else {
+		$minitalk = GetMiniTalkAPI(array('action'=>'check_server','ip'=>$_SERVER['REMOTE_ADDR'],'mcode'=>$check['mcode'],'scode'=>md5($_SERVER['SERVER_ADDR'].str_replace('://www.','://',$_ENV['url'])),'key'=>$_ENV['key']));
+		if ($minitalk['success'] == true) {
+			$minitalk['server']['idx'] = $check['idx'];
+			return $minitalk['server'];
+		} else {
+			return false;
+		}
+	}
+}
+
 function Request($var,$type='request') {
 	global $_REQUEST, $_SESSION;
 

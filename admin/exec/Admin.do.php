@@ -201,6 +201,7 @@ if ($action == 'channel') {
 		$errors = array();
 		$insert['category1'] = Request('category1');
 		$insert['category2'] = Request('category2');
+		$insert['password'] = Request('password');
 		$insert['channel'] = Request('channel');
 		$insert['title'] = Request('title');
 		$insert['grade_chat'] = Request('grade_chat');
@@ -232,6 +233,7 @@ if ($action == 'channel') {
 		$channel = Request('channel');
 		$insert['category1'] = Request('category1');
 		$insert['category2'] = Request('category2');
+		$insert['password'] = Request('password');
 		$insert['title'] = Request('title');
 		$insert['grade_chat'] = Request('grade_chat');
 		$insert['grade_font'] = Request('grade_font');

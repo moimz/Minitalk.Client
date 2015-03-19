@@ -173,6 +173,11 @@ var ChannelForm = function(channel) {
 								width:200,
 								editable:false,
 								value:"ALL"
+							}),
+							new Ext.form.TextField({
+								fieldLabel:"채널패스워드",
+								name:"password",
+								emptyText:"채팅방에서 /login [채널패스워드] 명령어로 관리자권한을 획득합니다."
 							})
 						]
 					}),
@@ -370,7 +375,7 @@ var ChannelStore = new Ext.data.JsonStore({
 	sorters:[{property:"channel",direction:"DESC"}],
 	autoLoad:false,
 	pageSize:50,
-	fields:["idx","category1","category2","channel","title","apikey","font","fontsize","is_nickname","is_broadcast","grade_font","grade_chat","notice","user","maxuser","server"]
+	fields:["idx","category1","category2","password","channel","title","apikey","font","fontsize","is_nickname","is_broadcast","grade_font","grade_chat","notice","user","maxuser","server"]
 });
 
 var LogStore = new Ext.data.JsonStore({
@@ -752,6 +757,16 @@ Ext.onReady(function () {
 										style:{margin:"1px 0px 1px 0px"},
 										handler:function() {
 											Ext.getCmp("ServerList").getStore().reload();
+										}
+									}),
+									new Ext.Button({
+										text:"온라인/오프라인상태 업데이트",
+										icon:"./images/connect.png",
+										style:{margin:"1px 0px 1px 0px"},
+										handler:function() {
+											Ext.getCmp("ServerList").getStore().getProxy().setExtraParam("checkOnline","true");
+											Ext.getCmp("ServerList").getStore().reload();
+											Ext.getCmp("ServerList").getStore().getProxy().setExtraParam("checkOnline","false");
 										}
 									})
 								],
@@ -1265,6 +1280,10 @@ Ext.onReady(function () {
 										dataIndex:"title",
 										minWidth:120,
 										flex:1
+									},{
+										header:"채널패스워드",
+										dataIndex:"password",
+										width:120
 									},{
 										header:"사용서버정보 / 미니톡서버접속코드",
 										dataIndex:"server",

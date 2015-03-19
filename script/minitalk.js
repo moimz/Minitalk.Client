@@ -1430,6 +1430,15 @@ if (isMiniTalkIncluded === undefined) {
 								m.printMessage("error",LANG.error.callCommandError);
 							}
 							break;
+							
+						case "/login" :
+							if (commandLine.length == 1) {
+								var password = commandLine.shift();
+								m.login(password);
+							} else {
+								m.printMessage("error",LANG.error.loginCommandError);
+							}
+							break;
 					}
 					
 					return;
@@ -1486,6 +1495,27 @@ if (isMiniTalkIncluded === undefined) {
 					m.onSendCall[i](m,nickname,m.myinfo);
 				}
 			}
+		}
+		
+		this.login = function(password) {
+			m.printMessage("system",LANG.action.login);
+			$.ajax({
+				type:"POST",
+				url:m.getRootPath()+"/exec/Login.do.php?rnd="+Math.random(),
+				data:"&password="+password+"&channel="+m.channel,
+				dataType:"json",
+				success:function(result) {
+					console.log(result);
+					if (result.success == true) {
+						m.send("oppercode",result.code);
+					} else {
+						m.printMessage("error",LANG.error.loginError);
+					}
+				},
+				error:function() {
+					
+				}
+			});
 		}
 		
 		this.showAlert = function(type,code,message,autoHide,data,callback) {
@@ -2613,6 +2643,10 @@ if (isMiniTalkIncluded === undefined) {
 			
 			this.socket.on("change",function(data) {
 				m.changeUser(data.before,data.after);
+			});
+			
+			this.socket.on("logged",function() {
+				m.printMessage("system",LANG.action.logged);
 			});
 			
 			this.socket.on("userinfo",function(userinfo) {

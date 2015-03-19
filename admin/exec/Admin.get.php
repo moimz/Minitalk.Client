@@ -17,6 +17,14 @@ $lists = array();
 if ($action == 'server') {
 	if ($get == 'list') {
 		$lists = $mDB->DBfetchs('minitalk_server_table','*');
+		
+		if (Request('checkOnline') == 'true') {
+			for ($i=0, $loop=sizeof($lists);$i<$loop;$i++) {
+				if ($lists[$i]['type'] == 'SELF') CheckOnline($lists[$i]['idx'],true);
+			}
+		}
+		
+		$lists = $mDB->DBfetchs('minitalk_server_table','*');
 		for ($i=0, $loop=sizeof($lists);$i<$loop;$i++) {
 			$lists[$i]['mcode'] = $lists[$i]['type'] == 'SELF' ? $_SERVER['SERVER_ADDR'].':'.$lists[$i]['port'] : $lists[$i]['mcode'];
 			if ($lists[$i]['type'] == 'MINITALK') {

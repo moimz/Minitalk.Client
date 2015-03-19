@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <minitalk>
-	<version>6.0.0</version>
+	<version>6.1.0</version>
 	<database>
 		<table name="minitalk_broadcast_table">
 			<field name="idx" type="int" length="11">고유값</field>
@@ -34,6 +34,7 @@
 			<field name="grade_font" type="enum" length="ALL,ADMIN,POWERUSER,MEMBER" default="ALL">글꼴설정여부</field>
 			<field name="grade_chat" type="enum" length="ALL,ADMIN,POWERUSER,MEMBER" default="ALL">채팅여부</field>
 			<field name="notice" type="varchar" length="255">공지메세지</field>
+			<field name="password" type="varchar" length="30">채널패스워드</field>
 			<index name="channel" type="primary" />
 			<index name="category1" type="index" />
 			<index name="category2" type="index" />
