@@ -825,6 +825,7 @@ if (isMiniTalkIncluded === undefined) {
 				icon:"icon_scroll.png",
 				text:LANG.tool.scroll,
 				fn:function(minitalk) {
+					minitalk.disconnect(false);
 					if (minitalk.isFixedScroll == true) {
 						minitalk.printMessage("system",LANG.action.useAutoScroll);
 						minitalk.isFixedScroll = false;
@@ -1505,7 +1506,6 @@ if (isMiniTalkIncluded === undefined) {
 				data:"&password="+password+"&channel="+m.channel,
 				dataType:"json",
 				success:function(result) {
-					console.log(result);
 					if (result.success == true) {
 						m.send("oppercode",result.code);
 					} else {
@@ -2450,7 +2450,7 @@ if (isMiniTalkIncluded === undefined) {
 		}
 		
 		this.connect = function() {
-			if (m.socket != null && !m.socket.connected) {
+			if (m.socket != null && !m.socket.socket.connected) {
 				m.socket.socket.connect();
 			} else {
 				m.socket = io.connect(m.server,{reconnect:false});
@@ -2478,15 +2478,19 @@ if (isMiniTalkIncluded === undefined) {
 			}
 		}
 		
-		this.disconnect = function() {
+		this.disconnect = function(reconnect) {
 			m.printMessage("error",LANG.error.disconnect);
 			m.printUserCount();
 			m.viewUserListSort = [];
 			m.viewUserListStore = {};
 			m.connected = false;
+			if (m.socket.socket.connected == true) {
+				if (reconnect === false) m.reconnected = false;
+				m.socket.disconnect();
+			}
 			$(".userList").html("");
 			$("input").attr("disabled",false);
-			m.reconnect();
+			if (reconnect !== false) m.reconnect();
 		}
 		
 		this.send = function(protocol,object) {
