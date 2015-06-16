@@ -6,10 +6,7 @@ $logged = Request('logged','session');
 if ($logged !== 'TRUE') {
 	INCLUDE './login.php';
 } else {
-	$XMLData = file_get_contents($_ENV['path'].'/install/db.xml');
-	$XML = new SimpleXMLElement($XMLData);
-	
-	$version = (string)($XML->version);
+	$version = __MINITALK_VERSION__;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -521,7 +518,7 @@ Ext.onReady(function () {
 																name:"type",
 																store:new Ext.data.ArrayStore({
 																	fields:["display","value"],
-																	data:[["자체서버 (자체서버에 서버를 구동하여 사용합니다.)","SELF"],["미니톡서버 (미니톡에서 제공하는 서버를 이용합니다.)","MINITALK"]]
+																	data:[["자체서버 (자체서버에 서버를 구동하여 사용합니다.)","SELF"],["채팅호스팅 (미니톡에서 제공하는 서비스를 이용합니다.)","MINITALK"]]
 																}),
 																displayField:"display",
 																valueField:"value",
@@ -571,12 +568,12 @@ Ext.onReady(function () {
 																id:"ServerAddMINITALK",
 																title:"미니톡서버등록",
 																hidden:true,
-																fieldDefaults:{labelAlign:"right",labelWidth:70,anchor:"100%",allowBlank:true},
+																fieldDefaults:{labelAlign:"right",labelWidth:80,anchor:"100%",allowBlank:true},
 																items:[
 																	new Ext.form.TextField({
-																		fieldLabel:"아이디",
+																		fieldLabel:"이메일주소",
 																		name:"user_id",
-																		emptyText:"미니톡 홈페이지의 로그인 아이디를 입력합니다."
+																		emptyText:"미니톡 홈페이지의 로그인 이메일주소를 입력합니다."
 																	}),
 																	new Ext.form.TextField({
 																		fieldLabel:"패스워드",
@@ -585,13 +582,13 @@ Ext.onReady(function () {
 																		emptyText:"미니톡 홈페이지의 로그인 패스워드를 입력합니다."
 																	}),
 																	new Ext.form.TextField({
-																		fieldLabel:"접속코드",
+																		fieldLabel:"클라이언트ID",
 																		name:"mcode",
-																		emptyText:"미니톡 홈페이지에서 발급받은 접속코드를 입력합니다."
+																		emptyText:"미니톡 홈페이지에서 발급받은 클라이언트 ID를 입력합니다."
 																	}),
 																	new Ext.form.DisplayField({
 																		padding:"0 0 0 75",
-																		value:'<span style="color:red;">미니톡서버를 등록후 사용하기 위해서는 미니톡홈페이지에서 서버접속이용권이 활성화되어있어야 합니다.'
+																		value:'<span style="color:red;">미니톡서버를 등록후 사용하기 위해서는 미니톡홈페이지에서 채팅호스팅서비스가 활성화되어있어야 합니다.'
 																	})
 																]
 															})

@@ -1,4 +1,5 @@
 <?php
+define(__MINITALK_VERSION__,'6.2.0');
 $_ENV['path'] = str_replace('/config/default.conf.php','',__FILE__);
 $_ENV['url'] = (isset($_SERVER['HTTPS']) == true && $_SERVER['HTTPS'] == 'on' ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].str_replace($_SERVER['DOCUMENT_ROOT'],'',$_ENV['path']);
 
