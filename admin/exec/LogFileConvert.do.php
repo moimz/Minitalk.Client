@@ -4,7 +4,7 @@ REQUIRE_ONCE '../../config/default.conf.php';
 $logged = Request('logged','session');
 if ($logged !== 'TRUE') exit;
 
-$mDB = &DB::instance();
+$mDB = new DB();
 $date = strtotime(Request('date'))*1000;
 $total = Request('total') == null ? $mDB->DBcount('minitalk_log_table',"where `time`<$date") : Request('total');
 $limit = 100;

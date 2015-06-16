@@ -6,7 +6,7 @@ $logged = Request('logged','session');
 if ($logged !== 'TRUE') {
 	INCLUDE './login.php';
 } else {
-	$mDB = &DB::instance();
+	$mDB = new DB();
 	$channel = Request('channel');
 	$channel = $mDB->DBfetch('minitalk_channel_table','*',"where `channel`='$channel'");
 	$channel = isset($channel['channel']) == true ? $channel : array('channel'=>'');

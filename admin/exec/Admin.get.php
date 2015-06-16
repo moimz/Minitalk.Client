@@ -4,7 +4,7 @@ REQUIRE_ONCE '../../config/default.conf.php';
 $action = Request('action');
 $get = Request('get');
 
-$mDB = &DB::instance();
+$mDB = new DB();
 $start = Request('start');
 $limit = Request('limit');
 $sort = Request('sort');

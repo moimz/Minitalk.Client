@@ -2,7 +2,7 @@
 $_ENV['debug'] = false;
 REQUIRE_ONCE '../config/default.conf.php';
 
-$mDB = &DB::instance();
+$mDB = new DB();
 $protocol = Request('protocol');
 $protocol = json_decode($protocol,true);
 

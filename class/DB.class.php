@@ -5,11 +5,6 @@ class DB {
 	private $isLog = false;
 	public $sql;
 
-	function &instance() {
-		if(isset($GLOBALS['_DB_']) == false || !$GLOBALS['_DB_']) $GLOBALS['_DB_'] = new DB();
-		return $GLOBALS['_DB_'];
-	}
-
 	function __construct() {
 		if (isset($_ENV['db']) == true) {
 			$this->infor['default'] = $_ENV['db'];
