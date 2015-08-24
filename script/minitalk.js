@@ -825,7 +825,6 @@ if (isMiniTalkIncluded === undefined) {
 				icon:"icon_scroll.png",
 				text:LANG.tool.scroll,
 				fn:function(minitalk) {
-					minitalk.disconnect(false);
 					if (minitalk.isFixedScroll == true) {
 						minitalk.printMessage("system",LANG.action.useAutoScroll);
 						minitalk.isFixedScroll = false;
