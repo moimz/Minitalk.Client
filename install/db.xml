@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <minitalk>
-	<version>6.2.0</version>
+	<version>6.2.1</version>
 	<database>
 		<table name="minitalk_broadcast_table">
 			<field name="idx" type="int" length="11">고유값</field>

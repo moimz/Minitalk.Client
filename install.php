@@ -2,7 +2,7 @@
 REQUIRE_ONCE './config/default.conf.php';
 unset($_SESSION['logged']);
 
-$checking_php = preg_match('/5\.(0|1|2|3|4|5)\.[0-9]+/',@phpversion()) == true;
+$checking_php = version_compare(phpversion(),'5.3','>=');
 $checking_mcrypt = function_exists('mcrypt_encrypt');
 $checking_json = function_exists('json_encode');
 $checking_xml = class_exists('SimpleXMLElement');
