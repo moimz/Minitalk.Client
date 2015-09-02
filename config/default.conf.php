@@ -1,6 +1,6 @@
 <?php
-define(__MINITALK_VERSION__,'6.2.0');
-$_ENV['path'] = str_replace('/config/default.conf.php','',__FILE__);
+define(__MINITALK_VERSION__,'6.2.3');
+$_ENV['path'] = preg_replace('/(\/|\\\)config(\/|\\\)default\.conf\.php/','',__FILE__);
 $_ENV['url'] = (isset($_SERVER['HTTPS']) == true && $_SERVER['HTTPS'] == 'on' ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].str_replace($_SERVER['DOCUMENT_ROOT'],'',$_ENV['path']);
 
 if (file_exists($_ENV['path'].'/config/key.conf.php') == true) {
@@ -11,7 +11,7 @@ if (file_exists($_ENV['path'].'/config/key.conf.php') == true) {
 }
 
 if (preg_match('/admin/',$_SERVER['PHP_SELF']) == true) {
-	session_save_path(str_replace('/config/default.conf.php','/session',__FILE__));
+	session_save_path($_ENV['path'].'/session');
 	session_cache_expire(3600);
 	session_start();
 }
