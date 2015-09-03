@@ -1,5 +1,16 @@
 <?php
-define(__MINITALK_VERSION__,'6.2.3');
+define(__MINITALK_VERSION__,'6.2.4');
+
+if (get_magic_quotes_gpc() == true) {
+	foreach ($_REQUEST as $key=>$value) {
+		if (is_array($value) == true) {
+			$_REQUEST[$key] = array_map('stripslashes',$value);
+		} else {
+			$_REQUEST[$key] = stripslashes($value);
+		}
+	}
+}
+
 $_ENV['path'] = preg_replace('/(\/|\\\)config(\/|\\\)default\.conf\.php/','',__FILE__);
 $_ENV['url'] = (isset($_SERVER['HTTPS']) == true && $_SERVER['HTTPS'] == 'on' ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].str_replace($_SERVER['DOCUMENT_ROOT'],'',$_ENV['path']);
 
