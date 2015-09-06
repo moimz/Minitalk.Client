@@ -349,7 +349,7 @@ if (isMiniTalkIncluded === undefined) {
 					m.isAlertStorage = true;
 					m.printMessage("error",LANG.error.storage);
 				}
-				return;
+				return null;
 			}
 			
 			var storage = {};
@@ -1371,12 +1371,21 @@ if (isMiniTalkIncluded === undefined) {
 				m.printMessage("error",LANG.error.notAllowChat);
 				return;
 			}
+			
 			if (message.replace(/ /g,'').length == 0) return;
 			
 			isRaw = isRaw === true ? true : false;
 			if (message.length == 0) return;
 
 			if (isRaw == true) {
+				if (m.getStorage("baned") != null && typeof m.getStorage("baned") == "object") {
+					var baned = m.getStorage("baned");
+					var check = baned[m.channel] ? baned[m.channel] : 0;
+					if (check > new Date().getTime()) {
+						m.printMessage("system",LANG.action.banedtime.replace("{second}","<b><u>"+Math.ceil((check - new Date().getTime()) / 1000)+"</u></b>"));
+						return false;
+					}
+				}
 				var printMessage = message;
 				m.send("message",message);
 			} else {
@@ -1443,6 +1452,15 @@ if (isMiniTalkIncluded === undefined) {
 					
 					return;
 				} else {
+					if (m.getStorage("baned") != null && typeof m.getStorage("baned") == "object") {
+						var baned = m.getStorage("baned");
+						var check = baned[m.channel] ? baned[m.channel] : 0;
+						if (check > new Date().getTime()) {
+							m.printMessage("system",LANG.action.banedtime.replace("{second}","<b><u>"+Math.ceil((check - new Date().getTime()) / 1000)+"</u></b>"));
+							return false;
+						}
+					}
+					
 					if (typeof m.listeners.beforeSendMessage == "function") {
 						if (m.listeners.beforeSendMessage(m,message,m.myinfo) == false) return;
 					}
@@ -2423,7 +2441,9 @@ if (isMiniTalkIncluded === undefined) {
 				success:function(result) {
 					if (result.success == true) {
 						if (result.server !== false) {
-							m.server = "http://"+result.server.ip+":"+result.server.port;
+							if (result.server.is_ssl == "TRUE") m.server = "https://"+result.server.domain;
+							else m.server = "http://"+result.server.ip;
+							m.server+= ":"+result.server.port;
 							m.serverCode = result.server.serverCode ? result.server.serverCode : null;
 							m.channelCode = result.server.channelCode ? result.server.channelCode : null;
 							m.maxuser = result.server.maxuser;
@@ -2452,7 +2472,7 @@ if (isMiniTalkIncluded === undefined) {
 			if (m.socket != null && !m.socket.socket.connected) {
 				m.socket.socket.connect();
 			} else {
-				m.socket = io.connect(m.server,{reconnect:false});
+				m.socket = io.connect(m.server,{reconnect:false,secure:m.server.indexOf("https://") == 0});
 				m.setEvent();
 			}
 		}
@@ -2693,6 +2713,17 @@ if (isMiniTalkIncluded === undefined) {
 					m.printMessage("system",LANG.action.inviteReject.replace("{nickname}","<b><u>"+data.to.nickname+"</b></u>"));
 				} else {
 					m.printMessage("system",LANG.action.inviteRejected.replace("{nickname}","<b><u>"+data.from.nickname+"</b></u>"));
+				}
+			});
+			
+			this.socket.on("banmsg",function(data) {
+				if (data.to.nickname == m.myinfo.nickname) {
+					m.printMessage("system",LANG.action.banedmsg.replace("{from}","<b><u>"+data.from.nickname+"</b></u>"));
+					var baned = m.getStorage("baned") == null || typeof m.getStorage("baned") != "object" ? {} : m.getStorage("baned");
+					baned[m.channel] = new Date().getTime() + 60000;
+					m.setStorage("baned",baned);
+				} else {
+					m.printMessage("system",LANG.action.banmsg.replace("{from}","<b><u>"+data.from.nickname+"</b></u>").replace("{to}","<b><u>"+data.to.nickname+"</b></u>"));
 				}
 			});
 			
