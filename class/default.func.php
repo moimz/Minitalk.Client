@@ -104,14 +104,14 @@ function Redirect($url,$target='') {
 	exit;
 }
 
-function GetMiniTalkAPI($data) {
+function GetMiniTalkAPI($api,$data) {
 	$curlsession = curl_init();
-	curl_setopt($curlsession,CURLOPT_URL,'http://service.minitalk.kr/v'.__MINITALK_VERSION__.'/'.$data['action'].'/');
+	curl_setopt($curlsession,CURLOPT_URL,'https://www.minitalk.kr/ko/api/minitalk/'.$api);
 	
-	unset($data['action']);
+	$data['version'] = __MINITALK_VERSION__;
 	
 	curl_setopt($curlsession,CURLOPT_POST,1);
-	curl_setopt($curlsession,CURLOPT_POSTFIELDS,array('data'=>json_encode($data),'rnd'=>time()));
+	curl_setopt($curlsession,CURLOPT_POSTFIELDS,$data);
 	curl_setopt($curlsession,CURLOPT_TIMEOUT,15);
 	curl_setopt($curlsession,CURLOPT_RETURNTRANSFER,1);
 	$buffer = curl_exec($curlsession);
@@ -157,7 +157,7 @@ function CheckOnline($idx,$forceCheck=false) {
 			return array('idx'=>$check['idx'],'ip'=>$_SERVER['SERVER_ADDR'],'port'=>intval($check['port']),'serverCode'=>urlencode(MinitalkEncoder(json_encode(array('ip'=>$_SERVER['REMOTE_ADDR'])))),'channelCode'=>'');
 		}
 	} else {
-		$minitalk = GetMiniTalkAPI(array('action'=>'check_server','ip'=>$_SERVER['REMOTE_ADDR'],'mcode'=>$check['mcode'],'scode'=>md5($_SERVER['SERVER_ADDR'].str_replace('://www.','://',$_ENV['url'])),'key'=>$_ENV['key']));
+		$minitalk = GetMiniTalkAPI('getConnect',array('ip'=>$_SERVER['REMOTE_ADDR'],'client_id'=>$check['mcode'],'server_id'=>md5($_SERVER['SERVER_ADDR'].str_replace('://www.','://',$_ENV['url'])),'key'=>$_ENV['key']));
 		if ($minitalk['success'] == true) {
 			$minitalk['server']['idx'] = $check['idx'];
 			return $minitalk['server'];

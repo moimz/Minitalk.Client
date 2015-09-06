@@ -28,15 +28,15 @@ if ($action == 'server') {
 		for ($i=0, $loop=sizeof($lists);$i<$loop;$i++) {
 			$lists[$i]['mcode'] = $lists[$i]['type'] == 'SELF' ? $_SERVER['SERVER_ADDR'].':'.$lists[$i]['port'] : $lists[$i]['mcode'];
 			if ($lists[$i]['type'] == 'MINITALK') {
-				$serverInfo = GetMiniTalkAPI(array('action'=>'server_info','mcode'=>$lists[$i]['mcode'],'scode'=>md5($_SERVER['SERVER_ADDR'].str_replace('://www.','://',$_ENV['url']))));
+				$serverInfo = GetMiniTalkAPI('getInfo',array('action'=>'server_info','client_id'=>$lists[$i]['mcode'],'server_id'=>md5($_SERVER['SERVER_ADDR'].str_replace('://www.','://',$_ENV['url']))));
 				
 				if ($serverInfo['success'] == true) {
 					$lists[$i]['status'] = $serverInfo['auth'] == true ? $serverInfo['status'] : 'REAUTH';
 					$lists[$i]['user'] = $serverInfo['user'];
 					$lists[$i]['channel'] = $serverInfo['channel'];
 					$lists[$i]['maxuser'] = $serverInfo['maxuser'];
-					$lists[$i]['expire_time'] = $serverInfo['expire_time'];
-					$lists[$i]['check_time'] = $serverInfo['check_time'];
+					$lists[$i]['expire_time'] = $serverInfo['expire_date'];
+					$lists[$i]['check_time'] = $serverInfo['check_date'];
 				} else {
 					$lists[$i]['status'] = 'UNKNOWN';
 					$lists[$i]['user'] = 'UNKNOWN';
