@@ -11,7 +11,7 @@ if (get_magic_quotes_gpc() == true) {
 	}
 }
 
-$_ENV['path'] = preg_replace('/(\/|\\\)config(\/|\\\)default\.conf\.php/','',__FILE__);
+$_ENV['path'] = str_replace('\\','/',preg_replace('/(\/|\\\)config(\/|\\\)default\.conf\.php/','',__FILE__));
 $_ENV['url'] = (isset($_SERVER['HTTPS']) == true && $_SERVER['HTTPS'] == 'on' ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].str_replace($_SERVER['DOCUMENT_ROOT'],'',$_ENV['path']);
 
 if (file_exists($_ENV['path'].'/config/key.conf.php') == true) {

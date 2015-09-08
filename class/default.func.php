@@ -114,6 +114,7 @@ function GetMiniTalkAPI($api,$data) {
 	curl_setopt($curlsession,CURLOPT_POSTFIELDS,$data);
 	curl_setopt($curlsession,CURLOPT_TIMEOUT,15);
 	curl_setopt($curlsession,CURLOPT_RETURNTRANSFER,1);
+	curl_setopt($curlsession,CURLOPT_SSL_VERIFYPEER,false);
 	$buffer = curl_exec($curlsession);
 	curl_close($curlsession);
 
