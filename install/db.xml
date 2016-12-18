@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <minitalk>
-	<version>6.3.0</version>
+	<version>6.3.2</version>
 	<database>
 		<table name="minitalk_broadcast_table">
 			<field name="idx" type="int" length="11">고유값</field>
 			<field name="type" type="enum" length="NOTICE,MESSAGE" default="NOTICE">종류</field>
 			<field name="message" type="varchar" length="255">내용</field>
 			<field name="receiver" type="int" length="11">받은유저수</field>
-			<field name="url" type="varchar" length="255">링크주소</field>
+			<field name="url" type="varchar" length="255" defatul="">링크주소</field>
 			<field name="reg_date" type="int" length="11">전송일자</field>
 			<index name="idx" type="auto_increment" />
 			<index name="reg_date" type="index" />
@@ -15,7 +15,7 @@
 		
 		<table name="minitalk_category_table">
 			<field name="idx" type="int" length="11">고유값</field>
-			<field name="parent" type="int" length="11">상위카테고리</field>
+			<field name="parent" type="int" length="11" default="0">상위카테고리</field>
 			<field name="category" type="varchar" length="100">카테고리명</field>
 			<index name="idx" type="auto_increment" />
 			<index name="parent" type="index" />
@@ -23,12 +23,12 @@
 		
 		<table name="minitalk_channel_table">
 			<field name="channel" type="varchar" length="30">채널명</field>
-			<field name="category1" type="int" length="11">카테고리1</field>
-			<field name="category2" type="int" length="11">카테고리2</field>
+			<field name="category1" type="int" length="11" default="0">카테고리1</field>
+			<field name="category2" type="int" length="11" default="0">카테고리2</field>
 			<field name="title" type="varchar" length="50">타이틀</field>
-			<field name="user" type="int" length="11">접속자수</field>
-			<field name="maxuser" type="int" length="11">최대접속자수</field>
-			<field name="server" type="int" length="11">서버</field>
+			<field name="user" type="int" length="11" default="0">접속자수</field>
+			<field name="maxuser" type="int" length="11" default="0">최대접속자수</field>
+			<field name="server" type="int" length="11" default="0">서버</field>
 			<field name="is_nickname" type="enum" length="TRUE,FALSE" default="TRUE">닉네임변경여부</field>
 			<field name="is_broadcast" type="enum" length="TRUE,FALSE" default="TRUE">브로드캐스트여부</field>
 			<field name="grade_font" type="enum" length="ALL,ADMIN,POWERUSER,MEMBER" default="ALL">글꼴설정여부</field>
@@ -42,8 +42,8 @@
 		
 		<table name="minitalk_ipban_table">
 			<field name="ip" type="varchar" length="15">아이피</field>
-			<field name="nickname" type="varchar" length="20">닉네임</field>
-			<field name="memo" type="varchar" length="255">차단사유</field>
+			<field name="nickname" type="varchar" length="20" default="">닉네임</field>
+			<field name="memo" type="varchar" length="255" default="">차단사유</field>
 			<field name="reg_date" type="int" length="11">차단일시</field>
 			<index name="ip" type="primary" />
 			<index name="reg_date" type="index" />
@@ -53,7 +53,7 @@
 			<field name="file" type="varchar" length="100">파일명</field>
 			<field name="date" type="char" length="10">로그일자</field>
 			<field name="channel" type="varchar" length="30">채널명</field>
-			<field name="size" type="int" length="11">용량</field>
+			<field name="size" type="int" length="11" default="0">용량</field>
 			<index name="file" type="primary" />
 			<index name="date" type="index" />
 			<index name="channel" type="index" />
@@ -74,13 +74,13 @@
 		<table name="minitalk_server_table">
 			<field name="idx" type="int" length="11">고유값</field>
 			<field name="type" type="enum" length="MINITALK,SELF" default="SELF">종류</field>
-			<field name="port" type="int" length="5">포트</field>
-			<field name="status" type="enum" length="ONLINE,OFFLINE" default="OFFLINE">포트</field>
-			<field name="channel" type="int" length="11">개설채널</field>
-			<field name="user" type="int" length="11">접속자수</field>
-			<field name="maxuser" type="int" length="11">최대접속자수</field>
-			<field name="check_time" type="int" length="11">확인시간</field>
-			<field name="mcode" type="char" length="32">접속코드</field>
+			<field name="port" type="int" length="5" default="0">포트</field>
+			<field name="status" type="enum" length="ONLINE,OFFLINE" default="OFFLINE">상태</field>
+			<field name="channel" type="int" length="11" default="0">개설채널</field>
+			<field name="user" type="int" length="11" default="0">접속자수</field>
+			<field name="maxuser" type="int" length="11" default="0">최대접속자수</field>
+			<field name="check_time" type="int" length="11" default="0">확인시간</field>
+			<field name="mcode" type="varchar" length="32" default="">접속코드</field>
 			<index name="idx" type="auto_increment" />
 			<index name="type" type="index" />
 		</table>

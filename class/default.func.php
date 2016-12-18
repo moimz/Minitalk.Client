@@ -106,7 +106,7 @@ function Redirect($url,$target='') {
 
 function GetMiniTalkAPI($api,$data) {
 	$curlsession = curl_init();
-	curl_setopt($curlsession,CURLOPT_URL,'http://www.minitalk.kr/ko/api/minitalk/'.$api);
+	curl_setopt($curlsession,CURLOPT_URL,'https://www.minitalk.kr/ko/api/minitalk/'.$api);
 	
 	$data['version'] = __MINITALK_VERSION__;
 	
@@ -114,6 +114,7 @@ function GetMiniTalkAPI($api,$data) {
 	curl_setopt($curlsession,CURLOPT_POSTFIELDS,$data);
 	curl_setopt($curlsession,CURLOPT_TIMEOUT,15);
 	curl_setopt($curlsession,CURLOPT_RETURNTRANSFER,1);
+	curl_setopt($curlsession,CURLOPT_SSL_VERIFYPEER,false);
 	$buffer = curl_exec($curlsession);
 	curl_close($curlsession);
 

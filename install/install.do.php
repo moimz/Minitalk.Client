@@ -14,9 +14,9 @@ if ($step == '2') {
 	
 	$check_key = preg_match('/^[a-zA-Z0-9\.]{32}$/',$key) == true;
 	$check_db = true;
-	@mysql_connect($db_host,$db_id,$db_password) or $check_db = false;
+	$connect = @mysqli_connect($db_host,$db_id,$db_password) or $check_db = false;
 	$check_dbname = true;
-	@mysql_select_db($db_name) or $check_dbname = false;
+	@mysqli_select_db($connect,$db_name) or $check_dbname = false;
 	
 	$check_admin_id = strlen($admin_id) > 0;
 	$check_admin_password = strlen($admin_password) > 0;
@@ -54,7 +54,9 @@ if ($step == '2') {
 		$field = $table[$i]->field;
 		$fields = array();
 		for ($j=0, $loopj=sizeof($field);$j<$loopj;$j++) {
-			$fields[$j] = array('name'=>(string)($field[$j]->attributes()->name),'type'=>(string)($field[$j]->attributes()->type),'length'=>(string)($field[$j]->attributes()->length),'default'=>(string)($field[$j]->attributes()->default),'comment'=>(string)($field[$j]));
+			$fields[$j] = array('name'=>(string)($field[$j]->attributes()->name),'type'=>(string)($field[$j]->attributes()->type),'length'=>(string)($field[$j]->attributes()->length),'comment'=>(string)($field[$j]));
+			
+			if (isset($field[$j]->attributes()->default) == true) $fields[$j]['default'] = $field[$j]->attributes()->default;
 		}
 		
 		$index = $table[$i]->index;

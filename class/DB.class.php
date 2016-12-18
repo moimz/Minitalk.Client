@@ -25,8 +25,8 @@ class DB {
 		if (isset($this->connector[$db]) == false) {
 			switch ($this->infor[$db]['type'] ) {
 				case 'mysql' :
-					$this->connector[$db] = @mysql_connect($this->infor[$db]['host'],$this->infor[$db]['id'],$this->infor[$db]['password'],true);
-					@mysql_query("set names utf8");
+					$this->connector[$db] = @mysqli_connect($this->infor[$db]['host'],$this->infor[$db]['id'],$this->infor[$db]['password']);
+					@mysqli_query($this->connector[$db],"set names utf8");
 				break;
 			}
 		}
@@ -37,15 +37,15 @@ class DB {
 		$success = true;
 		switch ($infor['type']) {
 			case 'mysql' :
-				$connect = @mysql_connect($infor['host'],$infor['id'],$infor['password'],true) or ($success = false);
+				$connect = @mysqli_connect($infor['host'],$infor['id'],$infor['password'],true) or ($success = false);
 				if ($success == true) {
-					@mysql_select_db($infor['dbname'],$connect) or ($success = false);
+					@mysqli_select_db($infor['dbname'],$connect) or ($success = false);
 				}
 			break;
 		}
 		
 		if ($success == true) {
-			@mysql_close($connect);
+			@mysqli_close($connect);
 		}
 
 		return $success;
@@ -71,7 +71,7 @@ class DB {
 		switch ($this->infor[$db]['type']) {
 			case 'mysql' :
 				$query = 'LOCK TABLES `'.$this->infor[$db]['dbname'].'`.`'.$table.'` READ';
-				@mysql_query($query,$this->connector[$db]) or $this->DBerror($query,mysql_error());
+				@mysqli_query($this->connector[$db],$query) or $this->DBerror($query,@mysqli_error($this->connector[$db]));
 			break;
 		}
 	}
@@ -83,7 +83,7 @@ class DB {
 		switch ($this->infor[$db]['type']) {
 			case 'mysql' :
 				$query = 'UNLOCK TABLES';
-				@mysql_query($query,$this->connector[$db]) or $this->DBerror($query,mysql_error());
+				@mysqli_query($this->connector[$db],$query) or $this->DBerror($query,@mysqli_error($this->connector[$db]));
 			break;
 		}
 	}
@@ -94,7 +94,7 @@ class DB {
 		
 		switch ($this->infor[$db]['type']) {
 			case 'mysql' :
-				$check = @mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='".$this->infor[$db]['dbname']."' AND table_name = '$table'"));
+				$check = @mysqli_fetch_array(mysqli_query("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='".$this->infor[$db]['dbname']."' AND table_name = '$table'"));
 				if ($check[0] == 1) return true;
 			break;
 		}
@@ -121,16 +121,20 @@ class DB {
 			if (in_array($fieldType[$field[$i]['type']],array('text','longtext','date')) == false && isset($field[$i]['length']) == false) return false;
 			if ($fieldType[$field[$i]['type']] == 'enum') $field[$i]['length'] = '\''.implode('\',\'',explode(',',str_replace('\'','',$field[$i]['length']))).'\'';
 			
-			if (in_array($fieldType[$field[$i]['type']],array('tinyint','int','bigint')) == true) {
-				$field[$i]['default'] = isset($field[$i]['default']) == true && $field[$i]['default'] == '0' ? '' : $field[$i]['default'];
-			} elseif ($fieldType[$field[$i]['type']] == 'date') {
-				$field[$i]['default'] = isset($field[$i]['default']) == true && $field[$i]['default'] ? $field[$i]['default'] : '0000-00-00';
-			} else {
-				$field[$i]['default'] = isset($field[$i]['default']) == true ? $field[$i]['default'] : '';
+			if (isset($field[$i]['default']) == true) {
+				if (in_array($fieldType[$field[$i]['type']],array('tinyint','int','bigint')) == true) {
+					$field[$i]['default'] = isset($field[$i]['default']) == true && $field[$i]['default'] == '0' ? '0' : $field[$i]['default'];
+				} elseif ($fieldType[$field[$i]['type']] == 'date') {
+					$field[$i]['default'] = isset($field[$i]['default']) == true && $field[$i]['default'] ? $field[$i]['default'] : '0000-00-00';
+				} else {
+					$field[$i]['default'] = isset($field[$i]['default']) == true ? $field[$i]['default'] : '';
+				}
 			}
 			
 			$field[$i]['comment'] = isset($field[$i]['comment']) == true ? $field[$i]['comment'] : '';
-			$return[$i] = array('name'=>$field[$i]['name'],'type'=>$fieldType[$field[$i]['type']],'length'=>$field[$i]['length'],'default'=>$field[$i]['default'],'comment'=>$field[$i]['comment']);
+			$return[$i] = array('name'=>$field[$i]['name'],'type'=>$fieldType[$field[$i]['type']],'length'=>$field[$i]['length'],'comment'=>$field[$i]['comment']);
+			
+			if (isset($field[$i]['default']) == true) $return[$i]['default'] = $field[$i]['default'];
 		}
 		
 		if ($isArray == false) $return = array_shift($return);
@@ -171,7 +175,7 @@ class DB {
 		switch ($this->infor[$db]['type']) {
 			case 'mysql' :
 				$query = 'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` AUTO_INCREMENT=0';
-				@mysql_query($query,$this->connector[$db]) or $this->DBerror($query,mysql_error());
+				@mysqli_query($this->connector[$db],$query) or $this->DBerror($query,@mysqli_error($this->connector[$db]));
 			break;
 		}
 	}
@@ -192,26 +196,31 @@ class DB {
 				$query = 'CREATE TABLE IF NOT EXISTS `'.$this->infor[$db]['dbname'].'`.`'.$table.'` (';
 				
 				for ($i=0, $loop=sizeof($field);$i<$loop;$i++) {
-					if (in_array($field[$i]['type'],array('varchar','char','int','bigint','enum')) == true) {
-						if ($field[$i]['default']) $field[$i] = '`'.$field[$i]['name'].'` '.$field[$i]['type'].'('.$field[$i]['length'].') NOT NULL DEFAULT \''.$field[$i]['default'].'\' COMMENT \''.$field[$i]['comment'].'\'';
+					if (in_array($field[$i]['type'],array('varchar','char','enum')) == true) {
+						if (isset($field[$i]['default']) == true) $field[$i] = '`'.$field[$i]['name'].'` '.$field[$i]['type'].'('.$field[$i]['length'].') NOT NULL DEFAULT \''.$field[$i]['default'].'\' COMMENT \''.$field[$i]['comment'].'\'';
+						else $field[$i] = '`'.$field[$i]['name'].'` '.$field[$i]['type'].'('.$field[$i]['length'].') NOT NULL COMMENT \''.$field[$i]['comment'].'\'';
+					} elseif (in_array($field[$i]['type'],array('int','bigint')) == true) {
+						if (isset($field[$i]['default']) == true) $field[$i] = '`'.$field[$i]['name'].'` '.$field[$i]['type'].'('.$field[$i]['length'].') NOT NULL DEFAULT '.$field[$i]['default'].' COMMENT \''.$field[$i]['comment'].'\'';
 						else $field[$i] = '`'.$field[$i]['name'].'` '.$field[$i]['type'].'('.$field[$i]['length'].') NOT NULL COMMENT \''.$field[$i]['comment'].'\'';
 					} elseif (in_array($field[$i]['type'],array('text','date')) == true) {
-						if ($field[$i]['default']) $field[$i] = '`'.$field[$i]['name'].'` '.$field[$i]['type'].' NOT NULL DEFAULT \''.$field[$i]['default'].'\' COMMENT \''.$field[$i]['comment'].'\'';
-						else $field[$i] = '`'.$field[$i]['name'].'` '.$field[$i]['type'].' NOT NULL COMMENT \''.$field[$i]['comment'].'\'';
+						if (isset($field[$i]['default']) == true) $field[$i] = '`'.$field[$i]['name'].'` '.$field[$i]['type'].' NOT NULL DEFAULT \''.$field[$i]['default'].'\' COMMENT \''.$field[$i]['comment'].'\'';
+						else $field[$i] = '`'.$field[$i]['name'].'` '.$field[$i]['type'].' NULL COMMENT \''.$field[$i]['comment'].'\'';
 					} elseif (in_array($field[$i]['type'],array('longtext')) == true) {
-						$field[$i] = '`'.$field[$i]['name'].'` '.$field[$i]['type'].' NOT NULL COMMENT \''.$field[$i]['comment'].'\'';
+						$field[$i] = '`'.$field[$i]['name'].'` '.$field[$i]['type'].' NULL COMMENT \''.$field[$i]['comment'].'\'';
 					}
 				}
 				
 				$query.= implode(', ',$field);
 				
 				$query.= ') ENGINE=MyISAM DEFAULT CHARSET=utf8;';
-
-				@mysql_query($query,$this->connector[$db]) or $isSuccess = $this->DBerror($query,mysql_error());
 				
-				$oIndexList = @mysql_query('SHOW INDEX FROM `'.$this->infor[$db]['dbname'].'`.`'.$table.'`',$this->connector[$db]);
-				while ($oIndex = @mysql_fetch_assoc($oIndexList)) {
-					@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` DROP INDEX `'.$oIndex['Key_name'].'`',$this->connector[$db]);
+				echo $query;
+
+				@mysqli_query($this->connector[$db],$query) or $isSuccess = $this->DBerror($query,@mysqli_error($this->connector[$db]));
+				
+				$oIndexList = @mysqli_query($this->connector[$db],'SHOW INDEX FROM `'.$this->infor[$db]['dbname'].'`.`'.$table.'`');
+				while ($oIndex = @mysqli_fetch_assoc($oIndexList)) {
+					@mysqli_query($this->connector[$db],'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` DROP INDEX `'.$oIndex['Key_name'].'`');
 				}
 				
 				if ($isSuccess == true) {
@@ -220,24 +229,24 @@ class DB {
 					for ($i=0, $loop=sizeof($index);$i<$loop;$i++) {
 						$index[$i]['name'] = implode('`,`',explode(',',$index[$i]['name']));
 						if ($index[$i]['type'] == 'auto_increment') {
-							@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD PRIMARY KEY (`'.$index[$i]['name'].'`)',$this->connector[$db]);
-							@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` CHANGE `'.$index[$i]['name'].'` `'.$index[$i]['name'].'` INT(11) NOT NULL AUTO_INCREMENT COMMENT \'고유값\'',$this->connector[$db]);
+							@mysqli_query($this->connector[$db],'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD PRIMARY KEY (`'.$index[$i]['name'].'`)');
+							@mysqli_query($this->connector[$db],'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` CHANGE `'.$index[$i]['name'].'` `'.$index[$i]['name'].'` INT(11) NOT NULL AUTO_INCREMENT COMMENT \'고유값\'');
 						}
 						
 						if ($index[$i]['type'] == 'primary') {
-							@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD PRIMARY KEY (`'.$index[$i]['name'].'`)',$this->connector[$db]);
+							@mysqli_query($this->connector[$db],'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD PRIMARY KEY (`'.$index[$i]['name'].'`)');
 						}
 						
 						if ($index[$i]['type'] == 'index') {
-							@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD INDEX (`'.$index[$i]['name'].'`)',$this->connector[$db]);
+							@mysqli_query($this->connector[$db],'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD INDEX (`'.$index[$i]['name'].'`)');
 						}
 						
 						if ($index[$i]['type'] == 'unique') {
-							@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD UNIQUE (`'.$index[$i]['name'].'`)',$this->connector[$db]);
+							@mysqli_query($this->connector[$db],'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD UNIQUE (`'.$index[$i]['name'].'`)');
 						}
 						
 						if ($index[$i]['type'] == 'fulltext') {
-							@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD FULLTEXT (`'.$index[$i]['name'].'`)',$this->connector[$db]);
+							@mysqli_query($this->connector[$db],'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD FULLTEXT (`'.$index[$i]['name'].'`)');
 						}
 					}
 				}
@@ -256,7 +265,7 @@ class DB {
 			switch ($this->infor[$db]['type']) {
 				case 'mysql' :
 					$query = 'RENAME TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` TO `'.$this->infor[$db]['dbname'].'`.`'.$newname.'`';
-					@mysql_query($query,$this->connector[$db]) or $isSuccess = $this->DBerror($query,mysql_error());
+					@mysqli_query($this->connector[$db],$query) or $isSuccess = $this->DBerror($query,@mysqli_error($this->connector[$db]));
 				break;
 			}
 		} else {
@@ -278,9 +287,9 @@ class DB {
 
 		switch ($this->infor[$db]['type']) {
 			case 'mysql' :
-				$desc = @mysql_query('DESC `'.$this->infor[$db]['dbname'].'`.`'.$table.'`',$this->connector[$db]);
+				$desc = @mysqli_query($this->connector[$db],'DESC `'.$this->infor[$db]['dbname'].'`.`'.$table.'`');
 				$i = 0;
-				while ($data = @mysql_fetch_assoc($desc)) {
+				while ($data = @mysqli_fetch_assoc($desc)) {
 					if ($data['Field'] != $field[$i]['name']) return false;
 					if (in_array($data['Type'],array('text','longtext','date')) == true && $data['Type'] != $field[$i]['type']) return false;
 					elseif (in_array($data['Type'],array('text','longtext','date')) == false && $data['Type'] != $field[$i]['type'].'('.$field[$i]['length'].')') return false;
@@ -290,10 +299,10 @@ class DB {
 				if ($i != sizeof($field)) return false;
 
 				$i = 0;
-				$oIndexList = @mysql_query('SHOW INDEX FROM `'.$this->infor[$db]['dbname'].'`.`'.$table.'`',$this->connector[$db]);
+				$oIndexList = @mysqli_query($this->connector[$db],'SHOW INDEX FROM `'.$this->infor[$db]['dbname'].'`.`'.$table.'`');
 				$keyName = array();
 				$beforeKeyName = '';
-				while ($oIndex = @mysql_fetch_assoc($oIndexList)) {
+				while ($oIndex = @mysqli_fetch_assoc($oIndexList)) {
 					if ($beforeKeyName == $oIndex['Key_name']) {
 						$key = array_pop($keyName).','.$oIndex['Column_name'];
 						$keyName[] = $key;
@@ -312,19 +321,19 @@ class DB {
 				for ($i=0, $loop=sizeof($index);$i<$loop;$i++) {
 					$index[$i]['name'] = implode('`,`',explode(',',$index[$i]['name']));
 					if ($index[$i]['type'] == 'auto_increment') {
-						@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` CHANGE `'.$index[$i]['name'].'` `'.$index[$i]['name'].'` INT(11) NOT NULL AUTO_INCREMENT COMMENT \'고유값\'',$this->connector[$db]);
+						@mysqli_query($this->connector[$db],'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` CHANGE `'.$index[$i]['name'].'` `'.$index[$i]['name'].'` INT(11) NOT NULL AUTO_INCREMENT COMMENT \'고유값\'');
 						$auto_increment = $index[$i]['name'];
 					}
 				}
 				
 				$i = 0;
-				$desc = @mysql_query('DESC `'.$this->infor[$db]['dbname'].'`.`'.$table.'`',$this->connector[$db]);
-				while ($data = @mysql_fetch_assoc($desc)) {
+				$desc = @mysqli_query($this->connector[$db],'DESC `'.$this->infor[$db]['dbname'].'`.`'.$table.'`');
+				while ($data = @mysqli_fetch_assoc($desc)) {
 					if ($auto_increment != $data['Field']) {
 						if ($field[$i]['default']) {
-							@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` CHANGE `'.$data['Field'].'` `'.$data['Field'].'` '.$data['Type'].' NOT NULL DEFAULT \''.$field[$i]['default'].'\' COMMENT \''.$field[$i]['comment'].'\'');
+							@mysqli_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` CHANGE `'.$data['Field'].'` `'.$data['Field'].'` '.$data['Type'].' NOT NULL DEFAULT \''.$field[$i]['default'].'\' COMMENT \''.$field[$i]['comment'].'\'');
 						} else {
-							@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` CHANGE `'.$data['Field'].'` `'.$data['Field'].'` '.$data['Type'].' NOT NULL COMMENT \''.$field[$i]['comment'].'\'');
+							@mysqli_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` CHANGE `'.$data['Field'].'` `'.$data['Field'].'` '.$data['Type'].' NOT NULL COMMENT \''.$field[$i]['comment'].'\'');
 						}
 					}
 					$i++;
@@ -343,7 +352,7 @@ class DB {
 		switch ($this->infor[$db]['type']) {
 			case 'mysql' :
 				$query = 'DROP TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'`';
-				@mysql_query($query,$this->connector[$db]) or $isSuccess = $this->DBerror($query,mysql_error());
+				@mysqli_query($this->connector[$db],$query) or $isSuccess = $this->DBerror($query,@mysqli_error($this->connector[$db]));
 			break;
 		}
 		
@@ -360,8 +369,8 @@ class DB {
 		switch ($this->infor[$db]['type']) {
 			case 'mysql' :
 				$query = 'DESC `'.$this->infor[$db]['dbname'].'`.`'.$table.'`';
-				$sql = @mysql_query($query,$this->connector[$db]) or $this->DBerror($query,mysql_error());
-				while ($field = @mysql_fetch_assoc($sql)) {
+				$sql = @mysqli_query($this->connector[$db],$query) or $this->DBerror($query,@mysqli_error($this->connector[$db]));
+				while ($field = @mysqli_fetch_assoc($sql)) {
 					$fields[] = $field['Field'];
 				}
 			break;
@@ -398,7 +407,7 @@ class DB {
 					$query.= ' AFTER `'.$position.'`';
 				}
 
-				@mysql_query($query,$this->connector[$db]) or $isSuccess = $this->DBerror($query,mysql_error());
+				@mysqli_query($this->connector[$db],$query) or $isSuccess = $this->DBerror($query,@mysqli_error($this->connector[$db]));
 			break;
 		}
 		
@@ -434,7 +443,7 @@ class DB {
 					$query.= ' AFTER `'.$position.'`';
 				}
 
-				@mysql_query($query,$this->connector[$db]) or $isSuccess = $this->DBerror($query,mysql_error());
+				@mysqli_query($this->connector[$db],$query) or $isSuccess = $this->DBerror($query,@mysqli_error($this->connector[$db]));
 			break;
 		}
 		
@@ -452,7 +461,7 @@ class DB {
 		switch ($this->infor[$db]['type']) {
 			case 'mysql' :
 				$query = 'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` DROP `'.$field.'`';
-				@mysql_query($query,$this->connector[$db]) or $isSuccess = $this->DBerror($query,mysql_error());
+				@mysqli_query($this->connector[$db],$query) or $isSuccess = $this->DBerror($query,@mysqli_error($this->connector[$db]));
 			break;
 		}
 		
@@ -469,8 +478,8 @@ class DB {
 		switch ($this->infor[$db]['type']) {
 			case 'mysql' :
 				$query = 'SHOW INDEX FROM `'.$this->infor[$db]['dbname'].'`.`'.$table.'`';
-				$sql = @mysql_query($query,$this->connector[$db]) or $this->DBerror($query,mysql_error());
-				while($fetch = @mysql_fetch_assoc($sql)) {
+				$sql = @mysqli_query($this->connector[$db],$query) or $this->DBerror($query,@mysqli_error($this->connector[$db]));
+				while($fetch = @mysqli_fetch_assoc($sql)) {
 					if ($fetch['Column_name'] == $field) {
 						if ($fetch['Key_name'] == 'PRIMARY') $index = 'primary';
 						elseif ($fetch['Non_unique'] == '0') $index = 'unique';
@@ -497,11 +506,11 @@ class DB {
 			case 'mysql' :
 				if ($index['type'] == 'auto_increment') {
 					if ($this->IDinfo($table,$index['name'],$db) == 'primary') {
-						@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` CHANGE `'.$index['name'].'` `'.$index['name'].'` INT(11) NOT NULL AUTO_INCREMENT COMMENT \'고유값\'',$this->connector[$db]);
+						@mysqli_query($this->connector[$db],'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` CHANGE `'.$index['name'].'` `'.$index['name'].'` INT(11) NOT NULL AUTO_INCREMENT COMMENT \'고유값\'');
 					} else {
-						@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` DROP PRIMARY KEY',$this->connector[$db]);
-						@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD PRIMARY KEY (`'.$index['name'].'`)',$this->connector[$db]);
-						@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` CHANGE `'.$index['name'].'` `'.$index['name'].'` INT(11) NOT NULL AUTO_INCREMENT COMMENT \'고유값\'',$this->connector[$db]);
+						@mysqli_query($this->connector[$db],'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` DROP PRIMARY KEY');
+						@mysqli_query($this->connector[$db],'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD PRIMARY KEY (`'.$index['name'].'`)');
+						@mysqli_query($this->connector[$db],'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` CHANGE `'.$index['name'].'` `'.$index['name'].'` INT(11) NOT NULL AUTO_INCREMENT COMMENT \'고유값\'');
 					}
 				} elseif ($this->IDinfo($table,$index['name'],$db) != $index['type']) {
 					if ($this->IDinfo($table,$index['name'],$db) != '') {
@@ -509,14 +518,14 @@ class DB {
 					}
 					
 					if ($index['type'] == 'primary') {
-						@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` DROP PRIMARY KEY',$this->connector[$db]);
-						@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD PRIMARY KEY (`'.$index['name'].'`)',$this->connector[$db]);
+						@mysqli_query($this->connector[$db],'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` DROP PRIMARY KEY');
+						@mysqli_query($this->connector[$db],'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD PRIMARY KEY (`'.$index['name'].'`)');
 					} elseif ($index['type'] == 'index') {
-						@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD INDEX (`'.$index['name'].'`)',$this->connector[$db]);
+						@mysqli_query($this->connector[$db],'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD INDEX (`'.$index['name'].'`)');
 					} elseif ($index['type'] == 'unique') {
-						@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD UNIQUE (`'.$index['name'].'`)',$this->connector[$db]);
+						@mysqli_query($this->connector[$db],'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD UNIQUE (`'.$index['name'].'`)');
 					} elseif ($index[$i]['type'] == 'fulltext') {
-						@mysql_query('ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD FULLTEXT (`'.$index['name'].'`)',$this->connector[$db]);
+						@mysqli_query($this->connector[$db],'ALTER TABLE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` ADD FULLTEXT (`'.$index['name'].'`)');
 					}
 				}
 			break;
@@ -542,7 +551,7 @@ class DB {
 				}
 				
 				if ($query) {
-					@mysql_query($query,$this->connector[$db]) or $isSuccess = $this->DBerror($query,mysql_error());
+					@mysqli_query($this->connector[$db],$query) or $isSuccess = $this->DBerror($query,@mysqli_error($this->connector[$db]));
 				}
 			break;
 		}
@@ -558,8 +567,8 @@ class DB {
 		switch ($this->infor[$db]['type']) {
 			case 'mysql' :
 				$query = 'SHOW INDEX FROM `'.$this->infor[$db]['dbname'].'`.`'.$table.'`';
-				$sql = @mysql_query($query,$this->connector[$db]) or $this->DBerror($query,mysql_error());
-				while($fetch = @mysql_fetch_assoc($sql)) {
+				$sql = @mysqli_query($this->connector[$db],$query) or $this->DBerror($query,@mysqli_error($this->connector[$db]));
+				while($fetch = @mysqli_fetch_assoc($sql)) {
 					if ($fetch['Column_name'] == $column) {
 						if ($fetch['Key_name'] == 'PRIMARY') $index = 'PRIMARY KEY';
 						elseif ($fetch['Non_unique'] == '0') $index = 'UNIQUE';
@@ -582,8 +591,8 @@ class DB {
 		switch ($this->infor[$db]['type']) {
 			case 'mysql' :
 				$query = 'SHOW TABLE STATUS FROM `'.$this->infor[$db]['dbname'].'` WHERE Name="'.$table.'"';
-				$list = @mysql_query($query,$this->connector[$db]) or $this->DBerror($query,mysql_error());
-				$status = @mysql_fetch_assoc($list);
+				$list = @mysqli_query($this->connector[$db],$query) or $this->DBerror($query,@mysqli_error($this->connector[$db]));
+				$status = @mysqli_fetch_assoc($list);
 
 				$size = $status['Data_length']+$status['Index_length'];
 			break;
@@ -602,12 +611,12 @@ class DB {
 			case 'mysql' :
 				if (preg_match('/GROUP BY/i',$find) == true) {
 					$query = 'SELECT * FROM `'.$this->infor[$db]['dbname'].'`.`'.$table.'` '.$find;
-					$checkCount = mysql_query($query,$this->connector[$db]) or $this->DBerror($query,mysql_error());
-					$count = @mysql_num_rows($checkCount);
+					$checkCount = mysqli_query($this->connector[$db],$query) or $this->DBerror($query,@mysqli_error($this->connector[$db]));
+					$count = @mysqli_num_rows($checkCount);
 				} else {
 					$query = 'SELECT COUNT(*) FROM `'.$this->infor[$db]['dbname'].'`.`'.$table.'` '.$find;
-					$checkCount = @mysql_query($query,$this->connector[$db]) or $this->DBerror($query,mysql_error());
-					$check = @mysql_fetch_array($checkCount);
+					$checkCount = @mysqli_query($this->connector[$db],$query) or $this->DBerror($query,@mysqli_error($this->connector[$db]));
+					$check = @mysqli_fetch_array($checkCount);
 					$count = $check[0];
 				}
 			break;
@@ -641,7 +650,7 @@ class DB {
 			case 'mysql' :
 				$query = 'UPDATE `'.$this->infor[$db]['dbname'].'`.`'.$table.'` SET '.$updater.' '.$find;
 				$this->sql = $query;
-				$result = @mysql_query($query,$this->connector[$db]) or $this->DBerror($query,mysql_error());
+				$result = @mysqli_query($this->connector[$db],$query) or $this->DBerror($query,@mysqli_error($this->connector[$db]));
 			break;
 		}
 		
@@ -675,8 +684,8 @@ class DB {
 		switch ($this->infor[$db]['type']) {
 			case 'mysql' :
 				$query = 'INSERT INTO `'.$this->infor[$db]['dbname'].'`.`'.$table.'` '.$insertor;
-				@mysql_query($query,$this->connector[$db]) or $this->DBerror($query,mysql_error());
-				$returnValue = @mysql_insert_id($this->connector[$db]);
+				@mysqli_query($this->connector[$db],$query) or $this->DBerror($query,@mysqli_error($this->connector[$db]));
+				$returnValue = @mysqli_insert_id($this->connector[$db]);
 			break;
 		}
 		
@@ -778,8 +787,8 @@ class DB {
 				$query.= $order ? ' '.$order : '';
 				$query.= $limit ? ' '.$limit : '';
 
-				$list = @mysql_query($query,$this->connector[$db]) or $this->DBerror($query,mysql_error());
-				while ($fetch = @mysql_fetch_assoc($list)) {
+				$list = @mysqli_query($this->connector[$db],$query) or $this->DBerror($query,@mysqli_error($this->connector[$db]));
+				while ($fetch = @mysqli_fetch_assoc($list)) {
 					$output[] = $fetch;
 				}
 			break;
@@ -804,8 +813,8 @@ class DB {
 				$query = 'SELECT * FROM '.implode(',',$tables);
 				$query.= $find ? ' '.$find : '';
 
-				$list = @mysql_query($query,$this->connector[$db]) or $this->DBerror($query,mysql_error());
-				$count = mysql_num_rows($list);
+				$list = @mysqli_query($this->connector[$db],$query) or $this->DBerror($query,@mysqli_error($this->connector[$db]));
+				$count = mysqli_num_rows($list);
 			break;
 		}
 		
@@ -872,8 +881,8 @@ class DB {
 				$query.= $order ? ' '.$order : '';
 				$query.= $limit ? ' '.$limit : '';
 
-				$list = @mysql_query($query,$this->connector[$db]) or $this->DBerror($query,mysql_error());
-				$fetch = @mysql_fetch_assoc($list);
+				$list = @mysqli_query($this->connector[$db],$query) or $this->DBerror($query,@mysqli_error($this->connector[$db]));
+				$fetch = @mysqli_fetch_assoc($list);
 			break;
 		}
 		
@@ -940,8 +949,8 @@ class DB {
 				$query.= $limit ? ' '.$limit : '';
 				$this->sql = $query;
 
-				$list = @mysql_query($query,$this->connector[$db]) or $this->DBerror($query,mysql_error());
-				while ($fetch = @mysql_fetch_assoc($list)) {
+				$list = @mysqli_query($this->connector[$db],$query) or $this->DBerror($query,@mysqli_error($this->connector[$db]));
+				while ($fetch = @mysqli_fetch_assoc($list)) {
 					$output[] = $fetch;
 				}
 			break;
@@ -958,7 +967,7 @@ class DB {
 
 		if ($this->infor[$db]['type'] == 'mysql') {
 			$query = 'DELETE FROM `'.$this->infor[$db]['dbname'].'`.`'.$table.'` '.$find;
-			@mysql_query($query,$this->connector[$db]) or $this->DBerror($query,mysql_error());
+			@mysqli_query($this->connector[$db],$query) or $this->DBerror($query,@mysqli_error($this->connector[$db]));
 		}
 		
 		$this->DBlog($query);
@@ -970,7 +979,7 @@ class DB {
 
 		if ($this->infor[$db]['type'] == 'mysql') {
 			$query = 'TRUNCATE `'.$this->infor[$db]['dbname'].'`.`'.$table.'`';
-			@mysql_query($query,$this->connector[$db]) or $this->DBerror($query,mysql_error());
+			@mysqli_query($this->connector[$db],$query) or $this->DBerror($query,@mysqli_error($this->connector[$db]));
 		}
 		
 		$this->DBlog($query);
@@ -1001,7 +1010,7 @@ class DB {
 		if (isset($this->infor[$db]) == false) $this->DBinfor($db);
 
 		if ($this->infor[$db]['type'] == 'mysql') {
-			if (!is_numeric($str)) $str = @mysql_escape_string($str);
+			if (!is_numeric($str)) $str = @mysqli_real_escape_string($this->connector[$db],$str);
 		}
 		return $str;
 	}

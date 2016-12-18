@@ -1,5 +1,5 @@
 <?php
-define(__MINITALK_VERSION__,'6.3.0');
+define('__MINITALK_VERSION__','6.3.2');
 
 if (get_magic_quotes_gpc() == true) {
 	foreach ($_REQUEST as $key=>$value) {

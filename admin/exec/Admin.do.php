@@ -86,7 +86,7 @@ if ($action == 'server') {
 				}
 			}
 		} else {
-			$check = $mDB->DBfetch('minitalk_server_table','*',"where `type`='MINITALK' and `mcode`='{$result['mcode']}'");
+			$check = $mDB->DBfetch('minitalk_server_table','*',"where `type`='MINITALK' and `mcode`='".Request('mcode')."'");
 			if (isset($check['idx']) == true) {
 				$return['success'] = false;
 				$return['message'] = '이미 등록되어 있는 클라이언트 ID 입니다.';
@@ -94,6 +94,8 @@ if ($action == 'server') {
 				$dbpath = $_ENV['url'].'/exec/DB.do.php';
 				$data = array('email'=>Request('user_id'),'password'=>Request('password'),'client_id'=>Request('mcode'),'server_id'=>md5($_SERVER['SERVER_ADDR'].str_replace('://www.','://',$_ENV['url'])),'callback'=>$dbpath);
 				$result = GetMiniTalkAPI('register',$data);
+				
+				print_r($result);
 				
 				if ($result['success'] == true) {
 					$mDB->DBinsert('minitalk_server_table',array('type'=>'MINITALK','mcode'=>$result['client_id']));
@@ -199,8 +201,8 @@ if ($action == 'channel') {
 	if ($do == 'add') {
 		$insert = array();
 		$errors = array();
-		$insert['category1'] = Request('category1');
-		$insert['category2'] = Request('category2');
+		if (Request('category1')) $insert['category1'] = Request('category1');
+		if (Request('category2')) $insert['category2'] = Request('category2');
 		$insert['password'] = Request('password');
 		$insert['channel'] = Request('channel');
 		$insert['title'] = Request('title');
