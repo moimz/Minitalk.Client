@@ -7,7 +7,7 @@ $checking_mcrypt = function_exists('mcrypt_encrypt');
 $checking_json = function_exists('json_encode');
 $checking_xml = class_exists('SimpleXMLElement');
 $checking_curl = function_exists('curl_init');
-$checking_mysql = preg_match('/5\.[0-9]+\.[0-9]+/',mysqli_get_client_info()) == true;
+$checking_mysql = version_compare(phpversion(),'7.0','>=') || version_compare(mysqli_get_client_info(),'5.0','>=');
 $checking_config = is_dir('./config') == true && (substr(sprintf('%o',fileperms('./config')),2,3) == 707 || substr(sprintf('%o',fileperms('./config')),2,3) == 777);
 $checking_log = is_dir('./log') == true && (substr(sprintf('%o',fileperms('./log')),2,3) == 707 || substr(sprintf('%o',fileperms('./log')),2,3) == 777);
 $checking_session = is_dir('./session') == true && (substr(sprintf('%o',fileperms('./session')),2,3) == 707 || substr(sprintf('%o',fileperms('./session')),2,3) == 777);

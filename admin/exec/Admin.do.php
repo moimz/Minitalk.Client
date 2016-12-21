@@ -95,8 +95,6 @@ if ($action == 'server') {
 				$data = array('email'=>Request('user_id'),'password'=>Request('password'),'client_id'=>Request('mcode'),'server_id'=>md5($_SERVER['SERVER_ADDR'].str_replace('://www.','://',$_ENV['url'])),'callback'=>$dbpath);
 				$result = GetMiniTalkAPI('register',$data);
 				
-				print_r($result);
-				
 				if ($result['success'] == true) {
 					$mDB->DBinsert('minitalk_server_table',array('type'=>'MINITALK','mcode'=>$result['client_id']));
 					$return['success'] = true;
