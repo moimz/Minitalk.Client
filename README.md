@@ -1,6 +1,6 @@
-MiniTalk6.Client
+Minitalk.Client
 ================
 
-Realtime Chatting Program in WebSite, MiniTalk6 Client
+Realtime Chatting Platform, Minitalk Client
 
-http://www.minitalk.kr
+https://www.minitalk.io
