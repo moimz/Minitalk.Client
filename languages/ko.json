@@ -1,0 +1,213 @@
+{
+	"text":{
+		"unit":"{COUNT}명",
+		"me":"나",
+		"error":"에러가 발생하였습니다.",
+		"minitalk_homepage":"미니톡 매뉴얼 확인"
+	},
+	"level":{
+		"0":"손님 (유저설정이 없는 손님)",
+		"1":"레벨 1 (유저설정이 있는 사용자의 최소레벨)",
+		"2":"레벨 2",
+		"3":"레벨 3",
+		"4":"레벨 4",
+		"5":"레벨 5",
+		"6":"레벨 6",
+		"7":"레벨 7",
+		"8":"레벨 8",
+		"9":"레벨 9 (채널관리자)"
+	},
+	"alert":{
+		"info":"안내",
+		"error":"에러"
+	},
+	"action":{
+		"wait":"잠시만 기다려주십시오.",
+		"loading":"데이터를 불러오고 있습니다.",
+		"saving":"데이터를 저장하고 있습니다.",
+		"saved":"데이터를 성공적으로 저장하였습니다.",
+		"working":"요청사항을 처리중입니다.",
+		"worked":"성공적으로 처리하였습니다.",
+		"connecting":"미니톡서버에 접속중입니다.",
+		"reconnecting":"잠시후 미니톡서버에 다시 접속을 시도합니다.({SECOND}초)",
+		"connected":"{CHANNEL}채널에 접속하였습니다.",
+		"join":"{NICKNAME}님이 채널에 접속하였습니다.",
+		"leave":"{NICKNAME}님이 접속을 종료하였습니다.",
+		"login":"채널관리자로 로그인하였습니다.",
+		"logout":"채널관리자에서 로그아웃하였습니다.",
+		"updated_nickname":"닉네임을 {NICKNAME}으로 변경하였습니다.",
+		"update_nickname":"{BEFORE}님이 닉네임을 {AFTER}으로 변경하였습니다.",
+		"refresh":"새로고침",
+		"reconnect":"재접속"
+	},
+	"tool":{
+		
+	},
+	"menu":{
+		
+	},
+	"button":{
+		"confirm":"확인",
+		"modify":"수정",
+		"cancel":"취소",
+		"search":"검색",
+		"refresh":"새로고침",
+		"chat":"채팅",
+		"users":"접속자",
+		"boxes":"개인박스",
+		"configs":"환경설정"
+	},
+	"user":{
+		"keyword":"닉네임 검색"
+	},
+	"box":{
+		"create":"박스생성",
+		"keyword":"박스명/개설자 검색"
+	},
+	"error":{
+		"UNKNOWN":"알 수 없는 에러가 발생하였습니다.",
+		"MINITALK_ID_DUPLICATED":"동일 웹페이지에 동일한 ID의 미니톡 채팅위젯을 동시에 사용할 수 없습니다.",
+		"FORBIDDEN":"권한이 없습니다.",
+		"REQUIRED":"필수입력사항이 누락되었습니다.",
+		"DATA_LOAD_FAILED":"데이터를 불러오는데 실패하였습니다.",
+		"DATA_SAVE_FAILED":"데이터를 저장하는데 실패하였습니다.",
+		"DISCONNECTED":"미니톡서버와 접속이 끊어졌습니다.",
+		"CONNECT_ERROR":"미니톡서버에 접속할 수 없습니다.",
+		"NOT_FOUND_ONLINE_SERVER":"접속가능한 서버를 찾을 수 없습니다.<br>잠시 후 다시 시도하여 주십시오.",
+		"NOT_FOUND_SERVICE":"서비스내역을 찾을 수 없습니다.<br>미니톡 홈페이지에서 Client ID 및 Client Secret 을 확인하여 주십시오.",
+		"NOT_FOUND_COMMAND":"명령어를 찾을 수 없습니다.",
+		"NOT_FOUND_CHANNEL":"개설된 채널을 찾을 수 없습니다.",
+		"SERVICE_API_FAIL":"채팅호스팅 API 요청이 실패하였습니다.",
+		"SERVICE_UNREGISTED_CLIENT_URL":"등록되지 않은 클라이언트주소입니다.",
+		"SERVICE_EXPIRED":"채팅호스팅서비스 이용기간이 만료되었습니다.",
+		"SERVICE_DISABLED":"채팅호스팅서비스를 잠시 이용할 수 없습니다.",
+		"ALREADY_LOGGED":"이미 채널관리자로 접속중입니다.",
+		"CHANNEL_DUPLICATED":"동일 웹페이지에 동일한 채널의 미니톡 채팅위젯을 동시에 사용할 수 없습니다.",
+		"INVALID_FORM_DATA":"잘못 입력된 항목이 있습니다.",
+		"code":{
+			"300":"다른곳에서 접속하고 있어, 기존접속을 종료하고 있습니다. 잠시만 기다려주십시오.",
+			"301":"다른곳에서 중복접속하여 현재 접속을 종료합니다.",
+			"302":"권한이 낮은 사용자가 현재 닉네임을 사용하고 있어, 해당 사용자의 닉네임을 변경중입니다. 잠시만 기다려주십시오.",
+			"303":"권한이 높은 사용자가 현재 닉네임으로 접속하여, 닉네임을 초기화합니다.",
+			"304":"권한이 높은 사용자가 현재 닉네임을 사용하고 있어, 닉네임을 초기화합니다."
+		}
+	},
+	"admin":{
+		"unselected":"선택안함",
+		"menu":{
+			"server":"서버",
+			"category":"카테고리",
+			"channel":"채널",
+			"log":"로그",
+			"ip":"IP차단자",
+			"broadcast":"브로드캐스트"
+		},
+		"server":{
+			"title":"서버관리",
+			"add":"서버추가",
+			"modify":"서버수정",
+			"delete":"선택서버삭제",
+			"delete_confirm":"선택한 서버를 삭제하시겠습니까?<br>서버를 삭제하면 해당 서버를 사용중인 채널의 접속자는 모두 접속이 종료됩니다.",
+			"grid_help":"더블클릭 : 서버수정 / 마우스우클릭 : 상세메뉴",
+			"form":{
+				"type_help":"추가할 서버 종류를 선택하여 주십시오.",
+				"server":"서버주소",
+				"port":"서버포트",
+				"server_help":"채팅서버에 접속하기 위해 채팅서버에 접속할 수 있는 서버주소와 포트를 설정하여야 합니다.<br>주소는 도메인명 또는 서버의 IP주소를, 포트는 3121 ~ 65535 까지 원하는 번호를 입력하시면 됩니다.<br>설정한 서버주소 및 서버포트가 방화벽설정 등을 통해 차단되어 있거나, 이미 다른 프로그램에 의해 사용중이라면, 접속이 불가능할 수 있습니다.<br>포트와 방화벽설정에 대한 자세한 내용은 구글 등을 통해 검색해보시기 바랍니다.",
+				"ssl":"SSL 사용",
+				"ssl_help":"서버프로그램 환경설정에 SSL설정이 되어있고, 서버접속시 SSL을 사용합니다.",
+				"hosting_client_id":"Client ID",
+				"hosting_client_id_help":"신청하신 채팅호스팅의 클라이언트 아이디를 입력하여 주십시오.",
+				"hosting_client_secret":"Client Secret",
+				"hosting_client_secret_help":"신청하신 채팅호스팅의 클라이언트 비밀키를 입력하여 주십시오.",
+				"hosting_help":"미니톡 홈페이지의 나의 서비스 관리하기 메뉴에서 클라이언트 아이디 및 비밀키를 확인할 수 있습니다."
+			},
+			"columns":{
+				"domain":"서버주소/클라이언트ID",
+				"status":"상태",
+				"status_message":"서버상세정보",
+				"channel":"개설채널수",
+				"user":"접속자수",
+				"max_user":"최대접속자수",
+				"latest_update":"마지막 확인시각",
+				"exp_date":"서비스 만료일"
+			},
+			"type":{
+				"SERVER":"자체서버 (현재 서버에 미니톡 채팅서버를 구성합니다.)",
+				"HOSTING":"채팅호스팅 (미니톡 채팅호스팅 서비스를 이용하는 채팅서버를 구성합니다.)"
+			},
+			"status":{
+				"ONLINE":"온라인",
+				"OFFLINE":"오프라인"
+			},
+			"unlimited":"제한없음",
+			"unknown":"알수없음"
+		},
+		"category":{
+			"category1":"1차 카테고리",
+			"category2":"2차 카테고리",
+			"category3":"카테고리에 개설된 채널",
+			"add":"카테고리추가",
+			"modify":"카테고리수정",
+			"delete":"선택카테고리 삭제",
+			"grid_help":"더블클릭 : 카테고리수정 / 마우스우클릭 : 상세메뉴",
+			"select_first":"1차 카테고리를 선택하세요.",
+			"delete_confirm":"선택한 카테고리를 삭제하시겠습니까?<br>카테고리내의 하위 카테고리 및 채널이 모두 삭제됩니다.",
+			"form":{
+				"category":"카테고리명"
+			},
+			"columns":{
+				"category":"카테고리명",
+				"children":"하위분류",
+				"channel":"채널수",
+				"user":"접속자수"
+			}
+		},
+		"channel":{
+			"title":"채널관리",
+			"add":"채널추가",
+			"modify":"채널수정",
+			"delete":"채널삭제",
+			"unknown":"채팅서버를 할당받지 않음",
+			"form":{
+				"default":"채널기본설정",
+				"category":"카테고리",
+				"channel":"채널명",
+				"channel_help":"미니톡 채팅위젯에 설정할 채널명을 영문소문자 및 숫자로만 입력하여 주십시오. (최대 32글자)",
+				"title":"채널타이틀",
+				"title_help":"미니톡 채팅위젯 상단에 표시될 채널타이틀을 입력하여 주십시오.",
+				"password":"패스워드",
+				"password_help":"패스워드를 설정하면 미니톡 채팅위젯에서 /login [패스워드] 명령어로 관리자권한획득이 가능합니다.",
+				"option":"옵션설정",
+				"allow_nickname_edit":"닉네임변경",
+				"allow_nickname_edit_help":"유저가 닉네임을 자유롭게 변경할 수 있습니다.",
+				"use_userlist":"유저목록",
+				"use_userlist_help":"유저목록 및 유저검색기능을 사용합니다.",
+				"use_box":"개인박스",
+				"use_box_help":"유저가 개인박스(토크박스/플러그인박스)를 개설할 수 있습니다.",
+				"max_user":"최대접속자",
+				"max_user_help":"(최대 2,000명까지 설정가능)",
+				"guest_name":"손님닉네임",
+				"guest_name_help":"(유저설정이 없는 경우 랜덤접속자명 앞에 붙일 고정명칭)",
+				"permission":"권한설정",
+				"send_level_limit":"데이터전송",
+				"send_level_limit_help":"서버에 데이터(채팅메세지 등)을 전송할 수 있는 최소레벨을 선택하여 주십시오.<br>이 권한이 없는 유저는 접속자/개인박스목록 등 서버에 데이터요청이 필요한 기능도 함께 제한됩니다.",
+				"userlist_level_limit":"유저목록표시",
+				"userlist_level_limit_help":"유저목록에 보일 유저의 최소레벨과 검색가능한 유저의 최소레벨을 설정합니다.<br>설정된 레벨보다 낮은 유저는 유저목록에 보이거나, 검색되지 않습니다.",
+				"box_level_limit":"개인박스개설",
+				"box_level_limit_help":"개인박스(토크박스/플러그인박스)를 개설할 수 있는 최소레벨을 선택하여 주십시오.<br>개인박스는 유저설정이 필요하므로 최소레벨 1 이상으로만 설정가능합니다."
+			},
+			"columns":{
+				"channel":"채널명",
+				"category1":"1차 카테고리",
+				"category2":"2차 카테고리",
+				"title":"채널타이틀",
+				"password":"채널패스워드",
+				"server":"서버정보",
+				"send_level_limit":"데이터전송권한",
+				"options":"채널옵션",
+				"user":"현재/최대접속자"
+			}
+		}
+	}
+}
