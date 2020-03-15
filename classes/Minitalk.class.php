@@ -433,7 +433,7 @@ class Minitalk {
 	}
 	
 	/**
-	 * 미니톡 호스팅 API 데이터를 가져온다.
+	 * 미니톡서비스 API 데이터를 가져온다.
 	 *
 	 * @param string $api API 명
 	 * @param string $query 가져올 데이터
@@ -468,12 +468,12 @@ class Minitalk {
 			if ($results === null || isset($results->success) == false) {
 				$results = new stdClass();
 				$results->success = false;
-				$results->message = 'HOSTING_API_FAIL';
+				$results->message = 'SERVICE_API_FAIL';
 			}
 		} else {
 			$results = new stdClass();
 			$results->success = false;
-			$results->message = 'HOSTING_API_FAIL';
+			$results->message = 'SERVICE_API_FAIL';
 		}
 		
 		return $results;
