@@ -330,9 +330,9 @@
 				},
 				"type":{
 					"type":"enum",
-					"length":"'HOSTING','SERVER'",
-					"default":"HOSTING",
-					"comment":"미니톡 서버종류(HOSTING:채팅호스팅/SERVER:자체서버)"
+					"length":"'SERVICE','SERVER'",
+					"default":"SERVICE",
+					"comment":"미니톡 서버종류(SERVICE:채팅서비스/SERVER:자체서버)"
 				},
 				"client_secret":{
 					"type":"char",

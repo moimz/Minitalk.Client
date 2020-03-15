@@ -74,16 +74,17 @@
 		"DISCONNECTED":"미니톡서버와 접속이 끊어졌습니다.",
 		"CONNECT_ERROR":"미니톡서버에 접속할 수 없습니다.",
 		"NOT_FOUND_ONLINE_SERVER":"접속가능한 서버를 찾을 수 없습니다.<br>잠시 후 다시 시도하여 주십시오.",
-		"NOT_FOUND_SERVICE":"서비스내역을 찾을 수 없습니다.<br>미니톡 홈페이지에서 Client ID 및 Client Secret 을 확인하여 주십시오.",
 		"NOT_FOUND_COMMAND":"명령어를 찾을 수 없습니다.",
 		"NOT_FOUND_CHANNEL":"개설된 채널을 찾을 수 없습니다.",
+		"ALREADY_LOGGED":"이미 채널관리자로 접속중입니다.",
+		"CHANNEL_DUPLICATED":"동일 웹페이지에 동일한 채널의 미니톡 채팅위젯을 동시에 사용할 수 없습니다.",
+		"INVALID_FORM_DATA":"잘못 입력된 항목이 있습니다.",
 		"SERVICE_API_FAIL":"채팅호스팅 API 요청이 실패하였습니다.",
 		"SERVICE_UNREGISTED_CLIENT_URL":"등록되지 않은 클라이언트주소입니다.",
 		"SERVICE_EXPIRED":"채팅호스팅서비스 이용기간이 만료되었습니다.",
 		"SERVICE_DISABLED":"채팅호스팅서비스를 잠시 이용할 수 없습니다.",
-		"ALREADY_LOGGED":"이미 채널관리자로 접속중입니다.",
-		"CHANNEL_DUPLICATED":"동일 웹페이지에 동일한 채널의 미니톡 채팅위젯을 동시에 사용할 수 없습니다.",
-		"INVALID_FORM_DATA":"잘못 입력된 항목이 있습니다.",
+		"SERVICE_ALREADY_LINKED":"이미 다른 미니톡클라이언트와 연결된 서비스입니다.",
+		"SERVICE_NOT_FOUND":"서비스내역을 찾을 수 없습니다.<br>미니톡 홈페이지에서 Client ID 및 Client Secret 을 확인하여 주십시오.",
 		"code":{
 			"300":"다른곳에서 접속하고 있어, 기존접속을 종료하고 있습니다. 잠시만 기다려주십시오.",
 			"301":"다른곳에서 중복접속하여 현재 접속을 종료합니다.",
@@ -134,7 +135,7 @@
 			},
 			"type":{
 				"SERVER":"자체서버 (현재 서버에 미니톡 채팅서버를 구성합니다.)",
-				"HOSTING":"채팅호스팅 (미니톡 채팅호스팅 서비스를 이용하는 채팅서버를 구성합니다.)"
+				"SERVICE":"채팅호스팅 (미니톡 채팅호스팅 서비스를 이용하는 채팅서버를 구성합니다.)"
 			},
 			"status":{
 				"ONLINE":"온라인",

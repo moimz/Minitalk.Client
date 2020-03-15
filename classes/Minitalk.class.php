@@ -566,7 +566,7 @@ class Minitalk {
 				}
 			}
 			
-			if ($server->type == 'HOSTING') {
+			if ($server->type == 'SERVICE') {
 				$service = $this->callServiceApi('GET','service/'.$server->domain);
 				if ($service->success == true) {
 					$service = $service->service;

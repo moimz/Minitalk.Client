@@ -1,0 +1,42 @@
+/**
+ * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
+ *
+ * 사이트관리자 로그인페이지를 위한 스타일을 정의한다.
+ * 
+ * @file /admin/styles/login.css
+ * @author Arzz (arzz@arzz.com)
+ * @license MIT License
+ * @version 7.0.0
+ * @modified 2020. 3. 16.
+ */
+* {padding:0px; margin:0px; -webkit-font-smoothing:antialiased;}
+html, body {width:100%; height:100%; overflow:hidden;}
+body {overflow:auto; background:url(../images/login.png) !important; background-size:cover;}
+
+form {width:300px; height:260px; position:absolute; top:calc(50% - 130px); left:calc(50% - 150px);}
+form > main {display:block; width:300px; height:260px;}
+form > main > h1 {height:100px; display:block; color:#fff; text-shadow:1px 1px 1px rgba(0,0,0,0.3); text-align:center; font-size:24px; font-family:OpenSans; font-weight:100; letter-spacing:-1px;}
+form > main > h1 > i {display:block !important; text-align:center; height:60px; line-height:50px; font-size:50px !important;}
+
+form > main > .inputbox {height:92px; position:relative; border-radius:5px; margin:10px 0px;}
+form > main > .inputbox > div[data-role=input] {margin:0px !important;}
+form > main > .inputbox > div[data-role=input] > input {display:block; width:100%; height:45px; line-height:25px; padding:10px; background:rgba(255,255,255,0.9); border:1px solid rgba(0,0,0,0.6); outline:none; font-family:OpenSans; font-size:16px; box-sizing:border-box;}
+form > main > .inputbox > div[data-role=input] > input:focus {border-color:#377cf8;}
+form > main > .inputbox > div[data-role=input] > input[name=user_id] {border-bottom:0px; border-radius:5px 5px 0px 0px;}
+form > main > .inputbox > div[data-role=input] > input[name=password] {border-radius:0px 0px 5px 5px; padding-right:50px; height:46px;}
+form > main > .inputbox > div[data-role=input] > input:disabled {background:#e5e5e5; opacity:0.6; cursor:not-allowed;}
+form > main > .inputbox > div[data-role=input] > div[data-role=help] {position:absolute; top:10px; left:100%; background:#c20000; height:25px; line-height:25px; padding:0px 10px; white-space:nowrap; margin-left:10px; font-size:12px; color:#ffff7f; margin-top:0px !important;}
+form > main > .inputbox > div[data-role=input] > div[data-role=help]:after {right:100%; top:50%; border:solid transparent; content:" "; height:0; width:0; position:absolute; border-right-color: #c20000; border-width:5px; margin-top:-5px;}
+form > main > .inputbox > button {position:absolute; bottom:10px; right:9px; cursor:pointer; border:1px solid rgba(0,0,0,0.6); background:transparent; width:28px; height:28px; border-radius:50%; z-index:10; color:rgba(0,0,0,0.6); font-size:12px; padding-left:1px; text-align:center;}
+form > main > .inputbox > button:hover {color:#377cf8; border-color:#377cf8;}
+form > main > .inputbox > button:disabled {border-color:rgba(0,0,0,0.6) !important; opacity:0.6; cursor:not-allowed; color:rgba(0,0,0,0.6) !important;}
+form > main.error > .inputbox {box-shadow:0px 0px 5px 5px rgba(255,0,0,0.3);}
+form > main.error > .inputbox > div[data-role=input] > input {border-color:#ff0000;}
+form > main.error > .inputbox > button {border-color:#ff0000; color:#ff0000;}
+
+form > main > label {display:block; width:280px; height:40px; line-height:40px; text-align:center; margin:0 auto; color:#fff; font-size:13px; font-family:OpenSans;}
+form > main > label > input {vertical-align:middle; margin-right:5px;}
+
+@media (max-width:767px) {
+	form > main > .inputbox > div[data-role=input] > div[data-role=help] {display:none;}
+}
