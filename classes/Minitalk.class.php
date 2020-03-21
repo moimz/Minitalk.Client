@@ -544,10 +544,11 @@ class Minitalk {
 	 *
 	 * @param string $domain 온라인여부를 확인할 도메인 (없을 경우 전체서버)
 	 */
-	function updateServer($domain=null) {
+	function updateServer($domain=null,$is_force=false) {
 		global $_CONFIGS;
 		
-		$servers = $this->db()->select($this->table->server)->where('latest_update',time() - 60,'<');
+		$servers = $this->db()->select($this->table->server);
+		if ($is_force == false) $servers->where('latest_update',time() - 60,'<');
 		if ($domain != null) $servers->where('domain',$domain);
 		$servers = $servers->get();
 		
