@@ -12,7 +12,7 @@
  */
 if (defined('__MINITALK__') == false) exit;
 
-$this->updateServer();
+$this->updateServer(null,true);
 
 $lists = $this->db()->select($this->table->server)->get();
 for ($i=0, $loop=count($lists);$i<$loop;$i++) {
