@@ -1,0 +1,41 @@
+<?php
+/**
+ * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
+ *
+ * 미니톡 채널목록을 불러온다.
+ * 
+ * @file /process/@getChannels.php
+ * @author Arzz (arzz@arzz.com)
+ * @license MIT License
+ * @version 7.0.0
+ * @modified 2020. 3. 23.
+ */
+if (defined('__MINITALK__') == false) exit;
+
+$category1 = Request('category1') ? Request('category1') : 0;
+$category2 = Request('category2') ? Request('category2') : 0;
+$keyword = Request('keyword') ? Request('keyword') : '';
+$start = Request('start');
+$limit = Request('limit');
+$sort = Request('sort');
+$dir = Request('dir');
+
+$lists = $this->db()->select($this->table->channel);
+if ($category1) $lists->where('category1',$category1);
+if ($category2) $lists->where('category2',$category2);
+if ($keyword) $lists->where('(channel like ? or title like ?)',array('%'.$keyword.'%','%'.$keyword.'%'));
+$total = $lists->copy()->count();
+$lists = $lists->limit($start,$limit)->orderBy($sort,$dir)->get();
+for ($i=0, $loop=count($lists);$i<$loop;$i++) {
+	$lists[$i]->category1 = $this->getCategoryTitle($lists[$i]->category1);
+	$lists[$i]->category2 = $this->getCategoryTitle($lists[$i]->category2);
+	$lists[$i]->server = $this->getServer($lists[$i]->server);
+	$lists[$i]->allow_nickname_edit = $lists[$i]->allow_nickname_edit == 'TRUE';
+	$lists[$i]->use_userlist = $lists[$i]->userlist_level_limit > -1;
+	$lists[$i]->use_box = $lists[$i]->box_level_limit > 0;
+}
+
+$results->success = true;
+$results->lists = $lists;
+$results->total = $total;
+?>
