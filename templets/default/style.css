@@ -1,0 +1,80 @@
+/**
+ * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
+ *
+ * 미니톡 채팅위젯 기본템플릿
+ * 
+ * @file /templets/default/style.css
+ * @author Arzz (arzz@arzz.com)
+ * @license MIT License
+ * @version 7.0.0
+ * @modified 2020. 3. 23.
+ */
+div[data-role=frame] {border:1px solid #10b8c3; background:#fff; width:100%; height:100%; box-sizing:border-box;}
+
+header {background:#10b8c3; min-height:40px; color:#fff;}
+header > h1 {display:inline-block; color:#fff; font-weight:bold; font-size:12px; height:40px; line-height:40px; vertical-align:middle; padding:0px 10px 0px 40px; background:url(./images/icon.png) no-repeat 10px 50%; background-size:20px 20px;}
+header > label[data-role=count] {display:inline-block; font-weight:normal; font-size:12px; height:40px; line-height:40px; vertical-align:middle; margin-left:-10px; padding-right:10px;}
+header > label[data-role=count]:before {content:"(";}
+header > label[data-role=count]:after {content:")";}
+header > label[data-role=count]:empty {display:none;}
+
+header > ul[data-role=menu] {display:table; width:100%; height:38px; background:#f9f9f9; table-layout:fixed;}
+header > ul[data-role=menu] > li {display:table-cell; width:100%; height:38px; position:relative; vertical-align:middle;}
+header > ul[data-role=menu] > li > button {position:relative; top:0; left:0; width:100%; height:38px; font-size:0; background:#f4f4f4; border:0; border-bottom:1px solid #d8d8d9; vertical-align:middle; box-sizing:border-box; border-left:1px solid #d8d8d9; cursor:pointer;}
+header > ul[data-role=menu] > li:first-child > button {border-left:0;}
+header > ul[data-role=menu] > li > button > i {width:100%; height:38px; display:block; font-style:normal; font-family:minitalk; font-size:16px; line-height:37px; text-align:center; color:#777;}
+header > ul[data-role=menu] > li > button > span {display:none;}
+header > ul[data-role=menu] > li > button.open {background:#fff; color:#10b8c3; border-bottom-color:#fff;}
+header > ul[data-role=menu] > li > button.open > i {color:#10b8c3;}
+header > ul[data-role=menu] > li > button[disabled] > i {opacity:0.5; cursor:not-allowed;}
+
+header > ul[data-role=menu] > li > button[data-action=chat] > i:before {content:"\EA01";}
+header > ul[data-role=menu] > li > button[data-action=users] > i:before {content:"\EA05";}
+header > ul[data-role=menu] > li > button[data-action=boxes] > i:before {content:"\EC01";}
+header > ul[data-role=menu] > li > button[data-action=configs] > i:before {content:"\EA07";}
+
+main {width:100%; height:calc(100% - 40px - 38px - 30px); border-bottom:1px solid #d8d8d9; box-sizing:border-box;}
+main > section[data-role] {width:100%; height:100%; overflow-x:hidden; overflow-y:scroll; box-sizing:border-box; display:none;}
+main > section[data-role].open {display:block;}
+
+footer {display:block; height:30px; font-size:0; position:relative;}
+footer > div[data-role=tool] {display:inline-block; width:30px; height:30px; vertical-align:middle;}
+footer > div[data-role=input] {display:inline-block; width:calc(100% - 30px); height:30px; vertical-align:middle; box-sizing:border-box;}
+footer > div[data-role=input] > input {border:0; width:calc(100% - 40px); height:20px; padding:5px; line-height:20px; font-size:12px; vertical-align:middle; display:inline-block; line-height:20px;}
+footer > div[data-role=input] > button {position:absolute; top:-1px; right:0; width:30px; height:31px; vertical-align:middle; border:0; background:#10b8c3; cursor:pointer; display:inline-block;}
+footer > div[data-role=input] > button > i {width:30px; height:30px; line-height:30px; font-family:minitalk; font-size:16px; color:#fff; font-style:normal;}
+footer > div[data-role=input] > button > i:before {content:"\ee13";}
+footer > div[data-role=input] > button > span {display:none;}
+footer > div[data-role=input] > button:hover {background:#15a9b4;}
+footer > div[data-role=input] > button[disabled] {background:#f4f4f4; cursor:not-allowed; box-sizing:border-box; top:0px; height:30px;}
+footer > div[data-role=input] > button[disabled] > i {color:#ccc;}
+
+
+/**
+ * 채팅메세지
+ */
+section[data-role=chat] > div[data-role=item] {margin:5px; -ms-word-break:break-all; word-wrap:break-word; -ms-user-select:auto; -moz-user-select:auto; -webkit-user-select:auto;}
+section[data-role=chat] > div[data-role=item].system {padding:5px; font-size:12px; line-height:1.4; text-align:justify;}
+section[data-role=chat] > div[data-role=item].system.info {border:1px solid #18295b; background:#2847a0; color:#fff;}
+section[data-role=chat] > div[data-role=item].system.action {border:1px solid #236a1f; background:#308f2b; color:#fff;}
+section[data-role=chat] > div[data-role=item].system.error {border:1px solid #b82332; background:#d33948; color:#fff;}
+section[data-role=chat] > div[data-role=item].system.user {color:#666; margin:0px; padding:2px 5px;}
+
+section[data-role=chat] > div[data-role=item].chat {margin:5px;}
+section[data-role=chat] > div[data-role=item].chat:after {clear:both; content:""; display:block;}
+section[data-role=chat] > div[data-role=item].chat > div.photo {float:left; width:34px; height:34px; margin-right:10px; background-image:url(./images/nophoto.png); background-repeat:no-repeat; background-size:cover; background-position:50% 50%; border-radius:50%; box-sizing:border-box; border:1px solid #eee;}
+section[data-role=chat] > div[data-role=item].chat > div.nickname {float:left; width:calc(100% - 50px); font-size:12px; font-weight:bold; height:16px; line-height:16px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; margin-top:3px;}
+section[data-role=chat] > div[data-role=item].chat > div.message {float:left; width:calc(100% - 50px); box-sizing:border-box;}
+section[data-role=chat] > div[data-role=item].chat > div.message > div > div {margin:0px; font-size:12px; color:#222; line-height:1.6;}
+section[data-role=chat] > div[data-role=item].chat > div.message > div > div > span.text:after {content:"-"; color:#fff;}
+section[data-role=chat] > div[data-role=item].chat > div.message > div > div > span.time {color:#666; display:none; white-space:nowrap;}
+section[data-role=chat] > div[data-role=item].chat > div.message > div > div > span.time > time {font-size:10px;}
+section[data-role=chat] > div[data-role=item].chat > div.message > div > div > span.time > time:before {content:"(";}
+section[data-role=chat] > div[data-role=item].chat > div.message > div > div > span.time > time:after {content:")";}
+section[data-role=chat] > div[data-role=item].chat > div.message > div:last-child > div > span.time {display:inline-block;}
+section[data-role=chat] > div[data-role=item].chat.whisper {color:#ff00ff;}
+section[data-role=chat] > div[data-role=item].chat.whisper > div.message > div > div {color:#ff00ff;}
+section[data-role=chat] > div[data-role=item].chat.log {opacity:0.5;}
+
+section[data-role=chat] > div[data-role=line] {border-top:1px dotted #ccc; margin:10px 5px 5px 5px; height:10px; position:relative;}
+section[data-role=chat] > div[data-role=line] > div {width:100px; height:12px; line-height:12px; background:#fff; position:absolute; top:-6px; left:calc(50% - 50px); text-align:center; color:#666; font-size:11px;}
