@@ -7,8 +7,8 @@
  * @file /classes/functions.php
  * @author Arzz
  * @license MIT License
- * @version 1.6.1
- * @modified 2020. 3. 4.
+ * @version 1.7.1
+ * @modified 2020. 6. 16.
  */
 
 /**
@@ -45,10 +45,10 @@ function Request($var,$type='request') {
  * @return any $object
  */
 function Param($var) {
-	global $IM;
+	global $MINITALK;
 	
 	if (isset($_REQUEST[$var]) == false) {
-		if (isset($IM) == true) return $IM->printError('MISSING_PARAMETER',$var);
+		if (isset($MINITALK) == true) return $MINITALK->printError('MISSING_PARAMETER',$var);
 		return null;
 	}
 	$value = $_REQUEST[$var];
@@ -71,11 +71,7 @@ function Encoder($value,$key=null,$mode='base64') {
 	$padSize = 16 - (strlen($value) % 16);
 	$value = $value.str_repeat(chr($padSize),$padSize);
 	
-	if (function_exists('openssl_encrypt') == true) {
-		$output = openssl_encrypt($value,'AES-256-CBC',$key,OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING,str_repeat(chr(0),16));
-	} else {
-		$output = mcrypt_encrypt(MCRYPT_RIJNDAEL_128,$key,$value,MCRYPT_MODE_CBC,str_repeat(chr(0),16));
-	}
+	$output = openssl_encrypt($value,'AES-256-CBC',$key,OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING,str_repeat(chr(0),16));
 	
 	return $mode == 'base64' ? base64_encode($output) : bin2hex($output);
 }
@@ -94,11 +90,8 @@ function Decoder($value,$key=null,$mode='base64') {
 	$key = $key !== null ? md5($key) : md5($_CONFIGS->key);
 	$value = $mode == 'base64' ? base64_decode(str_replace(' ','+',$value)) : hex2bin($value);
 	
-	if (function_exists('openssl_decrypt') == true) {
-		$output = openssl_decrypt($value,'AES-256-CBC',$key,OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING,str_repeat(chr(0),16));
-	} else {
-		$output = mcrypt_decrypt(MCRYPT_RIJNDAEL_128,$key,$value,MCRYPT_MODE_CBC,str_repeat(chr(0),16));
-	}
+	$output = openssl_decrypt($value,'AES-256-CBC',$key,OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING,str_repeat(chr(0),16));
+	if ($output === false) return false;
 	
 	$valueLen = strlen($output);
 	if ($valueLen % 16 > 0) return false;
@@ -178,38 +171,6 @@ function CheckPhoneNumber($phone) {
 	
 	if (preg_match('/^02/',$phone) == true) return preg_match('/^02[0-9]{7,8}$/',$phone);
 	else return preg_match('/^0[0-9]{9,11}$/',$phone);
-}
-
-/**
- * 사업자번호 형식이 맞는지 확인한다.
- *
- * @param string $number
- * @return boolean $isValid
- */
-function CheckCompanyNumber($number) {
-	$number = str_replace('-','',$number);
-	if (strlen($number) === 10) {
-		$CHECKNUMS = array(1,3,7,1,3,7,1,3,5);
-		$checkSum = 0;
-		$lastNumber = 0;
-		for ($i=0;$i<9;$i++) {
-			$tmp = ($CHECKNUMS[$i] * $number[$i]);
-			if ($i < 8) {
-				$checkSum += $tmp;
-			} else { // 9번째 곱셈의 결과를 각 자리수를 더함 (ex: 8*5=45 => 4 + 5 = 9)
-				$tmp2 = (string)$tmp;
-				$checkSum+= (int)$tmp2[0] + (int)$tmp2[1];
-				$lastNumber = (10 - ($checkSum % 10)) % 10; // (10 - (체크섬 % 10)) % 10)
-			}
-		}
-		if ($number[9] == $lastNumber) {
-			return true;
-		} else {
-			return false;
-		}
-	} else {
-		return false;
-	}
 }
 
 /**
@@ -685,7 +646,7 @@ function CheckDependency($dependency,$version) {
 		$check->installed = function_exists('ImageCreateFromJPEG');
 		$check->installedVersion = null;
 	} elseif ($dependency == 'encrypt') {
-		$check->installed = function_exists('openssl_encrypt') || function_exists('mcrypt_encrypt');
+		$check->installed = function_exists('openssl_encrypt');
 		$check->installedVersion = null;
 	} else {
 		$check->installed = false;
