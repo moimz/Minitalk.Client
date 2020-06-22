@@ -280,4 +280,13 @@ if (isMinitalkIncluded === undefined) {
 			this.frame.document.close();
 		}
 	};
+	
+	/**
+	 * 부모창의 클릭이벤트를 이용하여 특수한 DOM 객체를 초기화한다.
+	 */
+	document.addEventListener("click",function(e) {
+		for (var id in MinitalkComponent.minitalks) {
+			document.getElementById(id).contentWindow.$(document.getElementById(id).contentWindow.document).trigger("click",e);
+		}
+	});
 }
