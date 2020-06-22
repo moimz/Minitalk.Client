@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 3. 23.
+ * @modified 2020. 6. 16.
  */
 Minitalk.socket = {
 	io:null,
@@ -75,7 +75,7 @@ Minitalk.socket = {
 		/**
 		 * 접속자수를 초기화한다.
 		 */
-		Minitalk.ui.printUserCount(0);
+		Minitalk.user.printUserCount(data.count);
 		
 		Minitalk.socket.io = null;
 		Minitalk.socket.connected = false;
@@ -203,10 +203,7 @@ Minitalk.socket = {
 			/**
 			 * 접속자수를 갱신한다.
 			 */
-			if (data.time >= Minitalk.socket.usertime) {
-				Minitalk.socket.usertime = data.time;
-				Minitalk.ui.printUserCount(data.count);
-			}
+			Minitalk.user.printUserCount(data.count,data.time);
 			
 			/**
 			 * 채팅로그를 불러온다.
@@ -255,10 +252,7 @@ Minitalk.socket = {
 			/**
 			 * 채널의 접속자수를 변경한다.
 			 */
-			if (data.time >= Minitalk.socket.usertime) {
-				Minitalk.socket.usertime = data.time;
-				Minitalk.ui.printUserCount(data.count);
-			}
+			Minitalk.user.printUserCount(data.count,data.time);
 		});
 		
 		/**
@@ -275,10 +269,7 @@ Minitalk.socket = {
 			/**
 			 * 채널의 접속자수를 변경한다.
 			 */
-			if (data.time >= Minitalk.socket.usertime) {
-				Minitalk.socket.usertime = data.time;
-				Minitalk.ui.printUserCount(data.count);
-			}
+			Minitalk.user.printUserCount(data.count,data.time);
 		});
 		
 		/**

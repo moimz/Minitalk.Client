@@ -10,7 +10,8 @@
  * @modified 2020. 6. 16.
  */
 Minitalk.user = {
-	me:{},
+	latestRefreshTime:0, // 접속자목록을 마지막으로 갱신한 시각
+	me:{}, // 접속자(나)의 정보
 	/**
 	 * 나의정보를 초기화한다.
 	 */
@@ -68,5 +69,29 @@ Minitalk.user = {
 		
 		
 		return $user;
+	},
+	/**
+	 * 접속자수를 표시한다.
+	 *
+	 * @param int count 접속자수
+	 */
+	printUserCount:function(count,time) {
+		if (time !== undefined) {
+			if (this.latestRefreshTime > time) return;
+			this.latestRefreshTime = time;
+		}
+		
+		var $count = $("label[data-role=count]");
+		
+		if (count == 0) {
+			$count.empty();
+		} else {
+			$count.html(Minitalk.getText("text/unit").replace("{COUNT}",count));
+		}
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		$(document).triggerHandler("printUserCount",[Minitalk,$count,count]);
 	}
 };
