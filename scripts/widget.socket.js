@@ -74,16 +74,11 @@ Minitalk.socket = {
 		/**
 		 * 접속자수를 초기화한다.
 		 */
-		Minitalk.user.printUserCount(data.count);
+		Minitalk.user.printUserCount(0);
 		
 		Minitalk.socket.io = null;
 		Minitalk.socket.connected = false;
 		Minitalk.socket.joined = false;
-		
-		/**
-		 * 유저목록을 제거한다.
-		 */
-		$("div[data-role=userlist]").empty();
 		
 		/**
 		 * 채팅위젯 UI를 비활성화한다.
