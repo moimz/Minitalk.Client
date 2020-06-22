@@ -17,7 +17,6 @@ Minitalk.socket = {
 	joined:false,
 	reconnectable:true,
 	channel:null,
-	usertime:0,
 	/**
 	 * 미니톡 채팅서버에 접속한다.
 	 *
