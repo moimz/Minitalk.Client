@@ -154,6 +154,22 @@ Minitalk.ui = {
 		Minitalk.ui.toggleTab(Minitalk.defaultTab);
 	},
 	/**
+	 * 변경된 브라우저의 보안규칙에 따라, 사운드파일을 초기화한다.
+	 */
+	initSound:function() {
+		var $audios = $("audio");
+		$audios.each(function() {
+			var audio = $(this).get(0);
+			audio.muted = true;
+			var promise = audio.play();
+			if (promise !== undefined) {
+				promise.then(function() {
+				}).catch(function(e) {
+				});
+			}
+		});
+	},
+	/**
 	 * 미니톡 채널설정에 따른 UI설정을 초기화한다.
 	 *
 	 * @param object channel 채널정보
