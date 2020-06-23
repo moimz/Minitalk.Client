@@ -48,6 +48,7 @@ if ($channel !== null) {
 	$js->add(__MINITALK_PATH__.'/scripts/widget.user.js');
 	$js->add(__MINITALK_PATH__.'/scripts/widget.ui.js');
 	$js->add(__MINITALK_PATH__.'/scripts/widget.socket.js');
+	$js->add(__MINITALK_PATH__.'/scripts/widget.protocol.js');
 	$js->add(__MINITALK_PATH__.'/scripts/widget.box.js');
 	
 	/**
