@@ -11,7 +11,7 @@
  */
 Minitalk.user = {
 	latestRefreshTime:0, // 접속자목록을 마지막으로 갱신한 시각
-	me:{}, // 접속자(나)의 정보
+	me:{}, // 나의정보
 	/**
 	 * 나의정보를 초기화한다.
 	 */
@@ -37,10 +37,36 @@ Minitalk.user = {
 		return user.nickname;
 	},
 	/**
-	 * 유저태그를 가져온다.
+	 * 접속자목록을 가져온다.
+	 *
+	 * @param int page 접속자목록페이지번호
+	 * @param string keyword 검색어
+	 */
+	getUsers:function(page,keyword) {
+		var $users = $("section[data-role=users]");
+		if ($users.data("pagination") !== undefined) {
+			var page = page ? page : $users.data("pagination").page;
+			var keyword = keyword !== undefined ? keyword : $users.data("pagination").keyword;
+		} else {
+			var page = page ? page : 1;
+			var keyword = keyword !== undefined ? keyword : null;
+		}
+		
+		var $refresh = $("button[data-action=users-refresh]",$users);
+		$refresh.disable();
+		if ($refresh.data("timer")) {
+			clearTimeout($refresh.data("timer"));
+			$refresh.data("timer",null);
+		}
+		$refresh.data("timer",setTimeout(function($refresh) { $refresh.data("timer",null); $refresh.enable(); },5000,$refresh));
+		
+		Minitalk.socket.send("users",{page:page,keyword:keyword});
+	},
+	/**
+	 * 접속자태그를 가져온다.
 	 *
 	 * @param object user 유저객체
-	 * @return object $user 유저태그
+	 * @return object $user 접속자태그
 	 */
 	getTag:function(user) {
 		var $user = $("<label>").attr("data-role","user").data("user",user);
@@ -67,18 +93,23 @@ Minitalk.user = {
 		$nickname.append(Minitalk.user.getNickname(user));
 		$user.append($nickname);
 		
+		$user.on("click",function(e) {
+//			Minitalk.showUserMenu($(this),"users",e);
+			e.preventDefault();
+			e.stopImmediatePropagation();
+		});
 		
 		return $user;
 	},
 	/**
 	 * 접속자수를 표시한다.
 	 *
-	 * @param int count 접속자수
+	 * @param int count 접속자
 	 */
 	printUserCount:function(count,time) {
 		if (time !== undefined) {
-			if (this.latestRefreshTime > time) return;
-			this.latestRefreshTime = time;
+			if (Minitalk.user.latestRefreshTime > time) return;
+			Minitalk.user.latestRefreshTime = time;
 		}
 		
 		var $count = $("label[data-role=count]");
@@ -93,5 +124,8 @@ Minitalk.user = {
 		 * 이벤트를 발생시킨다.
 		 */
 		$(document).triggerHandler("printUserCount",[Minitalk,$count,count]);
+		
+//		Minitalk.ui.playSound("call");
+		Minitalk.ui.playSound("query");
 	}
 };

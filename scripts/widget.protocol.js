@@ -11,7 +11,7 @@
  */
 Minitalk.protocol = {
 	/**
-	 * 채팅서버에 연결이 완료되었을 때, 접속코드와 유저정보를 서버로 전송한다.
+	 * 채팅서버에 연결이 완료되었을 때, 접속코드와 유저객체를 서버로 전송한다.
 	 */
 	connect:function() {
 		setTimeout(Minitalk.socket.sendConnection,1000);
@@ -79,14 +79,18 @@ Minitalk.protocol = {
 		Minitalk.socket.reconnect(60);
 	},
 	/**
-	 * 신규접속자가 있을 경우, 접속한 유저의 정보를 수신한다.
+	 * 신규접속자가 있을 경우, 접속자 정보를 수신한다.
+	 *
+	 * @param object data.user 유저객체
+	 * @param int data.count 전체접속자수
+	 * @param int data.time 서버에서 접속자수를 계산한 시각
 	 */
 	join:function(data) {
 		/**
-		 * 유저참여 메세지를 출력한다.
+		 * 참여 메세지를 출력한다.
 		 */
 		if (Minitalk.socket.joined == true && Minitalk.viewUserMessage == true && Minitalk.viewUserLimit <= data.user.level) {
-			Minitalk.ui.printSystemMessage("user",Minitalk.getText("action/join").replace("{NICKNAME}",Minitalk.user.getNickname(data.user,false)));
+			Minitalk.ui.printUserMessage("join",data.user);
 		}
 		
 		/**
@@ -99,10 +103,10 @@ Minitalk.protocol = {
 	 */
 	leave:function(data) {
 		/**
-		 * 유저종료 메세지를 출력한다.
+		 * 종료 메세지를 출력한다.
 		 */
 		if (Minitalk.socket.joined == true && Minitalk.viewUserMessage == true && Minitalk.viewUserLimit <= data.user.level) {
-			Minitalk.ui.printSystemMessage("user",Minitalk.getText("action/leave").replace("{NICKNAME}",Minitalk.user.getNickname(data.user,false)));
+			Minitalk.ui.printUserMessage("leave",data.user);
 		}
 		
 		/**

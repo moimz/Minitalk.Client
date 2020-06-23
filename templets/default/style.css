@@ -51,7 +51,7 @@ footer > div[data-role=input] > button[disabled] > i {color:#ccc;}
 
 
 /**
- * 채팅메세지
+ * 채팅메시지
  */
 section[data-role=chat] > div[data-role=item] {margin:5px; -ms-word-break:break-all; word-wrap:break-word; -ms-user-select:auto; -moz-user-select:auto; -webkit-user-select:auto;}
 section[data-role=chat] > div[data-role=item].system {padding:5px; font-size:12px; line-height:1.4; text-align:justify;}
@@ -62,7 +62,7 @@ section[data-role=chat] > div[data-role=item].system.user {color:#666; margin:0p
 
 section[data-role=chat] > div[data-role=item].chat {margin:5px;}
 section[data-role=chat] > div[data-role=item].chat:after {clear:both; content:""; display:block;}
-section[data-role=chat] > div[data-role=item].chat > div.photo {float:left; width:34px; height:34px; margin-right:10px; background-image:url(./images/nophoto.png); background-repeat:no-repeat; background-size:cover; background-position:50% 50%; border-radius:50%; box-sizing:border-box; border:1px solid #eee;}
+section[data-role=chat] > div[data-role=item].chat > div.photo {float:left; width:34px; height:34px; margin-right:6px; background-image:url(./images/nophoto.png); background-repeat:no-repeat; background-size:cover; background-position:50% 50%; border-radius:50%; box-sizing:border-box; border:1px solid #eee;}
 section[data-role=chat] > div[data-role=item].chat > div.nickname {float:left; width:calc(100% - 50px); font-size:12px; font-weight:bold; height:16px; line-height:16px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; margin-top:3px;}
 section[data-role=chat] > div[data-role=item].chat > div.message {float:left; width:calc(100% - 50px); box-sizing:border-box;}
 section[data-role=chat] > div[data-role=item].chat > div.message > div > div {margin:0px; font-size:12px; color:#222; line-height:1.6;}
@@ -75,6 +75,19 @@ section[data-role=chat] > div[data-role=item].chat > div.message > div:last-chil
 section[data-role=chat] > div[data-role=item].chat.whisper {color:#ff00ff;}
 section[data-role=chat] > div[data-role=item].chat.whisper > div.message > div > div {color:#ff00ff;}
 section[data-role=chat] > div[data-role=item].chat.log {opacity:0.5;}
+
+/**
+ * 유저메시지
+ */
+section[data-role=chat] > div[data-role=user] {margin:5px;}
+section[data-role=chat] > div[data-role=user]:after {clear:both; content:""; display:block;}
+section[data-role=chat] > div[data-role=user] > div.photo {float:left; width:34px; height:34px; margin-right:6px; background-image:url(./images/nophoto.png); background-repeat:no-repeat; background-size:cover; background-position:50% 50%; border-radius:50%; box-sizing:border-box; border:1px solid #eee;}
+section[data-role=chat] > div[data-role=user] > div.nickname {float:left; width:calc(100% - 50px); font-size:12px; font-weight:bold; height:16px; line-height:16px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; margin-top:3px;}
+section[data-role=chat] > div[data-role=user] > div.message {float:left; width:calc(100% - 50px); box-sizing:border-box;}
+section[data-role=chat] > div[data-role=user] > div.message > div > div {margin:0px; font-size:12px; line-height:1.6;}
+section[data-role=chat] > div[data-role=user].join {color:#308f2b;}
+section[data-role=chat] > div[data-role=user].leave {color:#222; opacity:0.5;}
+
 
 section[data-role=chat] > div[data-role=line] {border-top:1px dotted #ccc; margin:10px 5px 5px 5px; height:10px; position:relative;}
 section[data-role=chat] > div[data-role=line] > div {width:100px; height:12px; line-height:12px; background:#fff; position:absolute; top:-6px; left:calc(50% - 50px); text-align:center; color:#666; font-size:11px;}

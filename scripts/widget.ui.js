@@ -27,7 +27,7 @@ Minitalk.ui = {
 			'		<label data-role="count"></label>', // 접속자수
 			'		<ul data-role="menu">', // 상단메뉴
 			'			<li data-role="chat"><button type="button" data-action="chat"><i class="icon"></i><span>' + Minitalk.getText("button/chat") + '</span></button></li>', // 채팅버튼
-			'			<li data-role="users"><button type="button" data-action="users"><i class="icon"></i><span>' + Minitalk.getText("button/users") + '</span></button></li>', // 유저목록버튼
+			'			<li data-role="users"><button type="button" data-action="users"><i class="icon"></i><span>' + Minitalk.getText("button/users") + '</span></button></li>', // 접속자목록버튼
 			'			<li data-role="boxes"><button type="button" data-action="boxes"><i class="icon"></i><span>' + Minitalk.getText("button/boxes") + '</span></button></li>', // 개인박스버튼
 			'			<li data-role="configs"><button type="button" data-action="configs"><i class="icon"></i><span>' + Minitalk.getText("button/configs") + '</span></button></li>', // 설정버튼
 			'		</ul>',
@@ -255,10 +255,10 @@ Minitalk.ui = {
 	toggleChat:function() {
 	},
 	/**
-	 * 유저탭을 토클한다.
+	 * 접속자탭을 토클한다.
 	 */
 	toggleUsers:function() {
-		Minitalk.ui.getUsers(1);
+		Minitalk.user.getUsers(1);
 	},
 	/**
 	 * 개인박스목록을 토클한다.
@@ -315,6 +315,36 @@ Minitalk.ui = {
 		Minitalk.ui.autoScroll($item);
 	},
 	/**
+	 * 접속자 이벤트 메시지를 출력한다.
+	 *
+	 * @param string event 이벤트명
+	 * @param object user 접속자객체
+	 */
+	printUserMessage:function(event,user) {
+		var $item = $("<div>").attr("data-role","user").addClass(event).data("nickname",user.nickname);
+		
+		var $photo = $("<div>").addClass("photo");
+		if (user.photo) $photo.css("backgroundImage","url("+user.photo+")");
+		$item.append($photo);
+		
+		var $nickname = $("<div>").addClass("nickname").append(Minitalk.user.getTag(user,false));
+		$item.append($nickname);
+		
+		var $messageBox = $("<div>").addClass("message");
+		$item.append($messageBox);
+		
+		var $message = $("<div>");
+		var $inner = $("<div>");
+		$inner.append($("<span>").addClass("text").html(Minitalk.getText("action/" + event).replace("{NICKNAME}",Minitalk.user.getNickname(user,false))));
+		
+		$message.append($inner);
+		$messageBox.append($message);
+		
+		$("section[data-role=chat]").append($item);
+		
+		Minitalk.ui.autoScroll($item);
+	},
+	/**
 	 * 채팅메시지를 출력한다.
 	 *
 	 * @param string message 메시지 객체
@@ -343,7 +373,7 @@ Minitalk.ui = {
 				if (message.type == "message") {
 					var $nickname = $("<div>").addClass("nickname").append(Minitalk.user.getTag(user,false));
 					$item.append($nickname);
-				} else {
+				} else if (message.type == "whisper") {
 					if (message.to.nickname == Minitalk.user.me.nickname) {
 						var $nickname = $("<div>").addClass("nickname").html(Minitalk.getText("text/whisper_from").replace("{nickname}","<b></b>"));
 						$("b",$nickname).replaceWith(Minitalk.user.getTag(message.user));
