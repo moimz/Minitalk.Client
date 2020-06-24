@@ -11,8 +11,11 @@
  * @version 7.0.0
  * @modified 2020. 3. 16.
  */
-if (is_file('../configs/key.config.php') == false || is_file('../configs/db.config.php') == false) header("location:../install");
 REQUIRE '../configs/init.config.php';
+if ($_CONFIGS->installed === false) {
+	header("location:../install");
+	exit;
+}
 
 $MINITALK = new Minitalk();
 $logged = $MINITALK->getAdminLogged();
