@@ -67,14 +67,6 @@ class Minitalk {
 		$this->initTime = $this->getMicroTime();
 		
 		/**
-		 * 미니톡 클라이언트가 설치되어 있다면 각 기능별 core class 를 호출한다.
-		 * 이 클래스는 인스톨러에서도 사용되기 인스톨러에서 호출되면 에러가 발생하는 기능 class 를 비활성화 한다.
-		 */
-		if ($_CONFIGS->installed === true) {
-			$this->Cache = new Cache($this);
-		}
-		
-		/**
 		 * 타임존 설정
 		 * @todo 언젠가 사용할 예정
 		 */
