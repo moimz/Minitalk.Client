@@ -367,6 +367,8 @@ Minitalk.ui = {
 	 * @param boolean is_log 로그메시지 여부
 	 */
 	printChatMessage:function(message,is_log) {
+		var $item = null;
+		
 		if (message.type == "message" || message.type == "whisper") {
 			if (message.type == "whisper") {
 				var user = typeof message.to == "string" ? {nickname:message.to,photo:""} : message.to;
@@ -374,39 +376,40 @@ Minitalk.ui = {
 				var user = message.user;
 			}
 			
-			var $item = $("section[data-role=chat] > div[data-role=item]:last");
-			if (is_log !== true && $item.hasClass("log") == true) $item = [];
-			if ($item.length > 0 && $item.hasClass("chat") == true && $item.hasClass(message.type) == true && $item.data("nickname") == user.nickname && $item.position().top > 10) {
-				$messageBox = $("div.message",$item);
-			} else {
-				$item = $("<div>").attr("data-role","item").addClass("chat").addClass(message.type).data("nickname",user.nickname);
-				if (is_log === true) $item.addClass("log");
-			
-				var $photo = $("<div>").addClass("photo");
-				if (user.photo) $photo.css("backgroundImage","url("+user.photo+")");
-				$item.append($photo);
+			if (message.from === undefined) {
+				var $item = $("section[data-role=chat] > div[data-role=item]:last");
+				if (is_log !== true && $item.hasClass("log") == true) $item = [];
+				if ($item.length > 0 && $item.hasClass("chat") == true && $item.hasClass(message.type) == true && $item.data("nickname") == user.nickname && $item.position().top > 10) {
+					$messageBox = $("div.message",$item);
+				} else {
+					$item = $("<div>").attr("data-role","item").addClass("chat").addClass(message.type).data("nickname",user.nickname);
+					if (is_log === true) $item.addClass("log");
 				
-				if (message.type == "message") {
-					var $nickname = $("<div>").addClass("nickname").append(Minitalk.user.getTag(user,false));
-					$item.append($nickname);
-				} else if (message.type == "whisper") {
-					if (message.to.nickname == Minitalk.user.me.nickname) {
-						var $nickname = $("<div>").addClass("nickname").html(Minitalk.getText("text/whisper_from").replace("{nickname}","<b></b>"));
-						$("b",$nickname).replaceWith(Minitalk.user.getTag(message.user));
-					} else {
-						var $nickname = $("<div>").addClass("nickname").html(Minitalk.getText("text/whisper_to").replace("{nickname}","<b></b>"));
-						$("b",$nickname).replaceWith(Minitalk.user.getTag(message.to));
+					var $photo = $("<div>").addClass("photo");
+					if (user.photo) $photo.css("backgroundImage","url("+user.photo+")");
+					$item.append($photo);
+					
+					if (message.type == "message") {
+						var $nickname = $("<div>").addClass("nickname").append(Minitalk.user.getTag(user,false));
+						$item.append($nickname);
+					} else if (message.type == "whisper") {
+						if (message.to.nickname == Minitalk.user.me.nickname) {
+							var $nickname = $("<div>").addClass("nickname").html(Minitalk.getText("text/whisper_from").replace("{nickname}","<b></b>"));
+							$("b",$nickname).replaceWith(Minitalk.user.getTag(message.user));
+						} else {
+							var $nickname = $("<div>").addClass("nickname").html(Minitalk.getText("text/whisper_to").replace("{nickname}","<b></b>"));
+							$("b",$nickname).replaceWith(Minitalk.user.getTag(message.to));
+						}
+						$item.append($nickname);
 					}
-					$item.append($nickname);
+				
+					if (user.nickname == Minitalk.user.me.nickname) $item.addClass("me");
+				
+					var $messageBox = $("<div>").addClass("message");
+					$item.append($messageBox);
+					
+					$("section[data-role=chat]").append($item);
 				}
-				
-			
-				if (user.nickname == Minitalk.user.me.nickname) $item.addClass("me");
-			
-				var $messageBox = $("<div>").addClass("message");
-				$item.append($messageBox);
-				
-				$("section[data-role=chat]").append($item);
 			}
 			
 			var $message = $("<div>").attr("data-message-id",message.id);
@@ -420,10 +423,16 @@ Minitalk.ui = {
 			}
 			
 			$message.append($inner);
-			$messageBox.append($message);
+			
+			if (message.from === undefined) {
+				$messageBox.append($message);
+			} else {
+				$("div[data-message-id="+message.from+"]").replaceWith($message);
+			}
 		}
 		
-		if ($item) Minitalk.ui.autoScroll($item);
+		if ($item !== null) Minitalk.ui.autoScroll($item);
+	},
 	},
 	/**
 	 * 채팅창의 스크롤을 특정위치로 이동한다.
