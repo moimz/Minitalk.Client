@@ -67,11 +67,13 @@ section[data-role=chat] > div[data-role=item].chat > div.nickname {float:left; w
 section[data-role=chat] > div[data-role=item].chat > div.message {float:left; width:calc(100% - 50px); box-sizing:border-box;}
 section[data-role=chat] > div[data-role=item].chat > div.message > div > div {margin:0px; font-size:12px; color:#222; line-height:1.6;}
 section[data-role=chat] > div[data-role=item].chat > div.message > div > div > span.text:after {content:"-"; color:#fff;}
-section[data-role=chat] > div[data-role=item].chat > div.message > div > div > span.time {color:#666; display:none; white-space:nowrap;}
-section[data-role=chat] > div[data-role=item].chat > div.message > div > div > span.time > time {font-size:10px;}
+section[data-role=chat] > div[data-role=item].chat > div.message > div > div > span.time {color:#666; white-space:nowrap;}
+section[data-role=chat] > div[data-role=item].chat > div.message > div > div > span.time > time {display:none; font-size:10px;}
 section[data-role=chat] > div[data-role=item].chat > div.message > div > div > span.time > time:before {content:"(";}
 section[data-role=chat] > div[data-role=item].chat > div.message > div > div > span.time > time:after {content:")";}
-section[data-role=chat] > div[data-role=item].chat > div.message > div:last-child > div > span.time {display:inline-block;}
+section[data-role=chat] > div[data-role=item].chat > div.message > div > div > span.time > i.sending {color:#999; font-family:minitalk; font-size:10px; font-style:normal;}
+section[data-role=chat] > div[data-role=item].chat > div.message > div > div > span.time > i.sending:before {content:"\ed01";}
+section[data-role=chat] > div[data-role=item].chat > div.message > div:last-child > div > span.time > time {display:inline-block;}
 section[data-role=chat] > div[data-role=item].chat.whisper {color:#ff00ff;}
 section[data-role=chat] > div[data-role=item].chat.whisper > div.message > div > div {color:#ff00ff;}
 section[data-role=chat] > div[data-role=item].chat.log {opacity:0.5;}
