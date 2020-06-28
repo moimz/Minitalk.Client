@@ -23,7 +23,8 @@ foreach ($languages as $language) {
 $minifier = new Minifier();
 $css = $minifier->css();
 
-$css->add(__MINITALK_PATH__.'/styles/fonts/minitalk.css');
+$css->add(__MINITALK_PATH__.'/styles/fonts/moimz.css');
+
 /**
  * 언어별 기본 웹폰트를 불러온다.
  */
