@@ -46,7 +46,7 @@ Minitalk.ui = {
 			 */
 			'	<footer>',
 			'		<div data-role="tool"></div>',
-			'		<div data-role="input"><input type="text" data-role="message"><button type="button"><i class="icon"></i><span>' + Minitalk.getText("button/send") + '</button></div>',
+			'		<div data-role="input"><textarea type="text" data-role="message"></textarea><button type="button"><i class="icon"></i><span>' + Minitalk.getText("button/send") + '</button></div>',
 			'	</footer>',
 			
 			/**
@@ -79,7 +79,7 @@ Minitalk.ui = {
 		/**
 		 * 채팅입력폼 이벤트 추가
 		 */
-		$("div[data-role=input] > input").on("keypress",function(e) {
+		$("div[data-role=input] > textarea").on("keypress",function(e) {
 			if (e.keyCode == 13) {
 				Minitalk.ui.sendMessage($(this).val());
 				e.stopPropagation();
@@ -91,8 +91,8 @@ Minitalk.ui = {
 		 * 메시지 전송버튼 이벤트 추가
 		 */
 		$("div[data-role=input] > button").on("click",function(e) {
-			if ($("div[data-role=input] > input").val().length > 0) {
-				Minitalk.ui.sendMessage($("div[data-role=input] > input").val());
+			if ($("div[data-role=input] > textarea").val().length > 0) {
+				Minitalk.ui.sendMessage($("div[data-role=input] > textarea").val());
 			}
 			e.stopPropagation();
 			e.preventDefault();
@@ -310,7 +310,7 @@ Minitalk.ui = {
 	enable:function(inputmode) {
 		var inputmode = inputmode === true;
 		
-		$("div[data-role=input] > input").enable();
+		$("div[data-role=input] > textarea").enable();
 		$("div[data-role=input] > button").enable();
 		
 		if (inputmode === false) {
@@ -327,7 +327,7 @@ Minitalk.ui = {
 	disable:function(inputmode) {
 		var inputmode = inputmode === true;
 		
-		if (inputmode === false) $("div[data-role=input] > input").disable();
+		if (inputmode === false) $("div[data-role=input] > textarea").disable();
 		$("div[data-role=input] > button").disable();
 		
 		if (inputmode === false) {
@@ -579,7 +579,7 @@ Minitalk.ui = {
 	 * @param string message 수정할 내용
 	 */
 	setInputVal:function(value) {
-		var $input = $("div[data-role=input] > input");
+		var $input = $("div[data-role=input] > textarea");
 		$input.focus().val(value);
 	},
 	/**
