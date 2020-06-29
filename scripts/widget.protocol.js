@@ -171,8 +171,13 @@ Minitalk.protocol = {
 	 * 메세지를 수신하였을 경우
 	 */
 	message:function(data) {
-		console.log("message",data);
+		if (Minitalk.socket.joined == true) {
+			Minitalk.ui.printChatMessage(data);
+		}
 		
+		if (data.from !== undefined) {
+			Minitalk.ui.enable(true);
+		}
 		if (typeof data.id == "object") {
 			
 		} else {
