@@ -10,6 +10,7 @@
  * @modified 2020. 6. 16.
  */
 Minitalk.ui = {
+	resizeTimer:null,
 	/**
 	 * 미니톡 채팅위젯 UI를 초기화한다.
 	 */
