@@ -583,6 +583,25 @@ Minitalk.ui = {
 		$input.focus().val(value);
 	},
 	/**
+	 * 자신이 입력한 메시지를 채팅창에 출력할 때, 이모티콘 치환과 메시지 스타일을 처리한다.
+	 *
+	 * @param string message 원본 메시지
+	 * @return string message 처리된 메시지
+	 */
+	encodeMessage:function(message) {
+		message = message.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\\/,"").replace(/\n/g,"<br>");
+		return message;
+	},
+	/**
+	 * 서버에서 전송된 RAW 채팅메시지를 HTML 태그로 변환한다.
+	 *
+	 * @param string message 원본 메시지
+	 * @return string message 처리된 메시지
+	 */
+	decodeMessage:function(message) {
+		return message;
+	},
+	/**
 	 * 사운드를 재생한다.
 	 *
 	 * @param string sound 사운드파일명
