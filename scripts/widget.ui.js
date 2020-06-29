@@ -37,7 +37,7 @@ Minitalk.ui = {
 			'	</aside>',
 			
 			/**
-			 * 채팅영역
+			 * 활성화된 탭이 표시되는 영역
 			 */
 			'	<main></main>',
 			
@@ -136,6 +136,15 @@ Minitalk.ui = {
 		var type = Minitalk.tabType == "auto" ? ($(window).width() > 400 ? "vertical" : "horizontal") : Minitalk.tabType;
 		$frame.attr("data-tab-type",type);
 		
+		/**
+		 * 탭바설정에 기존에 위치한 채팅탭을 삭제하고, 항상 제일 처음에 채팅탭을 추가한다.
+		 */
+		var chatTab = $.inArray("chat",Minitalk.tabs);
+		if (chatTab > -1) {
+			Minitalk.tabs.splice(chatTab,1);
+		}
+		Minitalk.tabs.unshift("chat");
+		
 		var $aside = $("aside");
 		var $tabs = $("ul[data-role=tabs]",$aside);
 		var $lists = $("ul[data-role=lists]",$aside);
@@ -164,7 +173,7 @@ Minitalk.ui = {
 					Minitalk.ui.activeTab($(this).attr("data-tab"));
 				});
 				
-				if ($aside.attr("data-current") == tab) {
+				if ($frame.attr("data-current-tab") == tab) {
 					$button.addClass("open");
 				}
 				
@@ -344,10 +353,11 @@ Minitalk.ui = {
 	activeTab:function(tab) {
 		if (Minitalk.fireEvent("beforeChangeTab",[tab]) === false) return;
 		
+		var $frame = $("div[data-role=frame]");
 		var $aside = $("aside");
 		var $main = $("main");
 		var $tabs = $("ul[data-role]",$aside);
-		if ($aside.attr("data-current") == tab) return;
+		if ($frame.attr("data-current-tab") == tab) return;
 		
 		$("button[data-tab]",$tabs).removeClass("open");
 		$("button[data-tab="+tab+"]",$tabs).addClass("open");
@@ -371,7 +381,7 @@ Minitalk.ui = {
 		if (tab == "configs") {
 		}
 		
-		$aside.attr("data-current",tab);
+		$frame.attr("data-current-tab",tab);
 		
 		Minitalk.fireEvent("afterChangeTab",[tab]);
 	},

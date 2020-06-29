@@ -102,7 +102,7 @@ if (isMinitalkIncluded === undefined) {
 		this.viewUserLimit = opt.viewUserLimit ? opt.viewUserLimit : 0;
 		this.logCount = opt.logCount !== undefined ? opt.logCount : 15;
 		
-		this.tabs = opt.tabs ? opt.tabs : ["chat","users","boxes","configs"];
+		this.tabs = opt.tabs ? opt.tabs : ["users","boxes","configs"];
 		this.tabType = opt.tabType ? opt.tabType : "auto";
 		this.tools = opt.tools ? opt.tools : [];
 		this.toolType = opt.toolType ? opt.toolType : "icon";
