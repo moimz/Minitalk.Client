@@ -37,17 +37,7 @@ Minitalk.ui = {
 			/**
 			 * 채팅영역
 			 */
-			'	<main>',
-			'		<section data-role="chat"></section>',
-			'		<section data-role="users">',
-			'			<div><input type="text" name="keyword" placeholder="' + Minitalk.getText("user/keyword") + '"><button type="button" data-action="users-search"><i class="icon"></i><span>' + Minitalk.getText("button/search") + '</span></button><button type="button" data-action="users-refresh"><i class="icon"></i><span>' + Minitalk.getText("button/refresh") + '</span></button></div>',
-			'			<ul></ul>',
-			'		</section>',
-			'		<section data-role="boxes">',
-			'			<div><input type="text" name="keyword" placeholder="' + Minitalk.getText("box/keyword") + '"><button type="button" data-action="boxes-search"><i class="icon"></i><span>' + Minitalk.getText("button/search") + '</span></button><button type="button" data-action="boxes-refresh"><i class="icon"></i><span>' + Minitalk.getText("button/refresh") + '</span></button><button type="button" data-action="boxes-create"><i class="icon"></i><span>' + Minitalk.getText("box/create") + '</span></button></div>',
-			'			<ul></ul>',
-			'		</section>',
-			'	</main>',
+			'	<main></main>',
 			
 			/**
 			 * 위젯푸터
@@ -132,7 +122,9 @@ Minitalk.ui = {
 		});
 		
 		Minitalk.ui.initFrame();
+		Minitalk.ui.initSection();
 		Minitalk.ui.disable();
+		
 		/**
 		 * 리사이즈 이벤트 추가
 		 */
@@ -163,6 +155,37 @@ Minitalk.ui = {
 		Minitalk.ui.printTools();
 		Minitalk.ui.disable();
 		Minitalk.ui.toggleTab(Minitalk.defaultTab);
+	/**
+	 * 설정된 탭에 따라 메인섹션을 초기화한다.
+	 */
+	initSection:function() {
+		var firstTab = null;
+		var $main = $("main");
+		for (var index in Minitalk.tabs) {
+			var tab = Minitalk.tabs[index];
+			
+			if (typeof tab == "string") {
+				/**
+				 * 기본탭을 추가한다.
+				 */
+				if ($.inArray(tab,["chat","users","files","boxes","configs"]) === false) continue;
+				$main.append($("<section>").attr("data-tab",tab));
+				
+				firstTab = firstTab === null ? tab : firstTab;
+			} else {
+				/**
+				 * 사용자정의 탭을 추가한다.
+				 */
+				if (tab.name === undefined || typeof tab.handler === "function") continue;
+				$main.append($("<section>").attr("data-tab",tab.name));
+				
+				firstTab = firstTab === null ? tab.name : firstTab;
+			}
+		}
+		
+		if (firstTab !== null) {
+			Minitalk.ui.activeTab(firstTab);
+		}
 	},
 	/**
 	 * 변경된 브라우저의 보안규칙에 따라, 사운드파일을 초기화한다.
@@ -337,8 +360,11 @@ Minitalk.ui = {
 	 * @param string message 메시지
 	 */
 	printSystemMessage:function(type,message) {
+		var $chat = $("section[data-tab=chat]");
+		if ($chat.length == 0) return;
+		
 		var $item = $("<div>").attr("data-role","item").addClass("system").addClass(type).html(message);
-		$("section[data-role=chat]").append($item);
+		$chat.append($item);
 		Minitalk.ui.autoScroll($item);
 	},
 	/**
@@ -378,6 +404,9 @@ Minitalk.ui = {
 	 * @param boolean is_log 로그메시지 여부
 	 */
 	printChatMessage:function(message,is_log) {
+		var $chat = $("section[data-tab=chat]");
+		if ($chat.length == 0) return;
+		
 		var $item = null;
 		
 		if (message.type == "message" || message.type == "whisper") {
@@ -388,7 +417,7 @@ Minitalk.ui = {
 			}
 			
 			if (message.from === undefined) {
-				var $item = $("section[data-role=chat] > div[data-role=item]:last");
+				var $item = $("div[data-role=item]:last",$chat);
 				if (is_log !== true && $item.hasClass("log") == true) $item = [];
 				if ($item.length > 0 && $item.hasClass("chat") == true && $item.hasClass(message.type) == true && $item.data("nickname") == user.nickname && $item.position().top > 10) {
 					$messageBox = $("div.message",$item);
@@ -419,7 +448,7 @@ Minitalk.ui = {
 					var $messageBox = $("<div>").addClass("message");
 					$item.append($messageBox);
 					
-					$("section[data-role=chat]").append($item);
+					$chat.append($item);
 				}
 			}
 			
