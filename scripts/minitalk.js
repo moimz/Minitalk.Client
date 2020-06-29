@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 3. 23.
+ * @modified 2020. 6. 25.
  */
 if (isMinitalkIncluded === undefined) {
 	var isMinitalkIncluded = true;
@@ -78,9 +78,10 @@ if (isMinitalkIncluded === undefined) {
 		 * @public int viewUserLimit 접속안내 메세지 및 유저목록에서 보일 유저의 최소레벨 (기본값 : 0)
 		 * @public int logCount 이전 대화내역을 몇개까지 보일지 설정한다. (기본값 : 15, 최대 : 30, 0 일 경우 이전 대화내역을 사용하지 않는다.)
 		 *
-		 * @public string defaultTab 채팅위젯의 기본 활성화된 탭을 설정한다. (기본값 : chat, chat : 채팅탭, users : 접속자탭, boxes : 개인박스탭, configs : 설정탭)
-		 * @public object[] tools 채팅위젯 툴바의 버튼을 정의한다.
-		 * @public string toolType 채팅위젯 툴바의 형식을 정의한다. (기본값 : icon, icon : 아이콘만 표시, icontext : 아이콘 및 버튼텍스트 표시, text : 버튼 텍스트만 표시)
+		 * @public string/object[] tabs 탭바의 탭을 설정한다.
+		 * @public string tabType 탭바 형식을 정의한다.  (기본값 : auto, auto : 채팅위젯 가로크기(400px 기준)에 따라 가로/세로 자동변환, horizontal : 가로형태, vertical : 세로형태)
+		 * @public object[] tools 툴바의 버튼을 정의한다.
+		 * @public string toolType 툴바의 형식을 정의한다. (기본값 : icon, icon : 아이콘만 표시, icontext : 아이콘 및 버튼텍스트 표시, text : 버튼 텍스트만 표시)
 		 * @public object[] menus 접속자 닉네임을 클릭했을 때 보일 메뉴를 설정한다.
 		 *
 		 * @public int/string width 미니톡 채팅위젯 가로크기를 픽셀 또는 % 단위로 설정한다. (기본값 : 200)
@@ -101,7 +102,8 @@ if (isMinitalkIncluded === undefined) {
 		this.viewUserLimit = opt.viewUserLimit ? opt.viewUserLimit : 0;
 		this.logCount = opt.logCount !== undefined ? opt.logCount : 15;
 		
-		this.defaultTab = opt.defaultTab ? opt.defaultTab : "chat";
+		this.tabs = opt.tabs ? opt.tabs : ["chat","users","boxes","configs"];
+		this.tabType = opt.tabType ? opt.tabType : "auto";
 		this.tools = opt.tools ? opt.tools : [];
 		this.toolType = opt.toolType ? opt.toolType : "icon";
 		this.menus = opt.menus ? opt.menus : [];
