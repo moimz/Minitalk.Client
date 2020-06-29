@@ -153,7 +153,7 @@ $(document).ready(function() {
 	Minitalk.socket.connect();
 	
 	$("link[rel=stylesheet]").on("load",function() {
-		Minitalk.ui.printTools();
+		Minitalk.ui.initFrame();
 	});
 	
 	Minitalk.fireEvent("init");

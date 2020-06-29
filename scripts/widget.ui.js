@@ -130,6 +130,8 @@ Minitalk.ui = {
 			e.preventDefault();
 		});
 		
+		Minitalk.ui.initFrame();
+		Minitalk.ui.disable();
 		/**
 		 * 리사이즈 이벤트 추가
 		 */
@@ -139,7 +141,7 @@ Minitalk.ui = {
 				Minitalk.ui.resizeTimer = null;
 			}
 			
-			Minitalk.ui.resizeTimer = setTimeout(Minitalk.ui.printTools,200);
+			Minitalk.ui.resizeTimer = setTimeout(Minitalk.ui.initFrame,200);
 		});
 		
 		/**
@@ -148,6 +150,12 @@ Minitalk.ui = {
 		$(document).on("click",function(e) {
 			Minitalk.ui.initSound();
 		});
+	/**
+	 * 브라우저 사이즈가 변경되거나, UI가 최초표시될 때 UI 요소를 초기화한다.
+	 */
+	initFrame:function() {
+		Minitalk.ui.initTabs();
+	},
 		
 		Minitalk.ui.printTools();
 		Minitalk.ui.disable();
