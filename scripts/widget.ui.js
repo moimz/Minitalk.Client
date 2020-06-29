@@ -602,6 +602,91 @@ Minitalk.ui = {
 		return message;
 	},
 	/**
+	 * 메시지를 전송한다.
+	 */
+	sendMessage:function(message) {
+		var message = $.trim(message);
+		if (message.length == 0) return;
+		
+		/**
+		 * 전송버튼이 비활성화 되었을 경우 모든 처리를 중단한다.
+		 */
+		if ($("div[data-role=input] > button").is(":disabled") == true) return;
+		
+		/**
+		 * 슬래시(/) 명령어 처리
+		 */
+		if (message.indexOf("/") === 0) {
+			var commands = message.substr(1).split(" ");
+			var command = commands.shift();
+			console.log(command);
+			
+			switch (command) {
+				/**
+				 * 채널관리자 로그인
+				 */
+				case "login" :
+					if (Minitalk.user.me.level == 9) {
+						Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("ALREADY_LOGGED"));
+						Minitalk.ui.setInputVal("");
+						return;
+					}
+					
+					Minitalk.socket.send("login",commands.join(" "));
+					break;
+					
+				/**
+				 * 채널관리자 로그아웃
+				 */
+				case "logout" :
+					if (Minitalk.user.me.level != 9) {
+						Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("FORBIDDEN"));
+						Minitalk.ui.setInputVal("");
+						return;
+					}
+					
+					Minitalk.socket.send("logout");
+					break;
+					
+				/**
+				 * 기본 명령어가 아닌 경우, 플러그인 등에서 처리할 수 있도록 이벤트를 발생시킨다.
+				 */
+				default :
+					var result = Minitalk.fireEvent("command",[Minitalk,command,commands]);
+					if (result === undefined) { // 플러그인 등에서 명령어를 처리하지 못하였을 경우
+						Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("NOT_FOUND_COMMAND"));
+						return;
+					} else if (result !== true) { // 플러그인에서 명령어 처리시 오류가 발생한 경우
+						return;
+					}
+					break;
+			}
+		} else {
+			/**
+			 * 메시지 전송전 이벤트 처리
+			 */
+			if (Minitalk.fireEvent("beforeSendMessage",[Minitalk,message,Minitalk.user.me]) === false) return;
+			
+			/**
+			 * 메시지의 고유 ID를 할당한다.
+			 */
+			var uuid = uuidv4();
+			
+			/**
+			 * 서버로 메시지를 전송한다.
+			 */
+			Minitalk.socket.send("message",{id:uuid,type:"message",message:message});
+			
+			/**
+			 * 자신의 메시지를 화면에 출력한다.
+			 */
+			Minitalk.ui.printChatMessage({id:uuid,type:"message",message:Minitalk.ui.encodeMessage(message),user:Minitalk.user.me});
+			Minitalk.ui.disable(true);
+		}
+		
+		Minitalk.ui.setInputVal("");
+	},
+	/**
 	 * 사운드를 재생한다.
 	 *
 	 * @param string sound 사운드파일명
