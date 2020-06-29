@@ -40,6 +40,13 @@
 		"refresh":"새로고침",
 		"reconnect":"재접속"
 	},
+	"tab":{
+		"chat":"채팅",
+		"users":"접속자",
+		"boxes":"개인박스",
+		"configs":"환경설정",
+		"more":"더보기"
+	},
 	"tool":{
 		
 	},
@@ -51,11 +58,7 @@
 		"modify":"수정",
 		"cancel":"취소",
 		"search":"검색",
-		"refresh":"새로고침",
-		"chat":"채팅",
-		"users":"접속자",
-		"boxes":"개인박스",
-		"configs":"환경설정"
+		"refresh":"새로고침"
 	},
 	"user":{
 		"keyword":"닉네임 검색"

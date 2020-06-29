@@ -25,7 +25,7 @@ header > label[data-role=count]:empty {display:none;}
  * 탭바 스타일정의
  */
 aside {background:#f6f6f6;}
-aside > ul[data-role=tabs] {width:100%; height:100%; display:block; list-style:none;}
+aside > ul[data-role=tabs] {width:100%; height:100%; display:block;}
 aside > ul[data-role=tabs] > li {position:relative; vertical-align:middle; width:100%; height:100%;}
 aside > ul[data-role=tabs] > li > button {position:relative; top:0; left:0; width:100%; height:100%; font-size:0; background:transparent; border:0; vertical-align:middle; box-sizing:border-box;  cursor:pointer;}
 aside > ul[data-role=tabs] > li > button > span {display:none;}
@@ -45,7 +45,7 @@ aside.open > ul[data-role=tabs] > li > button[data-tab=more] > i {color:#10b8c3;
  * 가로형태 탭바
  */
 div[data-role=frame][data-tab-type=horizontal] > aside {width:100%; height:38px;}
-div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li {display:inline-block; width:50px;}
+div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li {width:50px;}
 div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li > button {border-bottom:1px solid #d8d8d9; border-left:1px solid #d8d8d9;}
 div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li:first-child > button {border-left:0;}
 div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li > button > i {font-size:16px; line-height:37px;}
@@ -65,7 +65,7 @@ div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li >
 /**
  * 탭 목록
  */
-aside > ul[data-role=lists] {background:#f6f6f6; width:100%; border-top:1px solid #d8d8d9; border-bottom:1px solid #d8d8d9; list-style:none; max-height:50%; overflow:auto;}
+aside > ul[data-role=lists] {background:#f6f6f6; width:100%; border-top:1px solid #d8d8d9; border-bottom:1px solid #d8d8d9;}
 aside > ul[data-role=lists] > li {width:100%; height:36px; border-bottom:1px solid #e5e5e5;}
 aside > ul[data-role=lists] > li > button {width:100%; height:36px; text-align:left; background:transparent; border:0; cursor:pointer; color:#777; padding:0px 8px; font-size:0; cursor:pointer;}
 aside > ul[data-role=lists] > li > button > i {width:20px; height:36px; display:inline-block; line-height:36px; text-align:center; margin-right:5px; font-size:12px;  vertical-align:middle;}
@@ -86,9 +86,10 @@ div[data-role=frame][data-tab-type=vertical] > main {width:calc(100% - 41px); he
  * 푸터
  */
 footer {min-height:30px; font-size:0; bottom:0; left:0; background:#fff; border-top:1px solid #d8d8d9;} /* 푸터는 채팅메시지 입력에 따라 높이가 가변이므로, 최소높이(기본높이)를 설정한다. */
-footer > div[data-role=tools] {display:inline-block; width:30px; height:30px; vertical-align:middle;}
+footer > ul[data-role=tools] {display:inline-block; width:30px; height:30px; vertical-align:middle;}
+footer > ul[data-role=tools] > li > button[data-tool=more] {width:30px; height:30px;}
 footer > div[data-role=input] {display:inline-block; width:calc(100% - 30px); height:30px; vertical-align:middle; box-sizing:border-box;}
-footer > div[data-role=input] > textarea {border:0; width:calc(100% - 40px); height:20px; padding:5px; line-height:20px; font-size:12px; vertical-align:middle; display:inline-block; line-height:20px; resize:none;}
+footer > div[data-role=input] > textarea {border:0; width:calc(100% - 40px); min-height:20px; padding:5px; line-height:20px; font-size:12px; vertical-align:middle; display:inline-block; line-height:20px; resize:none;}
 footer > div[data-role=input] > button {position:absolute; top:-1px; right:0; width:30px; height:31px; vertical-align:middle; border:0; background:#10b8c3; cursor:pointer; display:inline-block;}
 footer > div[data-role=input] > button > i {width:30px; height:30px; line-height:30px; font-family:moimz; font-size:16px; color:#fff; font-style:normal;}
 footer > div[data-role=input] > button > i:before {content:"\ef16";}
@@ -96,11 +97,7 @@ footer > div[data-role=input] > button > span {display:none;}
 footer > div[data-role=input] > button:hover {background:#15a9b4;}
 footer > div[data-role=input] > button[disabled] {background:#f4f4f4; cursor:not-allowed; box-sizing:border-box; top:0px; height:30px;}
 footer > div[data-role=input] > button[disabled] > i {color:#ccc;}
-
-/**
- * 세로형태 탭바일 경우 푸터영역을 줄여준다.
- */
-div[data-role=frame][data-tab-type=vertical] > footer {width:calc(100% - 42px);}
+div[data-role=frame][data-tab-type=vertical] > footer {width:calc(100% - 42px);} /* 세로형태 탭바일 경우 푸터영역을 줄여준다. */
 
 
 /**

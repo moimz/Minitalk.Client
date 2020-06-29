@@ -168,7 +168,7 @@ Minitalk.ui = {
 				var $tab = $("<li>");
 				var $button = $("<button>").attr("type","button").attr("data-tab",tab);
 				$button.append($("<i>").addClass("icon"));
-				$button.append($("<span>").html(Minitalk.getText("button/" + tab)));
+				$button.append($("<span>").html(Minitalk.getText("tab/" + tab)));
 				$button.on("click",function() {
 					Minitalk.ui.activeTab($(this).attr("data-tab"));
 				});
@@ -221,7 +221,7 @@ Minitalk.ui = {
 			var $more = $("<li>");
 			var $button = $("<button>").attr("type","button").attr("data-tab","more");
 			$button.append($("<i>").addClass("icon"));
-			$button.append($("<span>").html(Minitalk.getText("button/more")));
+			$button.append($("<span>").html(Minitalk.getText("tab/more")));
 			$button.on("click",function(e) {
 				Minitalk.ui.toggleTabs();
 				e.stopImmediatePropagation();
