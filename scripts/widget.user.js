@@ -124,8 +124,5 @@ Minitalk.user = {
 		 * 이벤트를 발생시킨다.
 		 */
 		$(document).triggerHandler("printUserCount",[Minitalk,$count,count]);
-		
-//		Minitalk.ui.playSound("call");
-		Minitalk.ui.playSound("query");
 	}
 };
