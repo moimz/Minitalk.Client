@@ -440,9 +440,11 @@ Minitalk.ui = {
 	 * @param object $item 이동할 위치의 DOM객체
 	 */
 	autoScroll:function($item) {
-		var $item = $item ? $item : $("section[data-role=chat] > div[data-role=item]:last");
-		var $chat = $("section[data-role=chat]");
-		if ($chat.prop("scrollHeight") - $chat.scrollTop() - $chat.height() < $item.outerHeight(true) + 10) {
+		var $chat = $("section[data-tab=chat]");
+		if ($chat.length == 0) return;
+		
+		var $item = $item ? $item : $("div[data-role=item]:last",$chat);
+		if ($item === true || $chat.prop("scrollHeight") - $chat.scrollTop() - $chat.height() < $item.outerHeight(true) + 10) {
 			$chat.scrollTop($chat.prop("scrollHeight"));
 		}
 	},
