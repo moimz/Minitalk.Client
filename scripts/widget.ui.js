@@ -26,13 +26,15 @@ Minitalk.ui = {
 			'	<header>',
 			'		<h1>connecting...</h1>', // 위젯타이틀
 			'		<label data-role="count"></label>', // 접속자수
-			'		<ul data-role="menu">', // 상단메뉴
-			'			<li data-role="chat"><button type="button" data-action="chat"><i class="icon"></i><span>' + Minitalk.getText("button/chat") + '</span></button></li>', // 채팅버튼
-			'			<li data-role="users"><button type="button" data-action="users"><i class="icon"></i><span>' + Minitalk.getText("button/users") + '</span></button></li>', // 접속자목록버튼
-			'			<li data-role="boxes"><button type="button" data-action="boxes"><i class="icon"></i><span>' + Minitalk.getText("button/boxes") + '</span></button></li>', // 개인박스버튼
-			'			<li data-role="configs"><button type="button" data-action="configs"><i class="icon"></i><span>' + Minitalk.getText("button/configs") + '</span></button></li>', // 설정버튼
-			'		</ul>',
 			'	</header>',
+			
+			/**
+			 * 탭바
+			 */
+			'	<aside>',
+			'		<ul data-role="tabs"></ul>',
+			'		<ul data-role="lists"></ul>',
+			'	</aside>',
 			
 			/**
 			 * 채팅영역
@@ -73,31 +75,6 @@ Minitalk.ui = {
 		
 		var $html = $(html.join(""));
 		$("body").append($html);
-		
-		/**
-		 * 버튼 이벤트 추가
-		 */
-		$("button[data-action]").on("click",function() {
-			var action = $(this).attr("data-action");
-			
-			if (action == "chat" || action == "users" || action == "boxes" || action == "configs") {
-				Minitalk.ui.toggleTab(action);
-			}
-			
-			if (action == "users-search") {
-				var keyword = $("input[name=keyword]",$("section[data-role=users]")).val();
-				console.log("users-search",keyword);
-				Minitalk.ui.getUsers(1,keyword);
-			}
-			
-			if (action == "users-refresh") {
-				Minitalk.ui.getUsers();
-			}
-			
-			if (action == "boxes-create") {
-				Minitalk.ui.createBox();
-			}
-		});
 		
 		/**
 		 * 채팅입력폼 이벤트 추가
@@ -151,10 +128,106 @@ Minitalk.ui = {
 	initFrame:function() {
 		Minitalk.ui.initTabs();
 	},
+	/**
+	 * 탭바를 출력한다.
+	 */
+	initTabs:function() {
+		var $frame = $("div[data-role=frame]");
+		var type = Minitalk.tabType == "auto" ? ($(window).width() > 400 ? "vertical" : "horizontal") : Minitalk.tabType;
+		$frame.attr("data-tab-type",type);
 		
-		Minitalk.ui.printTools();
-		Minitalk.ui.disable();
-		Minitalk.ui.toggleTab(Minitalk.defaultTab);
+		var $aside = $("aside");
+		var $tabs = $("ul[data-role=tabs]",$aside);
+		var $lists = $("ul[data-role=lists]",$aside);
+		$tabs.empty();
+		$lists.empty();
+		if (Minitalk.tabType == "none") return;
+		
+		var limit = type == "horizontal" ? $tabs.width() : $tabs.height();
+		var limiter = 0;
+		var tabCount = 0;
+		
+		for (var index in Minitalk.tabs) {
+			var tab = Minitalk.tabs[index];
+			
+			if (typeof tab == "string") {
+				/**
+				 * 기본탭을 추가한다.
+				 */
+				if ($.inArray(tab,["chat","users","files","boxes","configs"]) === false) continue;
+				
+				var $tab = $("<li>");
+				var $button = $("<button>").attr("type","button").attr("data-tab",tab);
+				$button.append($("<i>").addClass("icon"));
+				$button.append($("<span>").html(Minitalk.getText("button/" + tab)));
+				$button.on("click",function() {
+					Minitalk.ui.activeTab($(this).attr("data-tab"));
+				});
+				
+				if ($aside.attr("data-current") == tab) {
+					$button.addClass("open");
+				}
+				
+				$tab.append($button);
+				$tabs.append($tab);
+			} else {
+				/**
+				 * 사용자정의 탭을 추가한다.
+				 */
+			}
+			
+			if (type == "horizontal") {
+				limiter+= $tab.outerWidth(true);
+			} else {
+				limiter+= $tab.outerHeight(true);
+			}
+			
+			tabCount++;
+		}
+		
+		/**
+		 * 탭바영역을 벗어난 탭을 탭 목록으로 이동시킨다.
+		 */
+		if (limit < limiter) {
+			var current = 0;
+			var split = 0;
+			
+			$("li",$tabs).each(function() {
+				if (type == "horizontal") {
+					if (current + $(this).width() > limit) {
+						return;
+					}
+				}
+				current+= $(this).width();
+				split++;
+			});
+			
+			for (var i=loop=$("li",$tabs).length - 1;i>=split-1;i--) {
+				var $tab = $("li",$tabs).eq(i).clone(true);
+				
+				$lists.prepend($tab);
+				$("li",$tabs).eq(i).remove();
+			}
+			
+			var $more = $("<li>");
+			var $button = $("<button>").attr("type","button").attr("data-tab","more");
+			$button.append($("<i>").addClass("icon"));
+			$button.append($("<span>").html(Minitalk.getText("button/more")));
+			$button.on("click",function(e) {
+				Minitalk.ui.toggleTabs();
+				e.stopImmediatePropagation();
+			});
+			$more.append($button);
+			$tabs.append($more);
+		}
+		
+		/**
+		 * 가로형 탭인 경우, 탭 너비를 동일하게 설정한다.
+		 */
+		if (type == "horizontal") {
+			$("li",$tabs).outerWidth((100 / $("li",$tabs).length) + "%",true);
+		}
+	},
 	/**
 	 * 설정된 탭에 따라 메인섹션을 초기화한다.
 	 */
@@ -268,53 +341,53 @@ Minitalk.ui = {
 	 *
 	 * @param string tab 탭
 	 */
-	toggleTab:function(tab) {
-		var $menu = $("ul[data-role=menu]",$("header"));
-		if ($menu.attr("data-toggle") == tab) return;
+	activeTab:function(tab) {
+		if (Minitalk.fireEvent("beforeChangeTab",[tab]) === false) return;
 		
-		Minitalk.fireEvent("beforeToggleTab",[tab]);
+		var $aside = $("aside");
+		var $main = $("main");
+		var $tabs = $("ul[data-role]",$aside);
+		if ($aside.attr("data-current") == tab) return;
 		
-		$("button[data-action]",$menu).removeClass("open");
-		$("button[data-action="+tab+"]").addClass("open");
-		$("section[data-role]",$("main")).removeClass("open");
-		$("section[data-role="+tab+"]",$("main")).addClass("open");
+		$("button[data-tab]",$tabs).removeClass("open");
+		$("button[data-tab="+tab+"]",$tabs).addClass("open");
+		$("section[data-tab]",$main).removeClass("open");
+		$("section[data-tab="+tab+"]",$main).addClass("open");
+		
+		if ($("ul[data-role=lists] > li > button.open",$aside).length > 0) {
+			$("button[data-tab=more]",$tabs).addClass("open");
+		}
 		
 		if (tab == "chat") {
-			Minitalk.ui.toggleChat();
+			Minitalk.ui.autoScroll(true);
 		}
 		
 		if (tab == "users") {
-			Minitalk.ui.toggleUsers();
 		}
 		
 		if (tab == "boxes") {
-			Minitalk.ui.toggleBoxes();
 		}
 		
 		if (tab == "configs") {
-			Minitalk.ui.toggleBoxes();
 		}
 		
-		$menu.attr("data-toggle",tab);
+		$aside.attr("data-current",tab);
 		
-		Minitalk.fireEvent("afterToggleTab",[tab]);
+		Minitalk.fireEvent("afterChangeTab",[tab]);
 	},
 	/**
-	 * 채팅탭을 토글한다.
+	 * 탭목록을 토글한다.
 	 */
-	toggleChat:function() {
+	toggleTabs:function() {
+		var $aside = $("aside");
+		$aside.toggleClass("open");
 	},
 	/**
-	 * 접속자탭을 토클한다.
+	 * 개인박스을 개설한다.
 	 */
-	toggleUsers:function() {
-		Minitalk.user.getUsers(1);
 	},
 	/**
-	 * 개인박스목록을 토클한다.
 	 */
-	toggleBoxes:function() {
-		Minitalk.ui.getBoxes(1);
 	},
 	/**
 	 * 에러메시지를 출력한다.
@@ -350,7 +423,6 @@ Minitalk.ui = {
 	 */
 	printErrorCode:function(code) {
 		var message = Minitalk.getText("error/code/" + code);
-		console.log("errorcode",code,message);
 		Minitalk.ui.printSystemMessage("error",message + "(code : " + code + ")");
 	},
 	/**
@@ -374,6 +446,9 @@ Minitalk.ui = {
 	 * @param object user 접속자객체
 	 */
 	printUserMessage:function(event,user) {
+		var $chat = $("section[data-tab=chat]");
+		if ($chat.length == 0) return;
+		
 		var $item = $("<div>").attr("data-role","user").addClass(event).data("nickname",user.nickname);
 		
 		var $photo = $("<div>").addClass("photo");
@@ -393,7 +468,7 @@ Minitalk.ui = {
 		$message.append($inner);
 		$messageBox.append($message);
 		
-		$("section[data-role=chat]").append($item);
+		$chat.append($item);
 		
 		Minitalk.ui.autoScroll($item);
 	},
@@ -515,7 +590,6 @@ Minitalk.ui = {
 			}).catch(function(e) {
 			});
 		}
-	};
 	},
 	/**
 	 * 토글된 객체를 초기화한다.
