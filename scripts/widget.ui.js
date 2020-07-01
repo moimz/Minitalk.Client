@@ -506,8 +506,7 @@ Minitalk.ui = {
 		}
 		
 		if (tab == "chat") {
-			Minitalk.ui.initTools();
-			Minitalk.ui.autoScroll(true);
+			Minitalk.ui.createChat();
 		}
 		
 		if (tab == "users") {
@@ -523,6 +522,13 @@ Minitalk.ui = {
 		Minitalk.fireEvent("afterActiveTab",[tab,e]);
 		
 		if (e) e.stopImmediatePropagation();
+	},
+	/**
+	 * 채팅탭을 구성한다.
+	 */
+	createChat:function() {
+		Minitalk.ui.initTools();
+		Minitalk.ui.autoScroll(true);
 	},
 	/**
 	 * 탭목록을 토글한다.
