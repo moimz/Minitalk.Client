@@ -488,7 +488,7 @@ Minitalk.ui = {
 	activeTab:function($tab,e) {
 		var tab = typeof $tab == "object" ? $tab.data("tab") : $tab;
 		var $tab = typeof $tab == "object" ? $tab : null;
-		if (Minitalk.fireEvent("beforeActiveTab",[tab,$tab,e]) === false) return;
+		if (Minitalk.fireEvent("beforeActiveTab",[tab,e]) === false) return;
 		
 		var $frame = $("div[data-role=frame]");
 		var $aside = $("aside");
@@ -519,9 +519,8 @@ Minitalk.ui = {
 		if (tab == "configs") {
 		}
 		
-		$frame.attr("data-current-tab",tab);
-		
-		Minitalk.fireEvent("afterActiveTab",[tab,$tab,e]);
+		$aside.removeClass("open");
+		Minitalk.fireEvent("afterActiveTab",[tab,e]);
 		
 		if (e) e.stopImmediatePropagation();
 	},
