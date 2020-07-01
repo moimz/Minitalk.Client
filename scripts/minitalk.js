@@ -81,7 +81,6 @@ if (isMinitalkIncluded === undefined) {
 		 * @public string/object[] tabs 탭바의 탭을 설정한다.
 		 * @public string tabType 탭바 형식을 정의한다.  (기본값 : auto, auto : 채팅위젯 가로크기(400px 기준)에 따라 가로/세로 자동변환, horizontal : 가로형태, vertical : 세로형태)
 		 * @public object[] tools 툴바의 버튼을 정의한다.
-		 * @public string toolType 툴바의 형식을 정의한다. (기본값 : icon, icon : 아이콘만 표시, icontext : 아이콘 및 버튼텍스트 표시, text : 버튼 텍스트만 표시)
 		 * @public object[] menus 접속자 닉네임을 클릭했을 때 보일 메뉴를 설정한다.
 		 *
 		 * @public int/string width 미니톡 채팅위젯 가로크기를 픽셀 또는 % 단위로 설정한다. (기본값 : 200)
@@ -104,8 +103,7 @@ if (isMinitalkIncluded === undefined) {
 		
 		this.tabs = opt.tabs ? opt.tabs : ["users","boxes","configs"];
 		this.tabType = opt.tabType ? opt.tabType : "auto";
-		this.tools = opt.tools ? opt.tools : [];
-		this.toolType = opt.toolType ? opt.toolType : "icon";
+		this.tools = opt.tools ? opt.tools : ["bold","underline","italic","color","-","emoticon","file"];
 		this.menus = opt.menus ? opt.menus : [];
 		
 		opt.width = opt.width ? opt.width : 200;
