@@ -164,7 +164,8 @@ if (isMinitalkIncluded === undefined) {
 		 */
 		this.fireEvent = function(event,args) {
 			var args = args ? args : [];
-			args.unshift(this);
+			var e = args.unshift(this);
+			args.push(e);
 			
 			this.frame.$(this.frame.document).triggerHandler(event,args);
 		};
