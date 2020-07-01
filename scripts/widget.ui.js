@@ -496,6 +496,9 @@ Minitalk.ui = {
 		var $tabs = $("ul[data-role]",$aside);
 		if ($frame.attr("data-current-tab") == tab) return;
 		
+		$frame.attr("data-previous-tab",$frame.attr("data-current-tab") ? $frame.attr("data-current-tab") : "chat");
+		$frame.attr("data-current-tab",tab);
+		
 		$("button[data-tab]",$tabs).removeClass("open");
 		$("button[data-tab="+tab+"]",$tabs).addClass("open");
 		$("section[data-tab]",$main).removeClass("open");
