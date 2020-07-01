@@ -141,6 +141,12 @@ $(document).ready(function() {
 		return;
 	}
 	
+	/**
+	 * 이벤트리스너를 등록한다.
+	 */
+	for (var eventName in Minitalk.listeners) {
+		Minitalk.on(eventName,Minitalk.listeners[eventName]);
+	}
 	Minitalk.user.init();
 	Minitalk.ui.init();
 	

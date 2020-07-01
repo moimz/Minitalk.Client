@@ -135,7 +135,7 @@ if (isMinitalkIncluded === undefined) {
 		};
 		
 		/**
-		 * 정의된 이벤트리스너를 등록한다.
+		 * 이벤트리스너를 추가한다.
 		 */
 		this.on = function(event,handler) {
 			if (event.indexOf("before") === 0) {
