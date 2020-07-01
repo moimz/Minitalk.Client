@@ -170,8 +170,9 @@ Minitalk.ui = {
 				var $button = $("<button>").attr("type","button").attr("data-tab",tab);
 				$button.append($("<i>").addClass("icon"));
 				$button.append($("<span>").html(Minitalk.getText("tab/" + tab)));
-				$button.on("click",function() {
-					Minitalk.ui.activeTab($(this).attr("data-tab"));
+				$button.data("tab",tab);
+				$button.on("click",function(e) {
+					Minitalk.ui.activeTab($(this),e);
 				});
 				
 				if ($frame.attr("data-current-tab") == tab) {
@@ -184,6 +185,21 @@ Minitalk.ui = {
 				/**
 				 * 사용자정의 탭을 추가한다.
 				 */
+				var $tab = $("<li>");
+				var $button = $("<button>").attr("type","button").attr("data-tab","custom");
+				$button.append($("<i>").addClass(tab.iconCls));
+				$button.append($("<span>").html(tab.text));
+				$button.data("tab",tab);
+				$button.on("click",function(e) {
+					Minitalk.ui.activeTab($(this),e);
+				});
+				
+				if ($frame.attr("data-current-tab") == tab) {
+					$button.addClass("open");
+				}
+				
+				$tab.append($button);
+				$tabs.append($tab);
 			}
 			
 			if (type == "horizontal") {
