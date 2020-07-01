@@ -156,7 +156,6 @@ Minitalk.ui = {
 		
 		var limit = type == "horizontal" ? $tabs.width() : $tabs.height();
 		var limiter = 0;
-		var tabCount = 0;
 		
 		for (var index in Minitalk.tabs) {
 			var tab = Minitalk.tabs[index];
@@ -192,8 +191,6 @@ Minitalk.ui = {
 			} else {
 				limiter+= $tab.outerHeight(true);
 			}
-			
-			tabCount++;
 		}
 		
 		/**
@@ -252,7 +249,7 @@ Minitalk.ui = {
 				/**
 				 * 기본탭을 추가한다.
 				 */
-				if ($.inArray(tab,["chat","users","files","boxes","configs"]) === false) continue;
+				if ($.inArray(tab,["chat","users","files","boxes","configs"]) === -1) continue;
 				$main.append($("<section>").attr("data-tab",tab));
 				
 				firstTab = firstTab === null ? tab : firstTab;
