@@ -537,6 +537,8 @@ Minitalk.ui = {
 	 */
 	activeTool:function($tool,e) {
 		var tool = $tool.data("tool");
+		if (Minitalk.fireEvent("beforeActiveTool",[tool,$tool,e]) === false) return;
+		
 		if (typeof tool == "string") {
 			
 		} else {
@@ -545,6 +547,9 @@ Minitalk.ui = {
 			}
 		}
 		$("footer").removeClass("open");
+		
+		if (Minitalk.fireEvent("afterActiveTool",[tool,$tool,e]) === false) return;
+		
 		e.stopImmediatePropagation();
 	},
 	/**
