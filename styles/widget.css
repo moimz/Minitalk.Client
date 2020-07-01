@@ -50,7 +50,7 @@ main > section[data-tab].open {display:block;}
 footer {position:absolute; z-index:3; width:100%; display:none;}
 footer > ul[data-role=tools] {list-style:none; white-space:nowrap; overflow:hidden;}
 footer > ul[data-role=tools] > li {display:inline-block;}
-footer > ul[data-role=lists] {display:none;}
+footer > ul[data-role=lists] {display:none; position:absolute; z-index:5;}
 footer.open > ul[data-role=lists] {display:block;}
 div[data-role=frame][data-current-tab=chat] > footer {display:block;}
 div[data-role=frame][data-tab-type=vertical] > footer {display:block;}

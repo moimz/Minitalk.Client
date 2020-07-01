@@ -45,7 +45,8 @@ Minitalk.ui = {
 			 * 위젯푸터
 			 */
 			'	<footer>',
-			'		<div data-role="tool"></div>',
+			'		<ul data-role="tools"></ul>',
+			'		<ul data-role="lists"></ul>',
 			'		<div data-role="input"><textarea type="text" data-role="message"></textarea><button type="button"><i class="icon"></i><span>' + Minitalk.getText("button/send") + '</button></div>',
 			'	</footer>',
 			
@@ -127,6 +128,7 @@ Minitalk.ui = {
 	 */
 	initFrame:function() {
 		Minitalk.ui.initTabs();
+		Minitalk.ui.initTools();
 	},
 	/**
 	 * 탭바를 출력한다.
@@ -270,6 +272,126 @@ Minitalk.ui = {
 		}
 	},
 	/**
+	 * 툴바를 초기화한다.
+	 */
+	initTools:function() {
+		var $footer = $("footer");
+		var $tools = $("ul[data-role=tools]",$footer);
+		var $lists = $("ul[data-role=lists]",$footer);
+		$tools.empty();
+		$lists.empty();
+		
+		var $more = $("<li>");
+		var $button = $("<button>").attr("type","button").attr("data-tool","more");
+		$button.append($("<i>").addClass("icon"));
+		$button.append($("<span>").html(Minitalk.getText("tool/more")));
+		$button.on("click",function(e) {
+			Minitalk.ui.toggleTools();
+			e.stopImmediatePropagation();
+		});
+		$more.append($button);
+		$tools.append($more);
+		
+		var limit = $tools.width();
+		var limiter = $more.outerWidth(true);
+		var separator = true;
+		
+		for (var index in Minitalk.tools) {
+			var tool = Minitalk.tools[index];
+			if (typeof tool == "string") {
+				/**
+				 * 구분자일 경우
+				 */
+				if (tool == "-") {
+					/**
+					 * 툴바 처음이거나, 현 구분자 직전에 구분자가 추가된 경우 추가로 구분자를 추가하지 않는다.
+					 */
+					if (separator === true) continue;
+					separator = true;
+					
+					var $tool = $("<li>");
+					$tool.addClass("separator");
+					$tool.append($("<i>"));
+				} else {
+					separator = false;
+					
+					/**
+					 * 기본툴버튼을 추가한다.
+					 */
+					if ($.inArray(tool,["bold","underline","italic","color","emoticon","file"]) === -1) continue;
+					
+					var $tool = $("<li>");
+					var $button = $("<button>").attr("type","button").attr("data-tool",tool);
+					$button.append($("<i>").addClass("icon"));
+					$button.append($("<span>").html(Minitalk.getText("tool/" + tool)));
+					$button.data("tool",tool);
+					$button.on("click",function(e) {
+						Minitalk.ui.activeTool($(this),e);
+					});
+					$tool.append($button);
+				}
+				
+				$tools.append($tool);
+			} else {
+				separator = false;
+				
+				/**
+				 * 사용자정의 툴버튼을 추가한다.
+				 */
+				var $tool = $("<li>");
+				var $button = $("<button>").attr("type","button").attr("data-tool","custom");
+				$button.append($("<i>").addClass(tool.iconCls));
+				$button.append($("<span>").html(tool.text));
+				$button.data("tool",tool);
+				$button.on("click",function(e) {
+					Minitalk.ui.activeTool($(this),e);
+				});
+				$tool.append($button);
+				$tools.append($tool);
+			}
+			
+			limiter+= $tool.outerWidth(true);
+		}
+		
+		/**
+		 * 툴바영역을 벗어난 툴버튼을 툴 목록으로 이동시킨다.
+		 */
+		if (limit < limiter) {
+			var current = 0;
+			var split = 0;
+			
+			$("li",$tools).each(function() {
+				if (current + $(this).width() > limit) {
+					return;
+				}
+				
+				current+= $(this).width();
+				split++;
+			});
+			
+			for (var i=loop=$("li",$tools).length - 1;i>=split;i--) {
+				var $tool = $("li",$tools).eq(i).clone(true);
+				
+				$lists.prepend($tool);
+				$("li",$tools).eq(i).remove();
+			}
+			
+			if ($("li:last",$tools).hasClass("separator") === true) {
+				$("li:last",$tools).remove();
+			}
+			
+			if ($("li:first",$lists).hasClass("separator") === true) {
+				$("li:first",$lists).remove();
+			}
+			
+			if ($("li",$lists).length === 0) {
+				$more.hide();
+			}
+		} else {
+			$more.hide();
+		}
+	},
+	/**
 	 * 변경된 브라우저의 보안규칙에 따라, 사운드파일을 초기화한다.
 	 */
 	initSound:function() {
@@ -369,6 +491,7 @@ Minitalk.ui = {
 		}
 		
 		if (tab == "chat") {
+			Minitalk.ui.initTools();
 			Minitalk.ui.autoScroll(true);
 		}
 		
@@ -391,6 +514,28 @@ Minitalk.ui = {
 	toggleTabs:function() {
 		var $aside = $("aside");
 		$aside.toggleClass("open");
+	},
+	/**
+	 * 툴버튼 실행
+	 */
+	activeTool:function($tool,e) {
+		var tool = $tool.data("tool");
+		if (typeof tool == "string") {
+			
+		} else {
+			if (typeof tool.handler == "function") {
+				tool.handler(e);
+			}
+		}
+		$("footer").removeClass("open");
+		e.stopImmediatePropagation();
+	},
+	/**
+	 * 툴버튼목록을 토글한다.
+	 */
+	toggleTools:function() {
+		var $footer = $("footer");
+		$footer.toggleClass("open");
 	},
 	/**
 	 * 개인박스을 개설한다.
@@ -710,5 +855,6 @@ Minitalk.ui = {
 	 */
 	resetToggle:function() {
 		$("aside").removeClass("open");
+		$("footer").removeClass("open");
 	}
 };

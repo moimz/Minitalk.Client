@@ -24,12 +24,13 @@ header > label[data-role=count]:empty {display:none;}
 /**
  * 탭바 스타일정의
  */
-aside {background:#f6f6f6;}
+aside {background:#f4f4f4;}
 aside > ul[data-role=tabs] {width:100%; height:100%; display:block;}
 aside > ul[data-role=tabs] > li {position:relative; vertical-align:middle; width:100%; height:100%;}
 aside > ul[data-role=tabs] > li > button {position:relative; top:0; left:0; width:100%; height:100%; font-size:0; background:transparent; border:0; vertical-align:middle; box-sizing:border-box;  cursor:pointer;}
 aside > ul[data-role=tabs] > li > button > span {display:none;}
-aside > ul[data-role=tabs] > li > button > i {display:block; width:100%; height:100%; font-style:normal; text-align:center; color:#777;}
+aside > ul[data-role=tabs] > li > button > i {display:block; width:100%; height:100%; font-style:normal; text-align:center; color:#999;}
+aside > ul[data-role=tabs] > li > button:hover > i {color:#777;}
 aside > ul[data-role] > li > button > i.icon {font-family:moimz; font-style:normal;}
 aside > ul[data-role] > li > button[data-tab=chat] > i.icon:before {content:"\ef07";}
 aside > ul[data-role] > li > button[data-tab=users] > i.icon:before {content:"\ec02";}
@@ -57,10 +58,13 @@ div[data-role=frame][data-tab-type=horizontal] > aside.open > ul[data-role=tabs]
 /**
  * 세로형태 탭바
  */
-div[data-role=frame][data-tab-type=vertical] > aside {position:absolute; top:40px; right:0px; width:41px; height:calc(100% - 40px); border-left:1px solid #d8d8d9;}
+div[data-role=frame][data-tab-type=vertical] > aside {position:absolute; top:40px; right:0px; width:35px; height:calc(100% - 40px); border-left:1px solid #d8d8d9; padding:2px 0px; box-sizing:border-box;}
 div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] {display:block; width:100%; height:100%;}
-div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li {height:40px;}
-div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li > button > i {font-size:16px; line-height:40px;}
+div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li {height:34px; padding:2px; box-sizing:border-box;}
+div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li > button > i {font-size:16px; line-height:30px;}
+div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li > button {border-radius:3px;}
+div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li > button:hover {Background:#fff;}
+div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li > button.open {background:#fff;}
 
 /**
  * 탭 목록
@@ -79,25 +83,48 @@ div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=lists] {to
  * 메인섹션
  */
 main {width:100%; height:calc(100% - 40px - 38px);}
-main > section[data-tab=chat] {height:calc(100% - 30px - 10px);} /* 채팅탭의 경우, 푸터영역의 기본크기만큼 높이를 줄여준다. */
-div[data-role=frame][data-tab-type=vertical] > main {width:calc(100% - 41px); height:calc(100% - 40px);} /* 세로형태 탭바일 경우 메인영역의 가로크기를 세로형태 탭바영역만큼 줄이고, 세로크기를 가로형태 탭바 높이만큼 눌려준다. */
+main > section[data-tab=chat] {height:calc(100% - 38px);} /* 채팅탭의 경우, 푸터영역의 기본크기만큼 높이를 줄여준다. */
+div[data-role=frame][data-tab-type=vertical] > main {width:calc(100% - 35px); height:calc(100% - 40px);} /* 세로형태 탭바일 경우 메인영역의 가로크기를 세로형태 탭바영역만큼 줄이고, 세로크기를 가로형태 탭바 높이만큼 눌려준다. */
 
 /**
  * 푸터
  */
-footer {min-height:30px; font-size:0; bottom:0; left:0; background:#fff; border-top:1px solid #d8d8d9;} /* 푸터는 채팅메시지 입력에 따라 높이가 가변이므로, 최소높이(기본높이)를 설정한다. */
-footer > ul[data-role=tools] {display:inline-block; width:30px; height:30px; vertical-align:middle;}
-footer > ul[data-role=tools] > li > button[data-tool=more] {width:30px; height:30px;}
-footer > div[data-role=input] {display:inline-block; width:calc(100% - 30px); height:30px; vertical-align:middle; box-sizing:border-box;}
-footer > div[data-role=input] > textarea {border:0; width:calc(100% - 40px); min-height:20px; padding:5px; line-height:20px; font-size:12px; vertical-align:middle; display:inline-block; line-height:20px; resize:none;}
-footer > div[data-role=input] > button {position:absolute; top:-1px; right:0; width:30px; height:31px; vertical-align:middle; border:0; background:#10b8c3; cursor:pointer; display:inline-block;}
-footer > div[data-role=input] > button > i {width:30px; height:30px; line-height:30px; font-family:moimz; font-size:16px; color:#fff; font-style:normal;}
+footer {min-height:34px; font-size:0; bottom:0; left:0; background:#fff; border-top:1px solid #d8d8d9;} /* 푸터는 채팅메시지 입력에 따라 높이가 가변이므로, 최소높이(기본높이)를 설정한다. */
+footer > ul[data-role=tools] {display:inline-block; width:34px; height:30px; vertical-align:middle;}
+footer > ul[data-role=tools] > li {width:30px;}
+footer > ul[data-role=tools] > li > button {width:24px; height:24px; margin:5px; font-size:12px; background:#fff; color:#666; border:1px solid #d8d8d9; cursor:pointer; border-radius:3px;}
+footer > ul[data-role=tools] > li > button:hover {background:#f4f4f4; color:#222;}
+footer > ul[data-role=tools] > li > button > i {width:30px; height:30px;}
+footer > ul[data-role=tools] > li > button > span {display:none;}
+footer > ul[data-role=tools] > li > button[data-tool=more] > i.icon:before {content:"\eb00";}
+footer.open > ul[data-role=tools] > li > button[data-tool=more] {border-color:#10b8c3; background:#10b8c3; color:#fff;}
+footer > ul[data-role] > li > button > i.icon {font-family:moimz; font-style:normal;}
+footer > ul[data-role] > li > button[data-tool=bold] > i.icon:before {content:"\ef13";}
+footer > ul[data-role] > li > button[data-tool=underline] > i.icon:before {content:"\ef14";}
+footer > ul[data-role] > li > button[data-tool=italic] > i.icon:before {content:"\ef15";}
+footer > ul[data-role] > li > button[data-tool=color] > i.icon:before {content:"\ef19";}
+footer > ul[data-role] > li > button[data-tool=emoticon] > i.icon:before {content:"\ef21";}
+footer > ul[data-role] > li > button[data-tool=file] > i.icon:before {content:"\ef28";}
+
+footer > ul[data-role=lists] {bottom:30px; left:5px; border:1px solid #d8d8d9; background:#f6f6f6; border-radius:3px;}
+footer > ul[data-role=lists]:before {display:block; position:absolute; content:" "; border-top:6px solid #d8d8d9; border-left:6px solid transparent; border-right:6px solid transparent; left:5px; bottom:-6px;}
+footer > ul[data-role=lists]:after {display:block; position:absolute; content:" "; border-top:5px solid #f6f6f6; border-left:5px solid transparent; border-right:5px solid transparent; left:6px; bottom:-5px;}
+footer > ul[data-role=lists] > li > button {width:100%; height:34px; line-height:34px; padding:0px 12px 0px 30px; text-align:left; border:0; cursor:pointer; background:transparent; color:#666; font-size:0; white-space:nowrap; max-width:150px; position:relative;}
+footer > ul[data-role=lists] > li > button > i {position:absolute; top:0; left:5px; width:20px; height:34px; line-height:34px; vertical-align:middle; font-size:14px; text-align:center; margin-right:5px;}
+footer > ul[data-role=lists] > li > button > i.icon {font-family:moimz;}
+footer > ul[data-role=lists] > li > button > span {display:inline-block; width:100%; height:34px; line-height:34px; vertical-align:middle; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; font-size:12px;}
+footer > ul[data-role=lists] > li > button:hover {background:#fff; color:#222;}
+footer > ul[data-role=lists] > li.separator {border-top:1px solid #d8d8d9; height:1px; background:#fff;}
+
+footer > div[data-role=input] {display:inline-block; width:calc(100% - 34px); height:30px; vertical-align:middle; box-sizing:border-box;}
+footer > div[data-role=input] > textarea {border:0; width:calc(100% - 35px); min-height:20px; padding:5px; line-height:24px; font-size:12px; vertical-align:middle; display:inline-block; resize:none; box-sizing:border-box;}
+footer > div[data-role=input] > button {position:absolute; top:-1px; right:0; width:35px; height:35px; vertical-align:middle; border:0; background:#10b8c3; cursor:pointer; display:inline-block;}
+footer > div[data-role=input] > button > i {width:35px; height:35px; line-height:34px; font-family:moimz; font-size:16px; color:#fff; font-style:normal;}
 footer > div[data-role=input] > button > i:before {content:"\ef16";}
 footer > div[data-role=input] > button > span {display:none;}
 footer > div[data-role=input] > button:hover {background:#15a9b4;}
-footer > div[data-role=input] > button[disabled] {background:#f4f4f4; cursor:not-allowed; box-sizing:border-box; top:0px; height:30px;}
+footer > div[data-role=input] > button[disabled] {background:#f4f4f4; cursor:not-allowed; box-sizing:border-box; top:0px; height:34px;}
 footer > div[data-role=input] > button[disabled] > i {color:#ccc;}
-div[data-role=frame][data-tab-type=vertical] > footer {width:calc(100% - 42px);} /* 세로형태 탭바일 경우 푸터영역을 줄여준다. */
 
 
 /**
