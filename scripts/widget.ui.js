@@ -485,8 +485,10 @@ Minitalk.ui = {
 	 *
 	 * @param string tab 탭
 	 */
-	activeTab:function(tab) {
-		if (Minitalk.fireEvent("beforeChangeTab",[tab]) === false) return;
+	activeTab:function($tab,e) {
+		var tab = typeof $tab == "object" ? $tab.data("tab") : $tab;
+		var $tab = typeof $tab == "object" ? $tab : null;
+		if (Minitalk.fireEvent("beforeActiveTab",[tab,$tab,e]) === false) return;
 		
 		var $frame = $("div[data-role=frame]");
 		var $aside = $("aside");
@@ -519,7 +521,9 @@ Minitalk.ui = {
 		
 		$frame.attr("data-current-tab",tab);
 		
-		Minitalk.fireEvent("afterChangeTab",[tab]);
+		Minitalk.fireEvent("afterActiveTab",[tab,$tab,e]);
+		
+		if (e) e.stopImmediatePropagation();
 	},
 	/**
 	 * 탭목록을 토글한다.
