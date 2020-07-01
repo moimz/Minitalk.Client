@@ -147,20 +147,36 @@ $(document).ready(function() {
 	for (var eventName in Minitalk.listeners) {
 		Minitalk.on(eventName,Minitalk.listeners[eventName]);
 	}
+	
+	/**
+	 * 채팅위젯 클래스를 초기화한다.
+	 */
 	Minitalk.user.init();
 	Minitalk.ui.init();
 	
+	/**
+	 * 활성화된 플러그인을 초기화한다.
+	 */
 	for (var plugin in Minitalk.plugins) {
 		if (typeof Minitalk.plugins[plugin].init == "function") {
 			Minitalk.plugins[plugin].init();
 		}
 	}
 	
-	Minitalk.socket.connect();
-	
+	/**
+	 * 채팅위젯 템플릿 스타일시트를 새로 불러왔을 경우, 스타일시트에 영향을 받는 요소를 초기화한다.
+	 */
 	$("link[rel=stylesheet]").on("load",function() {
 		Minitalk.ui.initFrame();
 	});
 	
+	/**
+	 * 초기화완료 이벤트를 발생한다.
+	 */
 	Minitalk.fireEvent("init");
+	
+	/**
+	 * 소켓서버에 접속한다.
+	 */
+	Minitalk.socket.connect();
 });
