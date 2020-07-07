@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 3. 23.
+ * @modified 2020. 7. 7.
  */
 var MinitalkComponent = parent.MinitalkComponent.clone(parent.MinitalkComponent);
 var Minitalk = MinitalkComponent.get($("html").attr("data-id"));
@@ -57,10 +57,14 @@ Minitalk.getErrorText = function(code) {
  * 브라우져의 세션스토리지에 데이터를 저장한다.
  *
  * @param string name 변수명
- * @param any value 저장될 데이터 (없을 경우 저장되어있는 데이터를 리턴한다.)
+ * @param any value 저장될 데이터 (없을 경우 저장되어있는 데이터를 반환한다.)
+ * @return boolean/any 데이터저장성공여부, 저장되어 있는 데이터
  */
 Minitalk.session = function(name,value) {
-	if (window.sessionStorage === undefined) return;
+	if (window.sessionStorage === undefined) {
+		// @todo 개인정보보호모드일 경우 일부 기능이 제한될 수 있다는 안내메시지 출력
+		return;
+	}
 	
 	var storage = {};
 	if (window.sessionStorage["Minitalk." + Minitalk.id + "." + Minitalk.channel] !== undefined) {
@@ -93,11 +97,14 @@ Minitalk.session = function(name,value) {
  * 브라우져의 로컬스토리지에 데이터를 저장한다.
  *
  * @param string name 변수명
- * @param any value 저장될 데이터 (없을 경우 저장되어있는 데이터를 리턴한다.)
+ * @param any value 저장될 데이터 (없을 경우 저장되어있는 데이터를 반환한다.)
+ * @return boolean/any 데이터저장성공여부, 저장되어 있는 데이터
  */
 Minitalk.storage = function(name,value) {
-	if (Minitalk.isPrivateChannel == true) return;
-	if (window.localStorage === undefined) return;
+	if (window.localStorage === undefined) {
+		// @todo 개인정보보호모드일 경우 일부 기능이 제한될 수 있다는 안내메시지 출력
+		return;
+	}
 	
 	var storage = {};
 	if (window.localStorage["Minitalk." + Minitalk.id + "." + Minitalk.channel] !== undefined) {
@@ -123,6 +130,35 @@ Minitalk.storage = function(name,value) {
 		} catch (e) {
 			return false;
 		}
+	}
+};
+
+/**
+ * 미니톡 환경설정 데이터를 저장한다.
+ *
+ * @param string name 변수명
+ * @param any value 저장될 데이터 (없을 경우 저장되어 있는 데이터를 반환한다.)
+ * @return boolean/any 데이터저장성공여부, 저장되어 있는 데이터
+ */
+Minitalk.configs = function(name,value) {
+	/**
+	 * 기본설정값
+	 */
+	var defaults = {
+		
+	};
+	
+	var configs = Minitalk.storage("configs") == null ? defaults : Minitalk.storage("configs");
+	if (value === undefined) {
+		if (name === undefined) return configs;
+		if (configs[name] !== undefined) {
+			return configs[name];
+		} else {
+			return null;
+		}
+	} else {
+		configs[name] = value;
+		return Minitalk.storage("configs",configs);
 	}
 };
 
