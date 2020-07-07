@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 6. 23.
+ * @modified 2020. 7. 8.
  */
 Minitalk.protocol = {
 	/**
@@ -52,7 +52,7 @@ Minitalk.protocol = {
 		 * 채팅로그를 불러온다.
 		 */
 		if (Minitalk.logCount > 0) {
-			Minitalk.socket.send("logs",{count:Minitalk.logCount,time:(Minitalk.storage("latestMessage") ? Minitalk.storage("latestMessage") : 0)});
+			Minitalk.socket.send("logs",{count:Minitalk.logCount,time:(Minitalk.session("latestMessage") ? Minitalk.session("latestMessage") : 0)});
 		} else {
 			Minitalk.socket.joined = true;
 		}
@@ -152,19 +152,18 @@ Minitalk.protocol = {
 		logs.sort(function(left,right) {
 			return left.time > right.time;
 		});
-		
 		while (logs.length > Minitalk.logCount) {
 			logs.shift();
 		}
 		Minitalk.session("logs",logs);
 		
-		var time = 0;
+		var latestMessage = 0;
 		for (var i=0, loop=logs.length;i<loop;i++) {
 			Minitalk.ui.printChatMessage(logs[i],true);
-			time = logs[i].time;
+			latestMessage = logs[i].time;
 		}
 		
-		Minitalk.session("lastTime",time);
+		Minitalk.session("latestMessage",latestMessage);
 		Minitalk.socket.joined = true;
 	},
 	/**
@@ -177,29 +176,27 @@ Minitalk.protocol = {
 		
 		if (data.from !== undefined) {
 			Minitalk.ui.enable(true);
+			delete data.from;
 		}
-		if (typeof data.id == "object") {
-			
-		} else {
-			if (Minitalk.logCount > 0) {
-				var logs = Minitalk.storage("logs") ? Minitalk.storage("logs") : [];
-				logs.push(data);
-				while (logs.length > Minitalk.logCount) {
-					logs.shift();
-				}
-				Minitalk.storage("logs",logs);
-				Minitalk.storage("latestMessage",data.time);
-			}
-			
-			if (Minitalk.joined == true) Minitalk.ui.printChatMessage(data);
+		
+		/**
+		 * 수신된 메시지를 로컬 로그저장소에 저장한다.
+		 */
+		var logs = Minitalk.session("logs") ? Minitalk.session("logs") : [];
+		logs.push(data);
+		while (logs.length > Minitalk.logCount) {
+			logs.shift();
 		}
+		Minitalk.session("logs",logs);
+		
+		var latestMessage = Minitalk.session("latestMessage") ? (Minitalk.session("latestMessage") < data.time ? data.time : Minitalk.session("latestMessage")) : data.time;
+		Minitalk.session("latestMessage",latestMessage);
 	},
 	/**
 	 * 접속코드를 수신하였을 경우
 	 */
 	authorization:function(authorization) {
 		Minitalk.session("authorization",authorization);
-		console.log(authorization);
 	},
 	/**
 	 * 에러코드를 수신하였을 경우
