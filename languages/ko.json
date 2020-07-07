@@ -48,7 +48,12 @@
 		"more":"더보기"
 	},
 	"tool":{
-		
+		"bold":"굵게",
+		"underline":"밑줄",
+		"italic":"기울임",
+		"color":"글자색",
+		"emoticon":"이모티콘",
+		"file":"파일첨부"
 	},
 	"menu":{
 		
