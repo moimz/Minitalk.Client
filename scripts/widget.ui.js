@@ -568,6 +568,122 @@ Minitalk.ui = {
 		$footer.toggleClass("open");
 	},
 	/**
+	 * 새로운 윈도우를 생성한다.
+	 *
+	 * @param string html 내부 HTML 내용
+	 * @param int width 윈도우 가로크기
+	 * @param function callback 윈도우가 초기화되었을때 실행할 callback 함수
+	 */
+	createWindow:function(html,width,callback) {
+		/**
+		 * 채팅위젯의 부모객체의 가로크기가 설정된 윈도우 가로크기보다 작을경우 팝업윈도우로 생성한다.
+		 */
+		if ($(parent.window).width() < width) {
+			var height = 100;
+			if (screen.availWidth < width) width = screen.availWidth - 50;
+			if (screen.availHeight < height) height = screen.availHeight - 50;
+			
+			var windowLeft = (screen.availWidth - width) / 2;
+			var windowTop = (screen.availHeight - height) / 2;
+			windowTop = windowTop > 20 ? windowTop - 20 : windowTop;
+			var opener = window.open("","", "top=" + windowTop + ",left=" + windowLeft + ",width=" + width + ",height=" + height + ",scrollbars=1");
+			
+			if (opener) {
+				var dom = opener.document;
+				var $target = $(opener);
+				$target.data("width",width);
+			} else {
+				// @todo 팝업차단알림 출력
+				
+				return;
+			}
+		} else {
+			var $cover = $("<div>").attr("data-role","cover");
+			$("div[data-role=frame]").append($cover);
+			
+			if ($("div[data-role=minitalk-window]",parent.document.body).length > 0) {
+				$("div[data-role=minitalk-window]",parent.document.body).remove();
+			}
+			
+			var $background = $("<div>").attr("data-role","minitalk-window");
+			$background.css("position","fixed").css("margin",0).css("padding",0).css("left",0).css("top",0).css("zIndex",100000).css("width","100%").css("height","100%").css("background","rgba(0,0,0,0.6) url("+Minitalk.getUrl()+"/images/loading.gif) no-repeat 50% 50%");
+			
+			var $target = $("<iframe>").css("position","fixed").css("width",width + "px").css("height","100px").css("background","#fff").attr("frameborder",0).attr("scrolling","auto").css("opacity",0);
+			$target.data("width",width);
+			$background.append($target);
+			$background.on("click",function() {
+				Minitalk.ui.closeWindow();
+			});
+			$(parent.document.body).append($background);
+			
+			var dom = $target.get(0).contentWindow.document;
+		}
+		
+		if (dom !== null) {
+			dom.removeChild(dom.documentElement);
+			
+			dom.open();
+			dom.write('<!DOCTYPE HTML>');
+			dom.write('<html data-id="'+Minitalk.id+'">');
+			dom.write('<head>');
+			dom.write('<meta charset="utf-8">');
+			dom.write('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">');
+			dom.write('<title>MiniTalk Widget</title>');
+			dom.write('<link href="'+MinitalkComponent.getUrl()+'/styles/widget.css.php?channel='+Minitalk.channel+'&templet='+Minitalk.templet+'" type="text/css">');
+			dom.write('</head>');
+			dom.write('<body><div data-role="window" style="opacity:0;">'+html+'</div></body>');
+			dom.write('</html>');
+			dom.close();
+			
+			var $dom = $(dom);
+			$dom.data("target",$target);
+			$dom.ready(function() {
+				$("link",$dom).on("load",function() {
+					var width = $dom.data("target").data("width");
+					var height = $("body",$dom).prop("scrollHeight");
+					
+					if ($dom.data("target").is("iframe") == true) {
+						if (screen.availHeight < height) height = $(parent.window).height() - 50;
+						$target.height(height);
+						$target.css("left","calc(50% - " + Math.ceil(width / 2) + "px)");
+						$target.css("top","calc(50% - " + Math.ceil(height / 2) + "px)");
+						$target.css("opacity",1);
+					} else {
+						if (screen.availHeight < height) height = screen.availHeight - 50;
+						var windowLeft = (screen.availWidth - width) / 2;
+						var windowTop = (screen.availHeight - height) / 2;
+						
+						var resizeWidth = width - $($dom.data("target").get(0).window).width();
+						var resizeHeight = height - $($dom.data("target").get(0).window).height();
+						
+						$dom.data("target").get(0).resizeBy(resizeWidth,resizeHeight);
+						$dom.data("target").get(0).moveTo(windowLeft,windowTop);
+					}
+					
+					$("div[data-role=window]",$dom).css("opacity",1);
+					
+					if (typeof callback == "function") {
+						callback($("body",$dom));
+					}
+				});
+				
+				setTimeout(function($dom) { $("link",$dom).attr("rel","stylesheet"); },100,$dom);
+			});
+		}
+	},
+	/**
+	 * 열린 윈도우를 닫는다.
+	 */
+	closeWindow:function() {
+		if ($("div[data-role=minitalk-window]",parent.document.body).length > 0) {
+			$("div[data-role=minitalk-window]",parent.document.body).remove();
+		}
+		
+		if ($("div[data-role=cover]",$("div[data-role=frame]")).length > 0) {
+			$("div[data-role=cover]",$("div[data-role=frame]")).remove();
+		}
+	},
+	/**
 	 * 개인박스을 개설한다.
 	 */
 	},
