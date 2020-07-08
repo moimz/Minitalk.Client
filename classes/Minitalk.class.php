@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 3. 16.
+ * @modified 2020. 7. 8.
  */
 class Minitalk {
 	/**
@@ -533,7 +533,12 @@ class Minitalk {
 		} else {
 			$results->success = true;
 			$results->connection = $server->connection;
-			$results->connection->channel = Encoder(json_encode(array('name'=>$channel->channel,'title'=>$channel->title,'send_level_limit'=>$channel->send_level_limit,'password'=>$channel->password,'max_user'=>$channel->max_user,'guest_name'=>$channel->guest_name,'allow_nickname_edit'=>$channel->allow_nickname_edit == 'TRUE','userlist_level_limit'=>$channel->userlist_level_limit,'box_level_limit'=>$channel->box_level_limit)));
+			
+			
+			// @todo 설정값을 추가
+			$channel->file_level_limit = 1;
+			$channel->font_level_limit = 1;
+			$results->connection->channel = Encoder(json_encode(array('name'=>$channel->channel,'title'=>$channel->title,'send_level_limit'=>$channel->send_level_limit,'password'=>$channel->password,'max_user'=>$channel->max_user,'guest_name'=>$channel->guest_name,'allow_nickname_edit'=>$channel->allow_nickname_edit == 'TRUE','userlist_level_limit'=>$channel->userlist_level_limit,'box_level_limit'=>$channel->box_level_limit,'file_level_limit'=>$channel->file_level_limit,'font_level_limit'=>$channel->font_level_limit)));
 		}
 		
 		$results->channel = new stdClass();
