@@ -92,6 +92,16 @@ Minitalk.socket = {
 		Minitalk.ui.disable();
 	},
 	/**
+	 * 권한정보를 가져온다.
+	 *
+	 * @param string name 변수명
+	 * @return boolean hasPermission 권한여부
+	 */
+	getPermission:function(name) {
+		if (Minitalk.socket.connected !== true) return false;
+		return Minitalk.socket.channel.permission !== undefined && Minitalk.socket.channel.permission[name] !== undefined ? Minitalk.socket.channel.permission[name] : false;
+	},
+	/**
 	 * 접속코드를 전송한다.
 	 */
 	sendConnection:function() {
