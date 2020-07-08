@@ -20,6 +20,12 @@ Minitalk.ui = {
 			 * 위젯시작
 			 */
 			'<div data-role="frame">',
+			
+			/**
+			 * 알림메시지 위치
+			 */
+			'	<div data-role="notifications"></div>',
+			
 			/**
 			 * 위젯헤더
 			 */
@@ -45,6 +51,7 @@ Minitalk.ui = {
 			 * 위젯푸터
 			 */
 			'	<footer>',
+			'		<div data-role="layers"></div>',
 			'		<ul data-role="tools"></ul>',
 			'		<ul data-role="lists"></ul>',
 			'		<div data-role="input"><textarea type="text" data-role="message"></textarea><button type="button"><i class="icon"></i><span>' + Minitalk.getText("button/send") + '</button></div>',
