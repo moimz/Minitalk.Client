@@ -910,7 +910,6 @@ Minitalk.ui = {
 		if (message.indexOf("/") === 0) {
 			var commands = message.substr(1).split(" ");
 			var command = commands.shift();
-			console.log(command);
 			
 			switch (command) {
 				/**
