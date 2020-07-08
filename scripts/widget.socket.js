@@ -101,8 +101,7 @@ Minitalk.socket = {
 		var join = {
 			connection:Minitalk.socket.connection.connection,
 			channel:Minitalk.socket.connection.channel,
-			usercode:Minitalk.usercode,
-			userdata:Minitalk.userdata,
+			usercode:Minitalk.usercode ? Minitalk.usercode : null,
 			authorization:Minitalk.session("authorization"),
 			box:Minitalk.box.connection
 		};
