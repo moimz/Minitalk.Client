@@ -58,6 +58,11 @@ Minitalk.protocol = {
 		}
 		
 		/**
+		 * 메시지 폰트설정을 업데이트한다.
+		 */
+		Minitalk.ui.updateFonts();
+		
+		/**
 		 * 채팅위젯의 UI를 활성화한다.
 		 */
 		Minitalk.ui.enable();

@@ -480,12 +480,44 @@ Minitalk.ui = {
 		}
 	},
 	/**
-	 * 채널타이틀을 출력한다.
+	 * 메시지 폰트 설정을 업데이트한다.
 	 *
-	 * @param string title
+	 * @param string name 변수명
+	 * @param string value 설정값 (설정값이 존재할 경우, 해당 설정값을 업데이트한다.)
 	 */
-	printTitle:function(title) {
-		$("h1").html(title);
+	updateFonts:function(name,value) {
+		/**
+		 * 서버에 접속하기전이라면, 폰트 업데이트를 중단한다.
+		 */
+		if (Minitalk.socket.connected !== true) return false;
+		
+		var fonts = Minitalk.socket.getPermission("font") === true && Minitalk.session("fonts") ? Minitalk.session("fonts") : {bold:false,italic:false,underline:false,color:null};
+		if (value !== undefined) {
+			fonts[name] = value;
+			Minitalk.session("fonts",fonts);
+		}
+		
+		/**
+		 * 입력폼 스타일적용
+		 */
+		var $input = $("div[data-role=input] > textarea");
+		$input.css("fontWeight",fonts.bold === true ? "bold" : "normal");
+		$input.css("fontStyle",fonts.italic === true ? "italic" : "normal");
+		$input.css("textDecoration",fonts.underline === true ? "underline" : "none");
+		$input.css("color",fonts.color === null ? null : fonts.color);
+		
+		/**
+		 * 툴바 스타일적용
+		 */
+		var $footer = $("footer");
+		var $tools = $("ul[data-role]",$footer);
+		$("button[data-tool=bold]",$tools).removeClass("on");
+		$("button[data-tool=italic]",$tools).removeClass("on");
+		$("button[data-tool=underline]",$tools).removeClass("on");
+		
+		if (fonts.bold === true) $("button[data-tool=bold]",$tools).addClass("on");
+		if (fonts.italic === true) $("button[data-tool=italic]",$tools).addClass("on");
+		if (fonts.underline === true) $("button[data-tool=underline]",$tools).addClass("on");
 	},
 	/**
 	 * 활성화탭을 변경한다.
@@ -696,6 +728,14 @@ Minitalk.ui = {
 	},
 	/**
 	 */
+	/**
+	 * 채널타이틀을 출력한다.
+	 *
+	 * @param string title
+	 */
+	printTitle:function(title) {
+		$("h1").html(title);
+	},
 	},
 	/**
 	 * 에러메시지를 출력한다.
