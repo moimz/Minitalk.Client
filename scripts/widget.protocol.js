@@ -33,6 +33,7 @@ Minitalk.protocol = {
 		Minitalk.socket.joined = false;
 		Minitalk.socket.channel.title = data.channel.title;
 		Minitalk.socket.channel.permission = data.channel.permission;
+		Minitalk.socket.token = data.token;
 		
 		/**
 		 * 나의정보를 저장한다.
@@ -225,7 +226,6 @@ Minitalk.protocol = {
 					
 				case 301 : // 중복접속에 따른 기존접속해제
 					Minitalk.socket.reconnectable = false;
-					Minitalk.socket.io.disconnect();
 					break;
 				
 				case 302 : // 권한이 낮은 사용자가 닉네임을 사용중이므로, 해당 사용자가 닉네임을 초기화할때까지 접속을 대기한다.

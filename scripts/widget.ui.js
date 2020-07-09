@@ -804,7 +804,13 @@ Minitalk.ui = {
 		var $item = $("<div>").attr("data-role","user").addClass(event).data("nickname",user.nickname);
 		
 		var $photo = $("<div>").addClass("photo");
+		$photo.data("user",user);
 		if (user.photo) $photo.css("backgroundImage","url("+user.photo+")");
+		$photo.on("click",function(e) {
+			Minitalk.user.toggleMenus($(this),e);
+			e.preventDefault();
+			e.stopImmediatePropagation();
+		});
 		$item.append($photo);
 		
 		var $nickname = $("<div>").addClass("nickname").append(Minitalk.user.getTag(user,false));
@@ -853,6 +859,12 @@ Minitalk.ui = {
 					if (is_log === true) $item.addClass("log");
 				
 					var $photo = $("<div>").addClass("photo");
+					$photo.data("user",user);
+					$photo.on("click",function(e) {
+						Minitalk.user.toggleMenus($(this),e);
+						e.preventDefault();
+						e.stopImmediatePropagation();
+					});
 					if (user.photo) $photo.css("backgroundImage","url("+user.photo+")");
 					$item.append($photo);
 					
@@ -1052,5 +1064,9 @@ Minitalk.ui = {
 	resetToggle:function() {
 		$("aside").removeClass("open");
 		$("footer").removeClass("open");
+		
+		if ($("ul[data-role=usermenus]").length > 0) {
+			$("ul[data-role=usermenus]").remove();
+		}
 	}
 };

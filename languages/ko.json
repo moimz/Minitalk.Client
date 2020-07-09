@@ -55,8 +55,11 @@
 		"emoticon":"이모티콘",
 		"file":"파일첨부"
 	},
-	"menu":{
-		
+	"usermenu":{
+		"whisper":"귓속말보내기",
+		"call":"호출하기",
+		"showip":"아이피확인",
+		"banip":"아이피차단"
 	},
 	"button":{
 		"confirm":"확인",
@@ -85,6 +88,7 @@
 		"NOT_FOUND_ONLINE_SERVER":"접속가능한 서버를 찾을 수 없습니다.<br>잠시 후 다시 시도하여 주십시오.",
 		"NOT_FOUND_COMMAND":"명령어를 찾을 수 없습니다.",
 		"NOT_FOUND_CHANNEL":"개설된 채널을 찾을 수 없습니다.",
+		"NOT_CONNECTED":"미니톡서버에 접속중이 아닙니다.",
 		"ALREADY_LOGGED":"이미 채널관리자로 접속중입니다.",
 		"CHANNEL_DUPLICATED":"동일 웹페이지에 동일한 채널의 미니톡 채팅위젯을 동시에 사용할 수 없습니다.",
 		"INVALID_FORM_DATA":"잘못 입력된 항목이 있습니다.",
