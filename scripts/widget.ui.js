@@ -522,7 +522,8 @@ Minitalk.ui = {
 	/**
 	 * 활성화탭을 변경한다.
 	 *
-	 * @param string tab 탭
+	 * @param object/string $tab 탭의 DOM 객체
+	 * @param event e 이벤트객체
 	 */
 	activeTab:function($tab,e) {
 		var tab = typeof $tab == "object" ? $tab.data("tab") : $tab;
@@ -581,6 +582,9 @@ Minitalk.ui = {
 	},
 	/**
 	 * 툴버튼 실행
+	 *
+	 * @param object $tool 툴버튼의 DOM 객체
+	 * @param event e 이벤트객체
 	 */
 	activeTool:function($tool,e) {
 		var tool = $tool.data("tool");
