@@ -129,6 +129,23 @@ Minitalk.ui = {
 			Minitalk.ui.initSound();
 			Minitalk.ui.resetToggle();
 		});
+		
+		/**
+		 * Keypress 이벤트처리
+		 */
+		$(document).on("keydown",function(e) {
+			if (e.keyCode == 27) {
+				$(document).triggerHandler("esc");
+			}
+		});
+		
+		/**
+		 * ESC 기본이벤트 처리
+		 */
+		$(document).on("esc",function() {
+			Minitalk.ui.resetToggle();
+			Minitalk.ui.closeWindow();
+		});
 	},
 	/**
 	 * 브라우저 사이즈가 변경되거나, UI가 최초표시될 때 UI 요소를 초기화한다.

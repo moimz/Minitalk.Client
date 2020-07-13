@@ -290,4 +290,12 @@ if (isMinitalkIncluded === undefined) {
 			document.getElementById(id).contentWindow.$(document.getElementById(id).contentWindow.document).trigger("click",e);
 		}
 	});
+	
+	document.addEventListener("keydown",function(e) {
+		if (e.keyCode == 27) {
+			for (var id in MinitalkComponent.minitalks) {
+				document.getElementById(id).contentWindow.$(document.getElementById(id).contentWindow.document).triggerHandler("esc");
+			}
+		}
+	});
 }
