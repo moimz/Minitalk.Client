@@ -40,14 +40,29 @@ aside.open > ul[data-role=lists] {display:block;}
 div[data-role=frame][data-tab-type=none] > aside {display:none;}
 
 main {position:relative;}
-main > section[data-tab] {position:absolute; z-index:0; top:0; left:0; width:100%; height:100%; overflow-x:hidden; overflow-y:scroll; display:none;}
-main > section[data-tab].open {display:block;}
+
+section[data-tab] {position:absolute; z-index:0; top:0; left:0; width:100%; height:100%; overflow-x:hidden; overflow-y:scroll; display:none;}
+section[data-tab].open {display:block;}
+
+/**
+ * 윈도우의 경우
+ */
+div[data-role=window] section[data-tab] {position:static; width:100%; height:auto;}
 
 /**
  * 특수요소별 기본속성을 정의힌다.
  */
-main > section[data-tab=chat] > div[data-role=item] > div.photo {cursor:pointer;}
-main > section[data-tab=chat] > div[data-role=user] > div.photo {cursor:pointer;}
+section[data-tab=chat] > div[data-role=item] > div.photo {cursor:pointer;}
+section[data-tab=chat] > div[data-role=user] > div.photo {cursor:pointer;}
+
+/**
+ * 환경설정탭
+ */
+section[data-tab=configs] > h2 {display:none;}
+section[data-tab=configs] > button[data-action=close] {display:none;}
+div[data-role=window] section[data-tab=configs] > h2 {display:block;}
+div[data-role=window] section[data-tab=configs] > button[data-action=close] {display:block;}
+
 
 /**
  * 푸터 기본속성을 정의한다.

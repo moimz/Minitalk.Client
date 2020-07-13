@@ -145,7 +145,13 @@ Minitalk.configs = function(name,value) {
 	 * 기본설정값
 	 */
 	var defaults = {
-		
+		active_scroll:true,
+		browser_notification:false,
+		mute:false,
+		whisper:true,
+		whisper_sound:true,
+		call:true,
+		call_sound:true
 	};
 	
 	var configs = Minitalk.storage("configs") == null ? defaults : Minitalk.storage("configs");

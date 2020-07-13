@@ -576,6 +576,7 @@ Minitalk.ui = {
 		}
 		
 		if (tab == "configs") {
+			Minitalk.ui.createConfigs();
 		}
 		
 		$aside.removeClass("open");
@@ -589,6 +590,95 @@ Minitalk.ui = {
 	createChat:function() {
 		Minitalk.ui.initTools();
 		Minitalk.ui.autoScroll(true);
+	},
+	/**
+	 * 설정탭을 구성한다.
+	 *
+	 * @param object $dom 설정탭 DOM 객체 (없을경우, DOM을 생성하고, 있을경우 해당 DOM 에 이벤트를 정의한다.)
+	 */
+	createConfigs:function($dom) {
+		var $frame = $("div[data-role=frame]");
+		
+		if ($dom === undefined) {
+			/**
+			 * 설정탭 HTML 을 정의한다.
+			 */
+			var html = [
+				'<h2>' + Minitalk.getText("tab/configs") + '</h2>',
+				'<button data-action="close"></button>',
+				'<div data-role="content">',
+					'<h4>' + Minitalk.getText("config/title/default") + '</h4>',
+					'<label><input type="checkbox" name="active_scroll">' + Minitalk.getText("config/active_scroll") + '</label>',
+					'<label><input type="checkbox" name="browser_notification">' + Minitalk.getText("config/browser_notification") + '</label>',
+					'<label><input type="checkbox" name="mute">' + Minitalk.getText("config/mute") + '</label>',
+					'<hr>',
+					'<h4>' + Minitalk.getText("config/title/whisper") + '</h4>',
+					'<label><input type="checkbox" name="whisper">' + Minitalk.getText("config/whisper") + '</label>',
+					'<label><input type="checkbox" name="whisper_sound">' + Minitalk.getText("config/whisper_sound") + '</label>',
+					'<hr>',
+					'<h4>' + Minitalk.getText("config/title/call") + '</h4>',
+					'<label><input type="checkbox" name="call">' + Minitalk.getText("config/call") + '</label>',
+					'<label><input type="checkbox" name="call_sound">' + Minitalk.getText("config/call_sound") + '</label>',
+				'</div>',
+				'<div data-role="button">',
+					'<ul>',
+						'<li><button type="button" data-action="cancel">' + Minitalk.getText("button/cancel") + '</button></li>',
+						'<li><button type="button" data-action="confirm">' + Minitalk.getText("button/confirm") + '</button></li>',
+					'</ul>',
+				'</div>'
+			];
+			html = html.join("");
+			
+			/**
+			 * 채팅위젯의 가로크기가 298px 이하인 경우, 새로운 윈도우에 설정탭을 출력한다.
+			 */
+			if ($frame.width() < 298) {
+				/**
+				 * 환경설정탭 DOM 을 추가한다.
+				 */
+				html = '<section data-tab="configs">' + html + '</section>';
+				Minitalk.ui.createWindow(html,400,Minitalk.ui.createConfigs);
+				
+				// 새로운 윈도우를 생성한뒤, 이전에 선택한 탭으로 복귀한다.
+				setTimeout(Minitalk.ui.activeTab,100,$frame.attr("data-previous-tab"));
+			} else {
+				var $section = $("section[data-tab=configs]");
+				$section.empty();
+				$section.append(html);
+				
+				Minitalk.ui.createConfigs($section);
+			}
+		} else {
+			var configs = Minitalk.configs();
+			$("input[name=active_scroll]",$dom).checked(configs.active_scroll);
+			$("input[name=browser_notification]",$dom).checked(configs.browser_notification);
+			$("input[name=mute]",$dom).checked(configs.mute);
+			$("input[name=whisper]",$dom).checked(configs.whisper);
+			$("input[name=whisper_sound]",$dom).checked(configs.whisper);
+			$("input[name=call]",$dom).checked(configs.whisper);
+			$("input[name=call_sound]",$dom).checked(configs.whisper);
+			
+			$("button[data-action]",$dom).on("click",function() {
+				var $button = $(this);
+				var action = $button.attr("data-action");
+				
+				if (action == "confirm") {
+					Minitalk.configs("active_scroll",$("input[name=active_scroll]",$dom).checked());
+					Minitalk.configs("browser_notification",$("input[name=browser_notification]",$dom).checked());
+					Minitalk.configs("mute",$("input[name=mute]",$dom).checked());
+					Minitalk.configs("whisper",$("input[name=whisper]",$dom).checked());
+					Minitalk.configs("whisper_sound",$("input[name=whisper_sound]",$dom).checked());
+					Minitalk.configs("call",$("input[name=call]",$dom).checked());
+					Minitalk.configs("call_sound",$("input[name=call_sound]",$dom).checked());
+				}
+				
+				if ($dom.is("body") === true) {
+					Minitalk.ui.closeWindow();
+				} else {
+					Minitalk.ui.activeTab($frame.attr("data-previous-tab"));
+				}
+			});
+		}
 	},
 	/**
 	 * 탭목록을 토글한다.
