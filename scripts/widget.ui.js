@@ -570,6 +570,7 @@ Minitalk.ui = {
 		}
 		
 		if (tab == "users") {
+			Minitalk.ui.createUsers();
 		}
 		
 		if (tab == "boxes") {
@@ -590,6 +591,50 @@ Minitalk.ui = {
 	createChat:function() {
 		Minitalk.ui.initTools();
 		Minitalk.ui.autoScroll(true);
+	},
+	/**
+	 * 유저탭을 구성한다.
+	 */
+	createUsers:function() {
+		var $frame = $("div[data-role=frame]");
+		var $section = $("section[data-tab=users]",$frame);
+		$section.empty();
+		
+		/**
+		 * 유저탭 HTML 을 정의한다.
+		 */
+		var html = [
+			'<div data-role="search">',
+			'	<input type="search" placeholder="' + Minitalk.getText("nickname") + '">',
+			'	<button type="button" data-action="search"><i></i><span>' + Minitalk.getText("button/search") + '</span></button>',
+			'	<button type="button" data-action="refresh"><i></i><span>' + Minitalk.getText("button/refresh") + '</span></button>',
+			'</div>',
+			'<ul><li class="loading"><i class="mi mi-loading"></i></ul>'
+		];
+		
+		$section.append(html.join(""));
+		
+		var $lists = $("ul",$section);
+		
+		Minitalk.user.getUsers(1,"",function(result) {
+			if (result.success == true) {
+				$lists.empty();
+				
+				/**
+				 * 키워드가 없을 경우, 자기자신을 접속자목록 제일 처음에 위치하도록 한다.
+				 */
+				if (result.pagination.keyword == null) result.users.unshift(Minitalk.user.me);
+				
+				for (var i=0, loop=result.users.length;i<loop;i++) {
+					var user = result.users[i];
+					var $item = $("<li>");
+					if (result.pagination.keyword == null && i > 0 && user.nickname == Minitalk.user.me.nickname) continue;
+					
+					$item.append(Minitalk.user.getTag(user));
+					$lists.append($item);
+				}
+			}
+		});
 	},
 	/**
 	 * 설정탭을 구성한다.
@@ -1018,7 +1063,6 @@ Minitalk.ui = {
 		}
 		
 		if ($item !== null) Minitalk.ui.autoScroll($item);
-	},
 	},
 	/**
 	 * 채팅창의 스크롤을 특정위치로 이동한다.
