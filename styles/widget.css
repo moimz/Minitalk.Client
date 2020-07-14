@@ -35,7 +35,7 @@ aside > ul[data-role=lists] {display:none; position:absolute; z-index:5; list-st
 aside.open > ul[data-role=lists] {display:block;}
 
 /**
- * 탭바를 사용하지 않을 경우 ,탭바영역을 숨긴다.
+ * 탭바를 사용하지 않을 경우, 탭바영역을 숨긴다.
  */
 div[data-role=frame][data-tab-type=none] > aside {display:none;}
 
