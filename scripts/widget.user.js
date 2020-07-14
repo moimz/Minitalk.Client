@@ -37,32 +37,6 @@ Minitalk.user = {
 		return user.nickname;
 	},
 	/**
-	 * 접속자목록을 가져온다.
-	 *
-	 * @param int page 접속자목록페이지번호
-	 * @param string keyword 검색어
-	 */
-	getUsers:function(page,keyword) {
-		var $users = $("section[data-role=users]");
-		if ($users.data("pagination") !== undefined) {
-			var page = page ? page : $users.data("pagination").page;
-			var keyword = keyword !== undefined ? keyword : $users.data("pagination").keyword;
-		} else {
-			var page = page ? page : 1;
-			var keyword = keyword !== undefined ? keyword : null;
-		}
-		
-		var $refresh = $("button[data-action=users-refresh]",$users);
-		$refresh.disable();
-		if ($refresh.data("timer")) {
-			clearTimeout($refresh.data("timer"));
-			$refresh.data("timer",null);
-		}
-		$refresh.data("timer",setTimeout(function($refresh) { $refresh.data("timer",null); $refresh.enable(); },5000,$refresh));
-		
-		Minitalk.socket.send("users",{page:page,keyword:keyword});
-	},
-	/**
 	 * 접속자태그를 가져온다.
 	 *
 	 * @param object user 유저객체
@@ -140,6 +114,30 @@ Minitalk.user = {
 			headers:{authorization:"TOKEN " + Minitalk.socket.token},
 			success:function(result) {
 				if (result.success == true && result.user === undefined) result.success = false;
+				callback(result);
+			},
+			error:function() {
+				callback({success:false,error:"CONNECT_ERROR"});
+			}
+		});
+	},
+	/**
+	 * 접속자목록을 가져온다.
+	 *
+	 * @param int page 접속자목록페이지번호
+	 * @param string keyword 검색어
+	 * @param function callback
+	 */
+	getUsers:function(page,keyword,callback) {
+		if (Minitalk.socket.connected !== true) callback({success:false,error:"NOT_CONNECTED"});
+		
+		$.get({
+			url:Minitalk.socket.connection.domain+"/users",
+			dataType:"json",
+			data:{start:(page - 1),limit:50,keyword:keyword},
+			headers:{authorization:"TOKEN " + Minitalk.socket.token},
+			success:function(result) {
+				if (result.success == true && result.users === undefined) result.success = false;
 				callback(result);
 			},
 			error:function() {
