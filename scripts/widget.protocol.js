@@ -138,12 +138,6 @@ Minitalk.protocol = {
 		}
 	},
 	/**
-	 * 접속자 목록을 불러온다.
-	 */
-	users:function(data) {
-		Minitalk.ui.printUsers(data.users,data.pagination);
-	},
-	/**
 	 * 채팅서버로 부터 이전대화기록을 받아 저장한다.
 	 */
 	logs:function(data) {
