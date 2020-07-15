@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 3. 23.
+ * @modified 2020. 7. 15.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -22,9 +22,11 @@ $password = Request('password') ? Request('password') : '';
 $allow_nickname_edit = Request('allow_nickname_edit') ? 'TRUE' : 'FALSE';
 $max_user = Request('max_user') && is_numeric(Request('max_user')) == true ? Request('max_user') : $errors['max_user'] = $this->getErrorText('REQUIRED');
 $guest_name = Request('guest_name') ? Request('guest_name') : $errors['guest_name'] = $this->getErrorText('REQUIRED');
-$send_level_limit = Request('send_level_limit') ? Request('send_level_limit') : 0;
-$userlist_level_limit = Request('use_userlist') ? (Request('userlist_level_limit') ? Request('userlist_level_limit') : 0) : -1;
-$box_level_limit = Request('use_box') && Request('box_level_limit') ? Request('box_level_limit') : -1;
+$send_limit = Request('send_limit') ? Request('send_limit') : 0;
+$file_limit = Request('file_limit') ? Request('file_limit') : 0;
+$font_limit = Request('font_limit') ? Request('font_limit') : 0;
+$user_limit = Request('use_user_tab') ? (Request('user_limit') ? Request('user_limit') : 0) : -1;
+$box_limit = Request('use_box_tab') && Request('box_limit') ? Request('box_limit') : -1;
 
 $check = $this->db()->select($this->table->channel)->where('channel',$channel);
 if ($oChannel) $check->where('channel',$oChannel,'!=');
@@ -42,9 +44,11 @@ if (count($errors) == 0) {
 	$insert['allow_nickname_edit'] = $allow_nickname_edit;
 	$insert['max_user'] = $max_user;
 	$insert['guest_name'] = $guest_name;
-	$insert['send_level_limit'] = $send_level_limit;
-	$insert['userlist_level_limit'] = $userlist_level_limit;
-	$insert['box_level_limit'] = $box_level_limit;
+	$insert['send_limit'] = $send_limit;
+	$insert['file_limit'] = $file_limit;
+	$insert['font_limit'] = $font_limit;
+	$insert['user_limit'] = $user_limit;
+	$insert['box_limit'] = $box_limit;
 	
 	if ($oChannel) {
 		$this->db()->update($this->table->channel,$insert)->where('channel',$oChannel)->execute();

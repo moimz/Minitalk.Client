@@ -75,7 +75,7 @@ if (isMinitalkIncluded === undefined) {
 		 *
 		 * @public string background 미니톡 채팅위젯 영역의 기본 배경스타일
 		 * @public boolean viewUserMessage 다른 접속자의 접속안내 메시지를 보일지 설정한다. (기본값 : true, true : 접속안내메시지 보임, false : 접속안내메시지 숨김)
-		 * @public int viewUserLimit 접속안내 메세지 및 유저목록에서 보일 유저의 최소레벨 (기본값 : 0)
+		 * @public int viewUserLimit 접속안내 메시지 및 유저목록에서 보일 유저의 최소레벨 (기본값 : 0)
 		 * @public int logCount 이전 대화내역을 몇개까지 보일지 설정한다. (기본값 : 15, 최대 : 30, 0 일 경우 이전 대화내역을 사용하지 않는다.)
 		 *
 		 * @public string/object[] tabs 탭바의 탭을 설정한다.

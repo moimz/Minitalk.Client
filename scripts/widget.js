@@ -16,7 +16,7 @@ var Minitalk = MinitalkComponent.get($("html").attr("data-id"));
  * 미니톡 클라이언트의 언어셋을 가져온다.
  *
  * @param string code
- * @param string replacement 일치하는 언어코드가 없을 경우 반환될 메세지 (기본값 : null, $code 반환)
+ * @param string replacement 일치하는 언어코드가 없을 경우 반환될 메시지 (기본값 : null, $code 반환)
  * @return string language 실제 언어셋 텍스트
  */
 Minitalk.getText = function(code,replacement) {
@@ -41,10 +41,10 @@ Minitalk.getText = function(code,replacement) {
 };
 
 /**
- * 미니톡 클라이언트의 에러메세지 가져온다.
+ * 미니톡 클라이언트의 에러메시지 가져온다.
  *
  * @param string code 에러코드
- * @return string message 에러메세지
+ * @return string message 에러메시지
  */
 Minitalk.getErrorText = function(code) {
 	var message = Minitalk.getText("error/"+code,code);

@@ -75,18 +75,18 @@
 					"type":"enum",
 					"length":"'NOTICE','MESSAGE'",
 					"default":"MESSAGE",
-					"comment":"메세지종류"
+					"comment":"메시지종류"
 				},
 				"message":{
 					"type":"varchar",
 					"length":255,
-					"comment":"메세지내용"
+					"comment":"메시지내용"
 				},
 				"receiver":{
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"메세지를 받은 접속자수"
+					"comment":"메시지를 받은 접속자수"
 				},
 				"url":{
 					"type":"varchar",
@@ -97,7 +97,7 @@
 				"reg_date":{
 					"type":"int",
 					"length":11,
-					"comment":"메세지를 전송한 시각"
+					"comment":"메시지를 전송한 시각"
 				}
 			},
 			"indexes":{
@@ -181,21 +181,33 @@
 					"default":"TRUE",
 					"comment":"닉네임변경 가능여부"
 				},
-				"send_level_limit":{
+				"send_limit":{
 					"type":"int",
-					"length":"11",
+					"length":11,
 					"default":0,
 					"comment":"데이터전송 권한"
 				},
-				"userlist_level_limit":{
+				"file_limit":{
 					"type":"int",
-					"length":"11",
+					"length":11,
+					"default":0,
+					"comment":"파일전송 권한"
+				},
+				"font_limit":{
+					"type":"int",
+					"length":11,
+					"default":0,
+					"comment":"폰트옵션 권한"
+				},
+				"user_limit":{
+					"type":"int",
+					"length":11,
 					"default":0,
 					"comment":"유저목록에 보일 최소권한"
 				},
-				"box_level_limit":{
+				"box_limit":{
 					"type":"int",
-					"length":"11",
+					"length":11,
 					"default":1,
 					"comment":"개인박스개설 권한"
 				},
@@ -290,7 +302,7 @@
 				"time":{
 					"type":"bigint",
 					"length":15,
-					"comment":"메세지 전송시각"
+					"comment":"메시지 전송시각"
 				},
 				"channel":{
 					"type":"varchar",
@@ -310,7 +322,7 @@
 				"message":{
 					"type":"varchar",
 					"length":255,
-					"comment":"메세지내용"
+					"comment":"메시지내용"
 				}
 			},
 			"indexes":{

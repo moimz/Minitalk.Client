@@ -31,8 +31,8 @@ for ($i=0, $loop=count($lists);$i<$loop;$i++) {
 	$lists[$i]->category2 = $this->getCategoryTitle($lists[$i]->category2);
 	$lists[$i]->server = $this->getServer($lists[$i]->server);
 	$lists[$i]->allow_nickname_edit = $lists[$i]->allow_nickname_edit == 'TRUE';
-	$lists[$i]->use_userlist = $lists[$i]->userlist_level_limit > -1;
-	$lists[$i]->use_box = $lists[$i]->box_level_limit > 0;
+	$lists[$i]->use_user_tab = $lists[$i]->user_limit > -1;
+	$lists[$i]->use_box_tab = $lists[$i]->box_limit > 0;
 }
 
 $results->success = true;

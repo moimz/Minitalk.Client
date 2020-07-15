@@ -141,7 +141,7 @@ Minitalk.socket = {
 		Minitalk.socket.io.emit(protocol,data);
 	},
 	/**
-	 * 호출메세지를 전송한다.
+	 * 호출메시지를 전송한다.
 	 *
 	 * @param string nickname 호출할 대상닉네임
 	 */

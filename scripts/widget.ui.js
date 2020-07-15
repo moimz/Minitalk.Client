@@ -454,9 +454,6 @@ Minitalk.ui = {
 		var channel = Minitalk.socket.channel;
 		if (channel == null) return;
 		
-		$frame.attr("data-userlist",channel.use_userlist == true ? "TRUE" : "FALSE");
-		$frame.attr("data-box",channel.use_box == true ? "TRUE" : "FALSE");
-		
 		$("body > div[data-role=loading]").remove();
 		
 		Minitalk.fireEvent("initChannel",[channel]);

@@ -7,14 +7,14 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 3. 16.
+ * @modified 2020. 7. 15.
  */
 var Admin = {
 	/**
 	 * 미니톡 클라이언트 관리자의 언어셋을 가져온다.
 	 *
 	 * @param string code
-	 * @param string replacement 일치하는 언어코드가 없을 경우 반환될 메세지 (기본값 : null, $code 반환)
+	 * @param string replacement 일치하는 언어코드가 없을 경우 반환될 메시지 (기본값 : null, $code 반환)
 	 * @return string language 실제 언어셋 텍스트
 	 */
 	getText:function(code,replacement) {
@@ -22,10 +22,10 @@ var Admin = {
 		return text;
 	},
 	/**
-	 * 미니톡 클라이언트 관리자의 에러메세지 가져온다.
+	 * 미니톡 클라이언트 관리자의 에러메시지 가져온다.
 	 *
 	 * @param string code 에러코드
-	 * @return string message 에러메세지
+	 * @return string message 에러메시지
 	 */
 	getErrorText:function(code) {
 		return Minitalk.getErrorText(code);
@@ -541,24 +541,24 @@ var Admin = {
 										boxLabel:Admin.getText("channel/form/allow_nickname_edit_help")
 									}),
 									new Ext.form.Checkbox({
-										fieldLabel:Admin.getText("channel/form/use_userlist"),
-										name:"use_userlist",
-										boxLabel:Admin.getText("channel/form/use_userlist_help"),
+										fieldLabel:Admin.getText("channel/form/use_user_tab"),
+										name:"use_user_tab",
+										boxLabel:Admin.getText("channel/form/use_user_tab_help"),
 										checked:true,
 										listeners:{
 											change:function(form,checked) {
-												form.getForm().findField("userlist_level_limit").setDisabled(!checked);
+												form.getForm().findField("user_limit").setDisabled(!checked);
 											}
 										}
 									}),
 									new Ext.form.Checkbox({
-										fieldLabel:Admin.getText("channel/form/use_box"),
-										name:"use_box",
-										boxLabel:Admin.getText("channel/form/use_box_help"),
+										fieldLabel:Admin.getText("channel/form/use_box_tab"),
+										name:"use_box_tab",
+										boxLabel:Admin.getText("channel/form/use_box_tab_help"),
 										checked:true,
 										listeners:{
 											change:function(form,checked) {
-												form.getForm().findField("box_level_limit").setDisabled(!checked);
+												form.getForm().findField("box_limit").setDisabled(!checked);
 											}
 										}
 									}),
@@ -602,8 +602,8 @@ var Admin = {
 								title:Admin.getText("channel/form/permission"),
 								items:[
 									new Ext.form.ComboBox({
-										fieldLabel:Admin.getText("channel/form/send_level_limit"),
-										name:"send_level_limit",
+										fieldLabel:Admin.getText("channel/form/send_limit"),
+										name:"send_limit",
 										store:new Ext.data.ArrayStore({
 											fields:["display","value"],
 											data:(function() {
@@ -618,11 +618,11 @@ var Admin = {
 										displayField:"display",
 										valueField:"value",
 										value:0,
-										afterBodyEl:'<div class="x-form-help">'+Admin.getText("channel/form/send_level_limit_help")+'</div>'
+										afterBodyEl:'<div class="x-form-help">'+Admin.getText("channel/form/send_limit_help")+'</div>'
 									}),
 									new Ext.form.ComboBox({
-										fieldLabel:Admin.getText("channel/form/userlist_level_limit"),
-										name:"userlist_level_limit",
+										fieldLabel:Admin.getText("channel/form/file_limit"),
+										name:"file_limit",
 										store:new Ext.data.ArrayStore({
 											fields:["display","value"],
 											data:(function() {
@@ -637,11 +637,49 @@ var Admin = {
 										displayField:"display",
 										valueField:"value",
 										value:0,
-										afterBodyEl:'<div class="x-form-help">'+Admin.getText("channel/form/userlist_level_limit_help")+'</div>'
+										afterBodyEl:'<div class="x-form-help">'+Admin.getText("channel/form/file_limit_help")+'</div>'
 									}),
 									new Ext.form.ComboBox({
-										fieldLabel:Admin.getText("channel/form/box_level_limit"),
-										name:"box_level_limit",
+										fieldLabel:Admin.getText("channel/form/font_limit"),
+										name:"font_limit",
+										store:new Ext.data.ArrayStore({
+											fields:["display","value"],
+											data:(function() {
+												var datas = [];
+												for (var i=0;i<10;i++) {
+													datas.push([Minitalk.getText("level/"+i),i]);
+												}
+												
+												return datas;
+											})()
+										}),
+										displayField:"display",
+										valueField:"value",
+										value:0,
+										afterBodyEl:'<div class="x-form-help">'+Admin.getText("channel/form/font_limit")+'</div>'
+									}),
+									new Ext.form.ComboBox({
+										fieldLabel:Admin.getText("channel/form/user_limit"),
+										name:"user_limit",
+										store:new Ext.data.ArrayStore({
+											fields:["display","value"],
+											data:(function() {
+												var datas = [];
+												for (var i=0;i<10;i++) {
+													datas.push([Minitalk.getText("level/"+i),i]);
+												}
+												
+												return datas;
+											})()
+										}),
+										displayField:"display",
+										valueField:"value",
+										value:0,
+										afterBodyEl:'<div class="x-form-help">'+Admin.getText("channel/form/user_limit_help")+'</div>'
+									}),
+									new Ext.form.ComboBox({
+										fieldLabel:Admin.getText("channel/form/box_limit"),
+										name:"box_limit",
 										store:new Ext.data.ArrayStore({
 											fields:["display","value"],
 											data:(function() {
@@ -656,7 +694,7 @@ var Admin = {
 										displayField:"display",
 										valueField:"value",
 										value:1,
-										afterBodyEl:'<div class="x-form-help">'+Admin.getText("channel/form/box_level_limit_help")+'</div>'
+										afterBodyEl:'<div class="x-form-help">'+Admin.getText("channel/form/box_limit_help")+'</div>'
 									})
 								]
 							})
@@ -811,7 +849,7 @@ var Minitalk = {
 	 * 미니톡 클라이언트의 언어셋을 가져온다.
 	 *
 	 * @param string code
-	 * @param string replacement 일치하는 언어코드가 없을 경우 반환될 메세지 (기본값 : null, $code 반환)
+	 * @param string replacement 일치하는 언어코드가 없을 경우 반환될 메시지 (기본값 : null, $code 반환)
 	 * @return string language 실제 언어셋 텍스트
 	 */
 	getText:function(code,replacement) {
@@ -846,10 +884,10 @@ var Minitalk = {
 		return replacement == null ? code : replacement;
 	},
 	/**
-	 * 미니톡 클라이언트의 에러메세지 가져온다.
+	 * 미니톡 클라이언트의 에러메시지 가져온다.
 	 *
 	 * @param string code 에러코드
-	 * @return string message 에러메세지
+	 * @return string message 에러메시지
 	 */
 	getErrorText:function(code) {
 		var message = Minitalk.getText("error/"+code,code);

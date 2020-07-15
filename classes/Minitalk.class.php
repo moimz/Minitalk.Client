@@ -124,7 +124,7 @@ class Minitalk {
 	 * 코드에 해당하는 문자열이 없을 경우 1차적으로 package.json 에 정의된 기본언어셋의 텍스트를 반환하고, 기본언어셋 텍스트도 없을 경우에는 코드를 그대로 반환한다.
 	 *
 	 * @param string $code 언어코드
-	 * @param string $replacement 일치하는 언어코드가 없을 경우 반환될 메세지 (기본값 : null, $code 반환)
+	 * @param string $replacement 일치하는 언어코드가 없을 경우 반환될 메시지 (기본값 : null, $code 반환)
 	 * @return string $language 실제 언어셋 텍스트
 	 */
 	function getText($code,$replacement=null) {
@@ -182,7 +182,7 @@ class Minitalk {
 	 *
 	 * @param string $code 에러코드
 	 * @param object $value(옵션) 에러와 관련된 데이터
-	 * @param string $message(옵션) 변환된 에러메세지
+	 * @param string $message(옵션) 변환된 에러메시지
 	 */
 	function getErrorText($code,$value=null,$message=null,$isRawData=false) {
 		if (is_object($code) == true) {
@@ -534,16 +534,12 @@ class Minitalk {
 			$results->success = true;
 			$results->connection = $server->connection;
 			
-			
-			// @todo 설정값을 추가
-			$channel->file_level_limit = 1;
-			$channel->font_level_limit = 1;
-			$results->connection->channel = Encoder(json_encode(array('name'=>$channel->channel,'title'=>$channel->title,'send_level_limit'=>$channel->send_level_limit,'password'=>$channel->password,'max_user'=>$channel->max_user,'guest_name'=>$channel->guest_name,'allow_nickname_edit'=>$channel->allow_nickname_edit == 'TRUE','userlist_level_limit'=>$channel->userlist_level_limit,'box_level_limit'=>$channel->box_level_limit,'file_level_limit'=>$channel->file_level_limit,'font_level_limit'=>$channel->font_level_limit)));
+			$results->connection->channel = Encoder(json_encode(array('name'=>$channel->channel,'title'=>$channel->title,'send_limit'=>$channel->send_limit,'password'=>$channel->password,'max_user'=>$channel->max_user,'guest_name'=>$channel->guest_name,'allow_nickname_edit'=>$channel->allow_nickname_edit == 'TRUE','user_limit'=>$channel->user_limit,'box_limit'=>$channel->box_limit,'file_limit'=>$channel->file_limit,'font_limit'=>$channel->font_limit)));
 		}
 		
 		$results->channel = new stdClass();
-		$results->channel->use_box = $channel->box_level_limit > -1;
-		$results->channel->use_userlist = $channel->userlist_level_limit > -1;
+		$results->channel->use_box_tab = $channel->box_limit > -1;
+		$results->channel->use_user_tab = $channel->user_limit > -1;
 		
 		return $results;
 	}
@@ -607,11 +603,11 @@ class Minitalk {
 	}
 	
 	/**
-	 * 에러메세지를 출력한다.
+	 * 에러메시지를 출력한다.
 	 *
 	 * @param string $code 에러코드
 	 * @param object $value(옵션) 에러와 관련된 데이터
-	 * @param string $message(옵션) 변환된 에러메세지
+	 * @param string $message(옵션) 변환된 에러메시지
 	 * @return null
 	 */
 	function printError($code=null,$value=null,$message=null) {

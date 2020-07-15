@@ -93,7 +93,7 @@ Minitalk.protocol = {
 	 */
 	join:function(data) {
 		/**
-		 * 참여 메세지를 출력한다.
+		 * 참여 메시지를 출력한다.
 		 */
 		if (Minitalk.socket.joined == true && Minitalk.viewUserMessage == true && Minitalk.viewUserLimit <= data.user.level) {
 			Minitalk.ui.printUserMessage("join",data.user);
@@ -109,7 +109,7 @@ Minitalk.protocol = {
 	 */
 	leave:function(data) {
 		/**
-		 * 종료 메세지를 출력한다.
+		 * 종료 메시지를 출력한다.
 		 */
 		if (Minitalk.socket.joined == true && Minitalk.viewUserMessage == true && Minitalk.viewUserLimit <= data.user.level) {
 			Minitalk.ui.printUserMessage("leave",data.user);
@@ -167,7 +167,7 @@ Minitalk.protocol = {
 		Minitalk.socket.joined = true;
 	},
 	/**
-	 * 메세지를 수신하였을 경우
+	 * 메시지를 수신하였을 경우
 	 */
 	message:function(data) {
 		if (Minitalk.socket.joined == true) {
@@ -205,7 +205,7 @@ Minitalk.protocol = {
 		var type = Math.floor(code / 100);
 		
 		/**
-		 * 에러메세지를 출력한다.
+		 * 에러메시지를 출력한다.
 		 */
 		Minitalk.ui.printErrorCode(code);
 		

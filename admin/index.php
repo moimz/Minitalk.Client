@@ -686,8 +686,8 @@ Ext.onReady(function () {
 								}
 							}
 						},{
-							text:Admin.getText("channel/columns/send_level_limit"),
-							dataIndex:"send_level_limit",
+							text:Admin.getText("channel/columns/send_limit"),
+							dataIndex:"send_limit",
 							width:140,
 							align:"center",
 							renderer:function(value) {
@@ -719,22 +719,22 @@ Ext.onReady(function () {
 								sHTML+= ' '+Admin.getText("channel/form/allow_nickname_edit");
 								
 								sHTML+= "&nbsp;&nbsp;&nbsp;";
-								if (record.data.use_userlist == true) {
+								if (record.data.use_user_tab == true) {
 									sHTML+= '<i class="xi xi-check-boxout"></i>';
 								} else {
 									sHTML+= '<i class="xi xi-layout-full"></i>';
 								}
-								sHTML+= ' '+Admin.getText("channel/form/use_userlist");
-								sHTML+= '(' + record.data.userlist_level_limit + '<i class="fa fa-caret-up"></i>)';
+								sHTML+= ' '+Admin.getText("channel/form/use_user_tab");
+								sHTML+= '(' + record.data.user_limit + '<i class="fa fa-caret-up"></i>)';
 								
 								sHTML+= "&nbsp;&nbsp;&nbsp;";
-								if (record.data.use_box == true) {
+								if (record.data.use_box_tab == true) {
 									sHTML+= '<i class="xi xi-check-boxout"></i>';
 								} else {
 									sHTML+= '<i class="xi xi-layout-full"></i>';
 								}
-								sHTML+= ' '+Admin.getText("channel/form/use_box");
-								sHTML+= '(' + record.data.box_level_limit + '<i class="fa fa-caret-up"></i>)';
+								sHTML+= ' '+Admin.getText("channel/form/use_box_tab");
+								sHTML+= '(' + record.data.box_limit + '<i class="fa fa-caret-up"></i>)';
 								
 								return sHTML;
 							}
