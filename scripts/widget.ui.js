@@ -1054,8 +1054,8 @@ Minitalk.ui = {
 			}
 			
 			if (message.from === undefined) {
-				var $item = $("div[data-role=item]:last",$chat);
-				if (is_log !== true && $item.hasClass("log") == true) $item = [];
+				var $item = $("div[data-role]:last",$chat);
+				if ($item.attr("data-role") != "item" || (is_log !== true && $item.hasClass("log") == true)) $item = [];
 				if ($item.length > 0 && $item.hasClass("chat") == true && $item.hasClass(message.type) == true && $item.data("nickname") == user.nickname && $item.position().top > 10) {
 					$messageBox = $("div.message",$item);
 				} else {
@@ -1106,6 +1106,65 @@ Minitalk.ui = {
 			}
 			
 			$message.append($inner);
+			
+			/**
+			 * 추가적인 정보가 있는 경우, 부가적인 정보박스를 추가한다.
+			 */
+			if (message.data) {
+				var $box = $("<div>").attr("data-role",message.data.type);
+				if (message.data.type == "website") {
+					/**
+					 * 비디오가 있을 경우, iframe 임베드처리
+					 * @todo 공격용으로 사용될 수 있는가? 검증필요
+					 */
+					if (message.data.video != null) {
+						var $video = $("<div>").attr("data-role","video");
+						var $innervideo = $("<div>");
+						var $iframe = $("<iframe>").attr("src",message.data.video.url);//.attr("frameborder",0).css("border",0).css("width","100%").css("height","100%");
+						
+						/**
+						 * 가로 세로 크기 데이터가 있을 경우, 세로 % 를 계산하고, 그렇지 않은 경우 16:10 비율로 표시한다.
+						 */
+						if (message.data.video.width && message.data.video.height) {
+							var height = Math.round(message.data.video.height / message.data.video.width * 100);
+						} else {
+							var height = 62;
+						}
+						$innervideo.css("paddingBottom",height + "%");
+						
+						$video.append($innervideo);
+						$innervideo.append($("<div>").append($iframe));
+						$box.append($video);
+					} else {
+						/**
+						 * 웹사이트 이미지가 있는 경우, 해당 이미지 추가
+						 */
+						if (message.data.image != null) {
+							var $image = $("<div>").attr("data-role","image");
+							var $innerimage = $("<div>").css("backgroundImage","url(" + message.data.image.url + ")");
+							/**
+							 * 가로 세로 크기 데이터가 있을 경우, 세로 % 를 계산하고, 그렇지 않은 경우 16:10 비율로 표시한다.
+							 */
+							if (message.data.image.width && message.data.image.height) {
+								var height = Math.round(message.data.image.height / message.data.image.width * 100);
+							} else {
+								var height = 62;
+							}
+							
+							/**
+							 * 세로로 긴 이미지 최대치를 지정한다.
+							 */
+							height = Math.min(height,200);
+							$innerimage.css("paddingBottom",height + "%");
+							
+							$image.append($innerimage);
+							$box.append($image);
+						}
+					}
+				}
+				
+				$message.append($box);
+			}
 			
 			if (message.from === undefined) {
 				$messageBox.append($message);
