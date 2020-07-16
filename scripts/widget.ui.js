@@ -1308,6 +1308,8 @@ Minitalk.ui = {
 	 * @todo 브라우저 정책에 따른 수정필요
 	 */
 	playSound:function(sound) {
+		if (Minitalk.configs("mute") === true) return;
+		
 		var $audio = $("audio[data-type="+sound+"]");
 		if ($audio.length == 0) return;
 		
