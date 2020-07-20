@@ -162,6 +162,11 @@ section[data-tab=chat] > div[data-role=item].chat.whisper {color:#ff00ff;}
 section[data-tab=chat] > div[data-role=item].chat.whisper > div.message > div > div {color:#ff00ff;}
 section[data-tab=chat] > div[data-role=item].chat.log {opacity:0.5;}
 
+section[data-tab=chat] > div[data-role=item] > div.message div[data-role=website] {padding-top:5px; max-width:300px;}
+section[data-tab=chat] > div[data-role=item] > div.message div[data-role=website] > a {border:1px solid #ccc; color:#222; text-decoration:none;}
+section[data-tab=chat] > div[data-role=item] > div.message div[data-role=website] > a > h4 {box-sizing:border-box; width:100%; padding:8px 8px 5px 8px; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;}
+section[data-tab=chat] > div[data-role=item] > div.message div[data-role=website] > a > p {display:-webkit-box; padding:0px 8px 8px 8px; line-height:20px; min-height:20px; max-height:40px; overflow:hidden; white-space:normal; -webkit-line-clamp:2; text-overflow:ellipsis; -webkit-box-orient:vertical; color:#666;}
+
 
 /**
  * 유저메시지

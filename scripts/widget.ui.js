@@ -1131,15 +1131,16 @@ Minitalk.ui = {
 							var height = 62;
 						}
 						$innervideo.css("paddingBottom",height + "%");
-						
-						$video.append($innervideo);
 						$innervideo.append($("<div>").append($iframe));
+						$video.append($innervideo);
+						
 						$box.append($video);
 					} else {
 						/**
 						 * 웹사이트 이미지가 있는 경우, 해당 이미지 추가
 						 */
 						if (message.data.image != null) {
+							var $link = $("<a>").attr("href",message.data.url).attr("target","_blank");
 							var $image = $("<div>").attr("data-role","image");
 							var $innerimage = $("<div>").css("backgroundImage","url(" + message.data.image.url + ")");
 							/**
@@ -1156,9 +1157,16 @@ Minitalk.ui = {
 							 */
 							height = Math.min(height,200);
 							$innerimage.css("paddingBottom",height + "%");
-							
 							$image.append($innerimage);
-							$box.append($image);
+							$link.append($image);
+							
+							var $title = $("<h4>").html(message.data.title);
+							$link.append($title);
+							
+							var $p = $("<p>").html(message.data.description);
+							$link.append($p);
+							
+							$box.append($link);
 						}
 					}
 				}
