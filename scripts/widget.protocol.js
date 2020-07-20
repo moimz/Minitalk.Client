@@ -174,7 +174,8 @@ Minitalk.protocol = {
 			Minitalk.ui.printChatMessage(data);
 		}
 		
-		if (data.from !== undefined) {
+		var replace = data.from !== undefined ? data.from : null;
+		if (replace !== null) {
 			Minitalk.ui.enable(true);
 			delete data.from;
 		}
@@ -183,10 +184,31 @@ Minitalk.protocol = {
 		 * 수신된 메시지를 로컬 로그저장소에 저장한다.
 		 */
 		var logs = Minitalk.session("logs") ? Minitalk.session("logs") : [];
-		logs.push(data);
-		while (logs.length > Minitalk.logCount) {
-			logs.shift();
+		
+		/**
+		 * 기존의 메시지가 갱신되었고, 해당하는 메시지가 이미 로그에 존재한다면, 해당 로그를 대체한다.
+		 */
+		var is_replace = false;
+		if (replace) {
+			for (var i=0, loop=logs.length;i<loop;i++) {
+				if (logs[i].id == replace) {
+					logs[i] = data;
+					is_replace = true;
+					break;
+				}
+			}
 		}
+		
+		/**
+		 * 기존의 메시지가 아닌 경우, 신규 로그를 저장한다.
+		 */
+		if (is_replace === false) {
+			logs.push(data);
+			while (logs.length > Minitalk.logCount) {
+				logs.shift();
+			}
+		}
+		
 		Minitalk.session("logs",logs);
 		
 		var latestMessage = Minitalk.session("latestMessage") ? (Minitalk.session("latestMessage") < data.time ? data.time : Minitalk.session("latestMessage")) : data.time;
