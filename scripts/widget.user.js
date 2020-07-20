@@ -106,7 +106,7 @@ Minitalk.user = {
 	 * @param function callback
 	 */
 	getUser:function(nickname,callback) {
-		if (Minitalk.socket.connected !== true) callback({success:false,error:"NOT_CONNECTED"});
+		if (Minitalk.socket.isConnected() === false) callback({success:false,error:"NOT_CONNECTED"});
 		
 		$.get({
 			url:Minitalk.socket.connection.domain+"/user/" + nickname,
@@ -129,7 +129,7 @@ Minitalk.user = {
 	 * @param function callback
 	 */
 	getUsers:function(page,keyword,callback) {
-		if (Minitalk.socket.connected !== true) callback({success:false,error:"NOT_CONNECTED"});
+		if (Minitalk.socket.isConnected() === false) callback({success:false,error:"NOT_CONNECTED"});
 		
 		$.get({
 			url:Minitalk.socket.connection.domain+"/users",
@@ -158,7 +158,7 @@ Minitalk.user = {
 			return;
 		}
 		
-		if (Minitalk.socket.connected !== true) {
+		if (Minitalk.socket.isConnected() === false) {
 			return;
 		}
 		

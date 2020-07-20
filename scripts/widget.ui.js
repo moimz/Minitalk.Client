@@ -503,7 +503,7 @@ Minitalk.ui = {
 		/**
 		 * 서버에 접속하기전이라면, 폰트 업데이트를 중단한다.
 		 */
-		if (Minitalk.socket.connected !== true) return false;
+		if (Minitalk.socket.isConnected() === false) return false;
 		
 		var fonts = Minitalk.socket.getPermission("font") === true && Minitalk.session("fonts") ? Minitalk.session("fonts") : {bold:false,italic:false,underline:false,color:null};
 		if (value !== undefined) {

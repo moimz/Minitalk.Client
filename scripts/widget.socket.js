@@ -93,6 +93,14 @@ Minitalk.socket = {
 		Minitalk.ui.disable();
 	},
 	/**
+	 * 서버에 접속중인지 확인한다.
+	 *
+	 * @return boolean isConnected
+	 */
+	isConnected:function() {
+		return Minitalk.socket.connecting !== true && Minitalk.socket.connected === true;
+	},
+	/**
 	 * 권한정보를 가져온다.
 	 *
 	 * @param string name 변수명
@@ -125,7 +133,7 @@ Minitalk.socket = {
 	 * @param object data 전송할 데이터
 	 */
 	send:function(protocol,data) {
-		if (protocol != "join" && Minitalk.socket.connecting !== true && Minitalk.socket.connected !== true) {
+		if (protocol != "join" && Minitalk.socket.isConnected() === false) {
 			Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("SEND_ERROR"));
 			return;
 		}
