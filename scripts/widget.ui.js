@@ -1176,8 +1176,13 @@ Minitalk.ui = {
 			
 			if (message.from === undefined) {
 				$messageBox.append($message);
+				if ($item !== null) Minitalk.ui.autoScroll($item);
 			} else {
+				var oHeight = $("div[data-message-id="+message.from+"]").outerHeight(true);
 				$("div[data-message-id="+message.from+"]").replaceWith($message);
+				var nHeight = $("div[data-message-id="+message.id+"]").outerHeight(true);
+				
+				Minitalk.ui.scrollBy(nHeight - oHeight)
 			}
 		}
 		
