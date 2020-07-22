@@ -1,0 +1,12 @@
+php_value  display_errors  true
+
+<LimitExcept GET POST PUT DELETE OPTIONS>
+	Order Allow,Deny
+	Deny from all
+</LimitExcept>
+
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^admin/([^\/]+)/?$ admin/index.php?menu=$1 [L]

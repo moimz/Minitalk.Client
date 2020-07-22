@@ -25,6 +25,8 @@ if ($logged !== null && $logged->language == 'ko') {
 } else {
 	$fontStyle = '../styles/font.css.php?font=moimz,XEIcon,FontAwesome,OpenSans&default=OpenSans';
 }
+
+$current = Request('menu') ? Request('menu') : 'server';
 ?>
 <!DOCTYPE HTML>
 <html lang="<?php echo $logged == null ? 'en' : $logged->language; ?>">
@@ -767,10 +769,11 @@ Ext.onReady(function () {
 					render:function(tab) {
 						tab.getTabBar().setVisible(false);
 					},
-					afterRender:function() {
-						if (location.hash && location.hash.split("!").length == 2) {
-							var panel = location.hash.split("!").pop();
-							Ext.getCmp("MinitalkTabPanel").setActiveTab("MinitalkPanel-"+panel);
+					afterRender:function(tabs) {
+						if (Ext.getCmp("MinitalkTabPanel").getActiveTab().getId() == "MinitalkPanel-<?php echo $current; ?>") {
+							tabs.fireEvent("tabchange",tabs,Ext.getCmp("MinitalkTabPanel").getActiveTab());
+						} else {
+							Ext.getCmp("MinitalkTabPanel").setActiveTab("MinitalkPanel-<?php echo $current; ?>");
 						}
 					},
 					tabchange:function(tabs,tab) {
@@ -778,9 +781,9 @@ Ext.onReady(function () {
 						$("#MinitalkHeader li.selected").removeClass("selected");
 						$("#MinitalkHeader button[data-tab="+panel+"]").parent().addClass("selected");
 						
-						if (!location.hash || location.hash.split("!").pop() != panel) {
-							history.pushState({panel:panel},document.title,location.pathname + "#!" + panel);
-						}
+						var title = $("#MinitalkHeader button[data-tab="+panel+"]").text() + " - " + $("title").text().split(" - ").pop();
+						history.pushState({panel:panel},title,"<?php echo __MINITALK_DIR__; ?>/admin/" + panel);
+						document.title = title;
 					}
 				}
 			}),
