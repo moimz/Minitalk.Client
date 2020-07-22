@@ -441,13 +441,28 @@ class Minitalk {
 	/**
 	 * 미니톡 클라이언트 API 주소를 가져온다.
 	 *
-	 * @return boolean $is_fullurl 전체주소포함 여부
+	 * @paran boolean $is_fullurl 전체주소포함 여부
+	 * @return string $url
 	 */
 	function getClientApiUrl($is_fullurl=false) {
 		if ($is_fullurl == true) $url = (IsHttps() == true ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'];
 		else $url = '';
 		
 		return $url.__MINITALK_DIR__.'/api/index.php';
+	}
+	
+	/**
+	 * 미니톡 클라이언트 프로세스 주소를 가져온다.
+	 *
+	 * @param string $action 프로세스액션명
+	 * @paran boolean $is_fullurl 전체주소포함 여부
+	 * @return string $url
+	 */
+	function getClientProcessUrl($action,$is_fullurl=false) {
+		if ($is_fullurl == true) $url = (IsHttps() == true ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'];
+		else $url = '';
+		
+		return $url.__MINITALK_DIR__.'/process/'.$action;
 	}
 	
 	/**
