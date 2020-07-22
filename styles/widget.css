@@ -75,6 +75,8 @@ div[data-role=window] section[data-tab=configs] > button[data-action=close] {dis
  * 탭바형식이 세로형식을 경우, 채팅탭이 항상 표시되므로, 푸터영역도 항상 표시되도록 설정한다.
  */
 footer {position:absolute; z-index:3; width:100%; display:none;}
+footer > div[data-role=progress] {display:none;}
+footer > div[data-role=progress] > div {width:0;}
 footer > ul[data-role=tools] {list-style:none; white-space:nowrap; overflow:hidden;}
 footer > ul[data-role=tools] > li {display:inline-block;}
 footer > ul[data-role=lists] {display:none; position:absolute; z-index:5;}

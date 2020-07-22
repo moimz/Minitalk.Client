@@ -51,6 +51,7 @@ Minitalk.ui = {
 			 * 위젯푸터
 			 */
 			'	<footer>',
+			'		<div data-role="progress"><div></div></div>',
 			'		<div data-role="layers"></div>',
 			'		<ul data-role="tools"></ul>',
 			'		<ul data-role="lists"></ul>',
@@ -1185,8 +1186,26 @@ Minitalk.ui = {
 				Minitalk.ui.scrollBy(nHeight - oHeight)
 			}
 		}
+	/**
+	 * 프로그래스바를 출력한다.
+	 *
+	 * @param int current 현재 진행율
+	 * @param int total 전체 진행율
+	 */
+	progress:function(current,total) {
+		var $progress = $("div[data-role=progress]");
+		if (total == 0) {
+			$("div",$progress).css("width",0);
+			$progress.hide();
+			return;
+		}
 		
-		if ($item !== null) Minitalk.ui.autoScroll($item);
+		$("div",$progress).css("width",Math.round(current / total * 100) + "%");
+		$progress.show();
+		
+		if (current == total) {
+			setTimeout(function($progress) { $("div",$progress).css("width",0); $progress.hide(); },1000,$progress);
+		}
 	},
 	/**
 	 * 채팅창의 스크롤을 특정위치로 이동한다.
