@@ -105,10 +105,23 @@ class Minitalk {
 	 * @return DB $DB
 	 */
 	function db($code='default',$prefix=null) {
-		if ($this->DB == null) $this->DB = new DB($this);
+		if ($this->DB == null || $this->DB->ping() === false) {
+			$DB = new DB($this);
+			$prefix = $prefix === null ? __MINITALK_DB_PREFIX__ : $prefix;
+			$this->DB = $DB->get($code,$prefix);
+		}
 		
-		$prefix = $prefix === null ? __MINITALK_DB_PREFIX__ : $prefix;
-		return $this->DB->get($code,$prefix);
+		return $this->DB;
+	}
+	
+	/**
+	 * 사용중인 DB테이블 별칭을 이용하여 실제 DB테이블 명을 반환한다.
+	 *
+	 * @param string $table DB테이블 별칭
+	 * @return string $table 실제 DB테이블 명
+	 */
+	function getTable($table) {
+		return empty($this->table->$table) == true ? null : $this->table->$table;
 	}
 	
 	/**
