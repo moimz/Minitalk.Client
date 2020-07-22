@@ -131,7 +131,7 @@ if (isMinitalkIncluded === undefined) {
 		 * 프로세스 경로를 가져온다.
 		 */
 		this.getProcessUrl = function(action) {
-			return this.getUrl() + "/process/index.php?action="+action;
+			return this.getUrl() + "/process/"+action;
 		};
 		
 		/**

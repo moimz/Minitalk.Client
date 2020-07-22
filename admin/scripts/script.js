@@ -776,7 +776,7 @@ var Minitalk = {
 	 * 프로세스 경로를 가져온다.
 	 */
 	getProcessUrl:function(action) {
-		return Minitalk.getUrl() + "/process/index.php?action="+action;
+		return Minitalk.getUrl() + "/process/"+action;
 	},
 	/**
 	 * 미니톡 클라이언트 언어셋을 추가한다.
