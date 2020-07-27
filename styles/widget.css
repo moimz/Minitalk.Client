@@ -59,6 +59,18 @@ section[data-tab=chat] > div[data-role=item] > div.message div[data-role=website
 section[data-tab=chat] > div[data-role=item] > div.message div[data-role=website] > div[data-role=video] > div > div {position:absolute; top:0; left:0; border:0; width:100%; height:100%;}
 section[data-tab=chat] > div[data-role=item] > div.message div[data-role=website] > div[data-role=video] > div > div > iframe {width:100%; height:100%; border:0;}
 section[data-tab=chat] > div[data-role=item] > div.message div[data-role=website] > a > div[data-role=image] > div {width:100%; height:0; overflow:hidden; background-image:no-repeat; background-size:cover; background-position:50% 50%;}
+i[data-role=file] {display:block; background-size:contain; background-repeat:no-repeat; background-position:50% 50%;}
+i[data-role=file][data-type=document] {background-image:url(../images/file/document.png);}
+i[data-role=file][data-type=image] {background-image:url(../images/file/image.png);}
+i[data-role=file][data-type=video] {background-image:url(../images/file/video.png);}
+i[data-role=file][data-type=audio] {background-image:url(../images/file/audio.png);}
+i[data-role=file][data-type=archive] {background-image:url(../images/file/archive.png);}
+
+i[data-role=file][data-extension^=ppt] {background-image:url(../images/file/ppt.png);}
+i[data-role=file][data-extension^=doc] {background-image:url(../images/file/doc.png);}
+i[data-role=file][data-extension^=xls] {background-image:url(../images/file/xls.png);}
+i[data-role=file][data-extension^=hwp] {background-image:url(../images/file/hwp.png);}
+i[data-role=file][data-extension^=pdf] {background-image:url(../images/file/pdf.png);}
 
 /**
  * 환경설정탭
