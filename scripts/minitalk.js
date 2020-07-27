@@ -56,6 +56,40 @@ if (isMinitalkIncluded === undefined) {
 		getLoaderHtml:function(background) {
 			var background = background ? background : "#fff url("+MinitalkComponent.getUrl()+"/images/loading.gif) no-repeat 50% 50%;";
 			return '<div data-role="loading" style="position:absolute; width:100%; height:100%; top:0; left:0; z-index:10; box-sizing:border-box; border:1px solid rgba(0,0,0,0.1); z-index:100; background:'+background+';"></div>';
+		},
+		/**
+		 * 파일사이즈를 KB, MB, GB 단위로 변환한다.
+		 *
+		 * @param int fileSize 파일사이즈 (byte단위)
+		 * @param boolean isKiB 1000 으로 나눈 값이 아닌 1024로 나눈 KiB 단위사용 여부
+		 */
+		getFileSize:function(fileSize,isKiB) {
+			var isKiB = isKiB === true;
+			var depthSize = isKiB == true ? 1024 : 1000;
+			
+			fileSize = parseInt(fileSize);
+			return depthSize > fileSize ? fileSize+"B" : depthSize * depthSize > fileSize ? (fileSize/depthSize).toFixed(2)+(isKiB == true ? "KiB" : "KB") : depthSize * depthSize * depthSize > fileSize ? (fileSize/depthSize/depthSize).toFixed(2)+(isKiB == true ? "MiB" : "MB") : (fileSize/depthSize/depthSize/depthSize).toFixed(2)+(isKiB == true ? "GiB" : "GB");
+		},
+		getNumberFormat:function(number,decimals,dec_point,thousands_sep) {
+			number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+			var n = !isFinite(+number) ? 0 : +number,
+				prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+				sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+				dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+				s = '',
+				toFixedFix = function (n, prec) {
+					var k = Math.pow(10, prec);
+					return '' + Math.round(n * k) / k;
+				};
+			s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+			if (s[0].length > 3) {
+				s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+			}
+			if ((s[1] || '').length < prec) {
+				s[1] = s[1] || '';
+				s[1] += new Array(prec - s[1].length + 1).join('0');
+			}
+			return s.join(dec);
 		}
 	};
 	
