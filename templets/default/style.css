@@ -139,6 +139,9 @@ footer > div[data-role=input] > button[disabled] > i {color:#ccc;}
  * 채팅탭
  */
 section[data-tab=chat] {height:calc(100% - 35px);} /* 채팅탭의 경우, 푸터영역의 기본크기만큼 높이를 줄여준다. */
+section[data-tab=chat] > div[data-role] > div[data-role=photo] {float:left; width:34px; height:34px; margin-right:6px; background-image:url(./images/nophoto.png); background-repeat:no-repeat; background-size:cover; background-position:50% 50%; border-radius:50%; box-sizing:border-box; border:1px solid #eee;}
+section[data-tab=chat] > div[data-role] > div[data-role=nickname] {float:left; width:calc(100% - 50px); font-size:12px; font-weight:bold; height:16px; line-height:16px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; margin-top:3px;}
+
 section[data-tab=chat] > div[data-role=item] {margin:5px; -ms-word-break:break-all; word-wrap:break-word; -ms-user-select:auto; -moz-user-select:auto; -webkit-user-select:auto;}
 section[data-tab=chat] > div[data-role=item].system {padding:5px; font-size:12px; line-height:1.4; text-align:justify;}
 section[data-tab=chat] > div[data-role=item].system.info {border:1px solid #18295b; background:#2847a0; color:#fff;}
@@ -146,28 +149,35 @@ section[data-tab=chat] > div[data-role=item].system.action {border:1px solid #23
 section[data-tab=chat] > div[data-role=item].system.error {border:1px solid #b82332; background:#d33948; color:#fff;}
 section[data-tab=chat] > div[data-role=item].system.user {color:#666; margin:0px; padding:2px 5px;}
 
-section[data-tab=chat] > div[data-role=item].chat {margin:5px;}
-section[data-tab=chat] > div[data-role=item].chat:after {clear:both; content:""; display:block;}
-section[data-tab=chat] > div[data-role=item].chat > div.photo {float:left; width:34px; height:34px; margin-right:6px; background-image:url(./images/nophoto.png); background-repeat:no-repeat; background-size:cover; background-position:50% 50%; border-radius:50%; box-sizing:border-box; border:1px solid #eee;}
-section[data-tab=chat] > div[data-role=item].chat > div.nickname {float:left; width:calc(100% - 50px); font-size:12px; font-weight:bold; height:16px; line-height:16px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; margin-top:3px;}
-section[data-tab=chat] > div[data-role=item].chat > div.message {float:left; width:calc(100% - 50px); box-sizing:border-box;}
-section[data-tab=chat] > div[data-role=item].chat > div.message > div > div {margin:0px; font-size:12px; color:#222; line-height:1.6;}
-section[data-tab=chat] > div[data-role=item].chat > div.message > div > div > span.text:after {content:"-"; color:#fff;}
-section[data-tab=chat] > div[data-role=item].chat > div.message > div > div > span.time {color:#666; white-space:nowrap;}
-section[data-tab=chat] > div[data-role=item].chat > div.message > div > div > span.time > time {display:none; font-size:10px;}
-section[data-tab=chat] > div[data-role=item].chat > div.message > div > div > span.time > time:before {content:"(";}
-section[data-tab=chat] > div[data-role=item].chat > div.message > div > div > span.time > time:after {content:")";}
-section[data-tab=chat] > div[data-role=item].chat > div.message > div > div > span.time > i.sending {color:#999; font-family:moimz; font-size:10px; font-style:normal;}
-section[data-tab=chat] > div[data-role=item].chat > div.message > div > div > span.time > i.sending:before {content:"\ef17";}
-section[data-tab=chat] > div[data-role=item].chat > div.message > div:last-child > div > span.time > time {display:inline-block;}
-section[data-tab=chat] > div[data-role=item].chat.whisper {color:#ff00ff;}
-section[data-tab=chat] > div[data-role=item].chat.whisper > div.message > div > div {color:#ff00ff;}
-section[data-tab=chat] > div[data-role=item].chat.log {opacity:0.5;}
 
-section[data-tab=chat] > div[data-role=item] > div.message div[data-role=website] {padding-top:5px; max-width:300px;}
-section[data-tab=chat] > div[data-role=item] > div.message div[data-role=website] > a {border:1px solid #ccc; color:#222; text-decoration:none;}
-section[data-tab=chat] > div[data-role=item] > div.message div[data-role=website] > a > h4 {box-sizing:border-box; width:100%; padding:8px 8px 5px 8px; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;}
-section[data-tab=chat] > div[data-role=item] > div.message div[data-role=website] > a > p {display:-webkit-box; padding:0px 8px 8px 8px; line-height:20px; min-height:20px; max-height:40px; overflow:hidden; white-space:normal; -webkit-line-clamp:2; text-overflow:ellipsis; -webkit-box-orient:vertical; color:#666;}
+
+section[data-tab=chat] > div[data-role=message] {margin:5px;}
+section[data-tab=chat] > div[data-role=message]:after {clear:both; content:""; display:block;}
+
+section[data-tab=chat] > div[data-role=message] > div.box {float:left; width:calc(100% - 50px); box-sizing:border-box;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=normal] {margin:0px; font-size:12px; color:#222; line-height:1.6;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=normal] > span.text:after {content:"-"; color:#fff;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=normal] > span.time {color:#666; white-space:nowrap;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=normal] > span.time > time {display:none; font-size:10px;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=normal] > span.time > time:before {content:"(";}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=normal] > span.time > time:after {content:")";}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=normal] > span.time > i.sending {color:#999; font-family:moimz; font-size:10px; font-style:normal;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=normal] > span.time > i.sending:before {content:"\ef17";}
+section[data-tab=chat] > div[data-role=message] > div.box > div:last-child > div > span.time > time {display:inline-block;}
+section[data-tab=chat] > div[data-role=message].whisper {color:#ff00ff;}
+section[data-tab=chat] > div[data-role=message].whisper > div.box > div > div[data-role=normal] {color:#ff00ff;}
+section[data-tab=chat] > div[data-role=message].log {opacity:0.5;}
+
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=file] {padding:5px 0px; max-width:300px;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=file] > a {border:1px solid #ccc; color:#222; text-decoration:none; font-size:0;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=file] > a > i {display:block; float:left; width:30px; height:30px; margin:10px; vertical-align:middle;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=file] > a > b {display:block; width:calc(100% - 60px); height:20px; line-height:20px; font-size:12px; color:#222; margin:5px 10px 0px 0px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=file] > a > p {display:block; width:calc(100% - 60px); height:20px; line-height:20px; font-size:12px; color:#666; margin:0px 10px 5px 0px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;}
+
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=website] {padding:5px 0px; max-width:300px;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=website] > a {border:1px solid #ccc; color:#222; text-decoration:none;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=website] > a > h4 {box-sizing:border-box; width:100%; padding:8px 8px 5px 8px; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; font-size:12px;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=website] > a > p {display:-webkit-box; padding:0px 8px 8px 8px; line-height:20px; min-height:20px; max-height:40px; overflow:hidden; white-space:normal; -webkit-line-clamp:2; text-overflow:ellipsis; -webkit-box-orient:vertical; color:#666; font-size:12px;}
 
 
 /**
@@ -175,10 +185,8 @@ section[data-tab=chat] > div[data-role=item] > div.message div[data-role=website
  */
 section[data-tab=chat] > div[data-role=user] {margin:5px;}
 section[data-tab=chat] > div[data-role=user]:after {clear:both; content:""; display:block;}
-section[data-tab=chat] > div[data-role=user] > div.photo {float:left; width:34px; height:34px; margin-right:6px; background-image:url(./images/nophoto.png); background-repeat:no-repeat; background-size:cover; background-position:50% 50%; border-radius:50%; box-sizing:border-box; border:1px solid #eee;}
-section[data-tab=chat] > div[data-role=user] > div.nickname {float:left; width:calc(100% - 50px); font-size:12px; font-weight:bold; height:16px; line-height:16px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; margin-top:3px;}
-section[data-tab=chat] > div[data-role=user] > div.message {float:left; width:calc(100% - 50px); box-sizing:border-box;}
-section[data-tab=chat] > div[data-role=user] > div.message > div > div {margin:0px; font-size:12px; line-height:1.6;}
+section[data-tab=chat] > div[data-role=user] > div.box {float:left; width:calc(100% - 50px); box-sizing:border-box;}
+section[data-tab=chat] > div[data-role=user] > div.box > div > div {margin:0px; font-size:12px; line-height:1.6;}
 section[data-tab=chat] > div[data-role=user].join {color:#308f2b;}
 section[data-tab=chat] > div[data-role=user].leave {color:#222; opacity:0.5;}
 

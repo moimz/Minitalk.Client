@@ -52,13 +52,16 @@ div[data-role=window] section[data-tab] {position:static; width:100%; height:aut
 /**
  * 특수요소별 기본속성을 정의힌다.
  */
-section[data-tab=chat] > div[data-role=item] > div.photo {cursor:pointer;}
-section[data-tab=chat] > div[data-role=user] > div.photo {cursor:pointer;}
-section[data-tab=chat] > div[data-role=item] > div.message div[data-role=website] > a {display:block;}
-section[data-tab=chat] > div[data-role=item] > div.message div[data-role=website] > div[data-role=video] > div {position:relative; width:100%; height:0; overflow:hidden;}
-section[data-tab=chat] > div[data-role=item] > div.message div[data-role=website] > div[data-role=video] > div > div {position:absolute; top:0; left:0; border:0; width:100%; height:100%;}
-section[data-tab=chat] > div[data-role=item] > div.message div[data-role=website] > div[data-role=video] > div > div > iframe {width:100%; height:100%; border:0;}
-section[data-tab=chat] > div[data-role=item] > div.message div[data-role=website] > a > div[data-role=image] > div {width:100%; height:0; overflow:hidden; background-image:no-repeat; background-size:cover; background-position:50% 50%;}
+*[data-role=photo] {cursor:pointer !important;}
+*[data-role=nickname] {cursor:pointer !important;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=file] > a {display:block;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=file] > a > div[data-role=image] > div {width:100%; height:0; overflow:hidden; background-image:no-repeat; background-size:cover; background-position:50% 50%;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=website] > a {display:block;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=website] > div[data-role=video] > div {position:relative; width:100%; height:0; overflow:hidden;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=website] > div[data-role=video] > div > div {position:absolute; top:0; left:0; border:0; width:100%; height:100%;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=website] > div[data-role=video] > div > div > iframe {width:100%; height:100%; border:0;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=website] > a > div[data-role=image] > div {width:100%; height:0; overflow:hidden; background-image:no-repeat; background-size:cover; background-position:50% 50%;}
+
 i[data-role=file] {display:block; background-size:contain; background-repeat:no-repeat; background-position:50% 50%;}
 i[data-role=file][data-type=document] {background-image:url(../images/file/document.png);}
 i[data-role=file][data-type=image] {background-image:url(../images/file/image.png);}
@@ -95,12 +98,6 @@ footer > ul[data-role=lists] {display:none; position:absolute; z-index:5;}
 footer.open > ul[data-role=lists] {display:block;}
 div[data-role=frame][data-current-tab=chat] > footer {display:block;}
 div[data-role=frame][data-tab-type=vertical] > footer {display:block;}
-
-/**
- * 유저관련
- */
-*[data-role=photo] {cursor:pointer !important;}
-*[data-role=nickname] {cursor:pointer !important;}
 
 /**
  * 유저메뉴
