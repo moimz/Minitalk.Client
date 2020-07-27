@@ -591,6 +591,7 @@ Minitalk.ui = {
 		}
 		
 		if (tab == "boxes") {
+			Minitalk.ui.createBoxes();
 		}
 		
 		if (tab == "configs") {
@@ -699,6 +700,107 @@ Minitalk.ui = {
 					if (result.pagination.keyword == null && i > 0 && user.nickname == Minitalk.user.me.nickname) continue;
 					
 					$item.append(Minitalk.user.getTag(user));
+					$lists.append($item);
+				}
+				
+				$keyword.data("latest",result.pagination.keyword);
+			}
+			
+			$search.enable();
+		});
+	},
+	/**
+	 * 박스탭을 구성한다.
+	 *
+	 * @param object $button 박스탭 액션버튼 (없을경우 탭 DOM 을 구현한다.)
+	 */
+	createBoxes:function($button) {
+		var $frame = $("div[data-role=frame]");
+		var $section = $("section[data-tab=boxes]",$frame);
+		
+		if ($button === undefined) {
+			$section.empty();
+			
+			/**
+			 * 박스탭 HTML 을 정의한다.
+			 */
+			var html = [
+				'<div data-role="search">',
+					'<input type="search" placeholder="' + Minitalk.getText("nickname") + '">',
+					'<button type="button" data-action="search"><i></i><span>' + Minitalk.getText("button/search") + '</span></button>',
+					'<button type="button" data-action="refresh"><i></i><span>' + Minitalk.getText("button/refresh") + '</span></button>',
+					'<button type="button" data-action="create"><i></i><span>' + Minitalk.getText("button/create_box") + '</span></button>',
+				'</div>',
+				'<ul></ul>'
+			];
+			
+			$section.append(html.join(""));
+			
+			/**
+			 * 액션버튼 이벤트를 등록한다.
+			 */
+			$("button[data-action]",$section).on("click",function(e) {
+				var $button = $(this);
+				var action = $button.attr("data-action");
+				
+				if (action == "create") {
+					Minitalk.box.create();
+				} else {
+					Minitalk.ui.createBoxes($(this));
+					e.stopImmediatePropagation();
+				}
+			});
+		}
+		
+		var $keyword = $("input[type=search]",$section);
+		var $search = $("button[data-action=search]",$section);
+		var $lists = $("ul",$section);
+		
+		/**
+		 * 새로고침버튼이벤트일 경우, 기존 검색어를 사용한다.
+		 */
+		if ($button !== undefined && $button.attr("data-action") == "refresh") {
+			$keyword.val($keyword.data("latest") ? $keyword.data("latest") : "");
+		}
+		var keyword = $keyword.val();
+		
+		$search.disable();
+		$lists.empty();
+		$lists.append($("<li>").addClass("loading").append($("<i>").addClass("mi mi-loading")));
+		
+		/**
+		 * 검색창 ENTER 이벤트 추가
+		 */
+		$keyword.on("keypress",function(e) {
+			if (e.keyCode == 13) {
+				Minitalk.ui.createBoxes($search);
+				e.stopImmediatePropagation();
+			}
+		});
+		
+		/**
+		 * 박스목록을 무한히 갱신하는 것을 방지하기 위해 새로고침 버튼을 일정시간 비활성화시킨다.
+		 */
+		var $refresh = $("button[data-action=refresh]",$section);
+		$refresh.disable();
+		if ($refresh.data("timer")) {
+			clearTimeout($refresh.data("timer"));
+			$refresh.data("timer",null);
+		}
+		$refresh.data("timer",setTimeout(function($refresh) { $refresh.data("timer",null); $refresh.enable(); },5000,$refresh));
+		
+		Minitalk.box.getBoxes(1,keyword,function(result) {
+			if (result.success == true) {
+				/**
+				 * 기존 박스목록을 제거한다.
+				 */
+				$lists.empty();
+				
+				for (var i=0, loop=result.boxes.length;i<loop;i++) {
+					var box = result.boxes[i];
+					var $item = $("<li>");
+					
+					$item.append(Minitalk.box.getTag(box));
 					$lists.append($item);
 				}
 				
@@ -954,12 +1056,6 @@ Minitalk.ui = {
 			$("div[data-role=cover]",$("div[data-role=frame]")).remove();
 		}
 	},
-	/**
-	 * 개인박스을 개설한다.
-	 */
-	},
-	/**
-	 */
 	/**
 	 * 채널타이틀을 출력한다.
 	 *
