@@ -22,6 +22,11 @@ Minitalk.ui = {
 			'<div data-role="frame">',
 			
 			/**
+			 * 파일첨부를 위한 파일선택폼 추가
+			 */
+			'<input type="file" style="display:none;">',
+			
+			/**
 			 * 알림메시지 위치
 			 */
 			'	<div data-role="notifications"></div>',
@@ -105,6 +110,20 @@ Minitalk.ui = {
 			}
 			e.stopPropagation();
 			e.preventDefault();
+		});
+		
+		/**
+		 * 파일첨부 이벤트 추가
+		 */
+		$("input[type=file]").on("change",function(e) {
+			if (e.target.files.length > 0) {
+				$(this).data("files",null);
+				$(this).data("drafts",null);
+				$(this).data("current",null);
+				$(this).data("files",e.target.files);
+				
+				Minitalk.ui.uploadFiles();
+			}
 		});
 		
 		Minitalk.ui.initFrame();
@@ -796,7 +815,11 @@ Minitalk.ui = {
 		if (Minitalk.fireEvent("beforeActiveTool",[tool,$tool,e]) === false) return;
 		
 		if (typeof tool == "string") {
-			
+			switch (tool) {
+				case "file" :
+					$("input[type=file]").trigger("click");
+					break;
+			}
 		} else {
 			if (typeof tool.handler == "function") {
 				tool.handler(e);
@@ -1186,6 +1209,141 @@ Minitalk.ui = {
 				Minitalk.ui.scrollBy(nHeight - oHeight)
 			}
 		}
+	/**
+	 * 파일을 업로드한다.
+	 */
+	uploadFiles:function() {
+		var $file = $("input[type=file]");
+		
+		/**
+		 * 서버접속중이 아니라면 파일전송을 중단한다.
+		 */
+		if (Minitalk.socket.isConnected() === false) {
+			$file.data("files",null);
+			$file.data("drafts",null);
+			$file.data("current",null);
+			$file.val("");
+		}
+		
+		Minitalk.ui.disable(true);
+		
+		var files = $file.data("files") !== null && typeof $file.data("files") == "object" && $file.data("files").length > 0 ? $file.data("files") : [];
+		if (files.length == 0) return;
+		
+		var current = $file.data("current") !== null && typeof $file.data("current") == "number" ? $file.data("current") : null;
+		var drafts = $file.data("drafts") !== null && typeof $file.data("drafts") == "object" && $file.data("drafts").length > 0 ? $file.data("drafts") : [];
+		
+		/**
+		 * 파일이 전송중이라면, 이어서 전송하고 아니라면 대용량 업로드를 위한 업로드주소를 할당받는다.
+		 */
+		if (current === null) {
+			var drafts = [];
+			for (var i=0, loop=files.length;i<loop;i++) {
+				var draft = {};
+				draft.name = files[i].name;
+				draft.size = files[i].size;
+				draft.type = files[i].type;
+				
+				drafts.push(draft);
+			}
+			$.send(Minitalk.getProcessUrl("uploadFiles"),{channel:Minitalk.channel,drafts:JSON.stringify(drafts),user:JSON.stringify(Minitalk.user.me)},function(result) {
+				if (result.success == true) {
+					$file.data("drafts",result.drafts);
+					$file.data("current",0);
+					
+					for (var i=0, loop=files.length;i<loop;i++) {
+						files[i].uploaded = 0;
+					}
+					
+					Minitalk.ui.uploadFiles();
+				} else {
+					// @todo 파일정보전송 실패시 에러메시지 출력
+				}
+			});
+		} else {
+			var draft = drafts[current];
+			var file = files[current];
+			if (draft === undefined || file === undefined) return;
+			
+			var chunkSize = 2 * 1000 * 1000;
+			file.chunk = file.size > file.uploaded + chunkSize ? file.uploaded + chunkSize : file.size;
+			
+			$.ajax({
+				url:Minitalk.getProcessUrl("uploadFiles")+"?code="+encodeURIComponent(draft.code),
+				method:"POST",
+				contentType:file.type,
+				headers:{
+					"Content-Range":"bytes " + file.uploaded + "-" + (file.chunk - 1) + "/" + file.size
+				},
+				xhr:function() {
+					var xhr = $.ajaxSettings.xhr();
+	
+					if (xhr.upload) {
+						xhr.upload.addEventListener("progress",function(e) {
+							if (e.lengthComputable) {
+								// @todo 여러개의 파일업로드를 동시에 진행할때, 프로그래스바를 어떻게 보이게 할 것인가?
+								Minitalk.ui.progress(file.uploaded + e.loaded,file.size);
+							}
+						},false);
+					}
+	
+					return xhr;
+				},
+				processData:false,
+				data:file.slice(file.uploaded,file.chunk)
+			}).done(function(result) {
+				if (result.success == true) {
+					file.failCount = 0;
+					file.uploaded = result.uploaded;
+					
+					/**
+					 * 하나의 파일의 전송이 모두 완료되었을 경우
+					 */
+					if (file.chunk == file.size) {
+						/**
+						 * 파일정보를 읽은 후 채팅서버에 전송한다.
+						 */
+						Minitalk.socket.send("file",result.file);
+						
+						/**
+						 * 다음에 업로드해야하는 파일이 존재할 경우
+						 */
+						if (files.length > current + 1) {
+							$file.data("current",current + 1);
+							Minitalk.ui.uploadFiles();
+						} else {
+							/**
+							 * 모든파일의 업로드가 완료되었을 경우
+							 */
+							$file.data("files",null);
+							$file.data("drafts",null);
+							$file.data("current",null);
+							$file.val("");
+							
+							/**
+							 * UI를 다시 활성화한다.
+							 */
+							Minitalk.ui.enable(true);
+						}
+					} else {
+						Minitalk.ui.uploadFiles();
+					}
+				} else {
+					if (file.failCount < 3) {
+//						file.failCount++;
+//						Attachment.upload(id);
+					} else {
+//						file.status = "FAIL";
+					}
+				}
+			}).fail(function() {
+				if (file.failCount < 3) {
+//					file.failCount++;
+//					Attachment.upload(id);
+				}
+			});
+		}
+	},
 	/**
 	 * 프로그래스바를 출력한다.
 	 *
