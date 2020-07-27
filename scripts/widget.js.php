@@ -39,8 +39,6 @@ $js->add('Minitalk.LANG = '.$lang.';');
 $js->add('Minitalk.language = "'.$language.'";');
 
 $js->add(__MINITALK_PATH__.'/scripts/jquery.extend.js');
-
-
 $js->add(__MINITALK_PATH__.'/scripts/moment.js');
 
 if ($channel !== null) {
