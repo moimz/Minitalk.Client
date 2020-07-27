@@ -13,14 +13,17 @@
 REQUIRE_ONCE str_replace(DIRECTORY_SEPARATOR.'styles'.DIRECTORY_SEPARATOR.'box.css.php','',$_SERVER['SCRIPT_FILENAME']).'/configs/init.config.php';
 header("Content-Type:text/css; charset=utf-8");
 
-$channel = isset($_GET['channel']) == true ? $_GET['channel'] : 'example';
-$templet = isset($_GET['templet']) == true ? $_GET['templet'] : 'default';
-$language = 'ko';
+$channel = isset($_GET['channel']) == true ? $_GET['channel'] : null;
+$templet = isset($_GET['templet']) == true ? $_GET['templet'] : null;
+$languages = GetDefaultLanguages();
+foreach ($languages as $language) {
+	if (is_file(__MINITALK_PATH__.'/languages/'.$language.'.json') == true) break;
+}
 
 $minifier = new Minifier();
 $css = $minifier->css();
 
-$css->add(file_get_contents(__MINITALK_PATH__.'/styles/fonts/moimz.css'));
+$css->add(__MINITALK_PATH__.'/styles/fonts/moimz.css');
 
 /**
  * 언어별 기본 웹폰트를 불러온다.
@@ -30,7 +33,9 @@ if ($language == 'ko') {
 	$css->add('html, body {font-family:NanumSquare;}');
 }
 
-if (is_file(__MINITALK_PATH__.'/templets/'.$templet.'/style.css') == true) {
+$css->add(__MINITALK_PATH__.'/styles/widget.css');
+
+if ($templet !== null && is_file(__MINITALK_PATH__.'/templets/'.$templet.'/style.css') == true) {
 	$css->add(__MINITALK_PATH__.'/templets/'.$templet.'/style.css');
 }
 ?>
