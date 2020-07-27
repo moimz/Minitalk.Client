@@ -1380,6 +1380,17 @@ Minitalk.ui = {
 		}
 	},
 	/**
+	 * 채팅창의 특정픽셀만큼 스크롤한다.
+	 *
+	 * @param int scroll 스크롤할 픽셀
+	 */
+	scrollBy:function(scroll) {
+		var $chat = $("section[data-tab=chat]");
+		if ($chat.length == 0) return;
+		
+		$chat.scrollTop($chat.scrollTop() + scroll);
+	},
+	/**
 	 * 메시지 입력창의 내용을 수정한다.
 	 *
 	 * @param string message 수정할 내용
