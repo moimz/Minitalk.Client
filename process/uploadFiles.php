@@ -93,7 +93,7 @@ if ($code != null) {
 				$file = $this->db()->select($this->table->attachment,'name,size,type,width,height,exp_date')->where('hash',$hash)->getOne();
 				
 				$results->success = true;
-				$file->exetension = $this->getFileExtension($file->name);
+				$file->extension = $this->getFileExtension($file->name);
 				
 				if ($file->type == 'image') {
 					$file->view = $this->getClientProcessUrl('attachment',true).'/view/'.$hash.'/'.$file->name;

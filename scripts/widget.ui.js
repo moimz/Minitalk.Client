@@ -1356,6 +1356,7 @@ Minitalk.ui = {
 			if (message.data.type == "image") {
 				var $image = $("<div>").attr("data-role","image");
 				var $innerimage = $("<div>").css("backgroundImage","url(" + message.data.view + ")");
+				
 				/**
 				 * 가로 세로 크기 데이터가 있을 경우, 세로 % 를 계산하고, 그렇지 않은 경우 16:10 비율로 표시한다.
 				 */
@@ -1373,7 +1374,7 @@ Minitalk.ui = {
 				$image.append($innerimage);
 				$link.append($image);
 			} else {
-				var $icon = $("<i>").attr("data-role","file").attr("data-type",message.data.type).attr("data-extenstion",message.data.extension);
+				var $icon = $("<i>").attr("data-role","file").attr("data-type",message.data.type).attr("data-extension",message.data.extension);
 				var $name = $("<b>").html(message.data.name);
 				var $info = $("<p>");
 				var $size = $("<span>").addClass("size").html(MinitalkComponent.getFileSize(message.data.size));
