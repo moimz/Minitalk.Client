@@ -29,39 +29,39 @@ Minitalk.ui = {
 			/**
 			 * 알림메시지 위치
 			 */
-			'	<div data-role="notifications"></div>',
+			'<div data-role="notifications"></div>',
 			
 			/**
 			 * 위젯헤더
 			 */
-			'	<header>',
-			'		<h1>connecting...</h1>', // 위젯타이틀
-			'		<label data-role="count"></label>', // 접속자수
-			'	</header>',
+			'<header>',
+				'<h1>connecting...</h1>', // 위젯타이틀
+				'<label data-role="count"></label>', // 접속자수
+			'</header>',
 			
 			/**
 			 * 탭바
 			 */
-			'	<aside>',
-			'		<ul data-role="tabs"></ul>',
-			'		<ul data-role="lists"></ul>',
-			'	</aside>',
+			'<aside>',
+				'<ul data-role="tabs"></ul>',
+				'<ul data-role="lists"></ul>',
+			'</aside>',
 			
 			/**
 			 * 활성화된 탭이 표시되는 영역
 			 */
-			'	<main></main>',
+			'<main></main>',
 			
 			/**
 			 * 위젯푸터
 			 */
-			'	<footer>',
-			'		<div data-role="progress"><div></div></div>',
-			'		<div data-role="layers"></div>',
-			'		<ul data-role="tools"></ul>',
-			'		<ul data-role="lists"></ul>',
-			'		<div data-role="input"><textarea type="text" data-role="message"></textarea><button type="button"><i class="icon"></i><span>' + Minitalk.getText("button/send") + '</button></div>',
-			'	</footer>',
+			'<footer>',
+				'<div data-role="progress"><div></div></div>',
+				'<div data-role="layers"></div>',
+				'<ul data-role="tools"></ul>',
+				'<ul data-role="lists"></ul>',
+				'<div data-role="input"><textarea type="text" data-role="message"></textarea><button type="button"><i class="icon"></i><span>' + Minitalk.getText("button/send") + '</button></div>',
+			'</footer>',
 			
 			/**
 			 * 위젯 끝
@@ -626,9 +626,9 @@ Minitalk.ui = {
 			 */
 			var html = [
 				'<div data-role="search">',
-				'	<input type="search" placeholder="' + Minitalk.getText("nickname") + '">',
-				'	<button type="button" data-action="search"><i></i><span>' + Minitalk.getText("button/search") + '</span></button>',
-				'	<button type="button" data-action="refresh"><i></i><span>' + Minitalk.getText("button/refresh") + '</span></button>',
+					'<input type="search" placeholder="' + Minitalk.getText("nickname") + '">',
+					'<button type="button" data-action="search"><i></i><span>' + Minitalk.getText("button/search") + '</span></button>',
+					'<button type="button" data-action="refresh"><i></i><span>' + Minitalk.getText("button/refresh") + '</span></button>',
 				'</div>',
 				'<ul></ul>'
 			];
