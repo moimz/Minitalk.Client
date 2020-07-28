@@ -137,8 +137,8 @@ Minitalk.storage = function(name,value) {
  */
 Minitalk.log = function(message) {
 	if (window.sessionStorage === undefined) {
-		if (message === undefined) return return {ids:{},messages:[],latest:0};
-		else false;
+		if (message === undefined) return {ids:{},messages:[],latest:0};
+		else return false;
 	}
 	
 	var logs = {ids:{},messages:[],latest:0};
