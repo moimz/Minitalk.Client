@@ -62,8 +62,8 @@ Minitalk.getErrorText = function(code) {
  */
 Minitalk.session = function(name,value) {
 	if (window.sessionStorage === undefined) {
-		// @todo 개인정보보호모드일 경우 일부 기능이 제한될 수 있다는 안내메시지 출력
-		return;
+		if (value === undefined) return null;
+		else return false;
 	}
 	
 	var storage = {};
@@ -102,8 +102,8 @@ Minitalk.session = function(name,value) {
  */
 Minitalk.storage = function(name,value) {
 	if (window.localStorage === undefined) {
-		// @todo 개인정보보호모드일 경우 일부 기능이 제한될 수 있다는 안내메시지 출력
-		return;
+		if (value === undefined) return null;
+		else return false;
 	}
 	
 	var storage = {};
@@ -141,8 +141,8 @@ Minitalk.storage = function(name,value) {
  */
 Minitalk.log = function(message) {
 	if (window.sessionStorage === undefined) {
-		if (value === undefined) return false;
-		else return {ids:{},messages:[],latest:0};
+		if (value === undefined) return return {ids:{},messages:[],latest:0};
+		else false;
 	}
 	
 	var logs = {ids:{},messages:[],latest:0};
