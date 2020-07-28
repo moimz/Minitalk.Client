@@ -16,7 +16,7 @@ var Minitalk = MinitalkComponent.get($("html").attr("data-id"));
  * 미니톡 클라이언트의 언어셋을 가져온다.
  *
  * @param string code
- * @param string replacement 일치하는 언어코드가 없을 경우 반환될 메세지 (기본값 : null, $code 반환)
+ * @param string replacement 일치하는 언어코드가 없을 경우 반환될 메시지 (기본값 : null, $code 반환)
  * @return string language 실제 언어셋 텍스트
  */
 Minitalk.getText = function(code,replacement) {
@@ -41,10 +41,10 @@ Minitalk.getText = function(code,replacement) {
 };
 
 /**
- * 미니톡 클라이언트의 에러메세지 가져온다.
+ * 미니톡 클라이언트의 에러메시지 가져온다.
  *
  * @param string code 에러코드
- * @return string message 에러메세지
+ * @return string message 에러메시지
  */
 Minitalk.getErrorText = function(code) {
 	var message = Minitalk.getText("error/"+code,code);
@@ -62,17 +62,15 @@ Minitalk.getErrorText = function(code) {
  */
 Minitalk.session = function(name,value) {
 	if (window.sessionStorage === undefined) {
-		// @todo 개인정보보호모드일 경우 일부 기능이 제한될 수 있다는 안내메시지 출력
-		return;
+		if (value === undefined) return null;
+		else return false;
 	}
 	
 	var storage = {};
 	if (window.sessionStorage["Minitalk." + Minitalk.id + "." + Minitalk.channel] !== undefined) {
 		try {
 			storage = JSON.parse(window.sessionStorage["Minitalk." + Minitalk.id + "." + Minitalk.channel]);
-		} catch (e) {
-			storage = {};
-		}
+		} catch (e) {}
 	}
 	
 	if (value === undefined) {
@@ -102,17 +100,15 @@ Minitalk.session = function(name,value) {
  */
 Minitalk.storage = function(name,value) {
 	if (window.localStorage === undefined) {
-		// @todo 개인정보보호모드일 경우 일부 기능이 제한될 수 있다는 안내메시지 출력
-		return;
+		if (value === undefined) return null;
+		else return false;
 	}
 	
 	var storage = {};
 	if (window.localStorage["Minitalk." + Minitalk.id + "." + Minitalk.channel] !== undefined) {
 		try {
 			storage = JSON.parse(window.localStorage["Minitalk." + Minitalk.id + "." + Minitalk.channel]);
-		} catch (e) {
-			storage = {};
-		}
+		} catch (e) {}
 	}
 	
 	if (value === undefined) {
@@ -134,6 +130,18 @@ Minitalk.storage = function(name,value) {
 };
 
 /**
+ * 브라우져의 세션스토리지에 메시지로그를 저장한다.
+ * 박스의 경우 로그데이터를 따로 기록하지 않는다.
+ *
+ * @param object message 저장될 로그데이터 (없을 경우 저장되어있는 데이터를 반환한다.)
+ * @return boolean/any 데이터저장성공여부, 저장되어 있는 데이터
+ */
+Minitalk.log = function(message) {
+	if (message === undefined) return {ids:{},messages:[],latest:0};
+	else return true;
+};
+
+/**
  * 미니톡 환경설정 데이터를 저장한다.
  *
  * @param string name 변수명
@@ -145,7 +153,13 @@ Minitalk.configs = function(name,value) {
 	 * 기본설정값
 	 */
 	var defaults = {
-		
+		active_scroll:true,
+		browser_notification:false,
+		mute:false,
+		whisper:true,
+		whisper_sound:true,
+		call:true,
+		call_sound:true
 	};
 	
 	var configs = Minitalk.storage("configs") == null ? defaults : Minitalk.storage("configs");
