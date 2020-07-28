@@ -53,7 +53,7 @@ Minitalk.protocol = {
 		 * 채팅로그를 불러온다.
 		 */
 		if (Minitalk.logCount > 0) {
-			Minitalk.socket.send("logs",{count:Minitalk.logCount,time:(Minitalk.session("latestMessage") ? Minitalk.session("latestMessage") : 0)});
+			Minitalk.socket.send("logs",{count:Minitalk.logCount,time:Minitalk.log().latest});
 		} else {
 			Minitalk.socket.joined = true;
 		}
@@ -141,29 +141,15 @@ Minitalk.protocol = {
 	 * 채팅서버로 부터 이전대화기록을 받아 저장한다.
 	 */
 	logs:function(data) {
-		var ids = [];
-		var logs = $.merge((Minitalk.session("logs") ? Minitalk.session("logs") : []),data).filter(function(element) {
-			if ($.inArray(element.id,ids) === -1) {
-				ids.push(element.id);
-				return true;
-			}
-			return false;
-		});
-		logs.sort(function(left,right) {
-			return left.time > right.time;
-		});
-		while (logs.length > Minitalk.logCount) {
-			logs.shift();
+		for (var i=0, loop=data.length;i<loop;i++) {
+			Minitalk.log(data[i]);
 		}
-		Minitalk.session("logs",logs);
 		
-		var latestMessage = 0;
+		var logs = Minitalk.log().messages;
 		for (var i=0, loop=logs.length;i<loop;i++) {
 			Minitalk.ui.printChatMessage(logs[i],true);
-			latestMessage = logs[i].time;
 		}
 		
-		Minitalk.session("latestMessage",latestMessage);
 		Minitalk.socket.joined = true;
 	},
 	/**
@@ -183,36 +169,7 @@ Minitalk.protocol = {
 		/**
 		 * 수신된 메시지를 로컬 로그저장소에 저장한다.
 		 */
-		var logs = Minitalk.session("logs") ? Minitalk.session("logs") : [];
-		
-		/**
-		 * 기존의 메시지가 갱신되었고, 해당하는 메시지가 이미 로그에 존재한다면, 해당 로그를 대체한다.
-		 */
-		var is_replace = false;
-		if (replace) {
-			for (var i=0, loop=logs.length;i<loop;i++) {
-				if (logs[i].id == replace) {
-					logs[i] = data;
-					is_replace = true;
-					break;
-				}
-			}
-		}
-		
-		/**
-		 * 기존의 메시지가 아닌 경우, 신규 로그를 저장한다.
-		 */
-		if (is_replace === false) {
-			logs.push(data);
-			while (logs.length > Minitalk.logCount) {
-				logs.shift();
-			}
-		}
-		
-		Minitalk.session("logs",logs);
-		
-		var latestMessage = Minitalk.session("latestMessage") ? (Minitalk.session("latestMessage") < data.time ? data.time : Minitalk.session("latestMessage")) : data.time;
-		Minitalk.session("latestMessage",latestMessage);
+		Minitalk.log(data);
 	},
 	/**
 	 * 접속코드를 수신하였을 경우

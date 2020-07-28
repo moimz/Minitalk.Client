@@ -134,6 +134,76 @@ Minitalk.storage = function(name,value) {
 };
 
 /**
+ * 브라우져의 세션스토리지에 메시지로그를 저장한다.
+ *
+ * @param object message 저장될 로그데이터 (없을 경우 저장되어있는 데이터를 반환한다.)
+ * @return boolean/any 데이터저장성공여부, 저장되어 있는 데이터
+ */
+Minitalk.log = function(message) {
+	if (window.sessionStorage === undefined) {
+		if (value === undefined) return false;
+		else return {ids:{},messages:[],latest:0};
+	}
+	
+	var logs = {ids:{},messages:[],latest:0};
+	if (window.sessionStorage["Minitalk.#" + Minitalk.channel] !== undefined) {
+		try {
+			logs = JSON.parse(window.sessionStorage["Minitalk.#" + Minitalk.channel]);
+		} catch (e) {}
+	}
+	
+	if (message === undefined) {
+		return logs;
+	} else {
+		var ids = logs.ids;
+		var messages = logs.messages;
+		var latest = logs.latest;
+		
+		/**
+		 * 신규 메시지인 경우, 로그에 저장하고, 기존 메시지인 경우 저장된 로그를 대체한다.
+		 */
+		if (ids[message.id] === undefined) {
+			ids[message.id] = true;
+			messages.push(message);
+			
+			/**
+			 * 시간순서대로 로그를 정렬한다.
+			 */
+			messages.sort(function(left,right) {
+				return left.time > right.time;
+			});
+			
+			/**
+			 * 최대 로그수를 초과하는 이전 로그는 제거한다.
+			 */
+			while (logs.length > Minitalk.logCount) {
+				delete ids[logs.shift().id];
+			}
+			
+			/**
+			 * 마지막 로그메시지 시각을 기록한다.
+			 */
+			if (latest < message.time) latest = message.time;
+		} else {
+			for (var i=0, loop=messages.length;i<loop;i++) {
+				if (messages[i].id == message.id) {
+					messages[i] = message;
+					break;
+				}
+			}
+		}
+		
+		try {
+			window.sessionStorage["Minitalk.#" + Minitalk.channel] = JSON.stringify({ids:ids,messages:messages,latest:latest});
+			
+			return true;
+		} catch (e) {
+			return false;
+		}
+	}
+};
+
+/**
  * 미니톡 환경설정 데이터를 저장한다.
  *
  * @param string name 변수명
