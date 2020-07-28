@@ -70,9 +70,7 @@ Minitalk.session = function(name,value) {
 	if (window.sessionStorage["Minitalk." + Minitalk.id + "." + Minitalk.channel] !== undefined) {
 		try {
 			storage = JSON.parse(window.sessionStorage["Minitalk." + Minitalk.id + "." + Minitalk.channel]);
-		} catch (e) {
-			storage = {};
-		}
+		} catch (e) {}
 	}
 	
 	if (value === undefined) {
@@ -110,9 +108,7 @@ Minitalk.storage = function(name,value) {
 	if (window.localStorage["Minitalk." + Minitalk.id + "." + Minitalk.channel] !== undefined) {
 		try {
 			storage = JSON.parse(window.localStorage["Minitalk." + Minitalk.id + "." + Minitalk.channel]);
-		} catch (e) {
-			storage = {};
-		}
+		} catch (e) {}
 	}
 	
 	if (value === undefined) {
@@ -141,7 +137,7 @@ Minitalk.storage = function(name,value) {
  */
 Minitalk.log = function(message) {
 	if (window.sessionStorage === undefined) {
-		if (value === undefined) return return {ids:{},messages:[],latest:0};
+		if (message === undefined) return return {ids:{},messages:[],latest:0};
 		else false;
 	}
 	
