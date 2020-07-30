@@ -640,7 +640,7 @@ class Minitalk {
 		global $_CONFIGS;
 		
 		$servers = $this->db()->select($this->table->server);
-		if ($is_force == false) $servers->where('latest_update',time() - 60,'<');
+		if ($is_force == false) $servers->where('latest_update',time() - 30,'<');
 		if ($domain != null) $servers->where('domain',$domain);
 		$servers = $servers->get();
 		
