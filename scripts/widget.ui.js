@@ -966,8 +966,7 @@ Minitalk.ui = {
 				var $target = $(opener);
 				$target.data("width",width);
 			} else {
-				// @todo 팝업차단알림 출력
-				
+				Minitalk.ui.printError("BLOCKED_POPUP");
 				return;
 			}
 		} else {
