@@ -47,7 +47,7 @@ section[data-tab].open {display:block;}
 /**
  * 윈도우의 경우
  */
-div[data-role=window] section[data-tab] {position:static; width:100%; height:auto;}
+div[data-role=window] section[data-tab] {position:static; width:100%; height:auto; display:block;}
 
 /**
  * 특수요소별 기본속성을 정의힌다.
