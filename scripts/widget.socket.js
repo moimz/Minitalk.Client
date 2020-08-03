@@ -17,6 +17,7 @@ Minitalk.socket = {
 	joined:false,
 	reconnectable:true,
 	channel:null,
+	permission:null,
 	token:null,
 	/**
 	 * 미니톡 채팅서버에 접속한다.
@@ -108,7 +109,7 @@ Minitalk.socket = {
 	 */
 	getPermission:function(name) {
 		if (Minitalk.socket.connected !== true) return false;
-		return Minitalk.socket.channel.permission !== undefined && Minitalk.socket.channel.permission[name] !== undefined ? Minitalk.socket.channel.permission[name] : false;
+		return Minitalk.socket.permission !== undefined && Minitalk.socket.permission[name] !== undefined ? Minitalk.socket.permission[name] : false;
 	},
 	/**
 	 * 접속코드를 전송한다.
