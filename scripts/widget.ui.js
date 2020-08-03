@@ -956,8 +956,8 @@ Minitalk.ui = {
 			if (screen.availWidth < width) width = screen.availWidth - 50;
 			if (screen.availHeight < height) height = screen.availHeight - 50;
 			
-			var windowLeft = (screen.availWidth - width) / 2;
-			var windowTop = (screen.availHeight - height) / 2;
+			var windowLeft = Math.ceil((screen.availWidth - width) / 2);
+			var windowTop = Math.ceil((screen.availHeight - height) / 2);
 			windowTop = windowTop > 20 ? windowTop - 20 : windowTop;
 			var opener = window.open("","", "top=" + windowTop + ",left=" + windowLeft + ",width=" + width + ",height=" + height + ",scrollbars=1");
 			
