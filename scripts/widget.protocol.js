@@ -32,7 +32,7 @@ Minitalk.protocol = {
 		Minitalk.socket.reconnectable = true;
 		Minitalk.socket.joined = false;
 		Minitalk.socket.channel.title = data.channel.title;
-		Minitalk.socket.channel.permission = data.channel.permission;
+		Minitalk.socket.permission = data.permission;
 		Minitalk.socket.token = data.token;
 		
 		/**
@@ -41,8 +41,20 @@ Minitalk.protocol = {
 		Minitalk.user.me = data.me;
 		Minitalk.session("authorization",data.authorization);
 		
-		Minitalk.ui.printTitle(data.channel.title);
-		Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/connected").replace("{CHANNEL}",data.channel.title+"("+data.worker+")"));
+		/**
+		 * 박스에 접속한 경우
+		 */
+		if (data.box !== null) {
+			Minitalk.box.connection = data.box;
+			console.log("Minitalk.box.connection",Minitalk.box.connection);
+			
+			Minitalk.ui.printTitle(data.box.title);
+			Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/connected").replace("{CHANNEL}",data.box.title+"("+data.worker+")"));
+		} else {
+			Minitalk.box.connection = null;
+			Minitalk.ui.printTitle(data.channel.title);
+			Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/connected").replace("{CHANNEL}",data.channel.title+"("+data.worker+")"));
+		}
 		
 		/**
 		 * 접속자수를 갱신한다.
