@@ -105,6 +105,146 @@ Minitalk.box = {
 		}
 	},
 	/**
+	 * 박스에 참여한다.
+	 *
+	 * @param string box 박스고유값
+	 */
+	join:function(box) {
+		var type = Minitalk.box.types[box.type] !== undefined ? Minitalk.box.types[box.type] : null;
+		if (type == null) return;
+		
+		box.mode = "join";
+		Minitalk.box.open(box);
+	},
+	/**
+	 * 박스 팝업윈도우를 오픈한다.
+	 *
+	 * @param object box 박스정보
+	 */
+	open:function(box) {
+		var type = Minitalk.box.types[box.type] !== undefined ? Minitalk.box.types[box.type] : null;
+		if (type == null) return;
+		
+		/**
+		 * 박스 팝업윈도우를 오픈한다.
+		 */
+		var width = type.width;
+		var height = type.height;
+		var windowLeft = Math.ceil((screen.availWidth - width) / 2);
+		var windowTop = Math.ceil((screen.availHeight - height) / 2);
+		
+		var opener = window.open("","","top="+windowTop+",left="+windowLeft+",width="+width+",height="+height+",scrollbars=0");
+		if (opener) {
+			var dom = opener.document;
+		} else {
+			Minitalk.ui.printError("BLOCKED_POPUP");
+			return;
+		}
+		
+		if (dom !== null) {
+			/**
+			 * 박스 개설 팝업윈도우의 DOM 객체를 정의한다.
+			 */
+			dom.removeChild(dom.documentElement);
+			
+			dom.open();
+			dom.write('<!DOCTYPE HTML>');
+			dom.write('<html data-id="'+Minitalk.id+'">');
+			dom.write('<head>');
+			dom.write('<meta charset="utf-8">');
+			dom.write('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">');
+			dom.write('<title>MiniTalk Widget</title>');
+			dom.write('<script src="'+MinitalkComponent.getUrl()+'/scripts/box.js.php?channel='+Minitalk.channel+'&templet='+Minitalk.templet+'"></script>');
+			dom.write('<link rel="stylesheet" href="'+MinitalkComponent.getUrl()+'/styles/widget.css.php?channel='+Minitalk.channel+'&templet='+Minitalk.templet+'" type="text/css">');
+			dom.write('<script>var box = '+JSON.stringify(box)+';</script>');
+			dom.write('</head>');
+			dom.write('<body>'+MinitalkComponent.getLoaderHtml()+'</body>');
+			dom.write('</html>');
+			dom.close();
+			
+			var $dom = $(dom);
+			$dom.data("width",width);
+			$dom.data("height",height);
+			var $target = $(opener);
+			$dom.data("target",$target);
+			$dom.ready(function() {
+				setTimeout(function($dom) {
+					var width = $dom.data("width");
+					var height = $dom.data("height");
+					
+					if (screen.availHeight < height) height = screen.availHeight - 50;
+					var windowLeft = (screen.availWidth - width) / 2;
+					var windowTop = (screen.availHeight - height) / 2;
+					
+					var resizeWidth = width - $($dom.data("target").get(0).window).width();
+					var resizeHeight = height - $($dom.data("target").get(0).window).height();
+					
+					$dom.data("target").get(0).resizeBy(resizeWidth,resizeHeight);
+					$dom.data("target").get(0).moveTo(windowLeft,windowTop);
+				},100,$dom);
+			});
+		}
+	},
+	/**
+	 * 박스목록을 가져온다.
+	 *
+	 * @param int page 박스목록페이지번호
+	 * @param string keyword 검색어
+	 * @param function callback
+	 */
+	getBoxes:function(page,keyword,callback) {
+		if (Minitalk.socket.isConnected() === false) callback({success:false,error:"NOT_CONNECTED"});
+		
+		$.get({
+			url:Minitalk.socket.connection.domain+"/boxes",
+			dataType:"json",
+			data:{start:(page - 1),limit:50,keyword:keyword},
+			headers:{authorization:"TOKEN " + Minitalk.socket.token},
+			success:function(result) {
+				if (result.success == true && result.boxes === undefined) result.success = false;
+				callback(result);
+			},
+			error:function() {
+				callback({success:false,error:"CONNECT_ERROR"});
+			}
+		});
+	},
+	/**
+	 * 박스태그를 가져온다.
+	 *
+	 * @param object user 유저객체
+	 * @return object $user 유저태그
+	 */
+	getTag:function(box) {
+		var $box = $("<label>").attr("data-role","box").data("box",box);
+		
+		var $icon = $("<i>").addClass("icon");
+		if (box.type == "talk") {
+			$icon.addClass("talk");
+		} else {
+			$icon.css("background-image","url(./plugins/" + box.type + "/images/icon.png");
+		}
+		$box.append($icon);
+		
+		var $title = $("<span>").addClass("title");
+		if (box.password !== null) {
+			var $secret = $("<i>").addClass("secret").html(Minitalk.getText("text/secret"));
+			$title.append($secret);
+		}
+		
+		$title.append(box.title);
+		
+		$box.append($title);
+		
+		$box.on("click",function(e) {
+			Minitalk.box.join($(this).data("box"));
+			e.preventDefault();
+			e.stopImmediatePropagation();
+		});
+		
+		return $box;
+	},
+	/**
 	 * 박스의 형태를 추가한다.
 	 *
 	 * @param string type 타입
@@ -113,7 +253,6 @@ Minitalk.box = {
 	 * @param int height 박스세로크기
 	 */
 	addType:function(type,title,width,height) {
-		console.log(type,title);
 		Minitalk.box.types[type] = {title:title,width:width,height:height};
 	}
 };
