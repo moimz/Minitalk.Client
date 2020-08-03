@@ -194,6 +194,7 @@ $(document).ready(function() {
 	/**
 	 * 개인박스 클래스를 초기화한다.
 	 */
+	Minitalk.user.init();
 	Minitalk.box.init();
 	
 	/**
@@ -211,4 +212,14 @@ $(document).ready(function() {
 	$("link[rel=stylesheet]").on("load",function() {
 		Minitalk.ui.initFrame();
 	});
+	
+	/**
+	 * 초기화완료 이벤트를 발생한다.
+	 */
+	Minitalk.fireEvent("init");
+	
+	/**
+	 * 소켓서버에 접속한다.
+	 */
+	Minitalk.socket.connect();
 });
