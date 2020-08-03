@@ -1068,8 +1068,10 @@ Minitalk.ui = {
 	 * 에러메시지를 출력한다.
 	 *
 	 * @param string code 에러코드
+	 * @param function callback
 	 */
-	printError:function(code) {
+	printError:function(code,callback) {
+		Minitalk.ui.closeWindow();
 		Minitalk.socket.reconnectable = false;
 		
 		var $error = $("<div>").attr("data-role","error");
@@ -1084,7 +1086,17 @@ Minitalk.ui = {
 				Minitalk.socket.connect();
 			});
 		} else {
-			var $button = $("<a>").attr("href","https://www.minitalk.io/").attr("target","_blank").html(Minitalk.getText("text/minitalk_homepage"));
+			var $button = $("<button>").html(Minitalk.getText("button/confirm"));
+			
+			if (typeof callback == "function") {
+				$button.on("click",function() {
+					callback();
+				});
+			} else {
+				$button.on("click",function() {
+					$("div[data-role=error]").remove();
+				});
+			}
 		}
 		
 		$errorbox.append($button);
