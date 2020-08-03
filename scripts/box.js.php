@@ -57,7 +57,7 @@ if ($channel !== null) {
 		if ($pluginName != '.' && $pluginName != '..' && is_dir(__MINITALK_PATH__.'/plugins/'.$pluginName) == true && is_file(__MINITALK_PATH__.'/plugins/'.$pluginName.'/package.json') == true) {
 			$package = json_decode(file_get_contents(__MINITALK_PATH__.'/plugins/'.$pluginName.'/package.json'));
 			$js->add(__MINITALK_PATH__.'/plugins/'.$pluginName.'/scripts/script.js');
-			$js->add('Minitalk.plugins.janggi = MinitalkComponent.clone(plugin);');
+			$js->add('Minitalk.plugins.'.$pluginName.' = MinitalkComponent.clone(plugin);');
 			$js->add('delete plugin;');
 			
 			/**
