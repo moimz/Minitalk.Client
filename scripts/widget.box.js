@@ -10,6 +10,27 @@
  * @modified 2020. 7. 8.
  */
 Minitalk.box = {
+	connection:null,
+	types:{talk:{title:Minitalk.getText("box/talk"),width:400,height:600}},
+	init:function() {
+		Minitalk.box.connection = box;
+		
+		$("body").html(MinitalkComponent.getLoaderHtml());
+		
+		/**
+		 * 기본 토크박스인 경우, 미니톡 기본 UI 요소를 구성하고, 플러그인 박스인 경우 해당 플러그인에서 UI 를 처리하도록 한다.
+		 */
+		if (Minitalk.box.connection.type == "talk") {
+			Minitalk.ui.init();
+		} else {
+			
+		}
+		
+		/**
+		 * 로딩 레이어를 제거한다.
+		 */
+		$("body > div[data-role=loading]").remove();
+	},
 	/**
 	 * 박스를 개설한다.
 	 *
@@ -43,8 +64,8 @@ Minitalk.box = {
 			/**
 			 * 박스 플러그인 등으로 부터 박스 종류를 불러온다.
 			 */
-			for (var i=0, loop=Minitalk.box.types.length;i<loop;i++) {
-				var $option = $("<option>").attr("value",Minitalk.box.types[i].type).text(Minitalk.box.types[i].title);
+			for (var type in Minitalk.box.types) {
+				var $option = $("<option>").attr("value",type).text(Minitalk.box.types[type].title);
 				$("select[name=type]",$dom).append($option);
 			}
 			
@@ -53,6 +74,11 @@ Minitalk.box = {
 				var action = $button.attr("data-action");
 				
 				if (action == "confirm") {
+					if (Minitalk.socket.isConnected() === false) {
+						Minitalk.ui.printError("NOT_CONNECTED");
+						return;
+					}
+					
 					var title = $.trim($("input[name=title]",$dom).val());
 					var type = $.trim($("select[name=type]",$dom).val());
 					var password = $.trim($("input[name=password]",$dom).val());
@@ -62,48 +88,32 @@ Minitalk.box = {
 						return;
 					}
 					
+					/**
+					 * 박스정보를 담는다.
+					 */
 					var box = {};
+					box.mode = "create";
 					box.title = title;
 					box.type = type;
 					box.password = password.length == 0 ? null : password;
 					
-					/**
-					 * 박스 팝업윈도우를 오픈한다.
-					 */
-					var width = 1500;
-					var height = 1000;
-					var windowLeft = Math.ceil((screen.width-width)/2);
-					var windowTop = Math.ceil((screen.height-height)/2 > 2);
-					
-					var createWindow = window.open("","createWindow","top="+windowTop+",left="+windowLeft+",width="+width+",height="+height+",scrollbars=0");
-					if (createWindow) {
-						/**
-						 * 박스 개설 팝업윈도우의 DOM 객체를 정의한다.
-						 */
-						createWindow.document.removeChild(createWindow.document.documentElement);
-						
-						createWindow.document.open();
-						createWindow.document.write('<!DOCTYPE HTML>');
-						createWindow.document.write('<html data-id="'+Minitalk.id+'">');
-						createWindow.document.write('<head>');
-						createWindow.document.write('<meta charset="utf-8">');
-						createWindow.document.write('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">');
-						createWindow.document.write('<title>'+box.title+'</title>');
-						createWindow.document.write('<script src="'+MinitalkComponent.getUrl()+'/scripts/box.js.php?channel='+Minitalk.channel+'&templet='+Minitalk.templet+'"></script>');
-						createWindow.document.write('<link rel="stylesheet" href="'+MinitalkComponent.getUrl()+'/styles/box.css.php?channel='+Minitalk.channel+'&templet='+Minitalk.templet+'" type="text/css">');
-						createWindow.document.write('<script>var box = '+JSON.stringify(box)+';</script>');
-						createWindow.document.write('</head>');
-						createWindow.document.write('<body data-mode="create" data-usercode="'+Minitalk.usercode+'" data-authorization="'+Minitalk.session("authorization")+'">'+MinitalkComponent.getLoaderHtml()+'</body>');
-						createWindow.document.write('</html>');
-						createWindow.document.close();
-					} else {
-						Minitalk.ui.alert("error",Minitalk.getErrorText("BLOCKED_POPUP"));
-						return false;
-					}
+					Minitalk.box.open(box);
 				}
 				
 				Minitalk.ui.closeWindow();
 			});
 		}
 	},
+	/**
+	 * 박스의 형태를 추가한다.
+	 *
+	 * @param string type 타입
+	 * @param string title 타입명
+	 * @param int width 박스가로크기
+	 * @param int height 박스세로크기
+	 */
+	addType:function(type,title,width,height) {
+		console.log(type,title);
+		Minitalk.box.types[type] = {title:title,width:width,height:height};
+	}
 };
