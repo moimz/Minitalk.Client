@@ -3,7 +3,7 @@
 		"unit":"{COUNT}명",
 		"me":"나",
 		"error":"에러가 발생하였습니다.",
-		"minitalk_homepage":"미니톡 매뉴얼 확인"
+		"password":"패스워드"
 	},
 	"level":{
 		"0":"손님 (유저설정이 없는 손님)",
@@ -112,6 +112,8 @@
 		"SERVICE_DISABLED":"채팅호스팅서비스를 잠시 이용할 수 없습니다.",
 		"SERVICE_ALREADY_LINKED":"이미 다른 미니톡클라이언트와 연결된 서비스입니다.",
 		"SERVICE_NOT_FOUND":"서비스내역을 찾을 수 없습니다.<br>미니톡 홈페이지에서 Client ID 및 Client Secret 을 확인하여 주십시오.",
+		"REQUIRED_PASSWORD":"패스워드가 필요합니다.",
+		"INVALID_PASSWORD":"패스워드가 일치하지 않습니다.",
 		"code":{
 			"300":"다른곳에서 접속하고 있어, 기존접속을 종료하고 있습니다. 잠시만 기다려주십시오.",
 			"301":"다른곳에서 중복접속하여 현재 접속을 종료합니다.",
