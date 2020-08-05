@@ -42,24 +42,28 @@ Minitalk.box = {
 			 * 박스 개설 HTML 을 정의한다.
 			 */
 			var html = [
-				'<h2>' + Minitalk.getText("box/create") + '</h2>',
-				'<button data-action="close"></button>',
-				'<div data-role="content">',
-					'<h4>' + Minitalk.getText("config/title/default") + '</h4>',
-					'<div data-role="input"><input type="text" name="title" value="test"></div>',
-					'<div data-role="input"><select name="type"></select></div>',
-					'<div data-role="input"><input type="password" name="password"></div>',
-				'</div>',
-				'<div data-role="button">',
-					'<ul>',
-						'<li><button type="button" data-action="cancel">' + Minitalk.getText("button/cancel") + '</button></li>',
-						'<li><button type="button" data-action="confirm">' + Minitalk.getText("button/confirm") + '</button></li>',
-					'</ul>',
-				'</div>'
+				'<section data-role="create">',
+					'<h2>' + Minitalk.getText("box/create") + '</h2>',
+					'<button data-action="close"></button>',
+					'<div data-role="content">',
+						'<label><input type="text" name="title" placeholder="' + Minitalk.getText("box/title") + '"></label>',
+						'<label><select name="type"></select></label>',
+						'<label>',
+							'<input type="text" name="password" placeholder="' + Minitalk.getText("box/password") + '">',
+							'<p>' + Minitalk.getText("box/password_help") + '</p>',
+						'</label>',
+					'</div>',
+					'<div data-role="button">',
+						'<ul>',
+							'<li><button type="button" data-action="cancel">' + Minitalk.getText("button/cancel") + '</button></li>',
+							'<li><button type="button" data-action="confirm">' + Minitalk.getText("button/confirm") + '</button></li>',
+						'</ul>',
+					'</div>',
+				'</section>'
 			];
 			html = html.join("");
 			
-			Minitalk.ui.createWindow(html,500,Minitalk.box.create);
+			Minitalk.ui.createWindow(html,400,Minitalk.box.create);
 		} else {
 			/**
 			 * 박스 플러그인 등으로 부터 박스 종류를 불러온다.
