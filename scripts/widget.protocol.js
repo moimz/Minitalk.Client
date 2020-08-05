@@ -106,20 +106,22 @@ Minitalk.protocol = {
 		 * 패스워드 입력 HTML 을 정의한다.
 		 */
 		var html = [
-			'<h2>' + Minitalk.getText("text/password") + '</h2>',
-			'<button data-action="close"></button>',
-			'<div data-role="content">',
-				'<label>',
-					'<input type="password" name="password">',
-					'<p>' + Minitalk.getErrorText(data) + '</p>',
-				'</label>',
-			'</div>',
-			'<div data-role="button">',
-				'<ul>',
-					'<li><button type="button" data-action="cancel">' + Minitalk.getText("button/cancel") + '</button></li>',
-					'<li><button type="button" data-action="confirm">' + Minitalk.getText("button/confirm") + '</button></li>',
-				'</ul>',
-			'</div>'
+			'<section data-role="password">',
+				'<h2>' + Minitalk.getText("text/password") + '</h2>',
+				'<button data-action="close"></button>',
+				'<div data-role="content">',
+					'<label>',
+						'<input type="password" name="password" placeholder="' + Minitalk.getText("text/password") + '">',
+						'<p>' + Minitalk.getErrorText(data) + '</p>',
+					'</label>',
+				'</div>',
+				'<div data-role="button">',
+					'<ul>',
+						'<li><button type="button" data-action="cancel">' + Minitalk.getText("button/cancel") + '</button></li>',
+						'<li><button type="button" data-action="confirm">' + Minitalk.getText("button/confirm") + '</button></li>',
+					'</ul>',
+				'</div>',
+			'</section>'
 		];
 		html = html.join("");
 		
@@ -148,11 +150,12 @@ Minitalk.protocol = {
 					
 					Minitalk.box.connection.password = password;
 					Minitalk.socket.sendConnection();
+					Minitalk.ui.closeWindow();
+				} else {
+					self.close();
 				}
-				
-				Minitalk.ui.closeWindow();
 			});
-		});
+		},false);
 	},
 	/**
 	 * 신규접속자가 있을 경우, 접속자 정보를 수신한다.
