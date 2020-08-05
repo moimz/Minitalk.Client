@@ -164,7 +164,7 @@ Minitalk.ui = {
 		 */
 		$(document).on("esc",function() {
 			Minitalk.ui.resetToggle();
-			Minitalk.ui.closeWindow();
+			Minitalk.ui.closeWindow(false);
 		});
 	},
 	/**
@@ -957,8 +957,11 @@ Minitalk.ui = {
 	 * @param string html 내부 HTML 내용
 	 * @param int width 윈도우 가로크기
 	 * @param function callback 윈도우가 초기화되었을때 실행할 callback 함수
+	 * @param boolean closable 닫을 수 있는 윈도우여부 (기본값 true)
 	 */
-	createWindow:function(html,width,callback) {
+	createWindow:function(html,width,callback,closable) {
+		var closable = closable === false ? false : true;
+		
 		/**
 		 * 채팅위젯의 부모객체의 가로크기가 설정된 윈도우 가로크기보다 작을경우 팝업윈도우로 생성한다.
 		 */
@@ -982,6 +985,7 @@ Minitalk.ui = {
 			}
 		} else {
 			var $cover = $("<div>").attr("data-role","cover");
+			$cover.data("closable",closable);
 			$("div[data-role=frame]").append($cover);
 			
 			if ($("div[data-role=minitalk-window]",parent.document.body).length > 0) {
@@ -995,7 +999,7 @@ Minitalk.ui = {
 			$target.data("width",width);
 			$background.append($target);
 			$background.on("click",function() {
-				Minitalk.ui.closeWindow();
+				Minitalk.ui.closeWindow(false);
 			});
 			$(parent.document.body).append($background);
 			
@@ -1056,14 +1060,20 @@ Minitalk.ui = {
 	},
 	/**
 	 * 열린 윈도우를 닫는다.
+	 *
+	 * @param boolean forceClosed 강제닫기여부 (기본값 true)
 	 */
-	closeWindow:function() {
-		if ($("div[data-role=minitalk-window]",parent.document.body).length > 0) {
-			$("div[data-role=minitalk-window]",parent.document.body).remove();
-		}
+	closeWindow:function(forceClosed) {
+		var forceClosed = forceClosed === false ? false : true;
 		
-		if ($("div[data-role=cover]",$("div[data-role=frame]")).length > 0) {
-			$("div[data-role=cover]",$("div[data-role=frame]")).remove();
+		if (forceClosed === true || $("div[data-role=cover]",$("div[data-role=frame]")).data("closable") === true) {
+			if ($("div[data-role=minitalk-window]",parent.document.body).length > 0) {
+				$("div[data-role=minitalk-window]",parent.document.body).remove();
+			}
+		
+			if ($("div[data-role=cover]",$("div[data-role=frame]")).length > 0) {
+				$("div[data-role=cover]",$("div[data-role=frame]")).remove();
+			}
 		}
 	},
 	/**
