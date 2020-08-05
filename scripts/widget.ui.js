@@ -560,15 +560,26 @@ Minitalk.ui = {
 	 * @param event e 이벤트객체
 	 */
 	activeTab:function($tab,e) {
+		var $frame = $("div[data-role=frame]");
+		var type = $frame.attr("data-tab-type");
+		
 		var tab = typeof $tab == "object" ? $tab.data("tab") : $tab;
 		var $tab = typeof $tab == "object" ? $tab : null;
-		if (Minitalk.fireEvent("beforeActiveTab",[tab,e]) === false) return;
 		
 		var $frame = $("div[data-role=frame]");
 		var $aside = $("aside");
 		var $main = $("main");
 		var $tabs = $("ul[data-role]",$aside);
-		if ($frame.attr("data-current-tab") == tab) return;
+		if ($frame.attr("data-current-tab") == tab) {
+			/**
+			 * 세로형태의 탭바의 경우, 같은 탭을 클릭할 경우 채팅탭으로 돌아간다.
+			 */
+			if (type == "vertical") {
+				Minitalk.ui.activeTab("chat");
+			}
+			return;
+		}
+		if (Minitalk.fireEvent("beforeActiveTab",[tab,e]) === false) return;
 		
 		$frame.attr("data-previous-tab",$frame.attr("data-current-tab") ? $frame.attr("data-current-tab") : "chat");
 		$frame.attr("data-current-tab",tab);

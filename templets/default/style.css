@@ -89,7 +89,16 @@ div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=lists] {to
  * 메인섹션
  */
 main {width:100%; height:calc(100% - 40px - 38px);}
-div[data-role=frame][data-tab-type=vertical] > main {width:calc(100% - 35px); height:calc(100% - 40px);} /* 세로형태 탭바일 경우 메인영역의 가로크기를 세로형태 탭바영역만큼 줄이고, 세로크기를 가로형태 탭바 높이만큼 눌려준다. */
+
+/**
+ * 세로형태 탭바일 경우,
+ * 메인영역의 가로크기를 세로형태 탭바영역만큼 줄이고, 세로크기를 가로형태 탭바 높이만큼 눌려준다.
+ * 채팅영역을 제외한 나머지 탭 영역의 최대 가로크기를 300px로 고정한다.
+ */
+div[data-role=frame][data-tab-type=vertical] > main {width:calc(100% - 35px); height:calc(100% - 40px);}
+div[data-role=frame][data-tab-type=vertical] > main > section[data-tab] {left:auto; right:0; background:#fff; border-left:1px solid #d8d8d9; max-width:300px;}
+div[data-role=frame][data-tab-type=vertical] > main > section[data-tab=chat] {border-left:0; max-width:none;}
+div[data-role=frame][data-tab-type=vertical] > main > section[data-tab=chat] {}
 
 
 /**
@@ -148,7 +157,6 @@ section[data-tab=chat] > div[data-role=item].system.info {border:1px solid #1829
 section[data-tab=chat] > div[data-role=item].system.action {border:1px solid #236a1f; background:#308f2b; color:#fff;}
 section[data-tab=chat] > div[data-role=item].system.error {border:1px solid #b82332; background:#d33948; color:#fff;}
 section[data-tab=chat] > div[data-role=item].system.user {color:#666; margin:0px; padding:2px 5px;}
-
 
 
 section[data-tab=chat] > div[data-role=message] {margin:5px;}
