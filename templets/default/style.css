@@ -96,7 +96,7 @@ main {width:100%; height:calc(100% - 40px - 38px);}
  * 채팅영역을 제외한 나머지 탭 영역의 최대 가로크기를 300px로 고정한다.
  */
 div[data-role=frame][data-tab-type=vertical] > main {width:calc(100% - 35px); height:calc(100% - 40px);}
-div[data-role=frame][data-tab-type=vertical] > main > section[data-tab] {left:auto; right:0; background:#fff; border-left:1px solid #d8d8d9; max-width:300px;}
+div[data-role=frame][data-tab-type=vertical] > main > section[data-tab] {left:auto; right:0; background:#fff; border-left:1px solid #d8d8d9; max-width:300px; height:calc(100% - 35px); box-sizing:border-box;}
 div[data-role=frame][data-tab-type=vertical] > main > section[data-tab=chat] {border-left:0; max-width:none;}
 div[data-role=frame][data-tab-type=vertical] > main > section[data-tab=chat] {}
 
