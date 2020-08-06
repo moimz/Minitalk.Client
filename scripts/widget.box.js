@@ -52,6 +52,11 @@ Minitalk.box = {
 							'<input type="text" name="password" placeholder="' + Minitalk.getText("box/password") + '">',
 							'<p>' + Minitalk.getText("box/password_help") + '</p>',
 						'</label>',
+						'<hr>',
+						'<label class="checkbox">',
+							'<input type="checkbox" name="closemode" value="owner">' + Minitalk.getText("box/closemode"),
+							'<p>' + Minitalk.getText("box/closemode_help") + '</p>',
+						'</label>',
 					'</div>',
 					'<div data-role="button">',
 						'<ul>',
@@ -86,6 +91,7 @@ Minitalk.box = {
 					var title = $.trim($("input[name=title]",$dom).val());
 					var type = $.trim($("select[name=type]",$dom).val());
 					var password = $.trim($("input[name=password]",$dom).val());
+					var closemode = $("input[name=closemode]",$dom).checked() ? "owner" : "all";
 					
 					if (title.length == 0) {
 						$("input[name=title]",$dom).status("error",Minitalk.getErrorText("REQUIRED"));
@@ -100,6 +106,7 @@ Minitalk.box = {
 					box.title = title;
 					box.type = type;
 					box.password = password.length == 0 ? null : password;
+					box.closemode = closemode;
 					
 					Minitalk.box.open(box);
 				}
