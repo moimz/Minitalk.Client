@@ -638,7 +638,7 @@ Minitalk.ui = {
 			 */
 			var html = [
 				'<div data-role="search">',
-					'<input type="search" placeholder="' + Minitalk.getText("nickname") + '">',
+					'<input type="search" placeholder="' + Minitalk.getText("user/keyword") + '">',
 					'<button type="button" data-action="search"><i></i><span>' + Minitalk.getText("button/search") + '</span></button>',
 					'<button type="button" data-action="refresh"><i></i><span>' + Minitalk.getText("button/refresh") + '</span></button>',
 				'</div>',
@@ -737,10 +737,10 @@ Minitalk.ui = {
 			 */
 			var html = [
 				'<div data-role="search">',
-					'<input type="search" placeholder="' + Minitalk.getText("nickname") + '">',
+					'<input type="search" placeholder="' + Minitalk.getText("box/keyword") + '">',
 					'<button type="button" data-action="search"><i></i><span>' + Minitalk.getText("button/search") + '</span></button>',
 					'<button type="button" data-action="refresh"><i></i><span>' + Minitalk.getText("button/refresh") + '</span></button>',
-					'<button type="button" data-action="create"><i></i><span>' + Minitalk.getText("button/create_box") + '</span></button>',
+					'<button type="button" data-action="create"><i></i><span>' + Minitalk.getText("button/box") + '</span></button>',
 				'</div>',
 				'<ul></ul>'
 			];

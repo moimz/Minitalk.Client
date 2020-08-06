@@ -66,14 +66,19 @@
 		"modify":"수정",
 		"cancel":"취소",
 		"search":"검색",
-		"refresh":"새로고침"
+		"refresh":"새로고침",
+		"box":"박스생성하기"
 	},
 	"user":{
 		"keyword":"닉네임 검색"
 	},
 	"box":{
+		"talk":"토크박스",
 		"create":"박스생성",
-		"keyword":"박스명/개설자 검색"
+		"keyword":"박스명/개설자 검색",
+		"title":"박스명",
+		"password":"패스워드",
+		"password_help":"패스워드 입력시, 패스워드를 알고 있는 사람만 참여가 가능한 비공개박스로 생성됩니다.",
 	},
 	"config":{
 		"title":{
