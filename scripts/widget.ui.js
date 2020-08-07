@@ -486,13 +486,11 @@ Minitalk.ui = {
 	enable:function(inputmode) {
 		var inputmode = inputmode === true;
 		
-		$("div[data-role=input] > textarea").enable();
-		$("div[data-role=input] > button").enable();
-		
-		if (inputmode === false) {
-			$("div[data-role=frame]").attr("disabled",null);
-			$("button[data-action]").enable();
-			$("div[data-role|=tool] > button").enable();
+		if (inputmode === true) {
+			$("div[data-role=input] > button").enable();
+		} else {
+			var $frame = $("div[data-role=frame]");
+			$("div[data-role=disable]",$frame).remove();
 		}
 	},
 	/**
@@ -503,14 +501,13 @@ Minitalk.ui = {
 	disable:function(inputmode) {
 		var inputmode = inputmode === true;
 		
-		if (inputmode === false) $("div[data-role=input] > textarea").disable();
-		$("div[data-role=input] > button").disable();
-		
-		if (inputmode === false) {
-			$("div[data-role=frame]").attr("disabled","disabled");
-			$("button[data-action]").disable();
-			$("div[data-role|=tool] > button").disable();
-			$("div[data-role=channel]").removeClass("open");
+		if (inputmode === true) {
+			$("div[data-role=input] > button").disable();
+		} else {
+			var $frame = $("div[data-role=frame]");
+			if ($("div[data-role=disable]",$frame).length > 0) return;
+			
+			$frame.append($("<div>").attr("data-role","disable"));
 		}
 	},
 	/**
