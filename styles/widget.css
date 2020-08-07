@@ -19,6 +19,8 @@ input, textarea, button {font-family:inherit; outline:none; border-radius:0;}
  */
 div[data-role=frame] {width:100%; height:100%; box-sizing:border-box; -webkit-user-select:none; -ms-user-select:none; -moz-user-select:none; overflow:hidden; position:relative;}
 div[data-role=frame] > div[data-role=cover] {width:100%; height:100%; position:fixed; top:0; left:0; z-index:1000;}
+div[data-role=frame] > div[data-role=disable] {width:100%; height:100%; position:fixed; top:0; left:0; z-index:1000; background:rgba(0,0,0,0.1); cursor:not-allowed;}
+
 
 /**
  * 탭바 기본속성을 정의한다.
