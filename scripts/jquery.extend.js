@@ -52,6 +52,155 @@
 	};
 	
 	/**
+	 * 폼이나 input, button 요소의 상태를 변경한다.
+	 *
+	 * @param object object 상태를 변경할 오브젝트
+	 */
+	$.fn.status = function(status,message) {
+		if (typeof this != "object") return;
+		var message = message !== undefined ? message : null;
+		
+		this.each(function() {
+			/**
+			 * 객체가 Form 일 경우
+			 */
+			if ($(this).is("form") == true) {
+				if (status == "error") {
+					$(this).status("default");
+					
+					if (typeof message == "object") {
+						for (var field in message) {
+							if (typeof message[field] == "object") {
+								for (var value in message[field]) {
+									var $field = $("input[type=checkbox][name='"+field+"[]'][value='"+value+"']",$(this));
+									if ($field.length > 0) {
+										$field.status("error",message[field][value]);
+									}
+								}
+							} else {
+								var $field = $("input[name="+field+"], select[name="+field+"], textarea[name="+field+"], input[type=checkbox][name='"+field+"[]']",$(this));
+								if ($field.length > 0) {
+									$field.status("error",message[field]);
+								}
+							}
+						}
+					}
+				} else {
+					/**
+					 * Form 내부의 input, textarea 객체에 대해서 처리
+					 */
+					$("input,textarea,select",$(this)).status(status,message);
+					$("button[type=submit]",$(this)).status(status);
+					$("button[type=button]",$(this)).status(status,false);
+				}
+			}
+			
+			/**
+			 * 객체가 submit 버튼일 경우
+			 */
+			if ($(this).is("button[type=submit]") == true || $(this).is("input[type=submit]") == true) {
+				if (status == "loading") {
+					if ($(this).data("defaultHtml") === undefined) $(this).data("defaultHtml",$(this).html());
+					if ($(this).is(":disabled") == false) $(this).attr("data-loading","TRUE");
+					$(this).outerWidth($(this).outerWidth());
+					if (message) {
+						$(this).html('<i class="mi mi-loading"></i>'+message);
+					} else {
+						$(this).html('<i class="icon mi mi-loading"></i>');
+					}
+					$(this).disable();
+				} else if (status == "default" || status == "success" || status == "error") {
+					$(this).outerWidth("");
+					if ($(this).data("defaultHtml") !== undefined) $(this).html($(this).data("defaultHtml"));
+					if ($(this).attr("data-loading") == "TRUE") {
+						$(this).enable();
+						$(this).attr("data-loading",null);
+					}
+				} else {
+					if ($(this).is(":disabled") == false) $(this).attr("data-loading","TRUE");
+					$(this).disable();
+				}
+			}
+			
+			/**
+			 * 객체가 버튼일 경우
+			 */
+			if ($(this).is("button[type=button]") == true) {
+				var is_indicator = message !== false;
+				
+				if (status == "loading") {
+					if (is_indicator == true) {
+						if ($(this).data("defaultHtml") === undefined) $(this).data("defaultHtml",$(this).html());
+						$(this).outerWidth($(this).outerWidth());
+						$(this).html('<i class="icon mi mi-loading"></i>');
+					}
+					if ($(this).is(":disabled") == false) $(this).attr("data-loading","TRUE");
+					$(this).disable();
+				} else if (status == "default" || status == "success" || status == "error") {
+					$(this).outerWidth("");
+					if ($(this).data("defaultHtml") !== undefined) $(this).html($(this).data("defaultHtml"));
+					if ($(this).attr("data-loading") == "TRUE") {
+						$(this).enable();
+						$(this).attr("data-loading",null);
+					}
+				} else {
+					if ($(this).is(":disabled") == false) $(this).attr("data-loading","TRUE");
+					if (status == $(this).attr("data-action")) {
+						if ($(this).data("defaultHtml") === undefined) $(this).data("defaultHtml",$(this).html());
+						$(this).html('<i class="mi mi-loading"></i>');
+					}
+					$(this).disable();
+				}
+			}
+			
+			/**
+			 * 객체가 input, select, textarea 일 경우
+			 */
+			if ($(this).is("input,textarea,select") == true) {
+				if (status == "loading") {
+					if ($(this).is(":disabled") == false) $(this).attr("data-loading","TRUE");
+					$(this).disable();
+				} else if (status == "default" || status == "success" || status == "error") {
+					if ($(this).attr("data-loading") == "TRUE") {
+						$(this).enable();
+						$(this).attr("data-loading",null);
+					}
+				} else {
+					if ($(this).is(":disabled") == false) $(this).attr("data-loading","TRUE");
+					$(this).disable();
+				}
+				
+				var $parent = $(this).parents("div[data-role=input]").length == 0 ? null : $(this).parents("div[data-role=input]").eq(0);
+				if ($parent == null) return;
+				
+				var setStatus = status;
+				if (status == "success") {
+					if ($(this).attr("type") == "checkbox" || $(this).attr("type") == "radio") {
+						if ($("input[name='"+$(this).attr("name")+"']:checked",$inputbox).length == 0) setStatus = "default";
+					} else {
+						if ($(this).val().length == 0) setStatus = "default";
+					}
+				}
+				
+				$parent.removeClass("success error loading default");
+				$parent.addClass(setStatus);
+				
+				var help = message ? message : ($parent.attr("data-"+setStatus) ? $parent.attr("data-"+setStatus) : null);
+				help = help == null && $parent.attr("data-default") ? $parent.attr("data-default") : help;
+				
+				if (help !== null) {
+					var $help = $("<div>").attr("data-role","help").addClass(setStatus).html(help);
+				}
+				
+				$("div[data-role=help]",$parent).remove();
+				if (help !== null) $parent.append($help);
+			}
+		});
+		
+		return this;
+	};
+	
+	/**
 	 * jQuery ajax 확장
 	 *
 	 * @param string url 데이터를 전송할 URL
