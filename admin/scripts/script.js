@@ -943,6 +943,13 @@ var Minitalk = {
 };
 
 $(document).ready(function() {
+	if ($("#MinitalkLoginForm").length == 1) {
+		$("#MinitalkLoginForm").on("submit",function() {
+			Admin.login($(this));
+			return false;
+		});
+	}
+	
 	$("#MinitalkHeader > ul > li > button[data-tab]").on("click",function() {
 		var tab = $(this).attr("data-tab");
 		Ext.getCmp("MinitalkTabPanel").setActiveTab("MinitalkPanel-"+tab);
