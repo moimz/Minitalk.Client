@@ -482,11 +482,8 @@ var Admin = {
 												emptyText:Admin.getText("category/category1"),
 												listeners:{
 													change:function(form,value) {
-														if (value) {
-															form.getForm().findField("category2").setValue("");
-															form.getForm().findField("category2").getStore().getProxy().setExtraParam("parent",value);
-															form.getForm().findField("category2").getStore().reload();
-														}
+														form.getForm().findField("category2").getStore().getProxy().setExtraParam("parent",value ? value : -1);
+														form.getForm().findField("category2").getStore().reload();
 													}
 												}
 											}),
@@ -502,7 +499,15 @@ var Admin = {
 													autoLoad:true,
 													remoteSort:false,
 													sorters:[{property:"sort",direction:"ASC"}],
-													fields:["idx","category",{name:"sort",type:"int"}]
+													fields:["idx","category",{name:"sort",type:"int"}],
+													listeners:{
+														load:function(store) {
+															var value = Ext.getCmp("MinitalkChannelAddForm").getForm().findField("category2").getValue();
+															if (value && store.findExact("idx",value) === -1) {
+																Ext.getCmp("MinitalkChannelAddForm").getForm().findField("category2").setValue("");
+															}
+														}
+													}
 												}),
 												flex:1,
 												editable:false,
