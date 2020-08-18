@@ -1615,6 +1615,64 @@ Minitalk.ui = {
 		$input.focus().val(value);
 	},
 	/**
+	 * 알림메시지를 출력한다.
+	 *
+	 * @param string code 알림메시지 고유값 (같은 고유값을 가진 알림메시지는 동시에 출력되지 않는다.)
+	 * @param string type 알림메시지 타입 (action, error, warning, success)
+	 * @param string message 알림메시지 메시지
+	 * @param boolean closable 알림메시지를 삭제할 수 있는 여부 (기본값 : true)
+	 * @param boolean autoHide 알림메시지 자동닫기 여부 (기본값 : true)
+	 * @param function callback
+	 */
+	notify:function(code,type,message,closable,autoHide,callback) {
+		var $notifications = $("div[data-role=notifications]");
+		var $notification = $("div[data-code=" + code + "]",$notifications);
+		if ($notification.length == 0) {
+			var $notification = $("<div>").attr("data-code",code).addClass("ready");
+			var $balloon = $("<div>");
+			$notification.append($balloon);
+			$notifications.append($notification);
+			$notification.data("autoHide",null);
+		} else {
+			var $balloon = $("div",$notification);
+		}
+		
+		$balloon.addClass(type);
+		
+		if ($notification.data("unnotify") !== null) {
+			clearTimeout($notification.data("unnotify"));
+			$notification.data("unnotify",null);
+		}
+		
+		var closable = closable === false ? false : true;
+		
+		var autoHide = autoHide === false ? false : true;
+		if (autoHide === true) {
+			Minitalk.ui.unnotify(code,5);
+		}
+		
+		$balloon.html(message);
+	},
+	/**
+	 * 알림메시지를 삭제한다.
+	 *
+	 * @param string code 알림메시지 고유값 (같은 고유값을 가진 알림메시지는 동시에 출력되지 않는다.)
+	 * @param int delay 지연시간(초) (기본값 : 0)
+	 */
+	unnotify:function(code,delay) {
+		var delay = delay ? delay : 0;
+		var $notifications = $("div[data-role=notifications]");
+		var $notification = $("div[data-code=" + code + "]",$notifications);
+		
+		if (delay > 0) {
+			$notification.data("unnotify",setTimeout(function(code) {
+				Minitalk.ui.unnotify(code);
+			},5000,code));
+		} else {
+			$notification.remove();
+		}
+	},
+	/**
 	 * 자신이 입력한 메시지를 채팅창에 출력할 때, 이모티콘 치환과 메시지 스타일을 처리한다.
 	 *
 	 * @param string message 원본 메시지
