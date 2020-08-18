@@ -42,6 +42,11 @@ Minitalk.protocol = {
 		Minitalk.session("authorization",data.authorization);
 		
 		/**
+		 * 서버접속오류 알림이 있는 경우 제거한다.
+		 */
+		Minitalk.ui.unnotify("disconnect");
+		
+		/**
 		 * 박스에 접속한 경우
 		 */
 		if (data.box !== null) {
@@ -49,11 +54,11 @@ Minitalk.protocol = {
 			console.log("Minitalk.box.connection",Minitalk.box.connection);
 			
 			Minitalk.ui.printTitle(data.box.title);
-			Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/connected").replace("{CHANNEL}",data.box.title+"("+data.worker+")"));
+			Minitalk.ui.notify("connecting","success",Minitalk.getText("action/connected").replace("{CHANNEL}",data.box.title),true,true);
 		} else {
 			Minitalk.box.connection = null;
 			Minitalk.ui.printTitle(data.channel.title);
-			Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/connected").replace("{CHANNEL}",data.channel.title+"("+data.worker+")"));
+			Minitalk.ui.notify("connecting","success",Minitalk.getText("action/connected").replace("{CHANNEL}",data.channel.title),true,true);
 		}
 		
 		/**
@@ -85,7 +90,7 @@ Minitalk.protocol = {
 	 */
 	connect_error:function() {
 		Minitalk.socket.connecting = false;
-		Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("CONNECT_ERROR"));
+		Minitalk.ui.notify("disconnect","error",Minitalk.getErrorText("CONNECT_ERROR"),false,false);
 		Minitalk.socket.reconnect(60);
 	},
 	/**
@@ -93,7 +98,7 @@ Minitalk.protocol = {
 	 */
 	disconnect:function() {
 		Minitalk.socket.disconnected();
-		Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("DISCONNECTED"));
+		Minitalk.ui.notify("disconnect","error",Minitalk.getErrorText("DISCONNECTED"),false,false);
 		Minitalk.socket.reconnect(60);
 	},
 	/**

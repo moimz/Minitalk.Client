@@ -36,7 +36,7 @@ Minitalk.socket = {
 			if (result.success == true) {
 				Minitalk.socket.channel = result.channel;
 				Minitalk.ui.initChannel();
-				Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/connecting"));
+				Minitalk.ui.notify("connecting","action",Minitalk.getText("action/connecting"),false,false);
 				Minitalk.socket.connecting = true;
 				Minitalk.socket.io = io(result.connection.domain,{reconnection:false,path:"/minitalk",transports:["websocket"],secure:result.connection.domain.indexOf("https://") == 0});
 				Minitalk.socket.connection = result.connection;
@@ -67,11 +67,11 @@ Minitalk.socket = {
 		if (time == 0) {
 			Minitalk.socket.connect();
 		} else {
-			if (time < 30) {
-				if (time % 10 == 0) Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/reconnecting").replace("{SECOND}",time));
-			} else {
-				if (time % 30 == 0) Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/reconnecting").replace("{SECOND}",time));
-			}
+			Minitalk.ui.notify("connecting","action",Minitalk.getText("action/reconnecting").replace("{SECOND}",time),false,false);
+			
+			/**
+			 * 동시에 서버재접속을 시도하지 않도록 1초 간격을 랜덤하게 조절한다.
+			 */
 			setTimeout(Minitalk.socket.reconnect,900 + Math.ceil(Math.random() * 300 % 300),--time);
 		}
 	},
