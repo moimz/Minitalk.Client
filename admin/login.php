@@ -30,7 +30,3 @@ if (defined('__MINITALK__') == false) exit;
 		<label class="autoLogin"><input type="checkbox" name="auto_login" value="TRUE"> Keep me signed in</label>
 	</main>
 </form>
-
-<script>
-$("#MinitalkLoginForm").inits(Admin.login);
-</script>
