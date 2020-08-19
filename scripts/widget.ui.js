@@ -1620,7 +1620,7 @@ Minitalk.ui = {
 	 * @param string code 알림메시지 고유값 (같은 고유값을 가진 알림메시지는 동시에 출력되지 않는다.)
 	 * @param string type 알림메시지 타입 (action, error, warning, success)
 	 * @param string message 알림메시지 메시지
-	 * @param boolean closable 알림메시지를 삭제할 수 있는 여부 (기본값 : true)
+	 * @param boolean closable 알림메시지를 닫을 수 있는 여부 (기본값 : true)
 	 * @param boolean autoHide 알림메시지 자동닫기 여부 (기본값 : true)
 	 * @param function callback
 	 */
@@ -1637,21 +1637,42 @@ Minitalk.ui = {
 			var $balloon = $("div",$notification);
 		}
 		
-		$balloon.addClass(type);
+		$balloon.removeClass("action error warning success").addClass(type);
 		
 		if ($notification.data("unnotify") !== null) {
 			clearTimeout($notification.data("unnotify"));
 			$notification.data("unnotify",null);
 		}
 		
-		var closable = closable === false ? false : true;
-		
+		/**
+		 * 자동닫기가 활성화되어 있는 경우, 5초 뒤에 알림을 닫는다.
+		 */
 		var autoHide = autoHide === false ? false : true;
 		if (autoHide === true) {
 			Minitalk.ui.unnotify(code,5);
 		}
 		
 		$balloon.html(message);
+		
+		/**
+		 * 콜백함수가 있거나, 자동닫기가 활성화되어있거나, 닫을 수 있는 알림인 경우 닫기버튼을 추가한다.
+		 */
+		var closable = closable === false && autoHide === false ? false : true;
+		if (typeof callback == "function" || closable === true) {
+			if (typeof callback == "function") {
+				$balloon.addClass("callback");
+				$balloon.on("click",function() {
+					var $notification = $(this).parent();
+					callback($notification.attr("data-code"));
+				});
+			} else {
+				$balloon.addClass("closable");
+				$balloon.append($("<i>").addClass("mi mi-close"));
+				$balloon.on("click",function() {
+					Minitalk.ui.unnotify($(this).parent().attr("data-code"));
+				});
+			}
+		}
 	},
 	/**
 	 * 알림메시지를 삭제한다.
