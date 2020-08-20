@@ -146,7 +146,7 @@ Minitalk.ui = {
 		 * 클릭이벤트를 이용하여 특수한 DOM 객체를 초기화한다.
 		 */
 		$(document).on("click",function(e) {
-			Minitalk.ui.initSound();
+			Minitalk.ui.initSounds();
 			Minitalk.ui.resetToggle();
 		});
 		
@@ -449,9 +449,52 @@ Minitalk.ui = {
 		}
 	},
 	/**
+	 * 메시지 폰트설정권한이 있는 경우, 현재 저장된 폰트설정에 따라 툴바 및 입력폼의 스타일을 변경한다.
+	 */
+	initFonts:function() {
+		/**
+		 * 서버에 접속하기전이라면, 폰트 업데이트를 중단한다.
+		 */
+		if (Minitalk.socket.isConnected() === false) return false;
+		
+		/**
+		 * 폰트설정권한이 없는 경우 저장된 값을 초기화한다.
+		 */
+		if (Minitalk.socket.getPermission("font") === false) {
+			Minitalk.fonts("bold",false);
+			Minitalk.fonts("italic",false);
+			Minitalk.fonts("underline",false);
+			Minitalk.fonts("color",null);
+		}
+		
+		var fonts = Minitalk.fonts();
+		
+		/**
+		 * 입력폼 스타일적용
+		 */
+		var $input = $("div[data-role=input] > textarea");
+		$input.css("fontWeight",fonts.bold === true ? "bold" : "normal");
+		$input.css("fontStyle",fonts.italic === true ? "italic" : "normal");
+		$input.css("textDecoration",fonts.underline === true ? "underline" : "none");
+		$input.css("color",fonts.color === null ? null : fonts.color);
+		
+		/**
+		 * 툴바 스타일적용
+		 */
+		var $footer = $("footer");
+		var $tools = $("ul[data-role]",$footer);
+		$("button[data-tool=bold]",$tools).removeClass("on");
+		$("button[data-tool=italic]",$tools).removeClass("on");
+		$("button[data-tool=underline]",$tools).removeClass("on");
+		
+		if (fonts.bold === true) $("button[data-tool=bold]",$tools).addClass("on");
+		if (fonts.italic === true) $("button[data-tool=italic]",$tools).addClass("on");
+		if (fonts.underline === true) $("button[data-tool=underline]",$tools).addClass("on");
+	},
+	/**
 	 * 변경된 브라우저의 보안규칙에 따라, 사운드파일을 초기화한다.
 	 */
-	initSound:function() {
+	initSounds:function() {
 		var $audios = $("audio");
 		$audios.each(function() {
 			var audio = $(this).get(0);
@@ -509,46 +552,6 @@ Minitalk.ui = {
 			
 			$frame.append($("<div>").attr("data-role","disable"));
 		}
-	},
-	/**
-	 * 메시지 폰트 설정을 업데이트한다.
-	 *
-	 * @param string name 변수명
-	 * @param string value 설정값 (설정값이 존재할 경우, 해당 설정값을 업데이트한다.)
-	 */
-	updateFonts:function(name,value) {
-		/**
-		 * 서버에 접속하기전이라면, 폰트 업데이트를 중단한다.
-		 */
-		if (Minitalk.socket.isConnected() === false) return false;
-		
-		var fonts = Minitalk.socket.getPermission("font") === true && Minitalk.session("fonts") ? Minitalk.session("fonts") : {bold:false,italic:false,underline:false,color:null};
-		if (value !== undefined) {
-			fonts[name] = value;
-			Minitalk.session("fonts",fonts);
-		}
-		
-		/**
-		 * 입력폼 스타일적용
-		 */
-		var $input = $("div[data-role=input] > textarea");
-		$input.css("fontWeight",fonts.bold === true ? "bold" : "normal");
-		$input.css("fontStyle",fonts.italic === true ? "italic" : "normal");
-		$input.css("textDecoration",fonts.underline === true ? "underline" : "none");
-		$input.css("color",fonts.color === null ? null : fonts.color);
-		
-		/**
-		 * 툴바 스타일적용
-		 */
-		var $footer = $("footer");
-		var $tools = $("ul[data-role]",$footer);
-		$("button[data-tool=bold]",$tools).removeClass("on");
-		$("button[data-tool=italic]",$tools).removeClass("on");
-		$("button[data-tool=underline]",$tools).removeClass("on");
-		
-		if (fonts.bold === true) $("button[data-tool=bold]",$tools).addClass("on");
-		if (fonts.italic === true) $("button[data-tool=italic]",$tools).addClass("on");
-		if (fonts.underline === true) $("button[data-tool=underline]",$tools).addClass("on");
 	},
 	/**
 	 * 활성화탭을 변경한다.
@@ -924,10 +927,50 @@ Minitalk.ui = {
 		var tool = $tool.data("tool");
 		if (Minitalk.fireEvent("beforeActiveTool",[tool,$tool,e]) === false) return;
 		
+		var $tool = $("footer > ul > li > button[data-tool=" + tool + "]");
+		var $input = $("div[data-role=input] > textarea");
+		var $file = $("input[type=file]");
+		
 		if (typeof tool == "string") {
 			switch (tool) {
+				case "bold" :
+					if (Minitalk.fonts("bold") === true) {
+						Minitalk.fonts("bold",false);
+						$input.css("fontWeight","normal");
+						$tool.removeClass("on");
+					} else {
+						Minitalk.fonts("bold",true);
+						$input.css("fontWeight","bold");
+						$tool.addClass("on");
+					}
+					break;
+					
+				case "underline" :
+					if (Minitalk.fonts("underline") === true) {
+						Minitalk.fonts("underline",false);
+						$input.css("fontDecoration","underline");
+						$tool.removeClass("on");
+					} else {
+						Minitalk.fonts("underline",true);
+						$input.css("fontDecoration","none");
+						$tool.addClass("on");
+					}
+					break;
+					
+				case "italic" :
+					if (Minitalk.fonts("italic") === true) {
+						Minitalk.fonts("italic",false);
+						$input.css("fontStyle","normal");
+						$tool.removeClass("on");
+					} else {
+						Minitalk.fonts("italic",true);
+						$input.css("fontStyle","italic");
+						$tool.addClass("on");
+					}
+					break;
+					
 				case "file" :
-					$("input[type=file]").trigger("click");
+					$file.trigger("click");
 					break;
 			}
 		} else {
