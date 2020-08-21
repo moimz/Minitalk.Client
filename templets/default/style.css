@@ -107,8 +107,8 @@ div[data-role=frame][data-tab-type=vertical] > main > section[data-tab=chat] {}
 footer {min-height:34px; font-size:0; bottom:0; left:0; background:#fff; border-top:1px solid #d8d8d9;} /* 푸터는 채팅메시지 입력에 따라 높이가 가변이므로, 최소높이(기본높이)를 설정한다. */
 footer > div[data-role=progress] {position:absolute; top:-6px; left:0; width:100%; height:5px; background:#f4f4f4; z-index:10;}
 footer > div[data-role=progress] > div {height:5px; background:#F44336;}
-footer > ul[data-role=tools] {display:inline-block; width:34px; height:30px; vertical-align:middle;}
-footer > ul[data-role=tools] > li {width:30px;}
+footer > ul[data-role=tools] {display:inline-block; width:34px; height:34px; vertical-align:middle;}
+footer > ul[data-role=tools] > li {width:34px;}
 footer > ul[data-role=tools] > li > button {width:24px; height:24px; margin:5px; font-size:12px; background:#fff; color:#666; border:1px solid #d8d8d9; cursor:pointer; border-radius:3px;}
 footer > ul[data-role=tools] > li > button:hover {background:#f4f4f4; color:#222;}
 footer > ul[data-role=tools] > li > button > i {width:30px; height:30px;}
@@ -134,8 +134,8 @@ footer > ul[data-role=lists] > li > button:hover {background:#fff; color:#222;}
 footer > ul[data-role=lists] > li > button.on {background:#fff; color:#222; color:#10b8c3; font-weight:bold;}
 footer > ul[data-role=lists] > li.separator {border-top:1px solid #d8d8d9; height:1px; background:#fff;}
 
-footer > div[data-role=input] {display:inline-block; width:calc(100% - 34px); height:30px; vertical-align:middle; box-sizing:border-box;}
-footer > div[data-role=input] > textarea {border:0; width:calc(100% - 35px); min-height:20px; padding:5px; line-height:24px; font-size:12px; vertical-align:middle; display:inline-block; resize:none; box-sizing:border-box;}
+footer > div[data-role=input] {display:inline-block; width:calc(100% - 34px); height:34px; vertical-align:middle; box-sizing:border-box;}
+footer > div[data-role=input] > textarea {border:0; width:calc(100% - 35px); height:100%; min-height:24px; padding:5px; line-height:24px; font-size:12px; vertical-align:middle; display:inline-block; resize:none; box-sizing:border-box;}
 footer > div[data-role=input] > button {position:absolute; top:-1px; right:0; width:35px; height:35px; vertical-align:middle; border:0; background:#10b8c3; cursor:pointer; display:inline-block;}
 footer > div[data-role=input] > button > i {width:35px; height:35px; line-height:34px; font-family:moimz; font-size:16px; color:#fff; font-style:normal;}
 footer > div[data-role=input] > button > i:before {content:"\ef16";}
