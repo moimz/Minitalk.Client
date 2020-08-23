@@ -144,6 +144,14 @@ footer > div[data-role=input] > button:hover {background:#15a9b4;}
 footer > div[data-role=input] > button[disabled] {background:#f4f4f4; cursor:not-allowed; box-sizing:border-box; top:0px; height:34px;}
 footer > div[data-role=input] > button[disabled] > i {color:#ccc;}
 
+/**
+ * 툴바레이어
+ */
+footer > div[data-role=layers] {left:0; bottom:100%;}
+footer > div[data-role=layers] > div[data-tool] {background:#fff; width:calc(100% - 5px); max-width:300px; margin-left:5px; border:1px solid #d8d8d9; background:#f6f6f6; border-radius:3px; position:relative;}
+footer > div[data-role=layers] > div[data-tool]:before {display:block; position:absolute; content:" "; border-top:6px solid #d8d8d9; border-left:6px solid transparent; border-right:6px solid transparent; left:5px; bottom:-6px;}
+footer > div[data-role=layers] > div[data-tool]:after {display:block; position:absolute; content:" "; border-top:5px solid #f6f6f6; border-left:5px solid transparent; border-right:5px solid transparent; left:6px; bottom:-5px;}
+footer > div[data-role=layers] > div[data-tool=color] {border:1px solid #d8d8d9;}
 
 /**
  * 채팅탭

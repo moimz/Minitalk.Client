@@ -972,6 +972,36 @@ Minitalk.ui = {
 				case "file" :
 					$file.trigger("click");
 					break;
+					
+				case "color" :
+					var colors = ["#7F7F7F","#880015","#ED1C24","#FF7F27","#FFF200","#22B14C","#00A2E8","#3F48CC","#A349A4","#000000","#C3C3C3","#B97A57","#FFAEC9","#FFC90E","#EFE4B0","#B5E61D","#99D9EA","#7092BE","#C8BFE7"];
+					
+					var html = [];
+					html.push('<ul>');
+					html.push('<li><button type="button" data-color="reset"></button></li>');
+					for (var i=0, loop=colors.length;i<loop;i++) {
+						html.push('<li><button type="button" data-color="' + colors[i] + '" style="background:' + colors[i] + ';"></button></li>');
+					}
+					html.push('</ul>');
+					html = html.join("");
+					Minitalk.ui.createLayer("color",html,function($dom) {
+						$("button[data-color]",$dom).on("click",function(e) {
+							var $button = $(this);
+							var color = $button.attr("data-color");
+							
+							if (color == "reset") {
+								Minitalk.fonts("color",null);
+								$input.css("color","");
+							} else {
+								Minitalk.fonts("color",color);
+								$input.css("color",color);
+							}
+							
+							$dom.remove();
+							e.stopImmediatePropagation();
+						});
+					});
+					break;
 			}
 		} else {
 			if (typeof tool.handler == "function") {
@@ -990,6 +1020,31 @@ Minitalk.ui = {
 	toggleTools:function() {
 		var $footer = $("footer");
 		$footer.toggleClass("open");
+		
+		if ($("footer > div[data-role=layers] > div[data-tool]").length > 0) {
+			$("footer > div[data-role=layers] > div[data-tool]").remove();
+		}
+	},
+	/**
+	 * 툴바 레이어를 생성한다.
+	 *
+	 * @param string tool 툴버튼코드
+	 * @param string html 레이어 HTML 코드
+	 * @param function callback
+	 */
+	createLayer:function(tool,html,callback) {
+		var $layers = $("footer > div[data-role=layers]");
+		if ($("div[data-tool=" + tool + "]",$layers).length == 0) {
+			var $layer = $("<div>").attr("data-tool",tool);
+			$layers.append($layer);
+		} else {
+			var $layer = $("div[data-tool=" + tool + "]",$layers);
+		}
+		
+		$layer.empty();
+		$layer.append(html);
+		
+		callback($layer);
 	},
 	/**
 	 * 새로운 윈도우를 생성한다.
@@ -1123,7 +1178,6 @@ Minitalk.ui = {
 	 */
 	printTitle:function(title) {
 		$("h1").html(title);
-	},
 	},
 	/**
 	 * 에러메시지를 출력한다.
@@ -1869,6 +1923,10 @@ Minitalk.ui = {
 		
 		if ($("ul[data-role=usermenus]").length > 0) {
 			$("ul[data-role=usermenus]").remove();
+		}
+		
+		if ($("footer > div[data-role=layers] > div[data-tool]").length > 0) {
+			$("footer > div[data-role=layers] > div[data-tool]").remove();
 		}
 	}
 };
