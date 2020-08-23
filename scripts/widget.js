@@ -200,6 +200,42 @@ Minitalk.log = function(message) {
 };
 
 /**
+ * 미니톡 글꼴설정 데이터를 저장한다.
+ *
+ * @param string name 변수명
+ * @param any value 저장될 데이터 (없을 경우 저장되어 있는 데이터를 반환한다.)
+ * @return boolean/any 데이터저장성공여부, 저장되어 있는 데이터
+ */
+Minitalk.fonts = function(name,value) {
+	/**
+	 * 기본설정값
+	 */
+	var defaults = {
+		bold:false,
+		italic:false,
+		underline:false,
+		color:null
+	};
+	
+	var fonts = Minitalk.socket.getPermission("font") == true && Minitalk.storage("fonts") == null ? defaults : Minitalk.storage("fonts");
+	if (value === undefined) {
+		if (name === undefined) return fonts;
+		if (fonts[name] !== undefined) {
+			return fonts[name];
+		} else {
+			return null;
+		}
+	} else {
+		if (Minitalk.socket.getPermission("font") == true) {
+			fonts[name] = value;
+			return Minitalk.storage("fonts",fonts);
+		} else {
+			return false;
+		}
+	}
+};
+
+/**
  * 미니톡 환경설정 데이터를 저장한다.
  *
  * @param string name 변수명
