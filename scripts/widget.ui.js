@@ -1880,6 +1880,16 @@ Minitalk.ui = {
 			var uuid = uuidv4();
 			
 			/**
+			 * 폰트권한이 있고 폰트설정이 있다면 메시지 데이터에 포함하여 전송한다.
+			 */
+			if (Minitalk.socket.getPermission("font") == true) {
+				if (Minitalk.fonts("bold") == true) message = "[B]" + message + "[/B]";
+				if (Minitalk.fonts("italic") == true) message = "[I]" + message + "[/I]";
+				if (Minitalk.fonts("underline") == true) message = "[U]" + message + "[/U]";
+				if (Minitalk.fonts("color") !== null) message = "[COLOR=" + Minitalk.fonts("color") + "]" + message + "[/COLOR]";
+			}
+			
+			/**
 			 * 서버로 메시지를 전송한다.
 			 */
 			Minitalk.socket.send("message",{id:uuid,type:"message",message:message});
