@@ -661,7 +661,7 @@ var Admin = {
 										displayField:"display",
 										valueField:"value",
 										value:0,
-										afterBodyEl:'<div class="x-form-help">'+Admin.getText("channel/form/font_limit")+'</div>'
+										afterBodyEl:'<div class="x-form-help">'+Admin.getText("channel/form/font_limit_help")+'</div>'
 									}),
 									new Ext.form.ComboBox({
 										fieldLabel:Admin.getText("channel/form/user_limit"),
