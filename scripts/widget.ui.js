@@ -1349,7 +1349,7 @@ Minitalk.ui = {
 			
 			var $message = $("<div>").attr("data-message-id",message.id);
 			var $inner = $("<div>").attr("data-role","normal");
-			$inner.append($("<span>").addClass("text").html(message.message));
+			$inner.append($("<span>").addClass("text").html(Minitalk.ui.decodeMessage(message.message)));
 			
 			if (message.time === undefined) {
 				$inner.append($("<span>").addClass("time").html('<i class="sending"></i>'));
@@ -1816,6 +1816,11 @@ Minitalk.ui = {
 	 * @return string message 처리된 메시지
 	 */
 	decodeMessage:function(message) {
+		/**
+		 * 이모티콘을 치환한다.
+		 */
+		message = message.replace(/\[#([a-z0-9]+)\/([a-z0-9\.]+)\]/gi,'<img src="' + Minitalk.getUrl() + '/emoticons/$1/items/$2" style="vertical-align:middle;">');
+		
 		return message;
 	},
 	/**
