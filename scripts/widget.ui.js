@@ -468,6 +468,7 @@ Minitalk.ui = {
 		}
 		
 		var fonts = Minitalk.fonts();
+		if (fonts === null) return;
 		
 		/**
 		 * 입력폼 스타일적용
@@ -999,6 +1000,84 @@ Minitalk.ui = {
 							
 							$dom.remove();
 							e.stopImmediatePropagation();
+						});
+					});
+					break;
+					
+				case "emoticon" :
+					var html = [
+						'<ul data-role="category">',
+							'<li><button type="button" data-action="prev"></button></li>',
+							'<li data-role="items"></li>',
+							'<li><button type="button" data-action="next"></button></li>',
+						'</ul>',
+						'<div data-role="lists"></div>'
+					];
+					
+					html = html.join("");
+					Minitalk.ui.createLayer("emoticon",html,function($dom) {
+						$.send(Minitalk.getProcessUrl("getEmoticons"),function(result) {
+							var $categories = $("ul[data-role=category] > li[data-role=items]",$dom);
+							
+							var opened = null;
+							if (result.success == true && result.emoticons.length > 0) {
+								for (var i=0, loop=result.emoticons.length;i<loop;i++) {
+									var emoticon = result.emoticons[i];
+									var $category = $("<button>").attr("data-category",emoticon.category);
+									$category.data("width",emoticon.width);
+									$category.data("height",emoticon.height);
+									$category.html(emoticon.title);
+									$category.on("click",function(e) {
+										var $category = $(this);
+										var $lists = $("div[data-role=lists]",$dom);
+										var category = $(this).attr("data-category");
+										var $item = $("ul[data-category="+category+"]",$lists);
+										if ($item.length == 1) {
+											$("ul[data-category]",$lists).hide();
+											$("ul[data-category="+category+"]",$lists).show();
+										} else {
+											$.send(Minitalk.getProcessUrl("getEmoticon"),{category:category},function(result) {
+												if (result.success == true) {
+													var $items = $("<ul>").attr("data-category",category);
+													for (var i=0, loop=result.items.length;i<loop;i++) {
+														var item = result.items[i];
+														var $item = $("<button>");
+														var path = item.split("/");
+														
+														$item.attr("data-code","#" + path[0] + "/" + path[1]);
+														$item.css("backgroundImage","url(" + Minitalk.getUrl()+"/emoticons/"+path[0]+"/items/"+path[1] + ")");
+														$item.css("width",$category.data("width") + "px");
+														$item.css("height",$category.data("height") + "px");
+														
+														$item.on("click",function() {
+															var code = $(this).attr("data-code");
+															var $input = $("div[data-role=input] > textarea");
+															
+															$input.focus();
+															$input.val($input.val() + "[" + code + "]");
+														});
+														
+														$items.append($("<li>").append($item));
+													}
+													$lists.append($items);
+													
+													$("ul[data-category]",$lists).hide();
+													$("ul[data-category="+category+"]",$lists).show();
+												}
+											});
+										}
+										
+										e.stopImmediatePropagation();
+									});
+									$categories.append($category);
+									
+									if (opened == null) opened = result.emoticons[i].category;
+								}
+								
+								if (opened != null && $("button[data-category="+opened+"]",$dom).length == 1) {
+									$("button[data-category="+opened+"]",$dom).triggerHandler("click");
+								}
+							}
 						});
 					});
 					break;
