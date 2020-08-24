@@ -73,6 +73,7 @@ div[data-role=window] section[data-tab] {position:static; width:100%; height:aut
  */
 *[data-role=photo] {cursor:pointer !important;}
 *[data-role=nickname] {cursor:pointer !important;}
+section[data-tab=chat] > div[data-role=message] {user-select:auto; -webkit-user-select:auto; -moz-user-select:auto; -ms-user-select:auto;}
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=file] > a {display:block;}
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=file] > a > div[data-role=image] > div {width:100%; height:0; overflow:hidden; background-image:no-repeat; background-size:cover; background-position:50% 50%;}
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=website] > a {display:block;}
