@@ -93,13 +93,14 @@ Minitalk.ui = {
 		/**
 		 * 채팅입력폼 이벤트 추가
 		 */
-		$("div[data-role=input] > textarea").on("keypress",function(e) {
-			console.log(e);
-			if (e.keyCode == 13) {
+		$("div[data-role=input] > textarea").on("keydown",function(e) {
+			if (e.keyCode == 13 && e.shiftKey === false) {
 				Minitalk.ui.sendMessage($(this).val());
 				e.stopPropagation();
 				e.preventDefault();
 			}
+		}).on("keyup",function(e) {
+			Minitalk.ui.updateInputHeight();
 		});
 		
 		/**
@@ -1788,6 +1789,23 @@ Minitalk.ui = {
 	setInputVal:function(value) {
 		var $input = $("div[data-role=input] > textarea");
 		$input.focus().val(value);
+	},
+	/**
+	 * 입력폼의 내용에 따라 입력폼의 높이를 조절한다.
+	 */
+	updateInputHeight:function() {
+		var $input = $("div[data-role=input] > textarea");
+		$input.css("height","");
+		
+		var oHeight = $input.outerHeight();
+		var maxHeight = Math.min($input.prop("scrollHeight"),150);
+		
+		if ($input.outerHeight() < maxHeight) {
+			$input.outerHeight(maxHeight);
+		}
+		
+		var $chat = $("section[data-tab=chat]");
+		$chat.css("top",oHeight - maxHeight);
 	},
 	/**
 	 * 알림메시지를 출력한다.
