@@ -94,6 +94,7 @@ Minitalk.ui = {
 		 * 채팅입력폼 이벤트 추가
 		 */
 		$("div[data-role=input] > textarea").on("keypress",function(e) {
+			console.log(e);
 			if (e.keyCode == 13) {
 				Minitalk.ui.sendMessage($(this).val());
 				e.stopPropagation();
@@ -356,6 +357,11 @@ Minitalk.ui = {
 		for (var index in Minitalk.tools) {
 			var tool = Minitalk.tools[index];
 			if (typeof tool == "string") {
+				/**
+				 * 권한에 따라 툴바 버튼을 추가한다.
+				 */
+				if (Minitalk.socket.getPermission("font") !== true && $.inArray(tool,["bold","italic","underline","color"]) > -1) continue;
+				
 				/**
 				 * 구분자일 경우
 				 */

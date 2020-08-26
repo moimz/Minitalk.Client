@@ -62,6 +62,11 @@ Minitalk.protocol = {
 		}
 		
 		/**
+		 * 실제 유저권한에 따라 툴바를 다시 초기화한다.
+		 */
+		Minitalk.ui.initTools();
+		
+		/**
 		 * 접속자수를 갱신한다.
 		 */
 		Minitalk.user.printUserCount(data.count,data.time);
