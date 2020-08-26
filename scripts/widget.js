@@ -217,7 +217,7 @@ Minitalk.fonts = function(name,value) {
 		color:null
 	};
 	
-	var fonts = Minitalk.socket.getPermission("font") == true && Minitalk.storage("fonts") == null ? defaults : Minitalk.storage("fonts");
+	var fonts = Minitalk.socket.getPermission("font") !== true || Minitalk.storage("fonts") == null ? defaults : Minitalk.storage("fonts");
 	if (value === undefined) {
 		if (name === undefined) return fonts;
 		if (fonts[name] !== undefined) {

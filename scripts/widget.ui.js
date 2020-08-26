@@ -929,7 +929,6 @@ Minitalk.ui = {
 		if (Minitalk.fireEvent("beforeActiveTool",[tool,$tool,e]) === false) return;
 		
 		var $tool = $("footer > ul > li > button[data-tool=" + tool + "]");
-		var $input = $("div[data-role=input] > textarea");
 		var $file = $("input[type=file]");
 		
 		if (typeof tool == "string") {
@@ -937,37 +936,31 @@ Minitalk.ui = {
 				case "bold" :
 					if (Minitalk.fonts("bold") === true) {
 						Minitalk.fonts("bold",false);
-						$input.css("fontWeight","normal");
-						$tool.removeClass("on");
 					} else {
 						Minitalk.fonts("bold",true);
-						$input.css("fontWeight","bold");
-						$tool.addClass("on");
 					}
+					
+					Minitalk.ui.initFonts();
 					break;
 					
 				case "underline" :
 					if (Minitalk.fonts("underline") === true) {
 						Minitalk.fonts("underline",false);
-						$input.css("fontDecoration","underline");
-						$tool.removeClass("on");
 					} else {
 						Minitalk.fonts("underline",true);
-						$input.css("fontDecoration","none");
-						$tool.addClass("on");
 					}
+					
+					Minitalk.ui.initFonts();
 					break;
 					
 				case "italic" :
 					if (Minitalk.fonts("italic") === true) {
 						Minitalk.fonts("italic",false);
-						$input.css("fontStyle","normal");
-						$tool.removeClass("on");
 					} else {
 						Minitalk.fonts("italic",true);
-						$input.css("fontStyle","italic");
-						$tool.addClass("on");
 					}
+					
+					Minitalk.ui.initFonts();
 					break;
 					
 				case "file" :
@@ -992,11 +985,11 @@ Minitalk.ui = {
 							
 							if (color == "reset") {
 								Minitalk.fonts("color",null);
-								$input.css("color","");
 							} else {
 								Minitalk.fonts("color",color);
-								$input.css("color",color);
 							}
+							
+							Minitalk.ui.initFonts();
 							
 							$dom.remove();
 							e.stopImmediatePropagation();
