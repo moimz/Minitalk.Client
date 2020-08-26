@@ -187,7 +187,9 @@ Minitalk.user = {
 		
 		if (e.pageX + width < frameWidth) {
 			$menus.css("left",e.pageX);
+			$menus.css("right","auto");
 		} else {
+			$menus.css("left","auto");
 			$menus.css("right",5);
 		}
 		
@@ -274,7 +276,6 @@ Minitalk.user = {
 			var oHeight = $menus.height();
 			$menus.height("auto");
 			var height = $menus.height();
-			console.log(oHeight,height);
 			$menus.height(oHeight);
 			
 			$menus.animate({height:height});
