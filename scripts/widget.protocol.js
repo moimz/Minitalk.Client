@@ -255,6 +255,25 @@ Minitalk.protocol = {
 		Minitalk.log(data);
 	},
 	/**
+	 * 귓속말을 수신하였을 경우
+	 */
+	whisper:function(data) {
+		if (Minitalk.socket.joined == true) {
+			Minitalk.ui.printChatMessage(data);
+		}
+		
+		var replace = data.from !== undefined ? data.from : null;
+		if (replace !== null) {
+			Minitalk.ui.enable(true);
+			delete data.from;
+		}
+		
+		/**
+		 * 수신된 메시지를 로컬 로그저장소에 저장한다.
+		 */
+		Minitalk.log(data);
+	},
+	/**
 	 * 누군가가 호출하였을 경우
 	 *
 	 * @param object data 호출한사람의 유저객체

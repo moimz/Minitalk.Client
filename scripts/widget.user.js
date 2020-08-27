@@ -43,6 +43,9 @@ Minitalk.user = {
 	 * @return object $user 접속자태그
 	 */
 	getTag:function(user) {
+		if (typeof user == "string") {
+			var user = {nickname:user,nickcon:null,photo:null,level:0,extras:null};
+		}
 		var $user = $("<label>").attr("data-role","user").data("user",user);
 		
 		if (user.nickname == Minitalk.user.me.nickname) $user.addClass("me");
@@ -319,6 +322,13 @@ Minitalk.user = {
 		
 		if (typeof menu == "string") {
 			switch (menu) {
+				case "whisper" :
+					var $input = $("div[data-role=input] > textarea");
+					$input.focus();
+					$input.val("/w " + user.nickname + " ");
+					$menus.remove();
+					break;
+					
 				case "call" :
 					var $icon = $("i",$menu).removeClass().addClass("mi mi-loading");
 					Minitalk.user.call(user.nickname,function(result) {

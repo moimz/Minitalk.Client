@@ -1373,16 +1373,19 @@ Minitalk.ui = {
 		var $chat = $("section[data-tab=chat]");
 		if ($chat.length == 0) return;
 		
+		var is_log = is_log === true;
 		var $item = null;
 		
 		/**
 		 * 채팅메시지 및 귓속말인 경우
 		 */
 		if (message.type == "message" || message.type == "whisper") {
+			var user = message.user;
+			
 			if (message.type == "whisper") {
-				var user = typeof message.to == "string" ? {nickname:message.to,photo:""} : message.to;
+				var to = message.to;
 			} else {
-				var user = message.user;
+				var to = null;
 			}
 			
 			if (message.from === undefined) {
@@ -1391,10 +1394,10 @@ Minitalk.ui = {
 				/**
 				 * 채팅탭 마지막객체에 메시지를 추가할 수 있다면, 해당 객체에 신규메시지를 추가하고, 그렇지 않다면 채팅메시지 객체를 신규로 생성한다.
 				 */
-				if ($item.length > 0 && $item.attr("data-role") == "message" && $item.hasClass("log") == is_log && $item.hasClass(message.type) == true && $item.data("nickname") == user.nickname && $item.position().top > 10) {
+				if ($item.length > 0 && $item.attr("data-role") == "message" && $item.hasClass("log") == is_log && $item.hasClass(message.type) == true && $item.data("nickname") == user.nickname && $item.data("to") == to && $item.position().top > 10) {
 					var $messageBox = $("div.box",$item);
 				} else {
-					$item = $("<div>").attr("data-role","message").addClass(message.type).data("nickname",user.nickname);
+					$item = $("<div>").attr("data-role","message").addClass(message.type).data("nickname",user.nickname).data("to",to);
 					if (is_log === true) $item.addClass("log");
 				
 					var $photo = $("<div>").attr("data-role","photo");
@@ -1411,11 +1414,11 @@ Minitalk.ui = {
 						var $nickname = $("<div>").attr("data-role","nickname").append(Minitalk.user.getTag(user,false));
 						$item.append($nickname);
 					} else if (message.type == "whisper") {
-						if (message.to.nickname == Minitalk.user.me.nickname) {
-							var $nickname = $("<div>").addClass("nickname").html(Minitalk.getText("text/whisper_from").replace("{nickname}","<b></b>"));
+						if (message.to == Minitalk.user.me.nickname) {
+							var $nickname = $("<div>").attr("data-role","nickname").html(Minitalk.getText("text/whisper_from").replace("{nickname}","<b>" + user.nickname + "</b>"));
 							$("b",$nickname).replaceWith(Minitalk.user.getTag(message.user));
 						} else {
-							var $nickname = $("<div>").addClass("nickname").html(Minitalk.getText("text/whisper_to").replace("{nickname}","<b></b>"));
+							var $nickname = $("<div>").attr("data-role","nickname").html(Minitalk.getText("text/whisper_to").replace("{nickname}","<b>" + to + "</b>"));
 							$("b",$nickname).replaceWith(Minitalk.user.getTag(message.to));
 						}
 						$item.append($nickname);
@@ -1943,6 +1946,42 @@ Minitalk.ui = {
 			var command = commands.shift();
 			
 			switch (command) {
+				/**
+				 * 귓속말
+				 */
+				case "w" :
+					var nickname = commands.shift();
+					var message = commands.join(" ");
+					
+					if (message.length == 0) return;
+					
+					/**
+					 * 메시지 전송전 이벤트 처리
+					 */
+					if (Minitalk.fireEvent("beforeSendWhisper",[Minitalk,nickname,message,Minitalk.user.me]) === false) return;
+					
+					/**
+					 * 메시지의 고유 ID를 할당한다.
+					 */
+					var uuid = uuidv4();
+					
+					/**
+					 * 서버로 메시지를 전송한다.
+					 */
+					Minitalk.socket.send("whisper",{id:uuid,type:"whisper",to:nickname,message:message});
+					
+					/**
+					 * 자신의 메시지를 화면에 출력한다.
+					 */
+					Minitalk.ui.printChatMessage({id:uuid,type:"whisper",to:nickname,message:Minitalk.ui.encodeMessage(message),user:Minitalk.user.me});
+					Minitalk.ui.disable(true);
+					
+					/**
+					 * 직전의 귓속말 보낸 사람의 닉네임을 유지한다.
+					 */
+					Minitalk.ui.setInputVal("/w " + nickname + " ");
+					return;
+					
 				/**
 				 * 채널관리자 로그인
 				 */
