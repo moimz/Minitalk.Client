@@ -505,11 +505,15 @@ Minitalk.ui = {
 	initSounds:function() {
 		var $audios = $("audio");
 		$audios.each(function() {
+			var $audio = $(this);
+			if ($audio.data("loaded") === true) return;
+			
 			var audio = $(this).get(0);
 			audio.muted = true;
 			var promise = audio.play();
 			if (promise !== undefined) {
 				promise.then(function() {
+					$audio.data("loaded",true);
 				}).catch(function(e) {
 				});
 			}
