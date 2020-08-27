@@ -194,6 +194,8 @@ section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=normal] > span.time > time:after {content:")";}
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=normal] > span.time > i.sending {color:#999; font-family:moimz; font-size:10px; font-style:normal;}
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=normal] > span.time > i.sending:before {content:"\ef17";}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=normal] > span.time > i.fail {color:#F44336; font-family:moimz; font-size:10px; font-style:normal;}
+section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=normal] > span.time > i.fail:before {content:"\eb02";}
 section[data-tab=chat] > div[data-role=message] > div.box > div:last-child > div > span.time > time {display:inline-block;}
 section[data-tab=chat] > div[data-role=message].whisper {color:#ff00ff;}
 section[data-tab=chat] > div[data-role=message].whisper > div.box > div > div[data-role=normal] {color:#ff00ff;}

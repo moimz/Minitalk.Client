@@ -1439,6 +1439,8 @@ Minitalk.ui = {
 			
 			if (message.time === undefined) {
 				$inner.append($("<span>").addClass("time").html('<i class="sending"></i>'));
+			} else if (message.time == -1) {
+				$inner.append($("<span>").addClass("time").html('<i class="fail"></i>'));
 			} else {
 				$inner.append($("<span>").addClass("time").html($("<time>").attr("datetime",message.time).html(moment(message.time).locale(Minitalk.language).format(Minitalk.dateFormat))));
 			}
