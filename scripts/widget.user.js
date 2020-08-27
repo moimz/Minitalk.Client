@@ -162,7 +162,6 @@ Minitalk.user = {
 			dataType:"json",
 			headers:{authorization:"TOKEN " + Minitalk.socket.token},
 			success:function(result) {
-				if (result.success == true && result.user === undefined) result.success = false;
 				callback(result);
 			},
 			error:function() {

@@ -280,7 +280,7 @@ Minitalk.protocol = {
 	 */
 	call:function(data) {
 		Minitalk.ui.playSound("call");
-		Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/called").replace("{nickname}",data.nickname));
+		Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/called").replace("{nickname}",data.nickname));
 	},
 	/**
 	 * 접속코드를 수신하였을 경우
