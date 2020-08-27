@@ -178,7 +178,7 @@ footer > div[data-role=layers] > div[data-tool=emoticon] > div[data-role=lists] 
 /**
  * 유저 및 유저메뉴
  */
-label[data-role=user] {display:inline-block; max-width:100%; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;}
+label[data-role=user] {display:inline-block; max-width:100%; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; vertical-align:middle;}
 label[data-role=user] > span > i.me {float:right; color:#666; font-size:12px; font-weight:normal; font-style:normal;}
 label[data-role=user] > span > i.me:before {content:"(";}
 label[data-role=user] > span > i.me:after {content:")";}
