@@ -288,6 +288,22 @@ Minitalk.user = {
 	 * @param event e 이벤트객체
 	 */
 	activeMenu:function($menu,e) {
+		var menu = $menu.data("menu");
+		if (Minitalk.fireEvent("beforeActiveUserMenu",[menu,$menu,e]) === false) return;
 		
+		var $menus = $("ul[data-role=usermenus]");
+		var $menu = $("button[data-menu=" + menu + "]",$menus);
+		var user = $menus.data("user");
+		
+		if (typeof menu == "string") {
+		} else {
+			if (typeof menu.handler == "function") {
+				menu.handler(e);
+			}
+		}
+		
+		if (Minitalk.fireEvent("afterActiveUserMenu",[menu,$menu,e]) === false) return;
+		
+		e.stopImmediatePropagation();
 	}
 };
