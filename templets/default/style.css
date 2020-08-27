@@ -144,6 +144,7 @@ footer > div[data-role=input] > button:hover {background:#15a9b4;}
 footer > div[data-role=input] > button[disabled] {background:#f4f4f4; cursor:not-allowed; box-sizing:border-box; top:0px; height:34px;}
 footer > div[data-role=input] > button[disabled] > i {color:#ccc;}
 
+
 /**
  * 툴바레이어
  */
@@ -153,6 +154,7 @@ footer > div[data-role=layers] > div[data-tool]:before {display:block; position:
 footer > div[data-role=layers] > div[data-tool]:after {display:block; position:absolute; content:" "; border-top:5px solid #f6f6f6; border-left:5px solid transparent; border-right:5px solid transparent; left:6px; bottom:-5px;}
 footer > div[data-role=layers] > div[data-tool=color] {border:1px solid #d8d8d9;}
 
+
 /**
  * 채팅탭
  */
@@ -160,17 +162,29 @@ section[data-tab=chat] {height:calc(100% - 35px);} /* 채팅탭의 경우, 푸�
 section[data-tab=chat] > div[data-role] > div[data-role=photo] {float:left; width:34px; height:34px; margin-right:6px; background-image:url(./images/nophoto.png); background-repeat:no-repeat; background-size:cover; background-position:50% 50%; border-radius:50%; box-sizing:border-box; border:1px solid #eee;}
 section[data-tab=chat] > div[data-role] > div[data-role=nickname] {float:left; width:calc(100% - 50px); font-size:12px; font-weight:bold; height:16px; line-height:16px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; margin-top:3px;}
 
+
+/**
+ * 유저탭
+ */
+section[data-tab=users] > div[data-role=search] {width:100%; height:30px;}
+section[data-tab=users] > ul {list-style:none; display:block; width:100%; height:calc(100% - 36px); padding:4px 0px; overflow-x:hidden; overflow-y:scroll;}
+section[data-tab=users] > ul > li {display:block; font-size:0;}
+section[data-tab=users] > ul > li > label[data-role=user] {display:block; width:100%; height:34px; padding:4px 8px; cursor:pointer;}
+section[data-tab=users] > ul > li > label[data-role=user]:hover {background:#f4f4f4;}
+section[data-tab=users] > ul > li > label[data-role=user] > i[data-role=photo] {display:block; width:34px; height:34px; float:left; margin-right:6px; background-image:url(./images/nophoto.png); background-repeat:no-repeat; background-size:cover; background-position:50% 50%; border-radius:50%; box-sizing:border-box; border:1px solid #eee;}
+section[data-tab=users] > ul > li > label[data-role=user] > span[data-role=nickname] {display:inline-block; font-weight:bold; font-size:12px; max-width:calc(100% - 40px); height:20px; line-height:20px; margin:7px 0px;}
+
+/**
+ * 채팅메시지
+ */
 section[data-tab=chat] > div[data-role=item] {margin:5px; -ms-word-break:break-all; word-wrap:break-word; -ms-user-select:auto; -moz-user-select:auto; -webkit-user-select:auto;}
 section[data-tab=chat] > div[data-role=item].system {padding:5px; font-size:12px; line-height:1.4; text-align:justify;}
 section[data-tab=chat] > div[data-role=item].system.info {border:1px solid #18295b; background:#2847a0; color:#fff;}
 section[data-tab=chat] > div[data-role=item].system.action {border:1px solid #236a1f; background:#308f2b; color:#fff;}
 section[data-tab=chat] > div[data-role=item].system.error {border:1px solid #b82332; background:#d33948; color:#fff;}
 section[data-tab=chat] > div[data-role=item].system.user {color:#666; margin:0px; padding:2px 5px;}
-
-
 section[data-tab=chat] > div[data-role=message] {margin:5px;}
 section[data-tab=chat] > div[data-role=message]:after {clear:both; content:""; display:block;}
-
 section[data-tab=chat] > div[data-role=message] > div.box {float:left; width:calc(100% - 50px); box-sizing:border-box;}
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=normal] {margin:0px; font-size:12px; color:#222; line-height:1.6;}
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=normal] > span.text:after {content:"-"; color:#fff;}
@@ -184,13 +198,11 @@ section[data-tab=chat] > div[data-role=message] > div.box > div:last-child > div
 section[data-tab=chat] > div[data-role=message].whisper {color:#ff00ff;}
 section[data-tab=chat] > div[data-role=message].whisper > div.box > div > div[data-role=normal] {color:#ff00ff;}
 section[data-tab=chat] > div[data-role=message].log {opacity:0.5;}
-
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=file] {padding:5px 0px; max-width:300px;}
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=file] > a {border:1px solid #ccc; color:#222; text-decoration:none; font-size:0;}
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=file] > a > i {display:block; float:left; width:30px; height:30px; margin:10px; vertical-align:middle;}
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=file] > a > b {display:block; width:calc(100% - 60px); height:20px; line-height:20px; font-size:12px; color:#222; margin:5px 10px 0px 0px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;}
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=file] > a > p {display:block; width:calc(100% - 60px); height:20px; line-height:20px; font-size:12px; color:#666; margin:0px 10px 5px 0px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;}
-
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=website] {padding:5px 0px; max-width:300px;}
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=website] > a {border:1px solid #ccc; color:#222; text-decoration:none;}
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=website] > a > h4 {box-sizing:border-box; width:100%; padding:8px 8px 5px 8px; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; font-size:12px;}
@@ -214,4 +226,15 @@ section[data-tab=chat] > div[data-role=line] > div {width:100px; height:12px; li
 /**
  * 유저메뉴
  */
-ul[data-role=usermenus] {top:0; left:0; max-width:80%; border:1px solid #d8d8d9; background:#f6f6f6; border-radius:3px;}
+ul[data-role=usermenus] {top:0; left:0; max-width:80%; border:1px solid #d8d8d9; background:#f6f6f6; border-radius:3px; box-shadow:1px 1px 2px rgba(0,0,0,0.1);}
+ul[data-role=usermenus] > li[data-role=nickname] {width:100%; height:30px; padding:0px 8px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; font-size:0; background:#10b8c3; color:#fff;}
+ul[data-role=usermenus] > li[data-role=nickname] > i {display:inline-block; vertical-align:middle;}
+ul[data-role=usermenus] > li[data-role=nickname] > i.status {width:10px; height:10px; margin:10px 7px 10px 3px; border-radius:50%; background:transparent; box-sizing:border-box; border:1px solid #fff;}
+ul[data-role=usermenus] > li[data-role=nickname] > i.mi-loading {font-size:12px; width:12px; height:12px; line-height:20px; margin:8px 6px 8px 2px; text-align:center; color:#fff;}
+ul[data-role=usermenus] > li[data-role=nickname] > i.online {background:#fff;}
+ul[data-role=usermenus] > li[data-role=nickname] > label {display:inline-block; width:calc(100% - 20px); height:30px; line-height:30px; font-size:12px; color:#fff; font-weight:bold; vertical-align:middle;}
+ul[data-role=usermenus] > li > button {width:100%; height:28px; border:0; background:transparent; cursor:pointer; text-align:left; font-size:12px; padding:0px 8px; box-sizing:border-box; color:#666; font-size:0;}
+ul[data-role=usermenus] > li > button:hover {background:#fff; color:#222;}
+ul[data-role=usermenus] > li > button > i.icon {width:16px; height:20px; margin:4px 4px 4px 0px; display:inline-block; vertical-align:middle;}
+ul[data-role=usermenus] > li > button > i.mi-loading {width:16px; height:20px; margin:4px 4px 4px 0px; display:inline-block; vertical-align:middle; font-size:12px; line-height:20px; text-align:center;}
+ul[data-role=usermenus] > li > button > span {display:inline-block; width:calc(100% - 20px); height:28px; line-height:28px; font-size:12px; vertical-align:middle;}
