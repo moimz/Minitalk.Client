@@ -38,7 +38,9 @@
 		"updated_nickname":"닉네임을 {NICKNAME}으로 변경하였습니다.",
 		"update_nickname":"{BEFORE}님이 닉네임을 {AFTER}으로 변경하였습니다.",
 		"refresh":"새로고침",
-		"reconnect":"재접속"
+		"reconnect":"재접속",
+		"call":"{nickname}님을 호출하였습니다.",
+		"called":"{nickname}님이 호출하였습니다."
 	},
 	"tab":{
 		"chat":"채팅",

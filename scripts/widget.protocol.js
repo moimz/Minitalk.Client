@@ -255,6 +255,15 @@ Minitalk.protocol = {
 		Minitalk.log(data);
 	},
 	/**
+	 * 누군가가 호출하였을 경우
+	 *
+	 * @param object data 호출한사람의 유저객체
+	 */
+	call:function(data) {
+		Minitalk.ui.playSound("call");
+		Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/called").replace("{nickname}",data.nickname));
+	},
+	/**
 	 * 접속코드를 수신하였을 경우
 	 */
 	authorization:function(authorization) {

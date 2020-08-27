@@ -146,6 +146,28 @@ Minitalk.user = {
 		});
 	},
 	/**
+	 * 유저를 호출한다.
+	 *
+	 * @param string nickname 호출할 대상 닉네임
+	 * @param function callback
+	 */
+	call:function(nickname,callback) {
+		if (Minitalk.socket.isConnected() === false) callback({success:false,error:"NOT_CONNECTED"});
+		
+		$.get({
+			url:Minitalk.socket.connection.domain+"/call/" + nickname,
+			dataType:"json",
+			headers:{authorization:"TOKEN " + Minitalk.socket.token},
+			success:function(result) {
+				if (result.success == true && result.user === undefined) result.success = false;
+				callback(result);
+			},
+			error:function() {
+				callback({success:false,error:"CONNECT_ERROR"});
+			}
+		});
+	},
+	/**
 	 * 유저메뉴를 토클한다.
 	 *
 	 * @param object $dom 메뉴를 호출한 대상의 DOM객체
@@ -296,6 +318,18 @@ Minitalk.user = {
 		var user = $menus.data("user");
 		
 		if (typeof menu == "string") {
+			switch (menu) {
+				case "call" :
+					var $icon = $("i",$menu).removeClass().addClass("mi mi-loading");
+					Minitalk.user.call(user.nickname,function(result) {
+						if (result.success == true) {
+							Minitalk.ui.notify("call","action",Minitalk.getText("action/call").replace("{nickname}",user.nickname));
+						}
+						
+						$menus.remove();
+					});
+					break;
+			}
 		} else {
 			if (typeof menu.handler == "function") {
 				menu.handler(e);
