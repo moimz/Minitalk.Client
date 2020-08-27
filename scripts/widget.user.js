@@ -212,10 +212,10 @@ Minitalk.user = {
 			
 			if (result.success == true && user.nickname == result.user.nickname) {
 				user.status = "online";
-				$("i",$name).removeClass("mi mi-loading").addClass("online");
+				$("i",$name).removeClass("mi mi-loading").addClass("status online");
 			} else {
 				user.status = "offline";
-				$("i",$name).removeClass("mi mi-loading").addClass("offline");
+				$("i",$name).removeClass("mi mi-loading").addClass("status offline");
 			}
 			
 			for (var index in Minitalk.usermenus) {
