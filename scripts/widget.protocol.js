@@ -44,6 +44,7 @@ Minitalk.protocol = {
 		/**
 		 * 서버접속오류 알림이 있는 경우 제거한다.
 		 */
+		Minitalk.ui.unnotify("error");
 		Minitalk.ui.unnotify("disconnect");
 		
 		/**
@@ -103,8 +104,15 @@ Minitalk.protocol = {
 	 */
 	disconnect:function() {
 		Minitalk.socket.disconnected();
-		Minitalk.ui.notify("disconnect","error",Minitalk.getErrorText("DISCONNECTED"),false,false);
-		Minitalk.socket.reconnect(60);
+		Minitalk.ui.unnotify("connecting");
+		
+		/**
+		 * 재접속이 가능한 경우 서버접속이 종료되었음을 알려준다.
+		 */
+		if (Minitalk.socket.reconnectable === true) {
+			Minitalk.ui.notify("disconnect","error",Minitalk.getErrorText("DISCONNECTED"),false,false);
+			Minitalk.socket.reconnect(60);
+		}
 	},
 	/**
 	 * 접속에 패스워드가 필요한 경우, 패스워드 창을 띄운다.
@@ -295,11 +303,6 @@ Minitalk.protocol = {
 		var type = Math.floor(code / 100);
 		
 		/**
-		 * 에러메시지를 출력한다.
-		 */
-		Minitalk.ui.printErrorCode(code);
-		
-		/**
 		 * 닉네임 관련
 		 */
 		if (type == 3) {
@@ -326,6 +329,11 @@ Minitalk.protocol = {
 				case 305 : // 닉네임 오류
 					break;
 			}
+			
+			/**
+			 * 에러메시지를 출력한다.
+			 */
+			Minitalk.ui.printErrorCode(code);
 		}
 		
 		/**

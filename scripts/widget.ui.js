@@ -1307,8 +1307,30 @@ Minitalk.ui = {
 	 * @param string code 에러코드
 	 */
 	printErrorCode:function(code) {
-		var message = Minitalk.getText("error/code/" + code);
-		Minitalk.ui.printSystemMessage("error",message + "(code : " + code + ")");
+		/**
+		 * 재접속 시도를 하지 않는 에러인 경우 에러확인창으로 에러를 표시하고,
+		 * 서버 접속중이 아닌경우에는 알림메시지창으로 에러를 표시한다.
+		 */
+		var message = Minitalk.getText("error/code/"+code) + " (code : " + code + ")";
+		if (Minitalk.socket.reconnectable == false) {
+			var $error = $("<div>").attr("data-role","error");
+			var $errorbox = $("<section>");
+			$errorbox.append($("<h2>").html(Minitalk.getText("text/error")));
+			$errorbox.append($("<p>").html(message));
+			
+			var $button = $("<button>").html(Minitalk.getText("button/close"));
+			$button.on("click",function() {
+				self.close();
+			});
+			
+			$errorbox.append($button);
+			$error.append($("<div>").append($errorbox));
+			$("body").append($error);
+		} else if (Minitalk.socket.connected == false) {
+			Minitalk.ui.notify("error","error",message,false,false);
+		} else {
+			Minitalk.ui.printSystemMessage("error",message);
+		}
 	},
 	/**
 	 * 시스템 메시지를 출력한다.

@@ -71,7 +71,8 @@
 		"cancel":"취소",
 		"search":"검색",
 		"refresh":"새로고침",
-		"box":"박스생성하기"
+		"box":"박스생성하기",
+		"close":"닫기"
 	},
 	"user":{
 		"keyword":"닉네임 검색"

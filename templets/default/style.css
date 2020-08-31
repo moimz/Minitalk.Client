@@ -72,6 +72,14 @@ div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li >
 
 
 /**
+ * 알림영역
+ */
+div[data-role=notifications] {top:80px;}
+div[data-role=frame][data-tab-type=vertical] div[data-role=notifications] {top:45px;}
+div[data-role=frame][data-tab-type=none] div[data-role=notifications] {top:45px;}
+
+
+/**
  * 탭 목록
  */
 aside > ul[data-role=lists] {background:#f6f6f6; width:100%; border-top:1px solid #d8d8d9; border-bottom:1px solid #d8d8d9;}
