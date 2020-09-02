@@ -215,7 +215,7 @@ Minitalk.ui = {
 				var $tab = $("<li>");
 				var $button = $("<button>").attr("type","button").attr("data-tab",tab);
 				$button.append($("<i>").addClass("icon"));
-				$button.append($("<span>").html(Minitalk.getText("tab/" + tab)));
+				$button.append($("<label>").html(Minitalk.getText("tab/" + tab)));
 				$button.data("tab",tab);
 				$button.on("click",function(e) {
 					Minitalk.ui.activeTab($(this),e);
@@ -234,7 +234,7 @@ Minitalk.ui = {
 				var $tab = $("<li>");
 				var $button = $("<button>").attr("type","button").attr("data-tab","custom");
 				$button.append($("<i>").addClass(tab.iconCls));
-				$button.append($("<span>").html(tab.text));
+				$button.append($("<label>").html(tab.text));
 				$button.data("tab",tab);
 				$button.on("click",function(e) {
 					Minitalk.ui.activeTab($(this),e);
@@ -651,8 +651,8 @@ Minitalk.ui = {
 			var html = [
 				'<div data-role="search">',
 					'<input type="search" placeholder="' + Minitalk.getText("user/keyword") + '">',
-					'<button type="button" data-action="search"><i></i><span>' + Minitalk.getText("button/search") + '</span></button>',
-					'<button type="button" data-action="refresh"><i></i><span>' + Minitalk.getText("button/refresh") + '</span></button>',
+					'<button type="button" data-action="search"><i></i><label>' + Minitalk.getText("button/search") + '</label></button>',
+					'<button type="button" data-action="refresh"><i></i><label>' + Minitalk.getText("button/refresh") + '</label></button>',
 				'</div>',
 				'<ul></ul>'
 			];
@@ -750,9 +750,9 @@ Minitalk.ui = {
 			var html = [
 				'<div data-role="search">',
 					'<input type="search" placeholder="' + Minitalk.getText("box/keyword") + '">',
-					'<button type="button" data-action="search"><i></i><span>' + Minitalk.getText("button/search") + '</span></button>',
-					'<button type="button" data-action="refresh"><i></i><span>' + Minitalk.getText("button/refresh") + '</span></button>',
-					'<button type="button" data-action="create"><i></i><span>' + Minitalk.getText("button/box") + '</span></button>',
+					'<button type="button" data-action="search"><i></i><label>' + Minitalk.getText("button/search") + '</label></button>',
+					'<button type="button" data-action="refresh"><i></i><label>' + Minitalk.getText("button/refresh") + '</label></button>',
+					'<button type="button" data-action="create"><i></i><label>' + Minitalk.getText("button/box") + '</label></button>',
 				'</div>',
 				'<ul></ul>'
 			];

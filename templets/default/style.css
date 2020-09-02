@@ -30,9 +30,11 @@ aside {background:#f4f4f4;}
 aside > ul[data-role=tabs] {width:100%; height:100%; display:block;}
 aside > ul[data-role=tabs] > li {position:relative; vertical-align:middle; width:100%; height:100%;}
 aside > ul[data-role=tabs] > li > button {position:relative; top:0; left:0; width:100%; height:100%; font-size:0; background:transparent; border:0; vertical-align:middle; box-sizing:border-box;  cursor:pointer;}
-aside > ul[data-role=tabs] > li > button > span {display:none;}
+aside > ul[data-role=tabs] > li > button > label {position:absolute; padding:0px 8px; height:20px; background:rgba(0,0,0,0.8); line-height:20px; color:#fff; z-index:100; font-size:12px; white-space:nowrap; display:none;}
+aside > ul[data-role=tabs] > li > button > label:before {position:absolute; content:" ";}
 aside > ul[data-role=tabs] > li > button > i {display:block; width:100%; height:100%; font-style:normal; text-align:center; color:#999;}
 aside > ul[data-role=tabs] > li > button:hover > i {color:#777;}
+aside > ul[data-role=tabs] > li > button:hover > label {display:block;}
 aside > ul[data-role] > li > button > i.icon {font-family:moimz; font-style:normal;}
 aside > ul[data-role] > li > button[data-tab=chat] > i.icon:before {content:"\ef07";}
 aside > ul[data-role] > li > button[data-tab=users] > i.icon:before {content:"\ec02";}
@@ -55,6 +57,8 @@ div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li
 div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li > button > i {font-size:16px; line-height:37px;}
 div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li > button:hover {background:#fff;}
 div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li > button.open {background:#fff; border-bottom-color:#fff;}
+div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li > button > label {bottom:100%; left:50%; transform:translateX(-50%);}
+div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li > button > label:before {border-top:5px solid rgba(0,0,0,0.8); border-left:5px solid transparent; border-right:5px solid transparent; top:100%; left:50%; margin-left:-5px;}
 div[data-role=frame][data-tab-type=horizontal] > aside.open > ul[data-role=tabs] > li > button[data-tab=more]:after {position:absolute; border-bottom:6px solid #f6f6f6; border-left:6px solid transparent; border-right:6px solid transparent; content:" "; bottom:-1px; left:50%; margin-left:-6px; z-index:10;}
 div[data-role=frame][data-tab-type=horizontal] > aside.open > ul[data-role=tabs] > li > button[data-tab=more]:before {position:absolute; border-bottom:7px solid #d8d8d9; border-left:7px solid transparent; border-right:7px solid transparent; content:" "; bottom:-1px; left:50%; margin-left:-7px; z-index:10;}
 
@@ -65,18 +69,12 @@ div[data-role=frame][data-tab-type=horizontal] > aside.open > ul[data-role=tabs]
 div[data-role=frame][data-tab-type=vertical] > aside {position:absolute; top:40px; right:0px; width:35px; height:calc(100% - 40px); border-left:1px solid #d8d8d9; padding:0px; box-sizing:border-box;}
 div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] {display:block; width:100%; height:100%;}
 div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li {height:34px; padding:2px; box-sizing:border-box;}
-div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li > button > i {font-size:16px; line-height:30px;}
 div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li > button {border-radius:3px;}
+div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li > button > i {font-size:16px; line-height:30px;}
+div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li > button > label {right:100%; top:50%; margin-top:-10px;}
+div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li > button > label:before {border-left:5px solid rgba(0,0,0,0.8); border-top:5px solid transparent; border-bottom:5px solid transparent; left:100%; top:50%; margin-top:-5px;}
 div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li > button:hover {Background:#fff;}
 div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li > button.open {background:#fff;}
-
-
-/**
- * 알림영역
- */
-div[data-role=notifications] {top:80px;}
-div[data-role=frame][data-tab-type=vertical] div[data-role=notifications] {top:45px;}
-div[data-role=frame][data-tab-type=none] div[data-role=notifications] {top:45px;}
 
 
 /**
@@ -86,11 +84,19 @@ aside > ul[data-role=lists] {background:#f6f6f6; width:100%; border-top:1px soli
 aside > ul[data-role=lists] > li {width:100%; height:36px; border-bottom:1px solid #e5e5e5;}
 aside > ul[data-role=lists] > li > button {width:100%; height:36px; text-align:left; background:transparent; border:0; cursor:pointer; color:#777; padding:0px 8px; font-size:0; cursor:pointer;}
 aside > ul[data-role=lists] > li > button > i {width:20px; height:36px; display:inline-block; line-height:36px; text-align:center; margin-right:5px; font-size:12px;  vertical-align:middle;}
-aside > ul[data-role=lists] > li > button > span {display:inline-block; width:calc(100% - 25px); height:36px; white-space:nowrap; line-height:36px; overflow:hidden; text-overflow:ellipsis; font-size:12px; vertical-align:middle;}
+aside > ul[data-role=lists] > li > button > label {display:inline-block; width:calc(100% - 25px); height:36px; white-space:nowrap; line-height:36px; overflow:hidden; text-overflow:ellipsis; font-size:12px; vertical-align:middle;}
 aside > ul[data-role=lists] > li > button:hover {background:#fff;}
 aside > ul[data-role=lists] > li:last-child {border-bottom:0;}
 
 div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=lists] {top:77px; right:0;}
+
+
+/**
+ * 알림영역
+ */
+div[data-role=notifications] {top:80px;}
+div[data-role=frame][data-tab-type=vertical] div[data-role=notifications] {top:45px;}
+div[data-role=frame][data-tab-type=none] div[data-role=notifications] {top:45px;}
 
 
 /**
@@ -174,14 +180,21 @@ section[data-tab=chat] > div[data-role] > div[data-role=nickname] {float:left; w
 /**
  * 유저탭
  */
-section[data-tab=users] > div[data-role=search] {width:100%; height:34px; background:#f4f4f4; border-bottom:1px solid #d8d8d9; box-shadow:0px 1px 3px rgba(0,0,0,0.1); font-size:0;}
+section[data-tab=users] > div[data-role=search] {width:100%; height:34px; border-bottom:1px solid #d8d8d9; box-shadow:0px 1px 3px rgba(0,0,0,0.1); font-size:0;}
 section[data-tab=users] > div[data-role=search] > input {padding:5px 10px; width:calc(100% - 68px); height:34px; line-height:14px; box-sizing:border-box; font-size:12px; border:0; background:transparent; vertical-align:middle;}
-section[data-tab=users] > div[data-role=search] > button {margin:0px; width:34px; height:34px; font-size:0; border:0; background:transparent; cursor:pointer; vertical-align:middle; border-left:1px solid #d8d8d9;}
+section[data-tab=users] > div[data-role=search] > button {margin:0px; width:34px; height:34px; font-size:0; border:0; background:transparent; cursor:pointer; vertical-align:middle; border-left:1px solid #d8d8d9; position:relative;}
 section[data-tab=users] > div[data-role=search] > button > i {width:34px; height:34px; font-size:14px; font-family:moimz; color:#666; text-align:center; font-style:normal;}
-section[data-tab=users] > div[data-role=search] > button:hover {background:#fff;}
+section[data-tab=users] > div[data-role=search] > button > label {position:absolute; top:100%; padding:0px 8px; height:20px; background:rgba(0,0,0,0.8); line-height:20px; color:#fff; z-index:100; font-size:12px; white-space:nowrap; display:none;}
+section[data-tab=users] > div[data-role=search] > button > label:before {position:absolute; border-bottom:5px solid rgba(0,0,0,0.8); border-left:5px solid transparent; border-right:5px solid transparent; content:" "; bottom:100%;}
+section[data-tab=users] > div[data-role=search] > button:hover {background:#f4f4f4;}
 section[data-tab=users] > div[data-role=search] > button:hover > i {color:#222;}
+section[data-tab=users] > div[data-role=search] > button:hover > label {display:block;}
 section[data-tab=users] > div[data-role=search] > button[data-action=search] > i:before {content:"\eb09";}
+section[data-tab=users] > div[data-role=search] > button[data-action=search] > label {left:50%; transform:translateX(-50%);}
+section[data-tab=users] > div[data-role=search] > button[data-action=search] > label:before {left:50%; margin-left:-5px;}
 section[data-tab=users] > div[data-role=search] > button[data-action=refresh] > i:before {content:"\eb05"; font-size:16px;}
+section[data-tab=users] > div[data-role=search] > button[data-action=refresh] > label {right:0;}
+section[data-tab=users] > div[data-role=search] > button[data-action=refresh] > label:before {right:12px;}
 section[data-tab=users] > div[data-role=search] > button[disabled] {cursor:not-allowed; background:#f4f4f4 !important;}
 section[data-tab=users] > div[data-role=search] > button[disabled] > i {color:#ccc;}
 section[data-tab=users] > ul {list-style:none; display:block; width:100%; height:calc(100% - 35px); padding:4px 0px; box-sizing:border-box; overflow-x:hidden; overflow-y:scroll;}
@@ -190,6 +203,34 @@ section[data-tab=users] > ul > li > label[data-role=user] {display:block; width:
 section[data-tab=users] > ul > li > label[data-role=user]:hover {background:#f4f4f4;}
 section[data-tab=users] > ul > li > label[data-role=user] > i[data-role=photo] {display:block; width:34px; height:34px; float:left; margin-right:6px; background-image:url(./images/nophoto.png); background-repeat:no-repeat; background-size:cover; background-position:50% 50%; border-radius:50%; box-sizing:border-box; border:1px solid #eee;}
 section[data-tab=users] > ul > li > label[data-role=user] > span[data-role=nickname] {display:inline-block; font-weight:bold; font-size:12px; max-width:calc(100% - 40px); height:20px; line-height:20px; margin:7px 0px;}
+
+
+/**
+ * 박스탭
+ */
+section[data-tab=boxes] > div[data-role=search] {width:100%; height:34px; border-bottom:1px solid #d8d8d9; box-shadow:0px 1px 3px rgba(0,0,0,0.1); font-size:0;}
+section[data-tab=boxes] > div[data-role=search] > input {padding:5px 10px; width:calc(100% - 102px); height:34px; line-height:14px; box-sizing:border-box; font-size:12px; border:0; background:transparent; vertical-align:middle;}
+section[data-tab=boxes] > div[data-role=search] > button {margin:0px; width:34px; height:34px; font-size:0; border:0; background:transparent; cursor:pointer; vertical-align:middle; border-left:1px solid #d8d8d9; position:relative;}
+section[data-tab=boxes] > div[data-role=search] > button > i {width:34px; height:34px; font-size:14px; font-family:moimz; color:#666; text-align:center; font-style:normal;}
+section[data-tab=boxes] > div[data-role=search] > button > label {position:absolute; top:100%; padding:0px 8px; height:20px; background:rgba(0,0,0,0.8); line-height:20px; color:#fff; z-index:100; font-size:12px; white-space:nowrap; display:none; text-align:center;}
+section[data-tab=boxes] > div[data-role=search] > button > label:before {position:absolute; border-bottom:5px solid rgba(0,0,0,0.8); border-left:5px solid transparent; border-right:5px solid transparent; content:" "; bottom:100%;}
+section[data-tab=boxes] > div[data-role=search] > button:hover {background:#f4f4f4;}
+section[data-tab=boxes] > div[data-role=search] > button:hover > i {color:#222;}
+section[data-tab=boxes] > div[data-role=search] > button:hover > label {display:block;}
+section[data-tab=boxes] > div[data-role=search] > button[data-action=search] > i:before {content:"\eb09";}
+section[data-tab=boxes] > div[data-role=search] > button[data-action=search] > label {left:50%; transform:translateX(-50%);}
+section[data-tab=boxes] > div[data-role=search] > button[data-action=search] > label:before {left:50%; margin-left:-5px;}
+section[data-tab=boxes] > div[data-role=search] > button[data-action=refresh] > i:before {content:"\eb05"; font-size:16px;}
+section[data-tab=boxes] > div[data-role=search] > button[data-action=refresh] > label {left:50%; transform:translateX(-50%);}
+section[data-tab=boxes] > div[data-role=search] > button[data-action=refresh] > label:before {left:50%; margin-left:-5px;}
+section[data-tab=boxes] > div[data-role=search] > button[data-action=create] {background:#2196F3; border-left-color:#1E88E5; height:35px;}
+section[data-tab=boxes] > div[data-role=search] > button[data-action=create]:hover {background:#1E88E5;}
+section[data-tab=boxes] > div[data-role=search] > button[data-action=create] > i {color:#fff;}
+section[data-tab=boxes] > div[data-role=search] > button[data-action=create] > i:before {content:"\eb00"; font-size:16px;}
+section[data-tab=boxes] > div[data-role=search] > button[data-action=create] > label {right:0;}
+section[data-tab=boxes] > div[data-role=search] > button[data-action=create] > label:before {right:12px;}
+section[data-tab=boxes] > div[data-role=search] > button[disabled] {cursor:not-allowed; background:#f4f4f4 !important;}
+section[data-tab=boxes] > div[data-role=search] > button[disabled] > i {color:#ccc;}
 
 /**
  * 채팅메시지
