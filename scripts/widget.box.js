@@ -38,6 +38,12 @@ Minitalk.box = {
 	 */
 	create:function($dom) {
 		if ($dom === undefined) {
+			if (Minitalk.socket.isConnected() === false) return;
+			if (Minitalk.socket.getPermission("box") === false) {
+				Minitalk.ui.printError("FORBIDDEN");
+				return;
+			}
+			
 			/**
 			 * 박스 개설 HTML 을 정의한다.
 			 */
