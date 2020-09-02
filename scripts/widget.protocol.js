@@ -355,6 +355,11 @@ Minitalk.protocol = {
 		if (type == 8) {
 			Minitalk.socket.reconnectable = false;
 			Minitalk.socket.io.disconnect();
+			
+			/**
+			 * 에러메시지를 출력한다.
+			 */
+			Minitalk.ui.printErrorCode(code);
 			return;
 		}
 		
