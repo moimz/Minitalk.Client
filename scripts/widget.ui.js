@@ -1290,14 +1290,20 @@ Minitalk.ui = {
 				$button.on("click",function() {
 					callback();
 				});
-			} else {
+			} else if (typeof callback == "undefined") {
 				$button.on("click",function() {
 					$("div[data-role=error]").remove();
 				});
+			} else {
+				$errorbox.addClass("textonly");
+				if (typeof callback == "string") {
+					$("p",$errorbox).append("<br>" + callback);
+				}
+				$button = null;
 			}
 		}
 		
-		$errorbox.append($button);
+		if ($button !== null) $errorbox.append($button);
 		$error.append($("<div>").append($errorbox));
 		$("body").append($error);
 	},
