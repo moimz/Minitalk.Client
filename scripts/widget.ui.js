@@ -597,6 +597,7 @@ Minitalk.ui = {
 			 * 세로형태의 탭바의 경우, 같은 탭을 클릭할 경우 채팅탭으로 돌아간다.
 			 */
 			if (type == "vertical") {
+				if (tab == "chat") return;
 				Minitalk.ui.activeTab("chat");
 			}
 			return;
