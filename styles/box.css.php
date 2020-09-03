@@ -15,6 +15,7 @@ header("Content-Type:text/css; charset=utf-8");
 
 $channel = isset($_GET['channel']) == true ? $_GET['channel'] : null;
 $templet = isset($_GET['templet']) == true ? $_GET['templet'] : null;
+$type = isset($_GET['type']) == true ? $_GET['type'] : 'talk';
 $languages = GetDefaultLanguages();
 foreach ($languages as $language) {
 	if (is_file(__MINITALK_PATH__.'/languages/'.$language.'.json') == true) break;
@@ -35,8 +36,14 @@ if ($language == 'ko') {
 
 $css->add(__MINITALK_PATH__.'/styles/widget.css');
 
-if ($templet !== null && is_file(__MINITALK_PATH__.'/templets/'.$templet.'/style.css') == true) {
+if ($type == 'talk' && $templet !== null && is_file(__MINITALK_PATH__.'/templets/'.$templet.'/style.css') == true) {
 	$css->add(__MINITALK_PATH__.'/templets/'.$templet.'/style.css');
+}
+
+if ($type != 'talk') {
+	if (is_file(__MINITALK_PATH__.'/plugins/'.$type.'/style.css') == true) {
+		$css->add(__MINITALK_PATH__.'/plugins/'.$type.'/style.css');
+	}
 }
 ?>
 /**
