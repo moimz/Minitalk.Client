@@ -43,8 +43,8 @@ div[data-role=notifications] > div > div.warning {background:#FFC107; color:#fff
  * 탭바 기본속성을 정의한다.
  */
 aside > ul[data-role=tabs] {white-space:nowrap; list-style:none;}
-div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li {display:inline-block;}
-div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li {display:block;}
+div[data-role=frame][data-tab-type=horizontal] aside > ul[data-role=tabs] > li {display:inline-block;}
+div[data-role=frame][data-tab-type=vertical] aside > ul[data-role=tabs] > li {display:block;}
 
 /**
  * 탭목록 기본속성을 정의한다.
@@ -55,7 +55,7 @@ aside.open > ul[data-role=lists] {display:block;}
 /**
  * 탭바를 사용하지 않을 경우, 탭바영역을 숨긴다.
  */
-div[data-role=frame][data-tab-type=none] > aside {display:none;}
+div[data-role=frame][data-tab-type=none] aside {display:none;}
 
 /**
  * 메인컨텐츠 영역의 기본속성을 정의한다.
@@ -63,7 +63,7 @@ div[data-role=frame][data-tab-type=none] > aside {display:none;}
 main {position:relative; display:block; overflow:hidden;}
 section[data-tab] {position:absolute; z-index:0; top:0; left:0; width:100%; height:100%; overflow-x:hidden; overflow-y:scroll; display:none;}
 section[data-tab].open {display:block;}
-div[data-role=frame][data-tab-type=vertical] > main > section[data-tab=chat] {display:block;} /* 세로형태의 탭바의 경우 채팅영역은 항상 표시한다. */
+div[data-role=frame][data-tab-type=vertical] main > section[data-tab=chat] {display:block;} /* 세로형태의 탭바의 경우 채팅영역은 항상 표시한다. */
 
 /**
  * 윈도우의 경우
@@ -159,8 +159,8 @@ footer > ul[data-role=tools] {list-style:none; white-space:nowrap; overflow:hidd
 footer > ul[data-role=tools] > li {display:inline-block;}
 footer > ul[data-role=lists] {display:none; position:absolute; z-index:5;}
 footer.open > ul[data-role=lists] {display:block;}
-div[data-role=frame][data-current-tab=chat] > footer {display:block;}
-div[data-role=frame][data-tab-type=vertical] > footer {display:block;}
+div[data-role=frame][data-current-tab=chat] footer {display:block;}
+div[data-role=frame][data-tab-type=vertical] footer {display:block;}
 
 /**
  * 툴바 레이어 기본속성을 정의한다.

@@ -50,31 +50,31 @@ aside.open > ul[data-role=tabs] > li > button[data-tab=more] > i {color:#10b8c3;
 /**
  * 가로형태 탭바
  */
-div[data-role=frame][data-tab-type=horizontal] > aside {width:100%; height:38px;}
-div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li {width:50px;}
-div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li > button {border-bottom:1px solid #d8d8d9; border-left:1px solid #d8d8d9;}
-div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li:first-child > button {border-left:0;}
-div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li > button > i {font-size:16px; line-height:37px;}
-div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li > button:hover {background:#fff;}
-div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li > button.open {background:#fff; border-bottom-color:#fff;}
-div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li > button > label {bottom:100%; left:50%; transform:translateX(-50%);}
-div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=tabs] > li > button > label:before {border-top:5px solid rgba(0,0,0,0.8); border-left:5px solid transparent; border-right:5px solid transparent; top:100%; left:50%; margin-left:-5px;}
-div[data-role=frame][data-tab-type=horizontal] > aside.open > ul[data-role=tabs] > li > button[data-tab=more]:after {position:absolute; border-bottom:6px solid #f6f6f6; border-left:6px solid transparent; border-right:6px solid transparent; content:" "; bottom:-1px; left:50%; margin-left:-6px; z-index:10;}
-div[data-role=frame][data-tab-type=horizontal] > aside.open > ul[data-role=tabs] > li > button[data-tab=more]:before {position:absolute; border-bottom:7px solid #d8d8d9; border-left:7px solid transparent; border-right:7px solid transparent; content:" "; bottom:-1px; left:50%; margin-left:-7px; z-index:10;}
+div[data-role=frame][data-tab-type=horizontal] aside {width:100%; height:38px;}
+div[data-role=frame][data-tab-type=horizontal] aside > ul[data-role=tabs] > li {width:50px;}
+div[data-role=frame][data-tab-type=horizontal] aside > ul[data-role=tabs] > li > button {border-bottom:1px solid #d8d8d9; border-left:1px solid #d8d8d9;}
+div[data-role=frame][data-tab-type=horizontal] aside > ul[data-role=tabs] > li:first-child > button {border-left:0;}
+div[data-role=frame][data-tab-type=horizontal] aside > ul[data-role=tabs] > li > button > i {font-size:16px; line-height:37px;}
+div[data-role=frame][data-tab-type=horizontal] aside > ul[data-role=tabs] > li > button:hover {background:#fff;}
+div[data-role=frame][data-tab-type=horizontal] aside > ul[data-role=tabs] > li > button.open {background:#fff; border-bottom-color:#fff;}
+div[data-role=frame][data-tab-type=horizontal] aside > ul[data-role=tabs] > li > button > label {bottom:100%; left:50%; transform:translateX(-50%);}
+div[data-role=frame][data-tab-type=horizontal] aside > ul[data-role=tabs] > li > button > label:before {border-top:5px solid rgba(0,0,0,0.8); border-left:5px solid transparent; border-right:5px solid transparent; top:100%; left:50%; margin-left:-5px;}
+div[data-role=frame][data-tab-type=horizontal] aside.open > ul[data-role=tabs] > li > button[data-tab=more]:after {position:absolute; border-bottom:6px solid #f6f6f6; border-left:6px solid transparent; border-right:6px solid transparent; content:" "; bottom:-1px; left:50%; margin-left:-6px; z-index:10;}
+div[data-role=frame][data-tab-type=horizontal] aside.open > ul[data-role=tabs] > li > button[data-tab=more]:before {position:absolute; border-bottom:7px solid #d8d8d9; border-left:7px solid transparent; border-right:7px solid transparent; content:" "; bottom:-1px; left:50%; margin-left:-7px; z-index:10;}
 
 
 /**
  * 세로형태 탭바
  */
-div[data-role=frame][data-tab-type=vertical] > aside {position:absolute; top:40px; right:0px; width:35px; height:calc(100% - 40px); border-left:1px solid #d8d8d9; padding:0px; box-sizing:border-box;}
-div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] {display:block; width:100%; height:100%;}
-div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li {height:34px; padding:2px; box-sizing:border-box;}
-div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li > button {border-radius:3px;}
-div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li > button > i {font-size:16px; line-height:30px;}
-div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li > button > label {right:100%; top:50%; margin-top:-10px;}
-div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li > button > label:before {border-left:5px solid rgba(0,0,0,0.8); border-top:5px solid transparent; border-bottom:5px solid transparent; left:100%; top:50%; margin-top:-5px;}
-div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li > button:hover {Background:#fff;}
-div[data-role=frame][data-tab-type=vertical] > aside > ul[data-role=tabs] > li > button.open {background:#fff;}
+div[data-role=frame][data-tab-type=vertical] aside {position:absolute; top:40px; right:0px; width:35px; height:calc(100% - 40px); border-left:1px solid #d8d8d9; padding:0px; box-sizing:border-box;}
+div[data-role=frame][data-tab-type=vertical] aside > ul[data-role=tabs] {display:block; width:100%; height:100%;}
+div[data-role=frame][data-tab-type=vertical] aside > ul[data-role=tabs] > li {height:34px; padding:2px; box-sizing:border-box;}
+div[data-role=frame][data-tab-type=vertical] aside > ul[data-role=tabs] > li > button {border-radius:3px;}
+div[data-role=frame][data-tab-type=vertical] aside > ul[data-role=tabs] > li > button > i {font-size:16px; line-height:30px;}
+div[data-role=frame][data-tab-type=vertical] aside > ul[data-role=tabs] > li > button > label {right:100%; top:50%; margin-top:-10px;}
+div[data-role=frame][data-tab-type=vertical] aside > ul[data-role=tabs] > li > button > label:before {border-left:5px solid rgba(0,0,0,0.8); border-top:5px solid transparent; border-bottom:5px solid transparent; left:100%; top:50%; margin-top:-5px;}
+div[data-role=frame][data-tab-type=vertical] aside > ul[data-role=tabs] > li > button:hover {Background:#fff;}
+div[data-role=frame][data-tab-type=vertical] aside > ul[data-role=tabs] > li > button.open {background:#fff;}
 
 
 /**
@@ -88,7 +88,7 @@ aside > ul[data-role=lists] > li > button > label {display:inline-block; width:c
 aside > ul[data-role=lists] > li > button:hover {background:#fff;}
 aside > ul[data-role=lists] > li:last-child {border-bottom:0;}
 
-div[data-role=frame][data-tab-type=horizontal] > aside > ul[data-role=lists] {top:77px; right:0;}
+div[data-role=frame][data-tab-type=horizontal] aside > ul[data-role=lists] {top:77px; right:0;}
 
 
 /**
@@ -109,10 +109,10 @@ main {width:100%; height:calc(100% - 40px - 38px);}
  * 메인영역의 가로크기를 세로형태 탭바영역만큼 줄이고, 세로크기를 가로형태 탭바 높이만큼 눌려준다.
  * 채팅영역을 제외한 나머지 탭 영역의 최대 가로크기를 300px로 고정한다.
  */
-div[data-role=frame][data-tab-type=vertical] > main {width:calc(100% - 35px); height:calc(100% - 40px);}
-div[data-role=frame][data-tab-type=vertical] > main > section[data-tab] {left:auto; right:0; background:#fff; border-left:1px solid #d8d8d9; max-width:300px; height:calc(100% - 35px); box-sizing:border-box;}
-div[data-role=frame][data-tab-type=vertical] > main > section[data-tab=chat] {border-left:0; max-width:none;}
-div[data-role=frame][data-tab-type=vertical] > main > section[data-tab=chat] {}
+div[data-role=frame][data-tab-type=vertical] main {width:calc(100% - 35px); height:calc(100% - 40px);}
+div[data-role=frame][data-tab-type=vertical] main > section[data-tab] {left:auto; right:0; background:#fff; border-left:1px solid #d8d8d9; max-width:300px; height:calc(100% - 35px); box-sizing:border-box;}
+div[data-role=frame][data-tab-type=vertical] main > section[data-tab=chat] {border-left:0; max-width:none;}
+div[data-role=frame][data-tab-type=vertical] main > section[data-tab=chat] {}
 
 
 /**
