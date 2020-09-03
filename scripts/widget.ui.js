@@ -14,81 +14,91 @@ Minitalk.ui = {
 	/**
 	 * 미니톡 채팅위젯 UI를 초기화한다.
 	 */
-	init:function() {
-		var html = [
+	init:function(html) {
+		if (html === undefined) {
 			/**
-			 * 위젯시작
+			 * 미니톡 채팅위젯을 구성하기 위한 필수요소 DOM 을 정의한다.
 			 */
-			'<div data-role="frame">',
+			var html = [
+				/**
+				 * 위젯헤더
+				 */
+				'<header>',
+					'<h1>connecting...</h1>', // 위젯타이틀
+					'<label data-role="count"></label>', // 접속자수
+				'</header>',
+				
+				/**
+				 * 탭바
+				 */
+				'<aside></aside>',
+				
+				/**
+				 * 활성화된 탭이 표시되는 영역
+				 */
+				'<main></main>',
+				
+				/**
+				 * 위젯푸터
+				 */
+				'<footer></footer>'
+			];
 			
-			/**
-			 * 파일첨부를 위한 파일선택폼 추가
-			 */
-			'<input type="file" style="display:none;">',
-			
-			/**
-			 * 알림메시지 위치
-			 */
-			'<div data-role="notifications"></div>',
-			
-			/**
-			 * 위젯헤더
-			 */
-			'<header>',
-				'<h1>connecting...</h1>', // 위젯타이틀
-				'<label data-role="count"></label>', // 접속자수
-			'</header>',
-			
-			/**
-			 * 탭바
-			 */
-			'<aside>',
-				'<ul data-role="tabs"></ul>',
-				'<ul data-role="lists"></ul>',
-			'</aside>',
-			
-			/**
-			 * 활성화된 탭이 표시되는 영역
-			 */
-			'<main></main>',
-			
-			/**
-			 * 위젯푸터
-			 */
-			'<footer>',
-				'<div data-role="progress"><div></div></div>',
-				'<div data-role="layers"></div>',
-				'<ul data-role="tools"></ul>',
-				'<ul data-role="lists"></ul>',
-				'<div data-role="input"><textarea type="text" data-role="message"></textarea><button type="button"><i class="icon"></i><span>' + Minitalk.getText("button/send") + '</button></div>',
-			'</footer>',
-			
-			/**
-			 * 위젯 끝
-			 */
-			'</div>',
-			
-			/**
-			 * 사운드파일
-			 */
-			'<audio data-type="call">',
-				'<source src="' + Minitalk.getUrl() + '/sounds/call.ogg" type="audio/ogg">',
-				'<source src="' + Minitalk.getUrl() + '/sounds/call.mp3" type="audio/mpeg">',
-			'</audio>',
-			
-			'<audio data-type="message">',
-				'<source src="' + Minitalk.getUrl() + '/sounds/message.ogg" type="audio/ogg">',
-				'<source src="' + Minitalk.getUrl() + '/sounds/message.mp3" type="audio/mpeg">',
-			'</audio>',
-			
-			'<audio data-type="query">',
-				'<source src="' + Minitalk.getUrl() + '/sounds/query.ogg" type="audio/ogg">',
-				'<source src="' + Minitalk.getUrl() + '/sounds/query.mp3" type="audio/mpeg">',
-			'</audio>'
-		];
+			html = html.join("");
+		}
 		
-		var $html = $(html.join(""));
-		$("body").append($html);
+		/**
+		 * 위젯 프레임을 정의하고, html DOM 요소를 추가한다.
+		 */
+		var $frame = $("<div>").attr("data-role","frame");
+		$frame.append(html);
+		
+		/**
+		 * 탭바 DOM 객체를 확인하고, 탭바 요소에 탭바 및 탭 목록 요소를 추가한다.
+		 */
+		var $aside = $("aside",$frame);
+		if ($aside.length == 0) return Minitalk.ui.printError("MISSING_DOM","aside");
+		$aside.append('<ul data-role="tabs"></ul>');
+		$aside.append('<ul data-role="lists"></ul>');
+		
+		/**
+		 * 메인 DOM 객체를 확인한다.
+		 */
+		var $main = $("main",$frame);
+		if ($main.length == 0) return Minitalk.ui.printError("MISSING_DOM","aside");
+		
+		/**
+		 * 푸터 영역에 툴바 및 입력폼 요소를 추가한다.
+		 */
+		var $footer = $("footer",$frame);
+		if ($footer.length == 0) return Minitalk.ui.printError("MISSING_DOM","footer");
+		$footer.append('<div data-role="progress"><div></div></div>');
+		$footer.append('<div data-role="layers"></div>');
+		$footer.append('<ul data-role="tools"></ul>');
+		$footer.append('<ul data-role="lists"></ul>');
+		$footer.append('<div data-role="input"><textarea type="text" data-role="message"></textarea><button type="button"><i class="icon"></i><span>' + Minitalk.getText("button/send") + '</button></div>');
+		
+		/**
+		 * 파일첨부를 위한 객체를 추가한다.
+		 */
+		$frame.append('<input type="file" style="display:none;">');
+		
+		/**
+		 * 알림영역을 추가한다.
+		 */
+		$frame.append('<div data-role="notifications"></div>');
+		
+		/**
+		 * 필수 audio 객체를 추가한다.
+		 */
+		$frame.append('<audio data-type="call"><source src="' + Minitalk.getUrl() + '/sounds/call.ogg" type="audio/ogg"><source src="' + Minitalk.getUrl() + '/sounds/call.mp3" type="audio/mpeg"></audio>');
+		$frame.append('<audio data-type="message"><source src="' + Minitalk.getUrl() + '/sounds/message.ogg" type="audio/ogg"><source src="' + Minitalk.getUrl() + '/sounds/message.mp3" type="audio/mpeg"></audio>');
+		$frame.append('<audio data-type="query"><source src="' + Minitalk.getUrl() + '/sounds/query.ogg" type="audio/ogg"><source src="' + Minitalk.getUrl() + '/sounds/query.mp3" type="audio/mpeg"></audio>');
+		
+		/**
+		 * 위젯 DOM 을 body 에 추가한다.
+		 */
+		$("body").append($frame);
 		
 		/**
 		 * 채팅입력폼 이벤트 추가
