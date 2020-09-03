@@ -56,9 +56,11 @@ if ($channel !== null) {
 	while ($pluginName = @readdir($pluginsPath)) {
 		if ($pluginName != '.' && $pluginName != '..' && is_dir(__MINITALK_PATH__.'/plugins/'.$pluginName) == true && is_file(__MINITALK_PATH__.'/plugins/'.$pluginName.'/package.json') == true) {
 			$package = json_decode(file_get_contents(__MINITALK_PATH__.'/plugins/'.$pluginName.'/package.json'));
-			$js->add(__MINITALK_PATH__.'/plugins/'.$pluginName.'/script.js');
-			$js->add('Minitalk.plugins.'.$pluginName.' = MinitalkComponent.clone(plugin);');
-			$js->add('delete plugin;');
+			if (is_file(__MINITALK_PATH__.'/plugins/'.$pluginName.'/script.js') == true) {
+				$js->add(__MINITALK_PATH__.'/plugins/'.$pluginName.'/script.js');
+				$js->add('Minitalk.plugins.'.$pluginName.' = MinitalkComponent.clone(plugin);');
+				$js->add('delete plugin;');
+			}
 			
 			/**
 			 * 플러그인에 언어팩이 존재할 경우
