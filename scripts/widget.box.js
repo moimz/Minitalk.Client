@@ -172,7 +172,7 @@ Minitalk.box = {
 			dom.write('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">');
 			dom.write('<title>MiniTalk Widget</title>');
 			dom.write('<script src="'+MinitalkComponent.getUrl()+'/scripts/box.js.php?channel='+Minitalk.channel+'&templet='+Minitalk.templet+'"></script>');
-			dom.write('<link rel="stylesheet" href="'+MinitalkComponent.getUrl()+'/styles/widget.css.php?channel='+Minitalk.channel+'&templet='+Minitalk.templet+'" type="text/css">');
+			dom.write('<link rel="stylesheet" href="'+MinitalkComponent.getUrl()+'/styles/box.css.php?channel='+Minitalk.channel+'&templet='+Minitalk.templet+'&type='+box.type+'" type="text/css">');
 			dom.write('<script>var box = '+JSON.stringify(box)+';</script>');
 			dom.write('</head>');
 			dom.write('<body>'+MinitalkComponent.getLoaderHtml()+'</body>');
