@@ -201,7 +201,7 @@ if (isMinitalkIncluded === undefined) {
 			var e = args.unshift(this);
 			args.push(e);
 			
-			this.frame.$(this.frame.document).triggerHandler(event,args);
+			return this.frame.$(this.frame.document).triggerHandler(event,args);
 		};
 		
 		/**
