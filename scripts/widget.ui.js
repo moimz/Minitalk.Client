@@ -1335,12 +1335,16 @@ Minitalk.ui = {
 			$errorbox.append($("<h2>").html(Minitalk.getText("text/error")));
 			$errorbox.append($("<p>").html(message));
 			
-			var $button = $("<button>").html(Minitalk.getText("button/close"));
-			$button.on("click",function() {
-				self.close();
-			});
-			
-			$errorbox.append($button);
+			if (Minitalk.box.connection !== null) {
+				var $button = $("<button>").html(Minitalk.getText("button/close"));
+				$button.on("click",function() {
+					self.close();
+				});
+				
+				$errorbox.append($button);
+			} else {
+				$errorbox.addClass("textonly");
+			}
 			$error.append($("<div>").append($errorbox));
 			$("body").append($error);
 		} else if (Minitalk.socket.connected == false) {
