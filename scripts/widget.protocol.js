@@ -198,6 +198,11 @@ Minitalk.protocol = {
 		 * 채널의 접속자수를 변경한다.
 		 */
 		Minitalk.user.printUserCount(data.count,data.time);
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("join",[data.user,data.count,data.time]);
 	},
 	/**
 	 * 유저가 접속을 종료한 경우, 접속을 종료한 유저의 정보를 수신한다.
@@ -214,6 +219,11 @@ Minitalk.protocol = {
 		 * 채널의 접속자수를 변경한다.
 		 */
 		Minitalk.user.printUserCount(data.count,data.time);
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("leave",[data.user,data.count,data.time]);
 	},
 	/**
 	 * 유저정보가 변경되었을 경우
@@ -374,5 +384,26 @@ Minitalk.protocol = {
 			Minitalk.socket.reconnectable = false;
 			return;
 		}
+	},
+	/**
+	 * 박스데이터 저장에 성공한 경우
+	 */
+	saved:function(data) {
+		if (Minitalk.box === null) return;
+		if (data.key == "*") {
+			Minitalk.box.connection.data = data.value;
+		} else if (Minitalk.box.connection.data == null) {
+			Minitalk.box.connection.data = {};
+		} else {
+			Minitalk.box.connection.data[data.key] = data.value;
+		}
+		
+		/**
+		 * 데이터 저장 이벤트를 전송한다.
+		 */
+		Minitalk.fireEvent("saved",[data.key,data.value]);
+	},
+	receive:function(data) {
+//		console.log(data);
 	}
 };
