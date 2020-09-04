@@ -52,7 +52,6 @@ Minitalk.protocol = {
 		 */
 		if (data.box !== null) {
 			Minitalk.box.connection = data.box;
-			console.log("Minitalk.box.connection",Minitalk.box.connection);
 			
 			Minitalk.ui.printTitle(data.box.title);
 			Minitalk.ui.notify("connecting","success",Minitalk.getText("action/connected").replace("{CHANNEL}",data.box.title),true,true);
@@ -90,6 +89,11 @@ Minitalk.protocol = {
 		 * 채팅위젯의 UI를 활성화한다.
 		 */
 		Minitalk.ui.enable();
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("connected");
 	},
 	/**
 	 * 채팅서버에 접속을 실패하였을 경우

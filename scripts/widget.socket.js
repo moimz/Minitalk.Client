@@ -34,6 +34,11 @@ Minitalk.socket = {
 		
 		$.send(Minitalk.getProcessUrl("getServer"),{channel:Minitalk.channel},function(result) {
 			if (result.success == true) {
+				/**
+				 * 이벤트를 발생시킨다.
+				 */
+				if (Minitalk.fireEvent("beforeConnect",[result.connection]) === false) return;
+				
 				Minitalk.socket.channel = result.channel;
 				Minitalk.ui.initChannel();
 				Minitalk.ui.notify("connecting","action",Minitalk.getText("action/connecting"),false,false);
@@ -92,6 +97,11 @@ Minitalk.socket = {
 		 * 채팅위젯 UI를 비활성화한다.
 		 */
 		Minitalk.ui.disable();
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("disconnected");
 	},
 	/**
 	 * 서버에 접속중인지 확인한다.
