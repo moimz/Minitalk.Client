@@ -2003,7 +2003,7 @@ Minitalk.ui = {
 					/**
 					 * 메시지 전송전 이벤트 처리
 					 */
-					if (Minitalk.fireEvent("beforeSendWhisper",[Minitalk,nickname,message,Minitalk.user.me]) === false) return;
+					if (Minitalk.fireEvent("beforeSendWhisper",[nickname,message,Minitalk.user.me]) === false) return;
 					
 					/**
 					 * 메시지의 고유 ID를 할당한다.
@@ -2057,7 +2057,7 @@ Minitalk.ui = {
 				 * 기본 명령어가 아닌 경우, 플러그인 등에서 처리할 수 있도록 이벤트를 발생시킨다.
 				 */
 				default :
-					var result = Minitalk.fireEvent("command",[Minitalk,command,commands]);
+					var result = Minitalk.fireEvent("command",[command,commands]);
 					if (result === undefined) { // 플러그인 등에서 명령어를 처리하지 못하였을 경우
 						Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("NOT_FOUND_COMMAND"));
 						return;
@@ -2070,7 +2070,7 @@ Minitalk.ui = {
 			/**
 			 * 메시지 전송전 이벤트 처리
 			 */
-			if (Minitalk.fireEvent("beforeSendMessage",[Minitalk,message,Minitalk.user.me]) === false) return;
+			if (Minitalk.fireEvent("beforeSendMessage",[message,Minitalk.user.me]) === false) return;
 			
 			/**
 			 * 메시지의 고유 ID를 할당한다.
