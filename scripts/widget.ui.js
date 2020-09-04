@@ -91,9 +91,9 @@ Minitalk.ui = {
 		/**
 		 * 필수 audio 객체를 추가한다.
 		 */
-		$frame.append('<audio data-type="call"><source src="' + Minitalk.getUrl() + '/sounds/call.ogg" type="audio/ogg"><source src="' + Minitalk.getUrl() + '/sounds/call.mp3" type="audio/mpeg"></audio>');
-		$frame.append('<audio data-type="message"><source src="' + Minitalk.getUrl() + '/sounds/message.ogg" type="audio/ogg"><source src="' + Minitalk.getUrl() + '/sounds/message.mp3" type="audio/mpeg"></audio>');
-		$frame.append('<audio data-type="query"><source src="' + Minitalk.getUrl() + '/sounds/query.ogg" type="audio/ogg"><source src="' + Minitalk.getUrl() + '/sounds/query.mp3" type="audio/mpeg"></audio>');
+		$frame.append('<audio data-type="call"><source src="' + Minitalk.getUrl() + '/sounds/call.mp3" type="audio/mpeg"></audio>');
+		$frame.append('<audio data-type="message"><source src="' + Minitalk.getUrl() + '/sounds/message.mp3" type="audio/mpeg"></audio>');
+		$frame.append('<audio data-type="query"><source src="' + Minitalk.getUrl() + '/sounds/query.mp3" type="audio/mpeg"></audio>');
 		
 		/**
 		 * 위젯 DOM 을 body 에 추가한다.
