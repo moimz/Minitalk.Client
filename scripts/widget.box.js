@@ -23,7 +23,14 @@ Minitalk.box = {
 		if (Minitalk.box.connection.type == "talk") {
 			Minitalk.ui.init();
 		} else {
+			var plugin = Minitalk.plugins[Minitalk.box.connection.type];
+			if (plugin === undefined) {
+				
+				return;
+			}
 			
+			var html = plugin.getBoxHtml();
+			Minitalk.ui.init(html);
 		}
 		
 		/**
