@@ -84,6 +84,7 @@ class Minitalk {
 		$this->table->channel = 'channel_table';
 		$this->table->attachment = 'attachment_table';
 		$this->table->ipban = 'ipban_table';
+		$this->table->history = 'history_table';
 	}
 	
 	/**
