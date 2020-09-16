@@ -134,6 +134,32 @@ class Minitalk {
 	}
 	
 	/**
+	 * 미니톡 API를 호출하였을 경우, API 요청을 처리하기 위한 함수로 API 실행결과를 반환한다.
+	 * 소스코드 관리를 편하게 하기 위해 각 요쳥별로 별도의 PHP 파일로 관리한다.
+	 *
+	 * @param string $protocol API 호출 프로토콜 (get, post, put, delete)
+	 * @param string $api API명
+	 * @param any $idx API 호출대상 고유값
+	 * @param object $params API 호출시 전달된 파라메터
+	 * @return object $datas API처리후 반환 데이터 (해당 데이터는 /api/index.php 를 통해 API호출자에게 전달된다.)
+	 * @see /api/index.php
+	 */
+	function getApi($protocol,$api,$idx=null,$params=null) {
+		global $_CONFIGS;
+		
+		$data = new stdClass();
+		
+		/**
+		 * api 폴더에 $api 에 해당하는 파일이 있을 경우 불러온다.
+		 */
+		if (is_file($this->getPath().'/api/'.$api.'.'.$protocol.'.php') == true) {
+			INCLUDE $this->getPath().'/api/'.$api.'.'.$protocol.'.php';
+		}
+		
+		return $data;
+	}
+	
+	/**
 	 * 언어셋파일에 정의된 코드를 이용하여 사이트에 설정된 언어별로 텍스트를 반환한다.
 	 * 코드에 해당하는 문자열이 없을 경우 1차적으로 package.json 에 정의된 기본언어셋의 텍스트를 반환하고, 기본언어셋 텍스트도 없을 경우에는 코드를 그대로 반환한다.
 	 *

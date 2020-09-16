@@ -11,6 +11,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^admin/([^\/]+)/?$ admin/index.php?menu=$1 [L]
 
+RewriteRule ^api/([^/\.]+)/([^/\.]+)?$ api/index.php?_api=$1&_idx=$2&%{QUERY_STRING} [L]
 
 RewriteRule ^process/([^/]+)$ process/index.php?action=$1&%{QUERY_STRING} [L]
 RewriteRule ^process/([^/]+)/?(.*?)?$ process/index.php?action=$1&extras=$2&%{QUERY_STRING} [L]
