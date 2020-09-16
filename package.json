@@ -473,6 +473,63 @@
 				"domain":"primary_key"
 			},
 			"comment":"미니톡 서버 테이블"
+		},
+		"history_table":{
+			"columns":{
+				"id":{
+					"type":"char",
+					"length":24,
+					"comment":"고유값"
+				},
+				"client_id":{
+					"type":"char",
+					"length":32,
+					"comment":"클라이언트아이디"
+				},
+				"room":{
+					"type":"varchar",
+					"length":65,
+					"comment":"대화방고유값"
+				},
+				"type":{
+					"type":"varchar",
+					"length":20,
+					"comment":"대화종류"
+				},
+				"message":{
+					"type":"text",
+					"comment":"대화내용"
+				},
+				"data":{
+					"type":"text",
+					"comment":"대화부가정보"
+				},
+				"nickname":{
+					"type":"varchar",
+					"length":30,
+					"comment":"닉네임"
+				},
+				"user":{
+					"type":"text",
+					"comment":"유저정보"
+				},
+				"time":{
+					"type":"bigint",
+					"length":15,
+					"comment":"대화시각"
+				},
+				"ip":{
+					"type":"varchar",
+					"length":15,
+					"comment":"아이피"
+				}
+			},
+			"indexes":{
+				"id":"primary_key",
+				"client_id,room":"index",
+				"time":"index"
+			},
+			"comment":"미니톡 채팅로그 테이블"
 		}
 	}
 }
