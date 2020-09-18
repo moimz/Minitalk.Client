@@ -481,11 +481,6 @@
 					"length":24,
 					"comment":"고유값"
 				},
-				"client_id":{
-					"type":"char",
-					"length":32,
-					"comment":"클라이언트아이디"
-				},
 				"room":{
 					"type":"varchar",
 					"length":65,
