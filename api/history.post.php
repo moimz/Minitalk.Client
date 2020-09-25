@@ -25,7 +25,7 @@ foreach ($history as $message) {
 	$insert = (array)$message;
 	$insert['user'] = json_encode($message->user,JSON_UNESCAPED_UNICODE);
 	$insert['nickname'] = $message->user->nickname;
-	$insert['data'] = isset($message->data) == true ? json_encode($message->data) : json_encode(null);
+	$insert['data'] = json_encode($message->data);
 	
 	$this->db()->replace($this->table->history,$insert)->execute();
 }
