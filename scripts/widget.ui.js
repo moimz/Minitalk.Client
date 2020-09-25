@@ -544,6 +544,21 @@ Minitalk.ui = {
 		Minitalk.fireEvent("initChannel",[channel]);
 	},
 	/**
+	 * 이전대화 불러오기 버튼을 초기화한다.
+	 */
+	initHistory:function() {
+		console.log("initHistory");
+		var $chat = $("section[data-tab=chat]");
+		
+		var $history = $("<button>").attr("data-action","history");
+		$history.html(Minitalk.getText("button/history"));
+		$history.on("click",function() {
+			Minitalk.ui.getHistory();
+		});
+		
+		$chat.prepend($history);
+	},
+	/**
 	 * 미니톡 위젯 UI를 활성화한다.
 	 *
 	 * @param boolean inputmode 메시지 입력창만 활성화할지 여부 (기본값 : false)

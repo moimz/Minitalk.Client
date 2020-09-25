@@ -72,6 +72,13 @@ Minitalk.protocol = {
 		Minitalk.user.printUserCount(data.count,data.time);
 		
 		/**
+		 * 이전대화기록을 사용하는 채널의 경우, 이전대화 불러오기 버튼을 추가한다.
+		 */
+		if (Minitalk.socket.channel.use_history == true) {
+			Minitalk.ui.initHistory();
+		}
+		
+		/**
 		 * 채팅로그를 불러온다.
 		 */
 		if (Minitalk.logCount > 0) {
