@@ -252,7 +252,7 @@ Minitalk.protocol = {
 		
 		var logs = Minitalk.log().messages;
 		for (var i=0, loop=logs.length;i<loop;i++) {
-			Minitalk.ui.printChatMessage(logs[i],true);
+			Minitalk.ui.printChatMessage(logs[i],"log");
 		}
 		
 		Minitalk.socket.joined = true;
