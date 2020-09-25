@@ -1281,6 +1281,56 @@ Minitalk.ui = {
 		}
 	},
 	/**
+	 * 이전대화기록을 불러온다.
+	 */
+	getHistory:function() {
+		var room = Minitalk.channel;
+		if (Minitalk.box.connection !== null) {
+			room+= "@" + Minitalk.box.connection.id;
+		}
+		
+		var $chat = $("section[data-tab=chat]");
+		var $button = $("button[data-action=history]",$chat);
+		var $messages = $("div[data-message-id]",$chat);
+		if ($messages.length > 0) {
+			var time = $messages.eq(0).attr("data-time");
+		} else {
+			var time = 0;
+		}
+		
+		$.get({
+			url:Minitalk.getApiUrl("history",room) + "?time=" + time,
+			dataType:"json",
+			headers:{authorization:"TOKEN " + Minitalk.socket.channel.token},
+			success:function(result) {
+				if (result.success == true) {
+					/**
+					 * 이전대화를 불러오고 난뒤 원래 보고 있던 위치를 구하기 위하여 현재 버튼의 위치를 기억한다.
+					 */
+					var top = $button.position().top - $chat.scrollTop();
+					for (var i=0, loop=result.history.length;i<loop;i++) {
+						Minitalk.log(result.history[i]);
+						Minitalk.ui.printChatMessage(result.history[i],"history");
+					}
+					
+					var scroll = $button.position().top - top;
+					
+					var $nButton = $button.clone(true);
+					$button.remove();
+					$chat.prepend($nButton);
+					
+					/**
+					 * 원래 보고 있던 위치로 스크롤을 이동한다.
+					 */
+					$chat.scrollTop(scroll);
+				}
+			},
+			error:function() {
+				callback({success:false,error:"CONNECT_ERROR"});
+			}
+		});
+	},
+	/**
 	 * 채널타이틀을 출력한다.
 	 *
 	 * @param string title
