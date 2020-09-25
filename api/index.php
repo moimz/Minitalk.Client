@@ -16,7 +16,6 @@ header('Pragma:no-cache');
 REQUIRE_ONCE str_replace(DIRECTORY_SEPARATOR.'api','',__DIR__).'/configs/init.config.php';
 
 $MINITALK = new Minitalk();
-$headers = getallheaders();
 
 header('Access-Control-Allow-Origin:'.(isset($headers['Origin']) == true ? $headers['Origin'] : '*'));
 header('Access-Control-Allow-Credentials:true');

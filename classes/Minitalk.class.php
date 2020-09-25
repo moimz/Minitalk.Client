@@ -148,6 +148,19 @@ class Minitalk {
 	function getApi($protocol,$api,$idx=null,$params=null) {
 		global $_CONFIGS;
 		
+		$headers = getallheaders();
+		$token = null;
+		
+		if (isset($headers['Authorization']) == true || isset($headers['authorization']) == true) {
+			$authorization = explode(' ',isset($headers['Authorization']) == true ? $headers['Authorization'] : $headers['authorization']);
+			$type = array_shift($authorization);
+			if ($type == 'TOKEN') {
+				$token = Decoder(implode(' ',$authorization));
+				if ($token !== false) $token = json_decode($token);
+				else $token = null;
+			}
+		}
+		
 		$data = new stdClass();
 		
 		/**
