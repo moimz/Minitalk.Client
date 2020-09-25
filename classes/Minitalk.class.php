@@ -609,6 +609,7 @@ class Minitalk {
 		$results->channel = new stdClass();
 		$results->channel->use_box_tab = $channel->box_limit > -1;
 		$results->channel->use_user_tab = $channel->user_limit > -1;
+		$results->channel->token = Encoder(json_encode(array('channel'=>$channel->channel,'ip'=>GetClientIp())));
 		
 		return $results;
 	}
