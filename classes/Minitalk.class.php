@@ -511,16 +511,22 @@ class Minitalk {
 	 * @param string $api API 명
 	 * @param string $query 가져올 데이터
 	 */
-	function callServiceApi($protocol,$api,$data=array()) {
+	function callServiceApi($protocol,$api,$data=array(),$headers=array()) {
 		global $_CONFIGS;
-		
-		$data['key'] = $_CONFIGS->key;
-		$data['client_version'] = __MINITALK_VERSION__;
-		$data['client_url'] = $this->getClientApiUrl(true);
 		
 		$apiUrl = 'https://api.minitalk.io';
 		
+		$headers['MINITALK_KEY'] = $_CONFIGS->key;
+		$headers['MINITALK_CLIENT_VERSION'] = __MINITALK_VERSION__;
+		$headers['MINITALK_CLIENT_URL'] = $this->getClientApiUrl(true);
+		
+		$cHeaders = array();
+		foreach ($headers as $key=>$value) {
+			$cHeaders[] = $key.': '.$value;
+		}
+		
 		$ch = curl_init();
+		curl_setopt($ch,CURLOPT_HTTPHEADER,$cHeaders);
 		if ($protocol == 'GET') {
 			curl_setopt($ch,CURLOPT_URL,$apiUrl.'/'.$api.(count($data) > 0 ? '?'.http_build_query($data) : ''));
 			curl_setopt($ch,CURLOPT_POST,false);

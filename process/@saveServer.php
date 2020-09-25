@@ -46,7 +46,7 @@ if ($type == 'SERVICE') {
 	}
 	
 	if (count($errors) == 0) {
-		$data = $this->callServiceApi('POST','service/'.$client_id,array('client_id'=>$client_id,'client_secret'=>$client_secret));
+		$data = $this->callServiceApi('POST','service/'.$client_id,array(),array('MINITALK_CLIENT_SECRET'=>$client_secret));
 		
 		if ($data->success == false) {
 			$results->success = false;
