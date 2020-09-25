@@ -169,6 +169,16 @@ if (isMinitalkIncluded === undefined) {
 		};
 		
 		/**
+		 * API 경로를 가져온다.
+		 */
+		this.getApiUrl = function(api,idx) {
+			var url = this.getUrl() + "/api/" + api;
+			if (idx !== undefined) url+= "/" + idx;
+			
+			return url;
+		};
+		
+		/**
 		 * 이벤트리스너를 추가한다.
 		 */
 		this.on = function(event,handler) {
