@@ -602,6 +602,9 @@ class Minitalk {
 		$this->updateServer($channel->server);
 		$server = $this->getServer($channel->server);
 		
+		// @todo 히스토리 사용여부 설정추가
+		$channel->use_history = true;
+		
 		if ($server->connection == null) {
 			$results->success = false;
 			$results->error = 'SERVICE_TEMPORARILY_UNAVAILABLE';
@@ -615,6 +618,7 @@ class Minitalk {
 		$results->channel = new stdClass();
 		$results->channel->use_box_tab = $channel->box_limit > -1;
 		$results->channel->use_user_tab = $channel->user_limit > -1;
+		$results->channel->use_history = $channel->use_history;
 		$results->channel->token = Encoder(json_encode(array('channel'=>$channel->channel,'ip'=>GetClientIp())));
 		
 		return $results;
