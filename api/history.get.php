@@ -43,7 +43,7 @@ if ($token === null || $token->channel != $channel->channel || $token->ip != Get
 	return;
 }
 
-$time = Request('time') ? Request('time') : time();
+$time = Request('time') ? Request('time') : time() * 1000;
 
 /**
  * 대화기록 테이블에 보관된 가장 최근, 가장 이전 시각을 가져온다.
@@ -54,6 +54,7 @@ $latest = $edge->latest ? $edge->latest : 0;
 
 $history = array();
 $server = $this->getServer($channel->server);
+
 /**
  * 할당된 서버가 없는 경우
  */
