@@ -73,7 +73,8 @@
 		"search":"검색",
 		"refresh":"새로고침",
 		"box":"박스생성하기",
-		"close":"닫기"
+		"close":"닫기",
+		"history":"이전대화보기"
 	},
 	"user":{
 		"keyword":"닉네임 검색"
