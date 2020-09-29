@@ -547,8 +547,9 @@ Minitalk.ui = {
 	 * 이전대화 불러오기 버튼을 초기화한다.
 	 */
 	initHistory:function() {
-		console.log("initHistory");
 		var $chat = $("section[data-tab=chat]");
+		var $history = $("button[data-action=history]",$chat);
+		if ($history.length > 0) return;
 		
 		var $history = $("<button>").attr("data-action","history");
 		$history.html(Minitalk.getText("button/history"));
