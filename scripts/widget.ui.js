@@ -551,7 +551,7 @@ Minitalk.ui = {
 		var $history = $("button[data-action=history]",$chat);
 		if ($history.length > 0) return;
 		
-		var $history = $("<button>").attr("data-action","history");
+		var $history = $("<button>").attr("type","button").attr("data-action","history");
 		$history.html(Minitalk.getText("button/history"));
 		$history.on("click",function() {
 			Minitalk.ui.getHistory();
