@@ -282,15 +282,36 @@ Minitalk.box = {
 		}
 		$box.append($icon);
 		
-		var $title = $("<span>").addClass("title");
-		if (box.password !== null) {
+		var $title = $("<h6>");
+		if (box.password === true) {
 			var $secret = $("<i>").addClass("secret").html(Minitalk.getText("text/secret"));
 			$title.append($secret);
 		}
 		
 		$title.append(box.title);
-		
 		$box.append($title);
+		
+		var $owner = $("<label>").attr("data-role","owner").data("user",box.owner);
+		
+		var $photo = $("<i>").attr("data-role","photo");
+		if (box.owner.photo) $photo.css("backgroundImage","url("+box.owner.photo+")");
+		$owner.append($photo);
+		
+		var $nickname = $("<span>").attr("data-role","nickname");
+		
+		$nickname.append(Minitalk.user.getNickname(box.owner));
+		$owner.append($nickname);
+		
+		$owner.on("click",function(e) {
+			Minitalk.user.toggleMenus($(this),e);
+			e.preventDefault();
+			e.stopImmediatePropagation();
+		});
+		$box.append($owner);
+		
+		var $count = $("<label>").attr("data-role","users");
+		$count.html(Minitalk.getText("text/unit").replace("{COUNT}",box.user));
+		$box.append($count);
 		
 		$box.on("click",function(e) {
 			Minitalk.box.join($(this).data("box"));
