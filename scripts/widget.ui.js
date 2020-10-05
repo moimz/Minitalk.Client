@@ -222,6 +222,11 @@ Minitalk.ui = {
 				 */
 				if ($.inArray(tab,["chat","users","files","boxes","configs"]) === false) continue;
 				
+				/**
+				 * 박스인 경우 박스탭을 숨긴다.
+				 */
+				if (Minitalk.box.isBox() == true && tab == "boxes") continue;
+				
 				var $tab = $("<li>");
 				var $button = $("<button>").attr("type","button").attr("data-tab",tab);
 				$button.append($("<i>").addClass("icon"));
@@ -1286,8 +1291,11 @@ Minitalk.ui = {
 	 */
 	getHistory:function() {
 		var room = Minitalk.channel;
-		if (Minitalk.box.connection !== null) {
-			room+= "@" + Minitalk.box.connection.id;
+		/**
+		 * 박스인 경우, 박스 아이디를 추가한다.
+		 */
+		if (Minitalk.box.isBox() == true) {
+			room+= "@" + Minitalk.box.getId();
 		}
 		
 		var $chat = $("section[data-tab=chat]");
@@ -1407,7 +1415,7 @@ Minitalk.ui = {
 			$errorbox.append($("<h2>").html(Minitalk.getText("text/error")));
 			$errorbox.append($("<p>").html(message));
 			
-			if (Minitalk.box.connection !== null) {
+			if (Minitalk.box.isBox() == true) {
 				var $button = $("<button>").html(Minitalk.getText("button/close"));
 				$button.on("click",function() {
 					self.close();
