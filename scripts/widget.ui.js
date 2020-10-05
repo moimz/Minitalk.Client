@@ -1307,6 +1307,8 @@ Minitalk.ui = {
 			var time = 0;
 		}
 		
+		$button.status("loading");
+		
 		$.get({
 			url:Minitalk.getApiUrl("history",room) + "?time=" + time,
 			dataType:"json",
@@ -1333,15 +1335,19 @@ Minitalk.ui = {
 					var $nButton = $button.clone(true);
 					$button.remove();
 					$chat.prepend($nButton);
+					$nButton.status("default");
 					
 					/**
 					 * 원래 보고 있던 위치로 스크롤을 이동한다.
 					 */
 					$chat.scrollTop(scroll);
+				} else {
+					$button.status("default");
 				}
 			},
 			error:function() {
 				callback({success:false,error:"CONNECT_ERROR"});
+				$button.status("default");
 			}
 		});
 	},
