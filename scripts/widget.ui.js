@@ -1427,7 +1427,7 @@ Minitalk.ui = {
 			}
 			$error.append($("<div>").append($errorbox));
 			$("body").append($error);
-		} else if (Minitalk.socket.connected == false) {
+		} else if (Minitalk.socket.isConnected() == false) {
 			Minitalk.ui.notify("error","error",message,false,false);
 		} else {
 			Minitalk.ui.printSystemMessage("error",message);
