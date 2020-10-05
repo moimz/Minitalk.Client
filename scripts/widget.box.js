@@ -129,6 +129,38 @@ Minitalk.box = {
 		}
 	},
 	/**
+	 * 현재 접속중인 채널이 박스인지 아닌지 확인한다.
+	 *
+	 * @return boolean isBox
+	 */
+	isBox:function() {
+		return Minitalk.box.connection !== null;
+	},
+	/**
+	 * 현재 접속중인 박스아이디를 가져온다.
+	 *
+	 * @return string id
+	 */,
+	getId:function() {
+		return Minitalk.box.isBox() === true ? Minitalk.box.connection.id : null;
+	},
+	/**
+	 * 현재 접속중인 박스종류를 가져온다.
+	 *
+	 * @return string type
+	 */
+	getType:function() {
+		return Minitalk.box.isBox() === true ? Minitalk.box.connection.type : null;
+	},
+	/**
+	 * 현재 접속중인 박스데이터 가져온다.
+	 *
+	 * @return object data
+	 */
+	getData:function() {
+		return Minitalk.box.isBox() === true ? Minitalk.box.connection.data : null;
+	},
+	/**
 	 * 박스에 참여한다.
 	 *
 	 * @param string box 박스고유값
