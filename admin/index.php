@@ -94,7 +94,7 @@ Ext.onReady(function () {
 				items:[
 					new Ext.grid.Panel({
 						id:"MinitalkPanel-server",
-						hasServer:<?php echo is_dir(__MINITALK_PATH__.'/server') == true && is_file(__MINITALK_PATH__.'/server/app.js') == true ? 'true' : 'false'; ?>,
+						hasServer:<?php echo is_dir(__MINITALK_PATH__.'/server') == true ? 'true' : 'false'; ?>,
 						tbar:[
 							new Ext.Button({
 								text:Admin.getText("server/add"),
