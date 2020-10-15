@@ -1,5 +1,5 @@
 /**
- * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.Minitalk.io)
+ * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
  *
  * 미니톡 서버프로그램과 소켓통신을 위한 프로토콜을 정의한다.
  * 
@@ -389,6 +389,7 @@ Minitalk.protocol = {
 		 */
 		if (type == 9) {
 			Minitalk.socket.reconnectable = false;
+			Minitalk.ui.printErrorCode(code);
 			return;
 		}
 	},
