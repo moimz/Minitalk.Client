@@ -26,13 +26,6 @@ class Minitalk {
 	public $language;
 	
 	/**
-	 * 각 기능별 core class 를 정의한다.
-	 *
-	 * @public Cache $Cache 캐싱처리를 위한 Cache class (@see /classes/Cache.class.php)
-	 */
-	public $Cache;
-	
-	/**
 	 * 언어셋을 정의한다.
 	 * 
 	 * @private object $lang 현재 사이트주소에서 설정된 언어셋
@@ -123,15 +116,6 @@ class Minitalk {
 	 */
 	function getTable($table) {
 		return empty($this->table->$table) == true ? null : $this->table->$table;
-	}
-	
-	/**
-	 * Cache 클래스를 반환한다.
-	 *
-	 * @return Cache $cache
-	 */
-	function cache() {
-		return $this->Cache;
 	}
 	
 	/**
