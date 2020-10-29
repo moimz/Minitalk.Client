@@ -366,6 +366,8 @@ class Minitalk {
 	 * @return object $domain
 	 */
 	function getServer($domain) {
+		global $_CONFIGS;
+		
 		if (isset($this->servers[$domain]) == true) return $this->servers[$domain];
 		$server = $this->db()->select($this->table->server)->where('domain',$domain)->getOne();
 		if ($server != null) {
