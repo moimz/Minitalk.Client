@@ -373,7 +373,15 @@ class Minitalk {
 				$this->updateServer($domain);
 				return $this->getServer($domain);
 			}
-			$server->connection = $server->connection ? json_decode($server->connection) : null;
+			
+			if ($server->type == 'SERVER') {
+				$connection = new stdClass();
+				$connection->domain = $server->domain;
+				$connection->client_id = md5($server->domain);
+				$connection->connection = Encoder(json_encode(array('max_user'=>0,'client_id'=>md5($server->domain),'key'=>$_CONFIGS->key,'lifetime'=>time() + 3600)));
+			} else {
+				$server->connection = $server->connection ? json_decode($server->connection) : null;
+			}
 		}
 		
 		$this->servers[$domain] = $server;
@@ -683,11 +691,7 @@ class Minitalk {
 			if ($server->type == 'SERVER') {
 				$status = $this->getServerStatus($server->domain);
 				if ($status !== null && $status->status == 'ONLINE') {
-					$connection = new stdClass();
-					$connection->domain = $server->domain;
-					$connection->client_id = md5($server->domain);
-					$connection->connection = Encoder(json_encode(array('max_user'=>0,'client_id'=>md5($server->domain),'key'=>$_CONFIGS->key,'lifetime'=>time() + 3600)));
-					$this->db()->update($this->table->server,array('status'=>'ONLINE','user'=>$status->user,'channel'=>$status->channel,'latest_update'=>time(),'connection'=>json_encode($connection)))->where('domain',$server->domain)->execute();
+					$this->db()->update($this->table->server,array('status'=>'ONLINE','user'=>$status->user,'channel'=>$status->channel,'latest_update'=>time(),'connection'=>''))->where('domain',$server->domain)->execute();
 				} else {
 					$this->db()->update($this->table->server,array('status'=>'OFFLINE','user'=>0,'channel'=>0,'connection'=>'','latest_update'=>time()))->where('domain',$server->domain)->execute();
 					if (isset($this->servers[$server->domain]) == true) unset($this->servers[$server->domain]);
