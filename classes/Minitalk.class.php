@@ -740,8 +740,8 @@ class Minitalk {
 		$results = new stdClass();
 		$results->success = false;
 		$results->message = $this->getErrorText($code);
-		if ($value != null) $results->message.'<br>'.$value;
-		if ($message != null) $results->message.'<br>'.$message;
+		if ($value != null) $results->message.= ' : '.$value;
+		if ($message != null) $results->message.= ' : '.$message;
 		
 		exit(json_encode($results,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 	}
