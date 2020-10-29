@@ -381,6 +381,8 @@ class Minitalk {
 				$connection->domain = $server->domain;
 				$connection->client_id = md5($server->domain);
 				$connection->connection = Encoder(json_encode(array('max_user'=>0,'client_id'=>md5($server->domain),'key'=>$_CONFIGS->key,'lifetime'=>time() + 3600)));
+				
+				$server->connection = $connection;
 			} else {
 				$server->connection = $server->connection ? json_decode($server->connection) : null;
 			}
