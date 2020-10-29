@@ -26,6 +26,7 @@ $data->use_user_tab = $data->user_limit > -1;
 $data->user_limit = $data->user_limit == -1 ? 0 : $data->user_limit;
 $data->use_box_tab = $data->box_limit > -1;
 $data->box_limit = $data->box_limit == -1 ? 1 : $data->box_limit;
+$data->use_history = $data->use_history == 'TRUE';
 
 $results->success = true;
 $results->data = $data;
