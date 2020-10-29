@@ -41,6 +41,10 @@ if (preg_match('/^@/',$action) == true && $MINITALK->isAdmin() == false) {
 	header('Pragma:no-cache');
 	exit(json_encode(array('success'=>false,'message'=>$MINITALK->getErrorText('FORBIDDEN')),JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT));
 } else {
+	header('Access-Control-Allow-Origin:*');
+	header('Access-Control-Allow-Credentials:true');
+	header('Access-Control-Allow-Methods:*');
+
 	$results = $MINITALK->doProcess($action);
 	if ($results !== null) {
 		header('Content-type:text/json; charset=utf-8',true);

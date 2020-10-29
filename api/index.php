@@ -17,7 +17,7 @@ REQUIRE_ONCE str_replace(DIRECTORY_SEPARATOR.'api','',__DIR__).'/configs/init.co
 
 $MINITALK = new Minitalk();
 
-header('Access-Control-Allow-Origin:'.(isset($headers['Origin']) == true ? $headers['Origin'] : '*'));
+header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Credentials:true');
 header('Access-Control-Allow-Headers:Authorization');
 header('Access-Control-Allow-Methods:*');
