@@ -594,8 +594,7 @@ class Minitalk {
 		$this->updateServer($channel->server);
 		$server = $this->getServer($channel->server);
 		
-		// @todo 히스토리 사용여부 설정추가
-		$channel->use_history = true;
+		$channel->use_history = $channel->use_history == 'TRUE';
 		
 		if ($server->connection == null) {
 			$results->success = false;

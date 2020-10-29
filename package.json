@@ -299,6 +299,12 @@
 					"default":1,
 					"comment":"개인박스개설 권한"
 				},
+				"use_history":{
+					"type":"enum",
+					"length":"'TRUE','FALSE'",
+					"default":"TRUE",
+					"comment":"이전대화보기여부"
+				},
 				"password":{
 					"type":"varchar",
 					"length":30,

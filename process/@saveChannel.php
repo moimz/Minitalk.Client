@@ -27,6 +27,7 @@ $file_limit = Request('file_limit') ? Request('file_limit') : 0;
 $font_limit = Request('font_limit') ? Request('font_limit') : 0;
 $user_limit = Request('use_user_tab') ? (Request('user_limit') ? Request('user_limit') : 0) : -1;
 $box_limit = Request('use_box_tab') && Request('box_limit') ? Request('box_limit') : -1;
+$use_history = Request('use_history') ? 'TRUE' : 'FALSE';
 
 $check = $this->db()->select($this->table->channel)->where('channel',$channel);
 if ($oChannel) $check->where('channel',$oChannel,'!=');
@@ -49,6 +50,7 @@ if (count($errors) == 0) {
 	$insert['font_limit'] = $font_limit;
 	$insert['user_limit'] = $user_limit;
 	$insert['box_limit'] = $box_limit;
+	$insert['use_history'] = $use_history;
 	
 	if ($oChannel) {
 		$this->db()->update($this->table->channel,$insert)->where('channel',$oChannel)->execute();

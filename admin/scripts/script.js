@@ -567,6 +567,12 @@ var Admin = {
 											}
 										}
 									}),
+									new Ext.form.Checkbox({
+										fieldLabel:Admin.getText("channel/form/use_history"),
+										name:"use_history",
+										boxLabel:Admin.getText("channel/form/use_history_help"),
+										checked:true
+									}),
 									new Ext.form.FieldContainer({
 										fieldLabel:Admin.getText("channel/form/max_user"),
 										layout:"hbox",
