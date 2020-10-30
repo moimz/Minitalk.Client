@@ -1697,12 +1697,27 @@ Minitalk.ui = {
 		 */
 		if (message.type == "file") {
 			var user = message.user;
-			var $item = $("> div[data-role]:last",$chat);
+			
+			/**
+			 * 실시간 대화이거나 최근대화인 경우, 채팅영역 제일 마지막에 요소에 추가하고,
+			 * 이전대화기록의 경우에는 이전대화 불러오기 버튼의 직전요소에 추가한다.
+			 */
+			if (type === "realtime" || type == "log") {
+				var $item = $("> div[data-role]:last",$chat);
+			} else {
+				/**
+				 * 이미 해당 대화가 존재한다면, 무시한다.
+				 */
+				if ($("div[data-message-id=" + message.id + "]",$chat).length > 0) return;
+				
+				var $history = $("button[data-action=history]",$chat);
+				var $item = $history.prev();
+			}
 			
 			/**
 			 * 채팅탭 마지막객체에 메시지를 추가할 수 있다면, 해당 객체에 신규메시지를 추가하고, 그렇지 않다면 채팅메시지 객체를 신규로 생성한다.
 			 */
-			if ($item.length > 0 && $item.attr("data-role") == "message" && $item.hasClass("log") == is_log && $item.hasClass("message") == true && $item.data("nickname") == user.nickname && $item.position().top > 10) {
+			if ($item.length > 0 && $item.attr("data-role") == "message" && $item.hasClass("log") == is_log && $item.hasClass("message") == true && $item.data("nickname") == user.nickname && $item.data("to") == null && $item.position().top > 10) {
 				var $messageBox = $("div.box",$item);
 			} else {
 				$item = $("<div>").attr("data-role","message").addClass("message").data("nickname",user.nickname);
@@ -1726,7 +1741,18 @@ Minitalk.ui = {
 				var $messageBox = $("<div>").addClass("box");
 				$item.append($messageBox);
 				
-				$chat.append($item);
+				/**
+				 * 실시간 대화이거나 최근대화인 경우, 채팅영역 제일 마지막에 요소에 추가하고,
+				 * 이전대화기록의 경우에는 이전대화 불러오기 버튼의 직전요소에 추가한다.
+				 */
+				if (type == "realtime" || type == "log") {
+					$chat.append($item);
+				} else {
+					var $history = $("button[data-action=history]",$chat);
+					if ($history.length == 0) return;
+					
+					$history.before($item);
+				}
 			}
 			
 			var $message = $("<div>").attr("data-message-id",message.id);
