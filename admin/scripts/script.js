@@ -47,7 +47,7 @@ var Admin = {
 	 * 관리자 로그인을 처리한다.
 	 */
 	logout:function() {
-		$form.send(Minitalk.getProcessUrl("logout"),function(result) {
+		$.send(Minitalk.getProcessUrl("logout"),function(result) {
 			if (result.success == true) {
 				location.replace(location.pathname);
 			}
