@@ -177,7 +177,7 @@ footer > div[data-role=layers] > div[data-tool=color] {border:1px solid #d8d8d9;
 section[data-tab=chat] {height:calc(100% - 35px);} /* 채팅탭의 경우, 푸터영역의 기본크기만큼 높이를 줄여준다. */
 section[data-tab=chat] > div[data-role] > div[data-role=photo] {float:left; width:34px; height:34px; margin-right:6px; background-image:url(./images/nophoto.png); background-repeat:no-repeat; background-size:cover; background-position:50% 50%; border-radius:50%; box-sizing:border-box; border:1px solid #eee;}
 section[data-tab=chat] > div[data-role] > div[data-role=nickname] {float:left; width:calc(100% - 50px); font-size:12px; font-weight:bold; height:16px; line-height:16px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; margin-top:3px;}
-section[data-tab=chat] > button[data-action=history] {display:block; width:calc(100% - 10px); height:30px; margin:5px; border:1px solid #e5e5e5; color:#666; background:#f4f4f4; cursor:pointer;}
+section[data-tab=chat] > button[data-action=history] {display:block; width:calc(100% - 10px); height:30px; margin:5px; border:1px solid #e5e5e5; color:#666; background:#f4f4f4; cursor:pointer; font-size:12px;}
 
 /**
  * 유저탭
