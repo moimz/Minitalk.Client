@@ -23,6 +23,8 @@ if (strlen($key) == 0 || $key != $_CONFIGS->key|| $history == null || count($his
 
 foreach ($history as $message) {
 	$insert = (array)$message;
+	unset($insert['client_id']);
+	
 	$insert['user'] = json_encode($message->user,JSON_UNESCAPED_UNICODE);
 	$insert['nickname'] = $message->user->nickname;
 	$insert['data'] = json_encode($message->data);

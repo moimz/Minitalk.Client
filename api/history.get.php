@@ -69,9 +69,42 @@ if ($server == null) {
  */
 if ($server->type == 'SERVER') {
 	/**
-	 * 가져올 대화기록이 대화기록 테이블에 보관중이라면, 가져오고, 그렇지 않다면 채팅서버에 요청한다.
-	 * @todo
+	 * 대화기록 테이블에 보관된 가장 최근 시각을 가져온다.
 	 */
+	$latest = $this->db()->select($this->table->history,'MAX(time) as latest')->where('room',$room)->getOne();
+	$latest = $latest->latest ? $latest->latest : 0;
+	
+	$history = array();
+	
+	$data->success = true;
+	$data->latest = $latest;
+	$data->time = $time;
+	
+	/**
+	 * 요청한 대화기록이 모두 데이터베이스에 있는 경우
+	 */
+	if ($latest >= $time) {
+		$history = $this->db()->select($this->table->history,'id, type, message, data, user, time')->where('room',$room)->where('time',$time,'<=')->orderBy('time','desc')->limit(30)->get();
+		$history = array_reverse($history);
+	
+		for ($i=0, $loop=count($history);$i<$loop;$i++) {
+			$history[$i]->user = json_decode($history[$i]->user);
+			$history[$i]->data = json_decode($history[$i]->data);
+		}
+	} else {
+		$history = $this->db()->select($this->table->history,'id, type, message, data, user, time')->where('room',$room)->where('time',$time,'<=')->orderBy('time','desc')->limit(30)->get();
+		$history = array_reverse($history);
+		
+		for ($i=0, $loop=count($history);$i<$loop;$i++) {
+			$history[$i]->user = json_decode($history[$i]->user);
+			$history[$i]->data = json_decode($history[$i]->data);
+		}
+		
+		$api = $this->callServerApi('GET',$server->domain,'history/'.md5($server->domain).'/'.$room,array('time'=>$time,'limit'=>30));
+		if ($api->success == true) {
+			$history = array_merge($history,$api->history);
+		}
+	}
 }
 
 /**

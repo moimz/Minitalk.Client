@@ -361,72 +361,6 @@
 			},
 			"comment":"미니톡 아이피차단 테이블"
 		},
-		"log_file_table":{
-			"columns":{
-				"file":{
-					"type":"varchar",
-					"length":100,
-					"comment":"로그파일명"
-				},
-				"date":{
-					"type":"date",
-					"comment":"로그일자"
-				},
-				"channel":{
-					"type":"varchar",
-					"length":32,
-					"comment":"로그채널명"
-				},
-				"size":{
-					"type":"int",
-					"length":11,
-					"default":0,
-					"comment":"로그파일크기"
-				}
-			},
-			"indexes":{
-				"file":"primary_key",
-				"date":"index",
-				"channel":"index"
-			},
-			"comment":"미니톡 채팅로그파일 테이블"
-		},
-		"log_table":{
-			"columns":{
-				"time":{
-					"type":"bigint",
-					"length":15,
-					"comment":"메시지 전송시각"
-				},
-				"channel":{
-					"type":"varchar",
-					"length":32,
-					"comment":"채널명"
-				},
-				"nickname":{
-					"type":"varchar",
-					"length":20,
-					"comment":"접속자닉네임"
-				},
-				"ip":{
-					"type":"varchar",
-					"length":15,
-					"comment":"접속자아이피"
-				},
-				"message":{
-					"type":"varchar",
-					"length":255,
-					"comment":"메시지내용"
-				}
-			},
-			"indexes":{
-				"time,channel,nickname":"primary_key",
-				"channel,time":"index",
-				"nickname":"index",
-				"ip":"index"
-			},
-			"comment":"미니톡 채팅로그 테이블"
-		},
 		"server_table":{
 			"columns":{
 				"domain":{
@@ -527,7 +461,7 @@
 			},
 			"indexes":{
 				"id":"primary_key",
-				"client_id,room":"index",
+				"room":"index",
 				"time":"index"
 			},
 			"comment":"미니톡 채팅로그 테이블"

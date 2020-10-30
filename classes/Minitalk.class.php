@@ -502,6 +502,50 @@ class Minitalk {
 	}
 	
 	/**
+	 * 서버 API 를 호출한다.
+	 *
+	 * @param string $protocol
+	 * @param string $server
+	 * @param string $api
+	 * @param object[] $data
+	 * @param object[] $headers
+	 */
+	function callServerApi($protocol,$server,$api,$data=array(),$headers=array()) {
+		global $_CONFIGS;
+		
+		$headers['authorization'] = 'CLIENT_SECRET_KEY '.$_CONFIGS->key;
+		
+		$cHeaders = array();
+		foreach ($headers as $key=>$value) {
+			$cHeaders[] = $key.': '.$value;
+		}
+		
+		$ch = curl_init();
+		curl_setopt($ch,CURLOPT_HTTPHEADER,$cHeaders);
+		if ($protocol == 'GET') {
+			curl_setopt($ch,CURLOPT_URL,$server.'/'.$api.(count($data) > 0 ? '?'.http_build_query($data) : ''));
+			curl_setopt($ch,CURLOPT_POST,false);
+		} else {
+			curl_setopt($ch,CURLOPT_URL,$server.'/'.$api);
+			if ($protocol != 'POST') curl_setopt($ch,CURLOPT_CUSTOMREQUEST,$protocol);
+			curl_setopt($ch,CURLOPT_POST,true);
+			curl_setopt($ch,CURLOPT_POSTFIELDS,$data);
+		}
+		
+		curl_setopt($ch,CURLOPT_TIMEOUT,10);
+		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+		$data = curl_exec($ch);
+		$http_code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+		curl_close($ch);
+		
+		if ($http_code == 200) {
+			return json_decode($data);
+		} else {
+			return null;
+		}
+	}
+	
+	/**
 	 * 미니톡서비스 API 데이터를 가져온다.
 	 *
 	 * @param string $api API 명
