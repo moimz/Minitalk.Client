@@ -1,0 +1,63 @@
+<?php
+/**
+ * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
+ *
+ * 미니톡 대화로그를 가져온다.
+ * 
+ * @file /api/log.get.php
+ * @author Arzz (arzz@arzz.com)
+ * @license MIT License
+ * @version 7.0.0
+ * @modified 2020. 9. 16.
+ */
+if (defined('__MINITALK__') == false) exit;
+
+$key = isset($headers['SECRET_KEY']) == true ? $headers['SECRET_KEY'] : null;
+$room = $idx;
+if ($room == null) {
+	$data->success = false;
+	$data->message = 'NOT_FOUND_ROOM';
+	return;
+}
+
+if (strlen($key) == 0 || $key != $_CONFIGS->key) {
+	$data->success = false;
+	$data->message = 'MISSING PARAMTERS : SECRET_KEY';
+	return;
+}
+
+/**
+ * 박스인경우 박스가 개설된 채널을 구한다.
+ */
+if (strpos($room,'@') !== false) {
+	list($channel,$box) = explode('@',$room);
+	
+	$channel = $this->getChannel($channel);
+} else {
+	$channel = $this->getChannel($room);
+	$box = null;
+}
+
+if ($channel == null) {
+	$data->success = false;
+	$data->message = 'NOT_FOUND_CHANNEL';
+	return;
+}
+
+$start_time = Request('start_time') && is_numeric(Request('start_time')) == true ? Request('start_time') * 1000 : 0;
+$end_time = Request('end_time') && is_numeric(Request('end_time')) == true ? Request('end_time') * 1000 : 0;
+$count = Request('count') ? Request('count') : 100;
+
+$logs = $this->db()->select($this->table->history)->where('room',$room);
+if ($start_time) $logs->where('time',$start_time,'>=');
+if ($end_time) $logs->where('time',$end_time,'<');
+$logs = $logs->limit(0,$count)->orderBy('time','asc')->get();
+
+for ($i=0, $loop=count($logs);$i<$loop;$i++) {
+	$logs[$i]->user = json_decode($logs[$i]->user);
+	$logs[$i]->data = json_decode($logs[$i]->data);
+}
+
+$data->success = true;
+$data->logs = $logs;
+?>
