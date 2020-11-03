@@ -12,7 +12,7 @@
  */
 if (defined('__MINITALK__') == false) exit;
 
-$key = Request('key');
+$key = isset($headers['SECRET_KEY']) == true ? $headers['SECRET_KEY'] : null;
 $history = Request('history') ? json_decode(Request('history')) : null;
 
 if (strlen($key) == 0 || $key != $_CONFIGS->key|| $history == null || count($history) == 0) {

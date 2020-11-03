@@ -12,7 +12,7 @@
  */
 if (defined('__MINITALK__') == false) exit;
 
-$key = Request('key');
+$key = isset($headers['SECRET_KEY']) == true ? $headers['SECRET_KEY'] : null;
 $domain = Request('domain');
 $time = Request('time');
 
