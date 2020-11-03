@@ -48,16 +48,16 @@ $start_time = Request('start_time') && is_numeric(Request('start_time')) == true
 $end_time = Request('end_time') && is_numeric(Request('end_time')) == true ? Request('end_time') * 1000 : 0;
 $count = Request('count') ? Request('count') : 100;
 
-$logs = $this->db()->select($this->table->history)->where('room',$room);
-if ($start_time) $logs->where('time',$start_time,'>=');
-if ($end_time) $logs->where('time',$end_time,'<');
-$logs = $logs->limit(0,$count)->orderBy('time','asc')->get();
+$messages = $this->db()->select($this->table->history)->where('room',$room);
+if ($start_time) $messages->where('time',$start_time,'>=');
+if ($end_time) $messages->where('time',$end_time,'<');
+$messages = $messages->limit(0,$count)->orderBy('time','asc')->get();
 
-for ($i=0, $loop=count($logs);$i<$loop;$i++) {
-	$logs[$i]->user = json_decode($logs[$i]->user);
-	$logs[$i]->data = json_decode($logs[$i]->data);
+for ($i=0, $loop=count($messages);$i<$loop;$i++) {
+	$messages[$i]->user = json_decode($messages[$i]->user);
+	$messages[$i]->data = json_decode($messages[$i]->data);
 }
 
 $data->success = true;
-$data->logs = $logs;
+$data->messages = $messages;
 ?>
