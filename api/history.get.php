@@ -37,7 +37,7 @@ if ($channel == null) {
 	return;
 }
 
-if ($token === null || $token->channel != $channel->channel || $token->ip != GetClientIp()) {
+if ($channel->use_history == false || $token === null || $token->channel != $channel->channel || $token->ip != GetClientIp()) {
 	$data->success = false;
 	$data->message = 'FORBIDDEN';
 	return;
