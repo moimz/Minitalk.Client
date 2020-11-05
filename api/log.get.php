@@ -56,6 +56,7 @@ $messages = $messages->limit(0,$count)->orderBy('time','asc')->get();
 for ($i=0, $loop=count($messages);$i<$loop;$i++) {
 	$messages[$i]->user = json_decode($messages[$i]->user);
 	$messages[$i]->data = json_decode($messages[$i]->data);
+	$messages[$i]->time = $messages[$i]->time / 1000;
 }
 
 $data->success = true;
