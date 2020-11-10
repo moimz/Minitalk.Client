@@ -7,5 +7,5 @@
 /plugins/*
 !/plugins/index.php
 /templets/*
-!/templets/default
+!/templets/index.php
 Minitalk.preset.php
