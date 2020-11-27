@@ -22,7 +22,9 @@ if (strlen($key) == 0 || $key != $_CONFIGS->key || strlen($domain) == 0) {
 	return;
 }
 
-$this->db()->update($this->table->server,array('status'=>'ONLINE','latest_update'=>time()))->where('domain',$domain)->getOne();
+$user = Request('user') ? Request('user') : 0;
+$channel = Request('channel') ? Request('channel') : 0;
+$this->db()->update($this->table->server,array('status'=>'ONLINE','user'=>$user,'channel'=>$channel,'latest_update'=>time()))->where('domain',$domain)->getOne();
 
 $data->success = true;
 $data->client = round(array_sum(explode(' ',microtime())) * 1000);
