@@ -65,17 +65,17 @@ if ($action == 'directory') {
 	$directory = Request('directory');
 	$permission = Request('permission');
 	
-	$results->success = true;
-	
+	$path = $directory;
 	if ($directory == 'attachments' && isset($_CONFIGS->attachment) == true && is_object($_CONFIGS->attachment) == true && isset($_CONFIGS->attachment->path) == true) {
-		$results->directory = $directory;
-		$results->created = CheckDirectoryPermission($_CONFIGS->attachment->path,$permission);
-		$results->permission = $permission;
-	} else {
-		$results->directory = $directory;
-		$results->created = CheckDirectoryPermission(strpos($directory,'/') === 0 ? $directory : __MINITALK_PATH__.DIRECTORY_SEPARATOR.$directory,$permission);
-		$results->permission = $permission;
+		$path = $_CONFIGS->attachment->path;
 	}
+	$path = strpos($path,'/') === 0 ? $path : __MINITALK_PATH__.DIRECTORY_SEPARATOR.$path;
+	
+	$results->success = true;
+	$results->path = $path;
+	$results->directory = $directory;
+	$results->created = CheckDirectoryPermission($path,$permission);
+	$results->permission = $permission;
 }
 
 if ($action == 'config') {
