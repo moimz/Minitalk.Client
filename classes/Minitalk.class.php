@@ -37,11 +37,9 @@ class Minitalk {
 	/**
 	 * DB접근을 줄이기 위해 DB에서 불러온 데이터를 저장할 변수를 정의한다.
 	 *
-	 * @private $servers 서버정보
 	 * @private $categories 카테고리정보
 	 * @private $channels 채널정보
 	 */
-	private $servers = array();
 	private $categories = array();
 	private $channels = array();
 	
@@ -368,7 +366,6 @@ class Minitalk {
 	function getServer($domain) {
 		global $_CONFIGS;
 		
-		if (isset($this->servers[$domain]) == true) return $this->servers[$domain];
 		$server = $this->db()->select($this->table->server)->where('domain',$domain)->getOne();
 		if ($server != null) {
 			if ($server->latest_update < time() - 60) {
@@ -388,8 +385,7 @@ class Minitalk {
 			}
 		}
 		
-		$this->servers[$domain] = $server;
-		return $this->servers[$domain];
+		return $server;
 	}
 	
 	/**
