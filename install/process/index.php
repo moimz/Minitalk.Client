@@ -151,10 +151,6 @@ if ($action == 'install') {
 		
 		$attachments = isset($_CONFIGS->attachment) == true && is_object($_CONFIGS->attachment) == true && isset($_CONFIGS->attachment->path) == true ? $_CONFIGS->attachment->path : __MINITALK_PATH__.'/attachments';
 		
-		if (is_dir($attachments.'/cache') == false) {
-			mkdir($attachments.'/cache',0707);
-		}
-		
 		if (is_dir($attachments.'/temp') == false) {
 			mkdir($attachments.'/temp',0707);
 		}
