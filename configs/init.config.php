@@ -96,7 +96,7 @@ function MoimzToolsAutoLoader($class) {
 }
 spl_autoload_register('MoimzToolsAutoLoader');
 
-if (true || defined('__DEBUG_MODE__') == true) {
+if (defined('__DEBUG_MODE__') == true) {
 	error_reporting(E_ALL);
 	ini_set('display_errors',true);
 } else {
