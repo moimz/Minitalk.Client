@@ -27,6 +27,7 @@ if ($logged !== null && $logged->language == 'ko') {
 }
 
 $current = Request('menu') ? Request('menu') : 'server';
+$hasServer = is_dir(__MINITALK_PATH__.'/server') == true;
 ?>
 <!DOCTYPE HTML>
 <html lang="<?php echo $logged == null ? 'en' : $logged->language; ?>">
@@ -61,7 +62,7 @@ if ($logged === null) {
 	<h1>Minitalk <small>Administrator</small></h1>
 	
 	<ul>
-		<?php foreach ($MINITALK->getText('admin/menu') as $menu=>$title) { ?>
+		<?php foreach ($MINITALK->getText('admin/menu') as $menu=>$title) { if (in_array($menu,array('log','broadcast')) == true && $hasServer == false) continue; ?>
 		<li<?php echo $menu == 'server' ? ' class="selected"' : ''; ?>><button data-tab="<?php echo $menu; ?>"><i class="xi <?php echo $menuIcons[$menu]; ?>"></i><?php echo $title; ?></button></li>
 		<?php } ?>
 	</ul>
@@ -94,7 +95,7 @@ Ext.onReady(function () {
 				items:[
 					new Ext.grid.Panel({
 						id:"MinitalkPanel-server",
-						hasServer:<?php echo is_dir(__MINITALK_PATH__.'/server') == true ? 'true' : 'false'; ?>,
+						hasServer:<?php echo $hasServer == true ? 'true' : 'false'; ?>,
 						tbar:[
 							new Ext.Button({
 								text:Admin.getText("server/add"),
