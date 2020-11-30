@@ -210,7 +210,7 @@
 				},
 				"category":{
 					"type":"varchar",
-					"length":11,
+					"length":32,
 					"comment":"카테고리명"
 				}
 			},
