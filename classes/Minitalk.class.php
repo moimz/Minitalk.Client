@@ -331,7 +331,7 @@ class Minitalk {
 	function getAdminLogged() {
 		$logged = Request('MINITALK_LOGGED','session') != null ? Request('MINITALK_LOGGED','session') : Request('MINITALK_LOGGED','cookie');
 		$logged = $logged != null && Decoder($logged) !== false && json_decode(Decoder($logged)) !== null ? json_decode(Decoder($logged)) : null;
-		if ($logged == null) return null;
+		if ($logged == null || $logged->ip != GetClientIp()) return null;
 		
 		$logged = $this->db()->select($this->table->admin)->where('idx',$logged->idx)->getOne();
 		$this->setLanguage($logged->language);

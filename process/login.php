@@ -21,7 +21,7 @@ if (count($errors) == 0) {
 	$check = $this->db()->select($this->table->admin)->where('user_id',$user_id)->getOne();
 	if ($check != null && $mHash->password_validate($password,$check->password) == true) {
 		$results->success = true;
-		$loginString = Encoder(json_encode(array('idx'=>$check->idx,'ip'=>$_SERVER['REMOTE_ADDR'],'time'=>time())));
+		$loginString = Encoder(json_encode(array('idx'=>$check->idx,'ip'=>GetClientIp(),'time'=>time())));
 		$this->db()->update($this->table->admin,array('latest_login'=>time()))->where('idx',$check->idx)->execute();
 		$_SESSION['MINITALK_LOGGED'] = $loginString;
 		if (Request('auto_login') == 'TRUE') {
