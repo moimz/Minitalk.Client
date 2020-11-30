@@ -747,7 +747,7 @@ Ext.onReady(function () {
 							displayInfo:false,
 							items:[
 								"->",
-								{xtype:"tbtext",text:"항목 더블클릭 : 상세정보 / 항목 우클릭 : 메뉴"}
+								{xtype:"tbtext",text:Admin.getText("channel/grid_help")}
 							],
 							listeners:{
 								beforerender:function(tool) {
