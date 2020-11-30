@@ -225,11 +225,11 @@ Ext.onReady(function () {
 							summaryType:"max",
 							renderer:function(value) {
 								if (value == 0) return Admin.getText("server/unknown");
-								return moment(value * 1000).locale($("html").attr("lang")).format("YYYY-MM-DD(dd) HH:mm");
+								return moment(value * 1000).locale($("html").attr("lang")).format("YYYY.MM.DD(dd) HH:mm");
 							},
 							summaryRenderer:function(value) {
 								if (value == 0) return Admin.getText("server/unknown");
-								return moment(value * 1000).locale($("html").attr("lang")).format("YYYY-MM-DD(dd) HH:mm");
+								return moment(value * 1000).locale($("html").attr("lang")).format("YYYY.MM.DD(dd) HH:mm");
 							}
 						},{
 							text:Admin.getText("server/columns/exp_date"),
@@ -245,7 +245,7 @@ Ext.onReady(function () {
 							},
 							summaryRenderer:function(value) {
 								if (value == 0) return Admin.getText("server/unlimited");
-								return moment(value * 1000).locale($("html").attr("lang")).format("YYYY-MM-DD(dd) HH:mm");
+								return moment(value * 1000).locale($("html").attr("lang")).format("YYYY.MM.DD(dd) HH:mm");
 							}
 						}],
 						selModel:new Ext.selection.CheckboxModel(),
