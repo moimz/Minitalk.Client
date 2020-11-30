@@ -36,7 +36,7 @@ var Admin = {
 	login:function($form) {
 		$form.send(Minitalk.getProcessUrl("login"),function(result) {
 			if (result.success == true) {
-				location.replace(location.pathname);
+				location.replace(location.href);
 			} else {
 				$("main").addClass("error").shake();
 				$form.status("error");
