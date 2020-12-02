@@ -398,7 +398,7 @@ class Minitalk {
 		$ch = curl_init();
 		curl_setopt($ch,CURLOPT_URL,$domain.'/status');
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-		curl_setopt($ch,CURLOPT_TIMEOUT,10);
+		curl_setopt($ch,CURLOPT_TIMEOUT,5);
 		$result = curl_exec($ch);
 		$http_code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
 		$content_type = explode(';',curl_getinfo($ch,CURLINFO_CONTENT_TYPE));
@@ -443,8 +443,10 @@ class Minitalk {
 	 */
 	function getChannel($channel) {
 		if (isset($this->channels[$channel]) == true) return $this->channels[$channel];
-		$this->channels[$channel] = $this->db()->select($this->table->channel)->where('channel',$channel)->getOne();
-		return $this->channels[$channel];
+		$channel = $this->db()->select($this->table->channel)->where('channel',$channel)->getOne();
+		
+		$this->channels[$channel->channel] = $channel;
+		return $this->channels[$channel->channel];
 	}
 	
 	/**
