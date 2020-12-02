@@ -12,6 +12,8 @@
  */
 REQUIRE_ONCE str_replace(DIRECTORY_SEPARATOR.'process','',__DIR__).'/configs/init.config.php';
 
+session_write_close();
+
 set_time_limit(0);
 @ini_set('memory_limit',-1);
 @ini_set('zlib.output_compression','Off');
