@@ -12,8 +12,6 @@
  */
 REQUIRE_ONCE str_replace(DIRECTORY_SEPARATOR.'process','',__DIR__).'/configs/init.config.php';
 
-session_write_close();
-
 set_time_limit(0);
 @ini_set('memory_limit',-1);
 @ini_set('zlib.output_compression','Off');
@@ -32,6 +30,13 @@ $MINITALK = new Minitalk();
  * 요청작업을 수행할 요청작업코드
  */
 $action = Request('action');
+
+/**
+ * 세션이 필요없는 액션인 경우 세션잠금을 해제한다.
+ */
+if (preg_match('/^@?(get|save|delete)/',$action) == true) {
+	session_write_close();
+}
 
 /**
  * 작업코드가 @ 로 시작할 경우 관리자권한으로 동작하는 작업으로 관리자권한을 확인한다.
