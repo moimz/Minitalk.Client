@@ -34,7 +34,7 @@ foreach ($users as $room=>$user) {
 	$this->db()->update($this->table->channel,array('user'=>$user))->where('channel',$channel)->execute();
 }
 
-$this->db()->update($this->table->server,array('status'=>'ONLINE','user'=>$user,'channel'=>$channel,'latest_update'=>time()))->where('domain',$domain)->getOne();
+$this->db()->update($this->table->server,array('status'=>'ONLINE','user'=>$user,'channel'=>$channel,'latest_update'=>time()))->where('domain',$domain)->execute();
 
 $data->success = true;
 $data->client = round(array_sum(explode(' ',microtime())) * 1000);
