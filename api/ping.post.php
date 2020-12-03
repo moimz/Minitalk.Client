@@ -34,8 +34,6 @@ foreach ($users as $room=>$user) {
 	$this->db()->update($this->table->channel,array('user'=>$user))->where('channel',$channel)->execute();
 }
 
-$user = Request('user') ? Request('user') : 0;
-$channel = Request('channel') ? Request('channel') : 0;
 $this->db()->update($this->table->server,array('status'=>'ONLINE','user'=>$user,'channel'=>$channel,'latest_update'=>time()))->where('domain',$domain)->getOne();
 
 $data->success = true;
