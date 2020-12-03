@@ -25,13 +25,11 @@ if (strlen($key) == 0 || $key != $_CONFIGS->key || strlen($domain) == 0) {
 $user = Request('user') ? Request('user') : 0;
 $channel = Request('channel') ? Request('channel') : 0;
 $users = Request('users') ? Request('users') : array();
-foreach ($users as $room=>$user) {
-	$totalUser+= $user;
-	$totalChannel++;
+foreach ($users as $room=>$count) {
 	$temp = explode('@',$room);
 	$channel = $temp[0];
 	
-	$this->db()->update($this->table->channel,array('user'=>$user))->where('channel',$channel)->execute();
+	$this->db()->update($this->table->channel,array('user'=>$count))->where('channel',$channel)->execute();
 }
 
 $this->db()->update($this->table->server,array('status'=>'ONLINE','user'=>$user,'channel'=>$channel,'latest_update'=>time()))->where('domain',$domain)->execute();
