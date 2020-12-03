@@ -56,7 +56,7 @@ $hasServer = is_dir(__MINITALK_PATH__.'/server') == true;
 if ($logged === null) {
 	INCLUDE './login.php';
 } else {
-	$menuIcons = array('server'=>'xi-cloud-network','category'=>'xi-sitemap','channel'=>'xi-chat','log'=>'xi-time-back','ip'=>'xi-slash-circle','broadcast'=>'xi-signal','admin'=>'xi-crown');
+	$menuIcons = array('server'=>'xi-cloud-network','category'=>'xi-sitemap','channel'=>'xi-chat','history'=>'xi-time-back','ip'=>'xi-slash-circle','broadcast'=>'xi-signal','admin'=>'xi-crown');
 ?>
 <header id="MinitalkHeader">
 	<h1>Minitalk <small>Administrator</small></h1>
@@ -610,9 +610,18 @@ Ext.onReady(function () {
 							new Ext.form.TextField({
 								id:"MinitalkChannelKeyword",
 								width:150,
-								emptyText:Admin.getText("channel/columns/channel") + " / " + Admin.getText("channel/columns/title")
+								emptyText:Admin.getText("channel/columns/channel") + " / " + Admin.getText("channel/columns/title"),
+								enableKeyEvents:true,
+								listeners:{
+									keypress:function(form,e) {
+										if (e.keyCode == 13) {
+											Ext.getCmp("MinitalkChannelSearchButton").handler();
+										}
+									}
+								}
 							}),
 							new Ext.Button({
+								id:"MinitalkChannelSearchButton",
 								iconCls:"mi mi-search",
 								handler:function() {
 									Ext.getCmp("MinitalkPanel-channel").getStore().getProxy().setExtraParam("keyword",Ext.getCmp("MinitalkChannelKeyword").getValue());
@@ -762,9 +771,177 @@ Ext.onReady(function () {
 							},
 							itemcontextmenu:function(grid,record,row,index,e) {
 								
+					<?php if ($hasServer == true) { ?>
+					new Ext.Panel({
+						id:"MinitalkPanel-history",
+						autoScroll:true,
+						tbar:[
+							new Ext.Button({
+								iconCls:"fa fa-caret-left",
+								handler:function() {
+									var date = Ext.getCmp("MinitalkHistoryDate").getValue();
+									var move = moment(date).add(-1,"day");
+									Ext.getCmp("MinitalkHistoryDate").setValue(move.format("YYYY-MM-DD"));
+								}
+							}),
+							new Ext.form.DateField({
+								id:"MinitalkHistoryDate",
+								format:"Y-m-d",
+								width:115,
+								value:moment().format("YYYY-MM-DD"),
+								listeners:{
+									change:function(form,value) {
+										var current = moment(value);
+										if (current.isValid() == true) {
+											Ext.getCmp("MinitalkPanel-history").store.getProxy().setExtraParam("date",current.format("YYYY-MM-DD"));
+											Ext.getCmp("MinitalkPanel-history").store.loadPage(1);
+										}
+									}
+								}
+							}),
+							new Ext.Button({
+								iconCls:"fa fa-caret-right",
+								handler:function() {
+									var date = Ext.getCmp("MinitalkHistoryDate").getValue();
+									var move = moment(date).add(1,"day");
+									Ext.getCmp("MinitalkHistoryDate").setValue(move.format("YYYY-MM-DD"));
+								}
+							}),
+							"-",
+							new Ext.form.TextField({
+								id:"MinitalkHistoryChannel",
+								width:120,
+								emptyText:Admin.getText("history/channel"),
+								enableKeyEvents:true,
+								listeners:{
+									keypress:function(form,e) {
+										if (e.keyCode == 13) {
+											Ext.getCmp("MinitalkHistorySearchButton").handler();
+										}
+									}
+								}
+							}),
+							new Ext.form.TextField({
+								id:"MinitalkHistoryNickname",
+								width:120,
+								emptyText:Admin.getText("history/nickname"),
+								enableKeyEvents:true,
+								listeners:{
+									keypress:function(form,e) {
+										if (e.keyCode == 13) {
+											Ext.getCmp("MinitalkHistorySearchButton").handler();
+										}
+									}
+								}
+							}),
+							new Ext.form.TextField({
+								id:"MinitalkHistoryKeyword",
+								width:140,
+								emptyText:Admin.getText("history/keyword"),
+								enableKeyEvents:true,
+								listeners:{
+									keypress:function(form,e) {
+										if (e.keyCode == 13) {
+											Ext.getCmp("MinitalkHistorySearchButton").handler();
+										}
+									}
+								}
+							}),
+							new Ext.Button({
+								id:"MinitalkHistorySearchButton",
+								iconCls:"mi mi-search",
+								handler:function() {
+									Ext.getCmp("MinitalkPanel-history").store.getProxy().setExtraParam("channel",Ext.getCmp("MinitalkHistoryChannel").getValue());
+									Ext.getCmp("MinitalkPanel-history").store.getProxy().setExtraParam("nickname",Ext.getCmp("MinitalkHistoryNickname").getValue());
+									Ext.getCmp("MinitalkPanel-history").store.getProxy().setExtraParam("keyword",Ext.getCmp("MinitalkHistoryKeyword").getValue());
+									Ext.getCmp("MinitalkPanel-history").store.loadPage(1);
+								}
+							})
+						],
+						store:new Ext.data.JsonStore({
+							proxy:{
+								type:"ajax",
+								simpleSortMode:true,
+								url:Minitalk.getProcessUrl("@getHistory"),
+								extraParams:{date:moment().format("YYYY-MM-DD")},
+								reader:{type:"json"}
+							},
+							remoteSort:true,
+							sorters:[{property:"time",direction:"ASC"}],
+							pageSize:50,
+							fields:["user","time","channel","nickname","message","ip"],
+							listeners:{
+								load:function(store,records,success,e) {
+									if (success == true) {
+										$("#MinitalkHistoryTotalRows").html(Ext.util.Format.number(store.getTotalCount(),"0,000"));
+										
+										var $panel = $("#MinitalkPanel-history-innerCt");
+										$panel.empty();
+										for (var i=0, loop=store.getCount();i<loop;i++) {
+											var item = store.getAt(i).data;
+											
+											var $item = $("<div>");
+											$item.css("padding","5px");
+											
+											var $time = $("<time>");
+											$time.css("color","#666").css("paddingRight","5px");
+											$time.html("[" + moment(item.time).locale($("html").attr("lang")).format("YYYY.MM.DD(dd) HH:mm:ss") + "]");
+											$item.append($time);
+											
+											var $channel = $("<u>");
+											$channel.css("fontWeight","bold").css("color","#2196F3").css("paddingRight","5px");
+											$channel.html("#" + item.room);
+											$item.append($channel);
+											
+											var $user = $("<b>");
+											$user.html(item.nickname);
+											$item.append($user);
+											
+											var $message = $("<span>");
+											$message.html(" : " + item.message);
+											$item.append($message);
+											
+											var $ip = $("<label>");
+											$ip.css("color","#999").css("fontFamily","OpenSans").css("fontSize","11px");
+											$ip.html(" (" + item.ip + ")");
+											$item.append($ip);
+											
+											$panel.append($item);
+										}
+									} else {
+										if (e.getError()) {
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+										} else {
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+										}
+									}
+								}
+							}
+						}),
+						html:'',
+						bbar:new Ext.PagingToolbar({
+							store:null,
+							displayInfo:false,
+							items:[
+								"->",
+								{xtype:"tbtext",text:'<span style="font-family:OpenSans;">Total <span id="MinitalkHistoryTotalRows" style="font-weight:bold;">0</span> History</span>'}
+							],
+							listeners:{
+								beforerender:function(tool) {
+									tool.bindStore(tool.ownerCt.store);
+								}
+							}
+						}),
+						listeners:{
+							show:function() {
+								if (Ext.getCmp("MinitalkPanel-history").store.isLoaded() == false && Ext.getCmp("MinitalkPanel-history").store.isLoading() == false) {
+									Ext.getCmp("MinitalkPanel-history").store.loadPage(1);
+								}
 							}
 						}
-					})
+					}),
+					<?php } ?>
+					null
 				],
 				listeners:{
 					render:function(tab) {

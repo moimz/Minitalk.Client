@@ -159,7 +159,7 @@
 			"server":"서버",
 			"category":"카테고리",
 			"channel":"채널",
-			"log":"로그",
+			"history":"대화기록",
 			"ip":"IP차단자",
 			"broadcast":"브로드캐스트"
 		},
@@ -276,6 +276,11 @@
 				"options":"채널옵션",
 				"user":"현재/최대접속자"
 			}
+		},
+		"history":{
+			"channel":"채널명",
+			"nickname":"닉네임/아이피",
+			"keyword":"대화내용"
 		}
 	}
 }
