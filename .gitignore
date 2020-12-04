@@ -1,2 +1,12 @@
 .DS_Store
-server
+/attachments/*
+!/attachments/index.php
+/configs/*
+!/configs/index.php
+!/configs/init.config.php
+/plugins/*
+!/plugins/index.php
+/templets/*
+!/templets/index.php
+Minitalk.preset.php
+/server
