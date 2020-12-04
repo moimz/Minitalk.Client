@@ -1,0 +1,31 @@
+/**
+ * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
+ *
+ * 미니톡 클라이언트 관리자 스타일시트를 정의한다.
+ * 
+ * @file /admin/styles/style.css
+ * @author Arzz (arzz@arzz.com)
+ * @license MIT License
+ * @version 6.4.0
+ * @modified 2020. 12. 4.
+ */
+html, body {width:100%; height:100%; -webkit-font-smoothing:antialiased; padding:0; margin:0;}
+header {background:#2d3845; height:52px; font-size:0px;}
+header > h1 {display:inline-block; width:230px; height:52px; line-height:52px; font-size:16px; font-weight:bold; padding-left:35px; font-family:OpenSans; color:#fff; letter-spacing:-1px; vertical-align:middle;background:#333f4d url(//www.moimz.com/modules/moimz/images/Minitalk/emblem.png) no-repeat 10px 50%; background-size:20px; margin:0;}
+header > h1 > i {color:#4cb9f3; margin-right:8px;}
+header > h1 > small {font-size:15px; font-weight:300; color:#aeb3b8; letter-spacing:0px;}
+header > ul {list-style:none; display:inline-block; width:calc(100% - 230px - 230px); vertical-align:middle; font-size:0px; padding:0; margin:0;}
+header > ul > li {display:inline-block; height:52px; border-bottom:2px solid transparent;}
+header > ul > li > button {display:block; height:50px; line-height:52px; font-size:15px; padding:0px 18px; color:#aeb3b8; text-decoration:none; background:transparent; cursor:pointer; border:0; font-family:inherit;}
+header > ul > li > button > i {margin-right:8px; font-size:14px; float:left; height:50px; line-height:52px;}
+header > ul > li:hover {background:#000;}
+header > ul > li.selected {border-color:#4cb9f3; background:#000;}
+header > ul > li.selected > button {color:#fff;}
+header > ul > li.selected > button > i {color:#4cb9f3;}
+header > aside {display:inline-block; width:230px; height:52px; vertical-align:middle; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; font-size:14px; font-weight:bold; color:rgba(255,255,255,0.8); line-height:52px; text-align:right; box-sizing:border-box; padding:0px 10px;}
+header > aside > i.photo {display:inline-block; margin:10px 10px 10px 0px; width:30px; height:30px; border:1px solid #44535d; vertical-align:middle; background-size:cover; background-position:50% 50%; background-repeat:no-repeat; border-radius:50%;}
+header > aside > button {float:right; background:#B71C1C; color:#fff; height:32px; line-height:32px; border:0; padding:0px 10px; margin:10px 0px 10px 15px; border-radius:3px; cursor:pointer; font-weight:bold; font-family:inherit;}
+
+footer {background:#343f4d; height:25px; line-height:25px; color:#aeb3b8; text-align:right; font-size:10px; font-family:OpenSans; padding-right:10px;}
+
+a {text-decoration:none; color:#2196F3;}
