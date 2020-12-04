@@ -7,7 +7,7 @@
  * @file /templets/index.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 3.0.0
+ * @version 7.0.0
  * @modified 2018. 3. 29.
  */
 header("HTTP/1.1 403 Forbidden");
