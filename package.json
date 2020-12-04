@@ -330,7 +330,7 @@
 			},
 			"comment":"미니톡 채널 테이블"
 		},
-		"ipban_table":{
+		"banip_table":{
 			"columns":{
 				"ip":{
 					"type":"varchar",
