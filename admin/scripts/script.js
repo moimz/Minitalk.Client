@@ -244,7 +244,7 @@ var Admin = {
 			} else {
 				var selected = Ext.getCmp("MinitalkPanel-server").getSelectionModel().getSelection();
 				if (selected.length == 0) {
-					Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("selectFirst"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+					Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("NOT_SELECTED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 					return;
 				}
 				
@@ -267,12 +267,6 @@ var Admin = {
 								Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
 									Ext.getCmp("MinitalkPanel-server").getStore().reload();
 								}});
-							} else {
-								if (result.message) {
-									Ext.Msg.show({title:Admin.getText("alert/error"),msg:result.message,buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
-								} else {
-									Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("work"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
-								}
 							}
 						}
 					});
@@ -386,7 +380,7 @@ var Admin = {
 		delete:function(parent) {
 			var selected = Ext.getCmp(parent ? "MinitalkCategory2" : "MinitalkCategory1").getSelectionModel().getSelection();
 			if (selected.length == 0) {
-				Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("selectFirst"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+				Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("NOT_SELECTED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 				return;
 			}
 			
@@ -413,12 +407,6 @@ var Admin = {
 										}
 									});
 								}});
-							} else {
-								if (result.message) {
-									Ext.Msg.show({title:Admin.getText("alert/error"),msg:result.message,buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
-								} else {
-									Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("work"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
-								}
 							}
 						}
 					});
