@@ -9,3 +9,4 @@
 /templets/*
 !/templets/index.php
 Minitalk.preset.php
+/server
