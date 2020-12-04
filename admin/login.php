@@ -1,67 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-<META http-equiv="X-UA-Compatible" content="IE=8" />
-<title>미니톡 관리자 로그인</title>
-<style type="text/css">
-@import url('../css/NanumGothicWeb.css');
-BODY {background:#2F2F2F; margin:0px; padding:0px;}
-.height10 {height:10px; overflow:hidden;}
-.height100 {height:100px; overflow:hidden;}
-.layoutfixed {width:100%; table-layout:fixed;}
-
-.loginTitle {height:80px; background:#000000;}
-.loginTitle DIV {width:440px; height:80px; margin:0 auto; background:url(./images/login_title.gif);}
-.loginBox {width:420px; padding:10px; margin:10px auto; border:5px solid #4F4F4F; background:#000000;}
-.loginBox .inputbox {border:2px solid #4F4F4F; background:#2F2F2F; color:#EEEEEE; font-family:verdana; font-size:16px; padding:3px; width:290px; height:18px;}
-.loginBox .checkbox {width:13px; height:13px;}
-.loginBox LABEL {cursor:pointer;}
-.loginButton {margin:10px 5px 0px 5px; border-top:1px dashed #4F4F4F; text-align:right; font:0/0 arial; padding-top:10px;}
-</style>
-</head>
-<body>
-<table cellspacing="0" cellpadding="0" class="layoutfixed">
-<tr class="height100">
-	<td></td>
-</tr>
-<tr class="loginTitle">
-	<td><div></div></td>
-</tr>
-<tr>
-	<td>
-		<div class="loginBox">
-			<form method="post" action="./exec/Admin.do.php" target="loginFrame">
-			<input type="hidden" name="action" value="login" />
-			<table cellspacing="0" cellpadding="0" class="layoutfixed">
-			<col width="105" /><col width="100%" />
-			<tr>
-				<td><img src="./images/text_user_id.gif" alt="아이디" /></td>
-				<td><input type="text" name="user_id" class="inputbox" /></td>
-			</tr>
-			<tr class="height10">
-				<td colspan="2"></td>
-			</tr>
-			<tr>
-				<td><img src="./images/text_password.gif" alt="패스워드" /></td>
-				<td><input type="password" name="password" class="inputbox" /></td>
-			</tr>
-			</table>
-
-			<div class="loginButton">
-				<table cellspacing="0" cellpadding="0" class="layoutfixed">
-				<col width="100%" /><col width="65" />
-				<tr>
-					<td></td>
-					<td><input type="image" src="./images/btn_login.gif" /></td>
-				</tr>
-				</table>
+<?php
+/**
+ * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
+ *
+ * 미니톡 클라이언트 관리자 레이아웃을 출력한다.
+ * 관리자페이지와 관련된 파일은 ExtJS 라이센스정책에 따라 GPLv3 라이센스로 배포됩니다.
+ * 
+ * @file /admin/index.php
+ * @author Arzz (arzz@arzz.com)
+ * @license GPLv3
+ * @version 6.4.0
+ * @modified 2020. 12. 4.
+ */
+if (defined('__MINITALK__') == false) exit;
+?>
+<form id="MinitalkLoginForm">
+	<main>
+		<h1><i class="mi mi-lock"></i> Login to control panel</h1>
+	
+		<div class="inputbox">
+			<div data-role="input">
+				<input type="text" name="user_id" placeholder="User ID">
 			</div>
-			</form>
-			<iframe name="loginFrame" style="display:none;"></iframe>
+			<div data-role="input">
+				<input type="password" name="password" placeholder="Password">
+			</div>
+			<button type="submit"><i class="mi mi-go-bold"></i></button>
 		</div>
-	</td>
-</tr>
-</table>
-</body>
-</html>
+		
+		<label class="autoLogin"><input type="checkbox" name="auto_login" value="TRUE"> Keep me signed in</label>
+	</main>
+</form>
