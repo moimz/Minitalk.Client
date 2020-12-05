@@ -756,6 +756,20 @@ var Admin = {
 					}
 				}
 			}).show();
+		},
+		/**
+		 * 채널을 미리본다.
+		 *
+		 * @param object channel 채널정보
+		 */
+		preview:function(channel) {
+			new Ext.Window({
+				title:channel.title,
+				width:700,
+				height:500,
+				modal:true,
+				html:'<iframe src="./preview.php?channel='+channel.channel+'" frameborder="0" style="width:100%; height:100%;" scrolling="0"></iframe>'
+			}).show();
 		}
 	},
 	/**
