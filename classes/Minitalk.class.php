@@ -513,7 +513,7 @@ class Minitalk {
 			curl_setopt($ch,CURLOPT_URL,$server.'/'.$api);
 			if ($protocol != 'POST') curl_setopt($ch,CURLOPT_CUSTOMREQUEST,$protocol);
 			curl_setopt($ch,CURLOPT_POST,true);
-			curl_setopt($ch,CURLOPT_POSTFIELDS,$data);
+			curl_setopt($ch,CURLOPT_POSTFIELDS,http_build_query($data));
 		}
 		
 		curl_setopt($ch,CURLOPT_TIMEOUT,5);
