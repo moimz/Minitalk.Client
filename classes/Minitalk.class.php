@@ -391,21 +391,7 @@ class Minitalk {
 	 * @return object $status
 	 */
 	function getServerStatus($domain) {
-		$ch = curl_init();
-		curl_setopt($ch,CURLOPT_URL,$domain.'/status');
-		curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-		curl_setopt($ch,CURLOPT_TIMEOUT,5);
-		$result = curl_exec($ch);
-		$http_code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
-		$content_type = explode(';',curl_getinfo($ch,CURLINFO_CONTENT_TYPE));
-		$content_type = array_shift($content_type);
-		curl_close($ch);
-		
-		if ($http_code == 200) {
-			return json_decode($result);
-		}
-		
-		return null;
+		return $this->callServerApi('GET',$domain,'status');
 	}
 	
 	/**
@@ -447,6 +433,50 @@ class Minitalk {
 		
 		$this->channels[$channel->channel] = $channel;
 		return $this->channels[$channel->channel];
+	}
+	
+	/**
+	 * 서버 API 를 호출한다.
+	 *
+	 * @param string $protocol
+	 * @param string $server
+	 * @param string $api
+	 * @param object[] $data
+	 * @param object[] $headers
+	 */
+	function callServerApi($protocol,$server,$api,$data=array(),$headers=array()) {
+		global $_CONFIGS;
+		
+		$headers['authorization'] = 'CLIENT_SECRET_KEY '.$_CONFIGS->key;
+		
+		$cHeaders = array();
+		foreach ($headers as $key=>$value) {
+			$cHeaders[] = $key.': '.$value;
+		}
+		
+		$ch = curl_init();
+		curl_setopt($ch,CURLOPT_HTTPHEADER,$cHeaders);
+		if ($protocol == 'GET') {
+			curl_setopt($ch,CURLOPT_URL,$server.'/'.$api.(count($data) > 0 ? '?'.http_build_query($data) : ''));
+			curl_setopt($ch,CURLOPT_POST,false);
+		} else {
+			curl_setopt($ch,CURLOPT_URL,$server.'/'.$api);
+			if ($protocol != 'POST') curl_setopt($ch,CURLOPT_CUSTOMREQUEST,$protocol);
+			curl_setopt($ch,CURLOPT_POST,true);
+			curl_setopt($ch,CURLOPT_POSTFIELDS,http_build_query($data));
+		}
+		
+		curl_setopt($ch,CURLOPT_TIMEOUT,5);
+		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+		$data = curl_exec($ch);
+		$http_code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+		curl_close($ch);
+		
+		if ($http_code == 200) {
+			return json_decode($data);
+		} else {
+			return null;
+		}
 	}
 	
 	/**
