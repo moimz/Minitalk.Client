@@ -757,6 +757,277 @@ var Admin = {
 				}
 			}).show();
 		}
+	},
+	/**
+	 * 차단IP
+	 */
+	banip:{
+		add:function(ip) {
+			new Ext.Window({
+				id:"MinitalkBanIpAddWindow",
+				title:ip ? Admin.getText("banip/modify") : Admin.getText("banip/add"),
+				width:400,
+				modal:true,
+				border:false,
+				items:[
+					new Ext.form.Panel({
+						id:"MinitalkBanIpAddForm",
+						border:false,
+						fieldDefaults:{allowBlank:false,labelWidth:80,labelAlign:"right",anchor:"100%"},
+						bodyPadding:"10 10 5 10",
+						items:[
+							new Ext.form.Hidden({
+								name:"oIp"
+							}),
+							new Ext.form.TextField({
+								fieldLabel:Admin.getText("banip/form/ip"),
+								name:"ip",
+								emptyText:"0.0.0.0"
+							}),
+							new Ext.form.TextField({
+								fieldLabel:Admin.getText("banip/form/nickname"),
+								name:"nickname",
+								allowBlank:true
+							}),
+							new Ext.form.TextField({
+								fieldLabel:Admin.getText("banip/form/memo"),
+								allowBlank:true,
+								name:"memo"
+							})
+						]
+					})
+				],
+				buttons:[
+					new Ext.Button({
+						text:Admin.getText("button/confirm"),
+						handler:function() {
+							Ext.getCmp("MinitalkBanIpAddForm").getForm().submit({
+								url:Minitalk.getProcessUrl("@saveBanIp"),
+								submitEmptyText:false,
+								waitTitle:Admin.getText("action/wait"),
+								waitMsg:Admin.getText("action/saving"),
+								success:function(form,action) {
+									Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/saved"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function(button) {
+										Ext.getCmp("MinitalkPanel-banip").getStore().reload();
+										Ext.getCmp("MinitalkBanIpAddWindow").close();
+									}});
+								},
+								failure:function(form,action) {
+									if (action.result && action.result.message) {
+										Ext.Msg.show({title:Admin.getText("alert/error"),msg:action.result.message,buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+									} else {
+										Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_SAVE_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+									}
+								}
+							});
+						}
+					}),
+					new Ext.Button({
+						text:Admin.getText("button/cancel"),
+						handler:function() {
+							Ext.getCmp("MinitalkBanIpAddWindow").close();
+						}
+					})
+				],
+				listeners:{
+					show:function() {
+						if (ip) {
+							Ext.getCmp("MinitalkBanIpAddForm").getForm().load({
+								url:Minitalk.getProcessUrl("@getBanIp"),
+								params:{ip:ip},
+								waitTitle:Admin.getText("action/wait"),
+								waitMsg:Admin.getText("action/loading"),
+								success:function(form,action) {
+								},
+								failure:function(form,action) {
+									if (action.result && action.result.message) {
+										Ext.Msg.show({title:Admin.getText("alert/error"),msg:action.result.message,buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+									} else {
+										Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+									}
+									Ext.getCmp("MinitalkBanIpAddWindow").close();
+								}
+							});
+						}
+					}
+				}
+			}).show();
+		},
+		/**
+		 * 차단아이피를 삭제한다.
+		 */
+		delete:function(parent) {
+			var selected = Ext.getCmp("MinitalkPanel-banip").getSelectionModel().getSelection();
+			if (selected.length == 0) {
+				Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("NOT_SELECTED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+				return;
+			}
+			
+			var ips = [];
+			for (var i=0, loop=selected.length;i<loop;i++) {
+				ips.push(selected[i].get("ip"));
+			}
+			
+			Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("banip/delete_confirm"),buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
+				if (button == "ok") {
+					Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/wait"));
+					$.send(Minitalk.getProcessUrl("@deleteBanIp"),{ips:JSON.stringify(ips)},function(result) {
+						if (result.success == true) {
+							Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
+								Ext.getCmp("MinitalkPanel-banip").getStore().reload();
+							}});
+						}
+					});
+				}
+			}});
+		}
+	},
+	/**
+	 * 브로드캐스트
+	 */
+	broadcast:{
+		send:function(data) {
+			new Ext.Window({
+				id:"MinitalkBroadcastSendWindow",
+				title:Admin.getText("broadcast/send"),
+				width:600,
+				modal:true,
+				border:false,
+				resizeable:false,
+				autoScroll:true,
+				items:[
+					new Ext.form.Panel({
+						id:"MinitalkBroadcastSendForm",
+						bodyPadding:"10 10 5 10",
+						border:false,
+						fieldDefaults:{labelAlign:"right",labelWidth:80,anchor:"100%",allowBlank:false},
+						items:[
+							new Ext.form.ComboBox({
+								fieldLabel:Admin.getText("broadcast/form/type"),
+								name:"type",
+								store:new Ext.data.ArrayStore({
+									fields:["display","value"],
+									data:(function() {
+										var datas = [];
+										for (var type in Admin.getText("broadcast/type")) {
+											datas.push([Admin.getText("broadcast/type/" + type) + " - " + Admin.getText("broadcast/type_help/" + type),type]);
+										}
+										return datas;
+									})()
+								}),
+								displayField:"display",
+								valueField:"value",
+								value:data ? data.type : "NOTICE",
+								listeners:{
+									select:function(form,value) {
+										if (value == "NOTICE") {
+											Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("nickname").disable();
+										} else {
+											Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("nickname").enable();
+										}
+									}
+								}
+							}),
+							new Ext.form.TextField({
+								fieldLabel:Admin.getText("broadcast/form/message"),
+								name:"message",
+								value:data ? data.message : null,
+								allowBlank:false
+							}),
+							new Ext.form.TextField({
+								fieldLabel:Admin.getText("broadcast/form/url"),
+								name:"url",
+								value:data ? data.url : null,
+								emptyText:Admin.getText("broadcast/form/url_help"),
+								validator:function(value) {
+									if (value.search(/^http(s)?:\/\//) == 0) return true;
+									else return Admin.getText("broadcast/form/url_error");
+								}
+							}),
+							new Ext.form.FieldContainer({
+								fieldLabel:Admin.getText("broadcast/form/nickname"),
+								layout:"hbox",
+								items:[
+									new Ext.form.TextField({
+										name:"nickname",
+										width:120,
+										value:data && data.type == "MESSAGE" ? data.nickname : "admin",
+										disabled:data && data.type == "MESSAGE" ? false : true
+									}),
+									new Ext.form.DisplayField({
+										value:"&nbsp;(" + Admin.getText("broadcast/form/nickname_help")+")"
+									})
+								]
+							})
+						]
+					})
+				],
+				buttons:[
+					new Ext.Button({
+						text:Admin.getText("button/confirm"),
+						handler:function() {
+							Ext.getCmp("MinitalkBroadcastSendForm").getForm().submit({
+								url:Minitalk.getProcessUrl("@sendBroadcast"),
+								submitEmptyText:false,
+								waitTitle:Admin.getText("action/wait"),
+								waitMsg:Admin.getText("action/saving"),
+								success:function(form,action) {
+									Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("broadcast/send_confirm").replace("{receiver}",action.result.receiver),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function(button) {
+										Ext.getCmp("MinitalkPanel-broadcast").getStore().loadPage(1);
+										Ext.getCmp("MinitalkBroadcastSendWindow").close();
+									}});
+								},
+								failure:function(form,action) {
+									if (action.result) {
+										if (action.result.message) {
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:action.result.message,buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+										} else {
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_SAVE_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+										}
+									} else {
+										Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("INVALID_FORM_DATA"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+									}
+								}
+							});
+						}
+					}),
+					new Ext.Button({
+						text:Admin.getText("button/cancel"),
+						handler:function() {
+							Ext.getCmp("MinitalkBroadcastSendWindow").close();
+						}
+					})
+				]
+			}).show();
+		},
+		/**
+		 * 브로드캐스트 전송내역을 삭제한다.
+		 */
+		delete:function(parent) {
+			var selected = Ext.getCmp("MinitalkPanel-broadcast").getSelectionModel().getSelection();
+			if (selected.length == 0) {
+				Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("NOT_SELECTED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+				return;
+			}
+			
+			var ids = [];
+			for (var i=0, loop=selected.length;i<loop;i++) {
+				ids.push(selected[i].get("id"));
+			}
+			
+			Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("broadcast/delete_confirm"),buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
+				if (button == "ok") {
+					Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/wait"));
+					$.send(Minitalk.getProcessUrl("@deleteBroadcast"),{ids:JSON.stringify(ids)},function(result) {
+						if (result.success == true) {
+							Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
+								Ext.getCmp("MinitalkPanel-broadcast").getStore().reload();
+							}});
+						}
+					});
+				}
+			}});
+		}
 	}
 };
 

@@ -154,46 +154,51 @@
 		},
 		"broadcast_table":{
 			"columns":{
-				"idx":{
-					"type":"int",
-					"length":11,
+				"id":{
+					"type":"char",
+					"length":32,
 					"comment":"고유값"
 				},
 				"type":{
 					"type":"enum",
 					"length":"'NOTICE','MESSAGE'",
 					"default":"MESSAGE",
-					"comment":"메시지종류"
+					"comment":"종류"
 				},
 				"message":{
 					"type":"varchar",
 					"length":255,
-					"comment":"메시지내용"
+					"comment":"내용"
+				},
+				"nickname":{
+					"type":"varchar",
+					"length":20,
+					"comment":"닉네임"
 				},
 				"receiver":{
 					"type":"int",
 					"length":11,
 					"default":0,
-					"comment":"메시지를 받은 접속자수"
+					"comment":"받은유저수"
 				},
 				"url":{
 					"type":"varchar",
 					"length":255,
-					"is_null":true,
+					"default":0,
 					"comment":"링크주소"
 				},
 				"reg_date":{
 					"type":"int",
 					"length":11,
-					"comment":"메시지를 전송한 시각"
+					"default":0,
+					"comment":"전송일자"
 				}
 			},
 			"indexes":{
-				"idx":"primary_key",
+				"id":"primary_key",
 				"reg_date":"index"
 			},
-			"auto_increment":"idx",
-			"comment":"미니톡 브로드캐스트 전송기록 테이블"
+			"comment":"미니톡 브로드캐스트 테이블"
 		},
 		"category_table":{
 			"columns":{
@@ -441,7 +446,7 @@
 				},
 				"nickname":{
 					"type":"varchar",
-					"length":30,
+					"length":20,
 					"comment":"닉네임"
 				},
 				"user":{

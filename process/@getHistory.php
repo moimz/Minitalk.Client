@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 3. 23.
+ * @modified 2020. 12. 4.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -33,6 +33,7 @@ $total = $history->copy()->count();
 $history = $history->limit($start,$limit)->orderBy('time','asc')->get();
 for ($i=0, $loop=count($history);$i<$loop;$i++) {
 	$history[$i]->user = json_decode($history[$i]->user);
+	$history[$i]->data = json_decode($history[$i]->data);
 }
 $results->success = true;
 $results->lists = $history;

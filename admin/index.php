@@ -56,7 +56,7 @@ $hasServer = is_dir(__MINITALK_PATH__.'/server') == true;
 if ($logged === null) {
 	INCLUDE './login.php';
 } else {
-	$menuIcons = array('server'=>'xi-cloud-network','category'=>'xi-sitemap','channel'=>'xi-chat','history'=>'xi-time-back','ip'=>'xi-slash-circle','broadcast'=>'xi-signal','admin'=>'xi-crown');
+	$menuIcons = array('server'=>'xi-cloud-network','category'=>'xi-sitemap','channel'=>'xi-chat','history'=>'xi-time-back','banip'=>'xi-slash-circle','broadcast'=>'xi-signal','admin'=>'xi-crown');
 ?>
 <header id="MinitalkHeader">
 	<h1>Minitalk <small>Administrator</small></h1>
@@ -770,7 +770,178 @@ Ext.onReady(function () {
 								Admin.channel.add(record.data.channel);
 							},
 							itemcontextmenu:function(grid,record,row,index,e) {
+								var menu = new Ext.menu.Menu();
 								
+								menu.addTitle(record.data.title);
+								
+								menu.add({
+									text:Admin.getText("channel/preview"),
+									iconCls:"xi xi-monitor",
+									handler:function() {
+										Admin.channel.preview(record.data);
+									}
+								});
+								
+								menu.add({
+									text:Admin.getText("channel/code"),
+									iconCls:"xi xi-code",
+									handler:function() {
+										Admin.channel.code(record.data);
+									}
+								});
+								
+								menu.add("-");
+								
+								menu.add({
+									text:Admin.getText("channel/modify"),
+									iconCls:"xi xi-form",
+									handler:function() {
+										Admin.channel.add(record.data.channel);
+									}
+								});
+								
+								menu.add({
+									text:Admin.getText("channel/delete"),
+									iconCls:"mi mi-trash",
+									handler:function() {
+										Admin.channel.delete(record.data.parent);
+									}
+								});
+								
+								e.stopEvent();
+								menu.showAt(e.getXY());
+							}
+						}
+					}),
+					new Ext.grid.Panel({
+						id:"MinitalkPanel-banip",
+						tbar:[
+							new Ext.form.TextField({
+								id:"MinitalkIpKeyword",
+								width:200,
+								emptyText:Admin.getText("banip/columns/ip") + " / " + Admin.getText("banip/columns/nickname"),
+								enableKeyEvents:true,
+								listeners:{
+									keypress:function(form,e) {
+										if (e.keyCode == 13) {
+											Ext.getCmp("MinitalkIpSearchButton").handler();
+										}
+									}
+								}
+							}),
+							new Ext.Button({
+								id:"MinitalkIpSearchButton",
+								iconCls:"mi mi-search",
+								handler:function() {
+									Ext.getCmp("MinitalkPanel-banip").getStore().getProxy().setExtraParam("keyword",Ext.getCmp("MinitalkIpKeyword").getValue());
+									Ext.getCmp("MinitalkPanel-banip").getStore().loadPage(1);
+								}
+							}),
+							"-",
+							new Ext.Button({
+								text:Admin.getText("banip/add"),
+								iconCls:"mi mi-plus",
+								handler:function() {
+									Admin.banip.add();
+								}
+							}),
+							new Ext.Button({
+								text:Admin.getText("banip/delete"),
+								iconCls:"mi mi-trash",
+								handler:function() {
+									Admin.banip.delete();
+								}
+							})
+						],
+						store:new Ext.data.JsonStore({
+							proxy:{
+								type:"ajax",
+								simpleSortMode:true,
+								url:Minitalk.getProcessUrl("@getBanIps"),
+								reader:{type:"json"}
+							},
+							remoteSort:true,
+							sorters:[{property:"reg_date",direction:"DESC"}],
+							autoLoad:true,
+							pageSize:50,
+							fields:["ip","nickname","memo",{name:"reg_date",type:"int"}],
+							listeners:{
+								load:function(store,records,success,e) {
+									if (success == false) {
+										if (e.getError()) {
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+										} else {
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+										}
+									}
+								}
+							}
+						}),
+						columns:[{
+							header:Admin.getText("banip/columns/ip"),
+							dataIndex:"ip",
+							width:140
+						},{
+							header:Admin.getText("banip/columns/nickname"),
+							dataIndex:"nickname",
+							width:200
+						},{
+							header:Admin.getText("banip/columns/memo"),
+							dataIndex:"memo",
+							minWidth:200,
+							flex:1
+						},{
+							header:Admin.getText("banip/columns/reg_date"),
+							dataIndex:"reg_date",
+							width:140,
+							renderer:function(value) {
+								return moment(value * 1000).locale($("html").attr("lang")).format("YYYY.MM.DD(dd) HH:mm");
+							}
+						}],
+						selModel:new Ext.selection.CheckboxModel(),
+						bbar:new Ext.PagingToolbar({
+							store:null,
+							displayInfo:false,
+							items:[
+								"->",
+								{xtype:"tbtext",text:Admin.getText("banip/grid_help")}
+							],
+							listeners:{
+								beforerender:function(tool) {
+									tool.bindStore(tool.ownerCt.getStore());
+								}
+							}
+						}),
+						listeners:{
+							itemdblclick:function(grid,record) {
+								Admin.banip.add(record.data.ip);
+							},
+							itemcontextmenu:function(grid,record,item,index,e) {
+								var menu = new Ext.menu.Menu();
+								
+								menu.addTitle(record.data.ip);
+								
+								menu.add({
+									text:Admin.getText("banip/modify"),
+									iconCls:"xi xi-form",
+									handler:function() {
+										Admin.banip.add(record.data.ip);
+									}
+								});
+								
+								menu.add({
+									text:Admin.getText("banip/delete"),
+									iconCls:"mi mi-trash",
+									handler:function() {
+										Admin.banip.delete();
+									}
+								});
+								
+								e.stopEvent();
+								menu.showAt(e.getXY());
+							}
+						}
+					}),
 					<?php if ($hasServer == true) { ?>
 					new Ext.Panel({
 						id:"MinitalkPanel-history",
@@ -937,6 +1108,146 @@ Ext.onReady(function () {
 								if (Ext.getCmp("MinitalkPanel-history").store.isLoaded() == false && Ext.getCmp("MinitalkPanel-history").store.isLoading() == false) {
 									Ext.getCmp("MinitalkPanel-history").store.loadPage(1);
 								}
+							}
+						}
+					}),
+					new Ext.grid.Panel({
+						id:"MinitalkPanel-broadcast",
+						tbar:[
+							new Ext.form.TextField({
+								id:"MinitalkBroadcastKeyword",
+								width:200,
+								emptyText:Admin.getText("broadcast/columns/message"),
+								enableKeyEvents:true,
+								listeners:{
+									keypress:function(form,e) {
+										if (e.keyCode == 13) {
+											Ext.getCmp("MinitalkBroadcastSearchButton").handler();
+										}
+									}
+								}
+							}),
+							new Ext.Button({
+								id:"MinitalkBroadcastSearchButton",
+								iconCls:"mi mi-search",
+								handler:function() {
+									Ext.getCmp("MinitalkPanel-broadcast").getStore().getProxy().setExtraParam("keyword",Ext.getCmp("MinitalkBroadcastKeyword").getValue());
+									Ext.getCmp("MinitalkPanel-broadcast").getStore().loadPage(1);
+								}
+							}),
+							"-",
+							new Ext.Button({
+								text:Admin.getText("broadcast/send"),
+								iconCls:"xi xi-paper-plane",
+								handler:function() {
+									Admin.broadcast.send();
+								}
+							}),
+							new Ext.Button({
+								text:Admin.getText("broadcast/delete"),
+								iconCls:"mi mi-trash",
+								handler:function() {
+									Admin.broadcast.delete();
+								}
+							})
+						],
+						store:new Ext.data.JsonStore({
+							proxy:{
+								type:"ajax",
+								simpleSortMode:true,
+								url:Minitalk.getProcessUrl("@getBroadcasts"),
+								reader:{type:"json"}
+							},
+							remoteSort:true,
+							sorters:[{property:"reg_date",direction:"DESC"}],
+							autoLoad:true,
+							pageSize:50,
+							fields:["id","type","message","nickname","url",{name:"receiver",type:"int"},{name:"reg_date",type:"int"}],
+							listeners:{
+								load:function(store,records,success,e) {
+									if (success == false) {
+										if (e.getError()) {
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+										} else {
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+										}
+									}
+								}
+							}
+						}),
+						columns:[{
+							header:Admin.getText("broadcast/columns/type"),
+							dataIndex:"type",
+							width:100,
+							align:"center",
+							renderer:function(value,p) {
+								if (value == "NOTICE") p.style = "color:red;";
+								else p.style = "color:blue;";
+								return Admin.getText("broadcast/type/"+value);
+							}
+						},{
+							header:Admin.getText("broadcast/columns/message"),
+							dataIndex:"message",
+							minWidth:100,
+							flex:1
+						},{
+							header:Admin.getText("broadcast/columns/url"),
+							dataIndex:"url",
+							width:250
+						},{
+							header:Admin.getText("broadcast/columns/receiver"),
+							dataIndex:"receiver",
+							width:100,
+							align:"right",
+							renderer:function(value) {
+								return Ext.util.Format.number(value,"0,000");
+							}
+						},{
+							header:Admin.getText("broadcast/columns/reg_date"),
+							dataIndex:"reg_date",
+							width:140
+						}],
+						selModel:new Ext.selection.CheckboxModel(),
+						bbar:new Ext.PagingToolbar({
+							store:null,
+							displayInfo:false,
+							items:[
+								"->",
+								{xtype:"tbtext",text:Admin.getText("broadcast/grid_help")}
+							],
+							listeners:{
+								beforerender:function(tool) {
+									tool.bindStore(tool.ownerCt.getStore());
+								}
+							}
+						}),
+						listeners:{
+							itemdblclick:function(grid,record) {
+								Admin.broadcast.send(record.data);
+							},
+							itemcontextmenu:function(grid,record,item,index,e) {
+								var menu = new Ext.menu.Menu();
+								
+								menu.addTitle(record.data.message);
+								
+								menu.add({
+									text:Admin.getText("broadcast/resend"),
+									iconCls:"xi xi-reply",
+									handler:function() {
+										Admin.broadcast.send(record.data);
+									}
+								});
+								
+								menu.add({
+									text:Admin.getText("broadcast/delete"),
+									iconCls:"mi mi-trash",
+									handler:function() {
+										Admin.broadcast.delete();
+									}
+								});
+								
+								e.stopEvent();
+								menu.showAt(e.getXY());
 							}
 						}
 					}),
