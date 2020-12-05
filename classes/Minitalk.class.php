@@ -70,6 +70,7 @@ class Minitalk {
 		 */
 		$this->table = new stdClass();
 		$this->table->admin = 'admin_table';
+		$this->table->broadcast = 'broadcast_table';
 		$this->table->server = 'server_table';
 		$this->table->category = 'category_table';
 		$this->table->channel = 'channel_table';

@@ -1110,7 +1110,7 @@ Ext.onReady(function () {
 							new Ext.form.TextField({
 								id:"MinitalkBroadcastKeyword",
 								width:200,
-								emptyText:"메세지내용",
+								emptyText:Admin.getText("broadcast/columns/message"),
 								enableKeyEvents:true,
 								listeners:{
 									keypress:function(form,e) {
@@ -1129,112 +1129,20 @@ Ext.onReady(function () {
 								}
 							}),
 							"-",
-							/*
 							new Ext.Button({
-								text:"브로드캐스트메세지전송",
-								iconCls:"mi mi-plus",
+								text:Admin.getText("broadcast/send"),
+								iconCls:"xi xi-paper-plane",
 								handler:function() {
-									new Ext.Window({
-										id:"BroadcastWindow",
-										title:"브로드캐스트메세지전송",
-										width:600,
-										modal:true,
-										items:[
-											new Ext.form.FormPanel({
-												id:"BroadcastForm",
-												bodyPadding:"10 10 5 10",
-												border:false,
-												fieldDefaults:{labelAlign:"right",labelWidth:80,anchor:"100%"},
-												items:[
-													new Ext.form.ComboBox({
-														fieldLabel:"종류",
-														name:"type",
-														store:new Ext.data.ArrayStore({
-															fields:["display","value"],
-															data:[["공지 - 브로드캐스트메세지 수신여부와 관련없이 알림창형태로 메세지 전송","notice"],["일반메세지 - 브로드캐스트메세지 수신채널에 한하여 일반 채팅메세지로 전송","broadcast"]]
-														}),
-														displayField:"display",
-														valueField:"value",
-														typeAhead:true,
-														mode:"local",
-														triggerAction:"all",
-														value:"notice",
-														editable:false,
-														listeners:{select:{fn:function(form) {
-															if (form.getValue() == "notice") {
-																Ext.getCmp("BroadcastForm").getForm().findField("nickname").disable();
-															} else {
-																Ext.getCmp("BroadcastForm").getForm().findField("nickname").enable();
-															}
-														}}}
-													}),
-													new Ext.form.TextField({
-														fieldLabel:"전송내용",
-														name:"message",
-														value:"브로드캐스트 메세지 + _+)//",
-														allowBlank:false
-													}),
-													new Ext.form.TextField({
-														fieldLabel:"URL주소",
-														name:"url",
-														value:"http://www.arzz.com",
-														emptyText:"메세지를 클릭하면 이동할 주소를 입력할 수 있습니다. (선택)",
-														validator:function(value) {
-															if (value.search(/^http(s)?:\/\//) == 0) return true;
-															else return "주소는 http(s):// 로 시작하여야 합니다."
-														}
-													}),
-													new Ext.form.FieldContainer({
-														fieldLabel:"전송닉네임",
-														layout:"hbox",
-														items:[
-															new Ext.form.TextField({
-																name:"nickname",
-																width:120,
-																value:"미니톡관리자",
-																disabled:true,
-																allowBlank:false
-															}),
-															new Ext.form.DisplayField({
-																value:"&nbsp;(일반메세지로 전송시 전송한사람의 닉네임을 설정하세요.)"
-															})
-														]
-													})
-												]
-											})
-										],
-										buttons:[
-											new Ext.Button({
-												text:"확인",
-												handler:function() {
-													Ext.getCmp("BroadcastForm").getForm().submit({
-														url:"./exec/Admin.do.php?action=broadcast&do=send",
-														submitEmptyText:false,
-														waitTitle:"잠시만 기다려주십시오.",
-														waitMsg:"브로드캐스트메세지를 전송하고 있습니다.",
-														success:function(form,action) {
-															Ext.Msg.show({title:"안내",msg:GetNumberFormat(action.result.receiver)+"명에게 성공적으로 전송하였습니다.",buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function(button) {
-																Ext.getCmp("BroadcastList").getStore().loadPage(1);
-																Ext.getCmp("BroadcastWindow").close();
-															}});
-														},
-														failure:function(form,action) {
-															Ext.Msg.show({title:"에러",msg:"입력내용에 오류가 있습니다.<br />입력내용을 다시 한번 확인하여 주십시오.",buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
-														}
-													});
-												}
-											}),
-											new Ext.Button({
-												text:"취소",
-												handler:function() {
-													Ext.getCmp("BroadcastWindow").close();
-												}
-											})
-										]
-									}).show();
+									Admin.broadcast.send();
+								}
+							}),
+							new Ext.Button({
+								text:Admin.getText("broadcast/delete"),
+								iconCls:"mi mi-trash",
+								handler:function() {
+									Admin.broadcast.delete();
 								}
 							})
-							*/
 						],
 						store:new Ext.data.JsonStore({
 							proxy:{
@@ -1247,7 +1155,7 @@ Ext.onReady(function () {
 							sorters:[{property:"reg_date",direction:"DESC"}],
 							autoLoad:true,
 							pageSize:50,
-							fields:["ip","nickname","memo",{name:"reg_date",type:"int"}],
+							fields:["id","type","message","nickname","url",{name:"receiver",type:"int"},{name:"reg_date",type:"int"}],
 							listeners:{
 								load:function(store,records,success,e) {
 									if (success == false) {
@@ -1261,23 +1169,26 @@ Ext.onReady(function () {
 							}
 						}),
 						columns:[{
-							header:"종류",
+							header:Admin.getText("broadcast/columns/type"),
 							dataIndex:"type",
 							width:100,
-							renderer:function(value) {
-								if (value == "NOTICE") return '<span style="color:red;">공지메세지</span>';
-								else return '<span style="color:red;">일반메세지</span>';
+							align:"center",
+							renderer:function(value,p) {
+								if (value == "NOTICE") p.style = "color:red;";
+								else p.style = "color:blue;";
+								return Admin.getText("broadcast/type/"+value);
 							}
 						},{
-							header:"메세지내용",
+							header:Admin.getText("broadcast/columns/message"),
 							dataIndex:"message",
+							minWidth:100,
 							flex:1
 						},{
-							header:"링크주소",
+							header:Admin.getText("broadcast/columns/url"),
 							dataIndex:"url",
 							width:250
 						},{
-							header:"수신인원",
+							header:Admin.getText("broadcast/columns/receiver"),
 							dataIndex:"receiver",
 							width:100,
 							align:"right",
@@ -1285,7 +1196,7 @@ Ext.onReady(function () {
 								return Ext.util.Format.number(value,"0,000");
 							}
 						},{
-							header:"전송일자",
+							header:Admin.getText("broadcast/columns/reg_date"),
 							dataIndex:"reg_date",
 							width:140
 						}],
@@ -1295,7 +1206,7 @@ Ext.onReady(function () {
 							displayInfo:false,
 							items:[
 								"->",
-								{xtype:"tbtext",text:Admin.getText("banip/grid_help")}
+								{xtype:"tbtext",text:Admin.getText("broadcast/grid_help")}
 							],
 							listeners:{
 								beforerender:function(tool) {
@@ -1304,24 +1215,27 @@ Ext.onReady(function () {
 							}
 						}),
 						listeners:{
+							itemdblclick:function(grid,record) {
+								Admin.broadcast.send(record.data);
+							},
 							itemcontextmenu:function(grid,record,item,index,e) {
 								var menu = new Ext.menu.Menu();
 								
 								menu.addTitle(record.data.message);
 								
 								menu.add({
-									text:Admin.getText("banip/modify"),
-									iconCls:"xi xi-form",
+									text:Admin.getText("broadcast/resend"),
+									iconCls:"xi xi-reply",
 									handler:function() {
-										Admin.banip.add(record.data.ip);
+										Admin.broadcast.send(record.data);
 									}
 								});
 								
 								menu.add({
-									text:Admin.getText("banip/delete"),
+									text:Admin.getText("broadcast/delete"),
 									iconCls:"mi mi-trash",
 									handler:function() {
-										Admin.banip.delete();
+										Admin.broadcast.delete();
 									}
 								});
 								

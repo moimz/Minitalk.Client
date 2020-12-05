@@ -2598,17 +2598,17 @@ if (isMiniTalkIncluded === undefined) {
 			});
 			
 			this.socket.on("broadcast",function(data) {
-				if (m.isBroadcast === true) {
-					if (data.url) {
-						m.printMessage("broadcast",data.nickname+m.splitString+'<a href="'+data.url+'" target="_blank">'+data.message+'</a>');
-					} else {
-						m.printMessage("broadcast",data.nickname+m.splitString+data.message);
+				if (data.type == "NOTICE") {
+					m.showNotice(data.message,data.url);
+				} else {
+					if (m.isBroadcast === true) {
+						if (data.url) {
+							m.printMessage("broadcast",data.nickname+m.splitString+'<a href="'+data.url+'" target="_blank">'+data.message+'</a>');
+						} else {
+							m.printMessage("broadcast",data.nickname+m.splitString+data.message);
+						}
 					}
 				}
-			});
-			
-			this.socket.on("notice",function(data) {
-				m.showNotice(data.message,data.url);
 			});
 			
 			this.socket.on("protocol",function(data) {

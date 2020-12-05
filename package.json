@@ -20,9 +20,9 @@
 	"databases":{
 		"broadcast_table":{
 			"columns":{
-				"idx":{
-					"type":"int",
-					"length":11,
+				"id":{
+					"type":"char",
+					"length":32,
 					"comment":"고유값"
 				},
 				"type":{
@@ -30,6 +30,11 @@
 					"length":"'NOTICE','MESSAGE'",
 					"default":"MESSAGE",
 					"comment":"종류"
+				},
+				"nickname":{
+					"type":"varchar",
+					"length":20,
+					"comment":"닉네임"
 				},
 				"message":{
 					"type":"varchar",
@@ -56,10 +61,9 @@
 				}
 			},
 			"indexes":{
-				"idx":"primary_key",
+				"id":"primary_key",
 				"reg_date":"index"
 			},
-			"auto_increment":"idx",
 			"comment":"미니톡 브로드캐스트 테이블"
 		},
 		"category_table":{
@@ -249,7 +253,7 @@
 				},
 				"nickname":{
 					"type":"varchar",
-					"length":30,
+					"length":20,
 					"comment":"닉네임"
 				},
 				"user":{
@@ -273,37 +277,6 @@
 				"time":"index"
 			},
 			"comment":"미니톡 채팅로그 테이블"
-		},
-		"log_file_table":{
-			"columns":{
-				"file":{
-					"type":"varchar",
-					"length":100,
-					"comment":"파일명"
-				},
-				"date":{
-					"type":"char",
-					"length":10,
-					"comment":"로그일자"
-				},
-				"channel":{
-					"type":"varchar",
-					"length":32,
-					"comment":"채널명"
-				},
-				"size":{
-					"type":"int",
-					"length":11,
-					"default":0,
-					"comment":"용량"
-				}
-			},
-			"indexes":{
-				"file":"primary_key",
-				"date":"index",
-				"channel":"index"
-			},
-			"comment":"미니톡 로그파일 테이블"
 		},
 		"server_table":{
 			"columns":{
