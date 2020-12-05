@@ -865,7 +865,7 @@ var Admin = {
 										disabled:data && data.type == "MESSAGE" ? false : true
 									}),
 									new Ext.form.DisplayField({
-										value:"&nbsp;" + Admin.getText("broadcast/form/nickname_help")
+										value:"&nbsp;(" + Admin.getText("broadcast/form/nickname_help")+")"
 									})
 								]
 							})
