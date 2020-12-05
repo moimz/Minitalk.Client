@@ -47,7 +47,7 @@ if ($channel == null) {
 </head>
 <body<?php echo $logged === null ? ' class="login"' : ' style="background:#fff !important;"'; ?>>
 <?php
-if (false && $logged === null) {
+if ($logged === null) {
 	INCLUDE './login.php';
 } else {
 ?>
