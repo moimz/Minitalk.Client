@@ -39,16 +39,17 @@ Minitalk.protocol = {
 		Minitalk.user.me = data.me;
 		Minitalk.storage("me",data.me);
 		
+		Minitalk.ui.printTitle(data.channel.title);
 		if (data.channel.room.indexOf("#") == 0 && data.channel.room.split(":").length == 3) {
 			var temp = data.channel.room.split(":");
-			if (Minitalk.showChannelConnectMessage == true) Minitalk.ui.printMessage("system",LANG.action.connected.replace("{channel}","<b><u>"+temp[1]+"</u></b>"));
+			if (Minitalk.showChannelConnectMessage == true) Minitalk.ui.printMessage("system",Minitalk.getText("action/connected").replace("{CHANNEL}","<b><u>"+temp[1]+"</u></b>"));
 		} else {
-			if (Minitalk.showChannelConnectMessage == true) Minitalk.ui.printMessage("system",LANG.action.connected.replace("{channel}","<b><u>"+data.channel.title+"</u></b>"));
+			if (Minitalk.showChannelConnectMessage == true) Minitalk.ui.printMessage("system",Minitalk.getText("action/connected").replace("{CHANNEL}","<b><u>"+data.channel.title+"</u></b>"));
 		}
 		Minitalk.ui.printUserCount(data.usercount);
 		
 		if (Minitalk.viewUser == true && data.usercount < 200) {
-			Minitalk.ui.printMessage("system",LANG.action.loadingUserList);
+			Minitalk.ui.printMessage("system",Minitalk.getText("action/loadingUsers"));
 			Minitalk.socket.send("users",Minitalk.viewUserLimit);
 		} else {
 			Minitalk.viewUserListStatus = false;
@@ -71,7 +72,7 @@ Minitalk.protocol = {
 	 */
 	connect_error:function() {
 		Minitalk.socket.connecting = false;
-		Minitalk.ui.printMessage("error",LANG.error.reconnectFail);
+		Minitalk.ui.printMessage("error",Minitalk.getErrorText("CONNECT_ERROR"));
 		Minitalk.socket.reconnect(60);
 	},
 	/**
@@ -193,7 +194,7 @@ Minitalk.protocol = {
 	 * 채널관리자로 로그인하였을 때
 	 */
 	logged:function() {
-		Minitalk.ui.printMessage("system",LANG.action.logged);
+		Minitalk.ui.printMessage("system",Minitalk.getText("action/login"));
 	},
 	/**
 	 * 특정유저의 정보를 수신하였을 때
@@ -205,7 +206,7 @@ Minitalk.protocol = {
 	 * 아이피를 확인하였을 때
 	 */
 	showip:function(data) {
-		Minitalk.ui.printMessage("system",LANG.action.showip.replace("{nickname}","<b><u>"+data.nickname+"</u></b>").replace("{ip}","<b><u>"+data.ip+"</u></b>"));
+		Minitalk.ui.printMessage("system",Minitalk.getText("action/showip").replace("{NICKNAME}","<b><u>"+data.nickname+"</u></b>").replace("{IP}","<b><u>"+data.ip+"</u></b>"));
 	},
 	/**
 	 * 아이피가 차단당했을 때
@@ -225,19 +226,19 @@ Minitalk.protocol = {
 				}
 			});
 		}
-		Minitalk.ui.printMessage("system",LANG.action.banip.replace("{from}","<b><u>"+data.from.nickname+"</u></b>").replace("{to}","<b><u>"+data.to.nickname+"</u></b>"));
+		Minitalk.ui.printMessage("system",Minitalk.getText("action/banip").replace("{FROM}","<b><u>"+data.from.nickname+"</u></b>").replace("{TO}","<b><u>"+data.to.nickname+"</u></b>"));
 	},
 	/**
 	 * 관리자권한을 부여받았을 때
 	 */
 	opper:function(data) {
-		Minitalk.ui.printMessage("system",LANG.action.opper.replace("{from}","<b><u>"+data.from.nickname+"</u></b>").replace("{to}","<b><u>"+data.to.nickname+"</u></b>"));
+		Minitalk.ui.printMessage("system",Minitalk.getText("action/opper").replace("{FROM}","<b><u>"+data.from.nickname+"</u></b>").replace("{TO}","<b><u>"+data.to.nickname+"</u></b>"));
 	},
 	/**
 	 * 관리자권한에서 해제되었을 떄
 	 */
 	deopper:function(data) {
-		Minitalk.ui.printMessage("system",LANG.action.deopper.replace("{from}","<b><u>"+data.from.nickname+"</u></b>").replace("{to}","<b><u>"+data.to.nickname+"</u></b>"));
+		Minitalk.ui.printMessage("system",Minitalk.getText("action/deopper").replace("{FROM}","<b><u>"+data.from.nickname+"</u></b>").replace("{TO}","<b><u>"+data.to.nickname+"</u></b>"));
 	},
 	/**
 	 * 권한코드가 변경되어, 변경된 권한코드를 수신하였을 때
@@ -268,9 +269,9 @@ Minitalk.protocol = {
 	 */
 	reject:function(data) {
 		if (data.from.nickname == Minitalk.user.me.nickname) {
-			Minitalk.ui.printMessage("system",LANG.action.inviteReject.replace("{nickname}","<b><u>"+data.to.nickname+"</b></u>"));
+			Minitalk.ui.printMessage("system",Minitalk.getText("action/invite_reject").replace("{NICKNAME}","<b><u>"+data.to.nickname+"</b></u>"));
 		} else {
-			Minitalk.ui.printMessage("system",LANG.action.inviteRejected.replace("{nickname}","<b><u>"+data.from.nickname+"</b></u>"));
+			Minitalk.ui.printMessage("system",Minitalk.getText("action/invite_rejected").replace("{NICKNAME}","<b><u>"+data.from.nickname+"</b></u>"));
 		}
 	},
 	/**
@@ -278,12 +279,12 @@ Minitalk.protocol = {
 	 */
 	banmsg:function(data) {
 		if (data.to.nickname == Minitalk.user.me.nickname) {
-			Minitalk.ui.printMessage("system",LANG.action.banedmsg.replace("{from}","<b><u>"+data.from.nickname+"</b></u>"));
+			Minitalk.ui.printMessage("system",Minitalk.getText("action/banedmsg").replace("{FROM}","<b><u>"+data.from.nickname+"</b></u>"));
 			var baned = m.storage("baned") == null || typeof m.storage("baned") != "object" ? {} : m.storage("baned");
 			baned[m.channel] = new Date().getTime() + 60000;
 			Minitalk.storage("baned",baned);
 		} else {
-			Minitalk.ui.printMessage("system",LANG.action.banmsg.replace("{from}","<b><u>"+data.from.nickname+"</b></u>").replace("{to}","<b><u>"+data.to.nickname+"</b></u>"));
+			Minitalk.ui.printMessage("system",Minitalk.getText("action/banmsg").replace("{FROM}","<b><u>"+data.from.nickname+"</b></u>").replace("{TO}","<b><u>"+data.to.nickname+"</b></u>"));
 		}
 	},
 	/**
@@ -292,13 +293,13 @@ Minitalk.protocol = {
 	clearlog:function(data) {
 		$(".chatArea").html("");
 		Minitalk.storage("logList",[]);
-		Minitalk.ui.printMessage("system",LANG.action.clearLog.replace("{from}","<b><u>"+data.from.nickname+"</b></u>"));
+		Minitalk.ui.printMessage("system",Minitalk.getText("action/clear_log").replace("{FROM}","<b><u>"+data.from.nickname+"</b></u>"));
 	},
 	/**
 	 * 에러코드가 전송되었을 때
 	 */
 	errorcode:function(code) {
-		Minitalk.ui.printMessage("error",LANG.errorcode["code"+code]+"(ErrorCode : "+code+")");
+		Minitalk.ui.printMessage("error",Minitalk.getErrorText("code/"+code)+"(ErrorCode : "+code+")");
 		
 		if (code == 304 || code == 305) {
 			setTimeout(Minitalk.socket.sendConnection,5000);

@@ -39,7 +39,7 @@ Minitalk.user = {
 		
 		if (Minitalk.viewAlert == true) {
 			if (Minitalk.user.checkLimit(Minitalk.viewAlertLimit,user.opper) == true) {
-				Minitalk.ui.printMessage("system",LANG.action.joinUser.replace("{nickname}","<b><u>"+user.nickname+"</u></b>"));
+				Minitalk.ui.printMessage("system",Minitalk.getText("action/join").replace("{NICKNAME}","<b><u>"+user.nickname+"</u></b>"));
 			}
 		}
 		
@@ -81,7 +81,7 @@ Minitalk.user = {
 		
 		if (Minitalk.viewAlert == true) {
 			if (Minitalk.user.checkLimit(Minitalk.viewAlertLimit,user.opper) == true) {
-				Minitalk.ui.printMessage("system",LANG.action.leaveUser.replace("{nickname}","<b><u>"+user.nickname+"</u></b>"));
+				Minitalk.ui.printMessage("system",Minitalk.getText("action/leave").replace("{NICKNAME}","<b><u>"+user.nickname+"</u></b>"));
 			}
 		}
 		
@@ -125,11 +125,11 @@ Minitalk.user = {
 		}
 		
 		if (before.nickname != after.nickname) {
-			Minitalk.ui.printMessage("system",LANG.action.changeNickname.replace("{before}","<b><u>"+before.nickname+"</u></b>").replace("{after}","<b><u>"+after.nickname+"</u></b>"));
+			Minitalk.ui.printMessage("system",Minitalk.getText("action/update_nickname").replace("{BEFORE}","<b><u>"+before.nickname+"</u></b>").replace("{AFTER}","<b><u>"+after.nickname+"</u></b>"));
 		}
 		
 		if (before.status != after.status) {
-			Minitalk.ui.printMessage("system",LANG.action.changeStatus.replace("{nickname}","<b><u>"+after.nickname+"</u></b>").replace("{status}","<b><u>"+LANG.status[after.status]+"</u></b>"));
+			Minitalk.ui.printMessage("system",Minitalk.getText("action/update_status").replace("{NICKNAME}","<b><u>"+after.nickname+"</u></b>").replace("{STATUS}","<b><u>"+Minitalk.getText("status/"+after.status)+"</u></b>"));
 		}
 		
 		var sortUserCode = {"ADMIN":"#","POWERUSER":"*","MEMBER":"+","NICKGUEST":"-"};
@@ -168,7 +168,7 @@ Minitalk.user = {
 		if (window.localStorage === undefined) {
 			if (Minitalk.isAlertStorage == false) {
 				Minitalk.isAlertStorage = true;
-				Minitalk.printMessage("error",LANG.error.storage);
+				Minitalk.printMessage("error",Minitalk.getErrorText("NOT_FOUND_STORAGE"));
 			}
 			return;
 		}
@@ -181,7 +181,7 @@ Minitalk.user = {
 			} catch (e) {
 				if (Minitalk.isAlertStorage == false) {
 					Minitalk.isAlertStorage = true;
-					Minitalk.printMessage("error",LANG.error.storage);
+					Minitalk.printMessage("error",Minitalk.getErrorText("NOT_FOUND_STORAGE"));
 					return false;
 				}
 			}
@@ -229,7 +229,7 @@ Minitalk.user = {
 		}
 		
 		if (isUserList == true && Minitalk.user.me.nickname == user.nickname) {
-			sHTML+= "("+LANG.me+")";
+			sHTML+= "("+Minitalk.getText("text/me")+")";
 		} else {
 			tag.attr("code",user.nickname);
 		}
@@ -372,7 +372,7 @@ Minitalk.user = {
 	 */
 	call:function(from,to) {
 		if (from.nickname == Minitalk.user.me.nickname) {
-			Minitalk.ui.printMessage("system",LANG.action.call.replace("{nickname}","<b><u>"+to.nickname+"</u></b>"));
+			Minitalk.ui.printMessage("system",Minitalk.getText("action/call").replace("{NICKNAME}","<b><u>"+to.nickname+"</u></b>"));
 		} else {
 			if (typeof Minitalk.listeners.beforeCall == "function") {
 				if (Minitalk.listeners.beforeCall(Minitalk,data.from,Minitalk.user.me) == false) return false;
@@ -384,9 +384,9 @@ Minitalk.user = {
 				}
 			}
 			
-			Minitalk.ui.printMessage("system",LANG.action.callNotify.replace("{nickname}","<b><u>"+from.nickname+"</u></b>"));
+			Minitalk.ui.printMessage("system",Minitalk.getText("action/called").replace("{NICKNAME}","<b><u>"+from.nickname+"</u></b>"));
 			Minitalk.ui.playSound("call");
-			Minitalk.ui.push("[MiniTalk6] "+LANG.action.callNotify.replace("{nickname}",from.nickname),"channel : "+Minitalk.channel);
+			Minitalk.ui.push("[MiniTalk6] "+Minitalk.getText("action/called").replace("{NICKNAME}",from.nickname),"channel : "+Minitalk.channel);
 			
 			if (typeof Minitalk.listeners.onCall == "function") {
 				Minitalk.listeners.onCall(Minitalk,data.from,Minitalk.user.me);
@@ -408,7 +408,7 @@ Minitalk.user = {
 	 */
 	invite:function(from,to,code) {
 		if (from.nickname == Minitalk.user.me.nickname) {
-			Minitalk.ui.printMessage("system",LANG.action.inviteUser.replace("{nickname}","<b><u>"+to.nickname+"</u></b>"));
+			Minitalk.ui.printMessage("system",Minitalk.getText("action/invite").replace("{NICKNAME}","<b><u>"+to.nickname+"</u></b>"));
 		} else {
 			if (typeof Minitalk.listeners.beforeInvite == "function") {
 				if (Minitalk.listeners.beforeInvite(Minitalk,from,code,Minitalk.user.me) == false) return false;
@@ -420,8 +420,8 @@ Minitalk.user = {
 				}
 			}
 			
-			var showAlert = Minitalk.ui.showAlert("invite",code,LANG.action.inviteNotifyLayer.replace("{nickname}","<b><u>"+from.nickname+"</u></b>").replace("{time}","<b><u>"+Minitalk.ui.getTime(new Date().getTime(),"full")+"</u></b>"),false,{from:from,to:to,code:code},function(alert) {
-				if (confirm(LANG.action.inviteConfirm) == true) {
+			var showAlert = Minitalk.ui.showAlert("invite",code,Minitalk.getText("action/invited_detail").replace("{NICKNAME}","<b><u>"+from.nickname+"</u></b>").replace("{TIME}","<b><u>"+Minitalk.ui.getTime(moment().valueOf(),"YYYY.MM.DD HH:mm:ss")+"</u></b>"),false,{from:from,to:to,code:code},function(alert) {
+				if (confirm(Minitalk.getText("action/invite_confirm")) == true) {
 					return Minitalk.ui.openPrivateChannel("join",alert.data("data"));
 				} else {
 					Minitalk.socket.send("reject",alert.data("data"));
@@ -430,8 +430,8 @@ Minitalk.user = {
 			});
 			if (showAlert == true) {
 				Minitalk.ui.playSound("query");
-				Minitalk.ui.push("[MiniTalk6] "+LANG.action.inviteNotify.replace("{nickname}",from.nickname),"channel : "+Minitalk.channel);
-				Minitalk.ui.printMessage("system",LANG.action.inviteNotify.replace("{nickname}","<b><u>"+from.nickname+"</u></b>"));
+				Minitalk.ui.push("[MiniTalk6] "+Minitalk.getText("action/invited").replace("{NICKNAME}",from.nickname),"channel : "+Minitalk.channel);
+				Minitalk.ui.printMessage("system",Minitalk.getText("action/invited").replace("{NICKNAME}","<b><u>"+from.nickname+"</u></b>"));
 				
 				if (typeof Minitalk.listeners.onInvite == "function") {
 					Minitalk.listeners.onInvite(Minitalk,from,code,Minitalk.user.me);

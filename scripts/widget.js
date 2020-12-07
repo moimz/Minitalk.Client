@@ -37,6 +37,8 @@ Minitalk.getText = function(code,replacement) {
 		return string;
 	}
 	
+	console.log(code);
+	
 	return replacement == null ? code : replacement;
 };
 
@@ -263,6 +265,4 @@ $(document).ready(function() {
 			Minitalk.ui.printError("NOT_FOUND_TEMPLET","");
 		}
 	});
-	
-	console.log(Minitalk.emoticons);
 });

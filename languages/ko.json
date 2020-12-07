@@ -4,21 +4,10 @@
 		"me":"나",
 		"error":"에러가 발생하였습니다.",
 		"password":"패스워드",
-		"whisper_to":"{nickname}님에게 귓속말",
-		"whisper_from":"{nickname}님의 귓속말",
-		"guest":"손님"
-	},
-	"level":{
-		"0":"손님 (유저설정이 없는 손님)",
-		"1":"레벨 1 (유저설정이 있는 사용자의 최소레벨)",
-		"2":"레벨 2",
-		"3":"레벨 3",
-		"4":"레벨 4",
-		"5":"레벨 5",
-		"6":"레벨 6",
-		"7":"레벨 7",
-		"8":"레벨 8",
-		"9":"레벨 9 (채널관리자)"
+		"whisper_to":"{NICKNAME}님에게 귓속말",
+		"whisper_from":"{NICKNAME}님의 귓속말",
+		"guest":"손님",
+		"document":"미니톡 매뉴얼 보기"
 	},
 	"alert":{
 		"info":"안내",
@@ -38,19 +27,38 @@
 		"leave":"{NICKNAME}님이 접속을 종료하였습니다.",
 		"login":"채널관리자로 로그인하였습니다.",
 		"logout":"채널관리자에서 로그아웃하였습니다.",
-		"updated_nickname":"닉네임을 {NICKNAME}으로 변경하였습니다.",
 		"update_nickname":"{BEFORE}님이 닉네임을 {AFTER}으로 변경하였습니다.",
+		"update_status":"{NICKNAME}님이 자신의 상태를 {STATUS}으로 변경하였습니다.",
 		"refresh":"새로고침",
 		"reconnect":"재접속",
-		"call":"{nickname}님을 호출하였습니다.",
-		"called":"{nickname}님이 호출하였습니다."
-	},
-	"tab":{
-		"chat":"채팅",
-		"users":"접속자",
-		"boxes":"개인박스",
-		"configs":"환경설정",
-		"more":"더보기"
+		"call":"{NICKNAME}님을 호출하였습니다.",
+		"called":"{NICKNAME}님이 호출하였습니다.",
+		"loadingUsers":"접속자목록을 불러오고 있습니다.",
+		"showip":"{NICKNAME}님의 IP는 {IP}입니다.",
+		"banip":"{FROM}님이 {TO}님의 아이피를 차단하였습니다.",
+		"opper":"{FROM}님이 {TO}님에게 관리자권한을 부여하였습니다.",
+		"deopper":"{FROM}님이 {TO}님의 관리자권한을 해제하였습니다.",
+		"autoHideUsers":"접속자수가 200명이 넘어 접속자목록을 숨깁니다. 다시 접속자목록을 보려면 접속자목록보기 버튼을 클릭하세요.",
+		"invite":"{NICKNAME}님을 개인채널에 초대하였습니다.",
+		"invited":"{NICKNAME}님이 개인채널에 초대하였습니다.",
+		"invited_detail":"{NICKNAME}님이 {TIME}에 개인채널에 초대하였습니다.<br />해당 개인채널에 참여하거나, 초대를 거절하실려면 이곳을 클릭하여 주십시오.",
+		"invite_reject":"{NICKNAME}님이 개인채널초대를 거절하였습니다.",
+		"invite_rejected":"{NICKNAME}님의 개인채널초대를 거절하였습니다.",
+		"invite_confirm":"개인채널초대를 수락하시겠습니까? 확인을 클릭하면 해당 개인채널에 참여합니다.",
+		"banmsg":"{FROM}님 {TO}님의 대화를 일시차단(60초)하였습니다.",
+		"banedmsg":"{FROM}님이 나의 대화를 일시차단하였습니다. 60초동안 대화가 금지됩니다.",
+		"banedtime":"대화일시차단중입니다. {SECOND}초 후에 다시 대화를 할 수 있습니다.",
+		"clear_log":"{FROM}님이 채팅대화기록을 모두 비웠습니다.",
+		"clear_log_self":"화면을 비웠습니다.",
+		"clear_log_confirm":"서버에 저장된 이전대화기록도 삭제하시겠습니까?",
+		"play_sound":"다른사용자가 호출하거나, 개인채널 초대시 알림음을 활성화합니다.",
+		"mute_sound":"다른사용자가 호출하거나, 개인채널 초대시 알림음을 비활성화합니다.",
+		"use_push":"다른사용자가 호출하거나, 개인채널에 초대할 때 브라우저의 알림메세지를 받습니다.",
+		"stop_push":"다른사용자가 호출하거나, 개인채널에 초대할 때 브라우저의 알림메세지를 더이상 받지 않습니다.",
+		"use_fixed_scroll":"채팅창의 스크롤이 지금부터 고정됩니다. 자동으로 스크롤되길 원하신다면 스크롤고정버튼을 다시 한번 클릭하세요.",
+		"use_auto_scroll":"채팅창의 내용이 추가될때마다 스크롤이 자동으로 조절됩니다.",
+		"create_private_channel":"활성화되어있는 개인채널이 없어 새로 개인채널을 만듭니다. 개인채널에 접속한 뒤 자동으로 해당유저를 개인채널로 초대합니다.",
+		"join_private_channel":"{NICKNAME}님의 개인채널에 참여합니다."
 	},
 	"tool":{
 		"bold":"굵게",
@@ -58,13 +66,34 @@
 		"italic":"기울임",
 		"color":"글자색",
 		"emoticon":"이모티콘",
-		"file":"파일첨부"
+		"scroll":"스크롤고정",
+		"clear":"화면비우기",
+		"mute":"음소거",
+		"push":"푸시알림"
 	},
 	"usermenu":{
+		"myinfo":"정보변경",
 		"whisper":"귓속말보내기",
 		"call":"호출하기",
-		"showip":"아이피확인",
-		"banip":"아이피차단"
+		"privchannel":"개인채널초대",
+		"showip":"IP보기",
+		"banip":"IP차단",
+		"banmsg":"대화일시차단",
+		"opper":"관리자권한부여",
+		"deopper":"관리자권한해제",
+		"police":"유저신고하기",
+		"talkfocus":"유저대화강조",
+		"talkunfocus":"유저대화강조해제",
+		"talkban":"유저대화차단",
+		"talkunban":"유저대화차단해제"
+	},
+	"status":{
+		"online":"온라인",
+		"away":"자리비움",
+		"otherwork":"다른용무중",
+		"working":"삽질중",
+		"pray":"...",
+		"offline":"오프라인"
 	},
 	"button":{
 		"send":"전송",
@@ -73,36 +102,7 @@
 		"cancel":"취소",
 		"search":"검색",
 		"refresh":"새로고침",
-		"box":"박스생성하기",
-		"close":"닫기",
-		"history":"이전대화보기"
-	},
-	"user":{
-		"keyword":"닉네임 검색"
-	},
-	"box":{
-		"talk":"토크박스",
-		"create":"박스생성",
-		"keyword":"박스명/개설자 검색",
-		"title":"박스명",
-		"password":"패스워드",
-		"password_help":"패스워드 입력시, 패스워드를 알고 있는 사람만 참여가 가능한 비공개박스로 생성됩니다.",
-		"closemode":"개설자가 접속종료시 박스를 자동으로 종료합니다.",
-		"closemode_help":"자동종료에 체크하지 않을 경우, 모든 박스접속자가 종료할때까지 박스가 유지됩니다."
-	},
-	"config":{
-		"title":{
-			"default":"기본설정",
-			"whisper":"귓속말설정",
-			"call":"호출설정"
-		},
-		"active_scroll":"이전 채팅메시지 기록을 보는동안 자동스크롤기능을 비활성화합니다.",
-		"browser_notification":"브라우저 알림기능을 사용합니다.",
-		"mute":"모든 알림음을 재생하지 않습니다.",
-		"whisper":"귓속말을 사용합니다.",
-		"whisper_sound":"귓속말을 받았을 경우 알림음을 재생합니다.",
-		"call":"다른사람이 나를 호출할 수 있도록 설정합니다.",
-		"call_sound":"호출을 받았을 경우 알림음을 재생합니다."
+		"close":"닫기"
 	},
 	"error":{
 		"NOT_SELECTED":"선택된 항목이 없습니다.",
@@ -119,7 +119,9 @@
 		"NOT_FOUND_ONLINE_SERVER":"접속가능한 서버를 찾을 수 없습니다.<br>잠시 후 다시 시도하여 주십시오.",
 		"NOT_FOUND_COMMAND":"명령어를 찾을 수 없습니다.",
 		"NOT_FOUND_CHANNEL":"개설된 채널을 찾을 수 없습니다.",
+		"NOT_FOUND_TEMPLET":"템플릿을 찾을 수 없습니다.",
 		"NOT_CONNECTED":"미니톡서버에 접속중이 아닙니다.",
+		"INVALID_COMMAND":"명령어 사용이 잘못되었습니다.",
 		"ALREADY_LOGGED":"이미 채널관리자로 접속중입니다.",
 		"CHANNEL_DUPLICATED":"동일 웹페이지에 동일한 채널의 미니톡 채팅위젯을 동시에 사용할 수 없습니다.",
 		"INVALID_FORM_DATA":"잘못 입력된 항목이 있습니다.",
@@ -132,6 +134,14 @@
 		"REQUIRED_PASSWORD":"패스워드가 필요합니다.",
 		"INVALID_PASSWORD":"패스워드가 일치하지 않습니다.",
 		"MISSING_PARAMETER":"필수항목이 누락되었습니다.",
+		"NOT_ALLOWED_FONT_SETTING":"폰트설정권한이 없습니다.",
+		"NOT_ALLOWED_CHATTING":"메시지를 전송할 권한이 없습니다.",
+		"RESERVED_PROTOCOL":"{PROTOCOL}프로토콜명은 미니톡에 의해 예약된 프로토콜로 사용할 수 없습니다.",
+		"NOT_FOUND_PROTOCOL":"{PROTOCOL}프로토콜명은 이벤트를 수신할 이벤트리스너가 정의되어 있지 않습니다.",
+		"NOT_FOUND_STORAGE":"브라우져의 로컬저장소를 사용할 수 없습니다. 최신브라우져를 사용하시거나, 개인정보보호모드를 종료하신 후 사용해보시기 바랍니다.",
+		"NOT_SUPPORTED_BROWSER":"현재 사용하고 있는 브라우저에서는 지원되지 않는 기능입니다.",
+		"DISABLED_PUSH":"브라우저의 푸시알림사용여부를 묻는 확인창에서 푸시권한을 승인해주셔야 사용이 가능합니다.",
+		"DISABLED_POPUP":"팝업이 차단되어 있습니다. 팝업허용을 하신 후 다시 시도하여 주시기 바랍니다.",
 		"code":{
 			"300":"다른곳에서 접속하고 있어, 기존접속을 종료하고 있습니다. 잠시만 기다려주십시오.",
 			"301":"다른곳에서 중복접속하여 현재 접속을 종료합니다.",

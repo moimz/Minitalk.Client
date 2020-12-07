@@ -30,12 +30,9 @@ Minitalk.socket = {
 		
 		Minitalk.socket.reconnectable = true;
 		
-		Minitalk.ui.printMessage("system",LANG.action.checkServer);
-		
 		$.send(Minitalk.getProcessUrl("getServer"),{channel:Minitalk.channel},function(result) {
 			if (result.success == true) {
 				Minitalk.socket.channel = result.channel;
-//				Minitalk.ui.initChannel();
 				Minitalk.ui.printMessage("system",Minitalk.getText("action/connecting"));
 				Minitalk.socket.connecting = true;
 				Minitalk.socket.io = io(result.connection.domain,{reconnection:false,path:"/minitalk",transports:["websocket"],secure:result.connection.domain.indexOf("https://") == 0});
@@ -67,7 +64,7 @@ Minitalk.socket = {
 		if (time == 0) {
 			Minitalk.socket.connect();
 		} else {
-			if (time == 60 || time == 30 || time == 10 || time <= 5) Minitalk.ui.printMessage("system",LANG.action.waitReconnect.replace("{count}","<b>"+time+"</b>"));
+			if (time == 60 || time == 30 || time == 10 || time <= 5) Minitalk.ui.printMessage("system",Minitalk.getText("action/reconnecting").replace("{SECOND}","<b>"+time+"</b>"));
 			
 			/**
 			 * 동시에 서버재접속을 시도하지 않도록 1초 간격을 랜덤하게 조절한다.
@@ -82,7 +79,7 @@ Minitalk.socket = {
 		/**
 		 * 접속자수를 초기화한다.
 		 */
-		Minitalk.ui.printMessage("error",LANG.error.disconnect);
+		Minitalk.ui.printMessage("error",Minitalk.getErrorText("DISCONNECTED"));
 		Minitalk.ui.printUserCount(0);
 		Minitalk.viewUserListSort = [];
 		Minitalk.viewUserListStore = {};
@@ -214,7 +211,7 @@ Minitalk.socket = {
 		var nickname = nickname !== undefined && nickname.length > 0 ? nickname : null;
 		
 		if (protocol.search(/(connect|message|whisper|call|banip|showip|userinfo|users|log|change)/) >= 0) {
-			Minitalk.ui.printMessage("error",LANG.error.reservedProtocol.replace("{protocol}","<b><u>"+protocol+"</u></b>"));
+			Minitalk.ui.printMessage("error",Minitalk.getErrorText("RESERVED_PROTOCOL").replace("{PROTOCOL}","<b><u>"+protocol+"</u></b>"));
 			return;
 		}
 		

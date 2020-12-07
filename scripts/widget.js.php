@@ -36,7 +36,6 @@ $oLang = null;
 if (is_file(__MINITALK_PATH__.'/languages/'.$language.'.json') == false) {
 	$language = $package->language;
 }
-
 $lang = file_get_contents(__MINITALK_PATH__.'/languages/'.$language.'.json');
 
 $js->add('Minitalk.LANG = '.$lang.';');
@@ -46,7 +45,6 @@ $js->add(__MINITALK_PATH__.'/scripts/jquery.extend.js');
 $js->add(__MINITALK_PATH__.'/scripts/moment.js');
 
 if ($channel !== null) {
-	$js->add(__MINITALK_PATH__.'/languages/'.$language.'.js');
 	$js->add(__MINITALK_PATH__.'/scripts/socket.io.js');
 	$js->add(__MINITALK_PATH__.'/scripts/widget.user.js');
 	$js->add(__MINITALK_PATH__.'/scripts/widget.ui.js');

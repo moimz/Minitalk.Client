@@ -132,7 +132,7 @@ Minitalk.ui = {
 				Minitalk.ui.hideUser();
 			} else {
 				Minitalk.isAutoHideUserList = true;
-				Minitalk.ui.printMessage("system",LANG.action.loadingUserList);
+				Minitalk.ui.printMessage("system",Minitalk.getText("action/loadingUsers"));
 				Minitalk.socket.send("users",Minitalk.viewUserLimit);
 			}
 		});
@@ -143,7 +143,7 @@ Minitalk.ui = {
 				if (Minitalk.isNickname == false || Minitalk.isPrivate == true) $(".userInfoNickname").attr("disabled",true);
 				else $(".userInfoNickname").attr("disabled",false);
 				$(".userInfoStatusIcon").css("backgroundImage","url("+Minitalk.statusIconPath+"/"+Minitalk.user.me.device+"/"+Minitalk.user.me.status+".png)");
-				$(".userInfoStatusText").text(LANG.status[Minitalk.user.me.status]);
+				$(".userInfoStatusText").text(Minitalk.getText("status/"+Minitalk.user.me.status));
 				$(".userInfoStatus").attr("status",Minitalk.user.me.status);
 				$(".userInfoLayer").fadeIn();
 			} else {
@@ -155,10 +155,10 @@ Minitalk.ui = {
 			if ($(".userInfoStatusList").css("display") == "none") {
 				var list = $("<ul>");
 				
-				for (var status in LANG.status) {
+				for (var status in Minitalk.getText("status")) {
 					if (status == "offline") continue;
 					var item = $("<li>");
-					item.text(LANG.status[status]);
+					item.text(Minitalk.getText("status/"+status));
 					item.css("backgroundImage","url("+Minitalk.statusIconPath+"/"+Minitalk.device+"/"+status+".png)");
 					item.attr("status",status);
 					item.on("mouseover",function() {
@@ -169,7 +169,7 @@ Minitalk.ui = {
 					});
 					item.on("click",function() {
 						$(".userInfoStatusIcon").css("backgroundImage","url("+Minitalk.statusIconPath+"/"+Minitalk.device+"/"+$(this).attr("status")+".png)");
-						$(".userInfoStatusText").text(LANG.status[$(this).attr("status")]);
+						$(".userInfoStatusText").text(Minitalk.getText("status/"+$(this).attr("status")));
 						$(".userInfoStatus").attr("status",$(this).attr("status"));
 						$(".userInfoStatusList").hide();
 					});
@@ -292,10 +292,10 @@ Minitalk.ui = {
 		var defaultTool = [{
 			cls:"toolBold",
 			icon:"icon_bold.png",
-			text:LANG.tool.bold,
+			text:Minitalk.getText("tool/bold"),
 			fn:function(minitalk) {
 				if (minitalk.user.checkLimit(minitalk.fontSettingLimit,minitalk.user.me.opper) == false) {
-					minitalk.ui.printMessage("error",LANG.error.notAllowFontSetting);
+					minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_ALLOWED_FONT_SETTING"));
 					minitalk.setting("fontBold",false);
 					$(".toolBold").removeClass("selected");
 					$(".inputText").css("fontWeight","normal");
@@ -315,10 +315,10 @@ Minitalk.ui = {
 		},{
 			cls:"toolItalic",
 			icon:"icon_italic.png",
-			text:LANG.tool.italic,
+			text:Minitalk.getText("tool/italic"),
 			fn:function(minitalk) {
 				if (minitalk.user.checkLimit(minitalk.fontSettingLimit,minitalk.user.me.opper) == false) {
-					minitalk.ui.printMessage("error",LANG.error.notAllowFontSetting);
+					minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_ALLOWED_FONT_SETTING"));
 					minitalk.setting("fontItalic",false);
 					$(".toolItalic").removeClass("selected");
 					$(".inputText").css("fontStyle","");
@@ -338,10 +338,10 @@ Minitalk.ui = {
 		},{
 			cls:"toolUnderline",
 			icon:"icon_underline.png",
-			text:LANG.tool.underline,
+			text:Minitalk.getText("tool/underline"),
 			fn:function(minitalk) {
 				if (minitalk.user.checkLimit(minitalk.fontSettingLimit,minitalk.user.me.opper) == false) {
-					minitalk.ui.printMessage("error",LANG.error.notAllowFontSetting);
+					minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_ALLOWED_FONT_SETTING"));
 					minitalk.setting("fontUnderline",false);
 					$(".toolUnderline").removeClass("selected");
 					$(".inputText").css("textDecoration","");
@@ -361,10 +361,10 @@ Minitalk.ui = {
 		},{
 			cls:"toolColor",
 			icon:"icon_color.png",
-			text:LANG.tool.color,
+			text:Minitalk.getText("tool/color"),
 			fn:function(minitalk) {
 				if (minitalk.user.checkLimit(minitalk.fontSettingLimit,minitalk.user.me.opper) == false) {
-					minitalk.ui.printMessage("error",LANG.error.notAllowFontSetting);
+					minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_ALLOWED_FONT_SETTING"));
 					$(".inputText").css("color","");
 					return false;
 				}
@@ -374,35 +374,35 @@ Minitalk.ui = {
 		},"-",{
 			cls:"toolEmoticon",
 			icon:"icon_emoticon.png",
-			text:LANG.tool.emoticon,
+			text:Minitalk.getText("tool/emoticon"),
 			fn:function(minitalk) {
 				minitalk.ui.insertEmoticon();
 			}
 		},"-",{
 			cls:"toolMute",
 			icon:"icon_mute.png",
-			text:LANG.tool.mute,
+			text:Minitalk.getText("tool/mute"),
 			fn:function(minitalk) {
 				if (minitalk.setting("mute") == true) {
 					minitalk.setting("mute",false);
-					minitalk.ui.printMessage("system",LANG.action.useSound);
+					minitalk.ui.printMessage("system",Minitalk.getText("action/play_sound"));
 					$(".toolMute").removeClass("selected");
 				} else {
 					minitalk.setting("mute",true);
-					minitalk.ui.printMessage("system",LANG.action.muteSound);
+					minitalk.ui.printMessage("system",Minitalk.getText("action/mute_sound"));
 					$(".toolMute").addClass("selected");
 				}
 			}
 		},{
 			cls:"toolPush",
 			icon:"icon_push.png",
-			text:LANG.tool.push,
+			text:Minitalk.getText("tool/push"),
 			fn:function(minitalk) {
 				if (minitalk.setting("push") == false) {
 					if (window.Notification !== undefined) {
 						if (Notification.permission == "granted") {
 							minitalk.setting("push",true);
-							minitalk.ui.printMessage("system",LANG.action.usePush);
+							minitalk.ui.printMessage("system",Minitalk.getText("action/use_push"));
 							$(".toolPush").addClass("selected");
 						} else if (Notification.permission != "granted") {
 							Notification.requestPermission(function(permission) {
@@ -412,49 +412,48 @@ Minitalk.ui = {
 								
 								if (permission == "granted") {
 									Minitalk.setSetting("push",true);
-									Minitalk.ui.printMessage("system",LANG.action.usePush);
+									Minitalk.ui.printMessage("system",Minitalk.getText("action/use_push"));
 									$(".toolPush").addClass("selected");
 								} else {
-									Minitalk.ui.printMessage("error",LANG.error.allowPush);
+									Minitalk.ui.printMessage("error",Minitalk.getErrorText("DISABLED_PUSH"));
 								}
 							});
 						}
 					} else {
-						Minitalk.ui.printMessage("error",LANG.error.notSupportBrowser);
+						Minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_SUPPORTED_BROWSER"));
 					}
 				} else {
 					minitalk.setting("push",false);
 					$(".toolPush").removeClass("selected");
-					Minitalk.ui.printMessage("system",LANG.action.stopPush);
+					Minitalk.ui.printMessage("system",Minitalk.getText("action/stop_push"));
 				}
 			}
 		},"-",{
 			cls:"toolScroll",
 			icon:"icon_scroll.png",
-			text:LANG.tool.scroll,
+			text:Minitalk.getText("tool/scroll"),
 			fn:function(minitalk) {
-				if (minitalk.isFixedScroll == true) {
-					minitalk.ui.printMessage("system",LANG.action.useAutoScroll);
-					minitalk.isFixedScroll = false;
-					minitalk.autoScroll();
+				if (minitalk.ui.isFixedScroll == true) {
+					minitalk.ui.printMessage("system",Minitalk.getText("action/use_auto_scroll"));
+					minitalk.ui.isFixedScroll = false;
+					minitalk.ui.autoScroll();
 					$(".toolScroll").removeClass("selected");
 				} else {
-					minitalk.ui.printMessage("system",LANG.action.useFixedScroll);
-					minitalk.autoScroll();
-					minitalk.isFixedScroll = true;
+					minitalk.ui.printMessage("system",Minitalk.getText("action/use_fixed_scroll"));
+					minitalk.ui.isFixedScroll = true;
 					$(".toolScroll").addClass("selected");
 				}
 			}
 		},{
 			cls:"toolClear",
 			icon:"icon_clear.png",
-			text:LANG.tool.clear,
+			text:Minitalk.getText("tool/clear"),
 			fn:function(minitalk) {
-				if (minitalk.user.me.opper == "ADMIN" && minitalk.logLimit > 0 && confirm(LANG.confirm.clearlog) == true) {
+				if (minitalk.user.me.opper == "ADMIN" && minitalk.logLimit > 0 && confirm(Minitalk.getText("action/clear_log_confirm")) == true) {
 					minitalk.socket.send("clearlog",null);
 				} else {
 					$(".chatArea").html("");
-					minitalk.ui.printMessage("system",LANG.action.clearLogSelf);
+					minitalk.ui.printMessage("system",Minitalk.getText("action/clear_log_self"));
 					minitalk.storage("logList",[]);
 				}
 			}
@@ -632,7 +631,7 @@ Minitalk.ui = {
 	initUserMenu:function() {
 		Minitalk.userMenuList = [{
 			icon:"icon_myinfo.png",
-			text:LANG.usermenu.myinfo,
+			text:Minitalk.getText("usermenu/myinfo"),
 			viewMenu:function(minitalk,user,myinfo) {
 				if (user.nickname == myinfo.nickname) return true;
 				else return false;
@@ -642,13 +641,13 @@ Minitalk.ui = {
 				if (minitalk.isNickname == false || minitalk.isPrivate == true) $(".userInfoNickname").attr("disabled",true);
 				else $(".userInfoNickname").attr("disabled",false);
 				$(".userInfoStatusIcon").css("backgroundImage","url("+minitalk.statusIconPath+"/"+minitalk.user.me.device+"/"+minitalk.user.me.status+".png)");
-				$(".userInfoStatusText").text(LANG.status[minitalk.user.me.status]);
+				$(".userInfoStatusText").text(Minitalk.getText("status/"+minitalk.user.me.status));
 				$(".userInfoStatus").attr("status",minitalk.user.me.status);
 				$(".userInfoLayer").fadeIn();
 			}
 		},{
 			icon:"icon_whisper.png",
-			text:LANG.usermenu.whisper,
+			text:Minitalk.getText("usermenu/whisper"),
 			viewMenu:function(minitalk,user,myinfo) {
 				if (user.nickname != myinfo.nickname) return true;
 				else return false;
@@ -659,7 +658,7 @@ Minitalk.ui = {
 			}
 		},{
 			icon:"icon_call.png",
-			text:LANG.usermenu.call,
+			text:Minitalk.getText("usermenu/call"),
 			viewMenu:function(minitalk,user,myinfo) {
 				if (user.nickname != myinfo.nickname) return true;
 				else return false;
@@ -669,7 +668,7 @@ Minitalk.ui = {
 			}
 		},{
 			icon:"icon_privchannel.png",
-			text:LANG.usermenu.privchannel,
+			text:Minitalk.getText("usermenu/privchannel"),
 			viewMenu:function(minitalk,user,myinfo) {
 				if (user.nickname != myinfo.nickname && Minitalk.isPrivate == false) return true;
 				else return false;
@@ -679,7 +678,7 @@ Minitalk.ui = {
 			}
 		},{
 			icon:"icon_banmsg.png",
-			text:LANG.usermenu.banmsg,
+			text:Minitalk.getText("usermenu/banmsg"),
 			viewMenu:function(minitalk,user,myinfo) {
 				if (myinfo.opper == "ADMIN" && user.nickname != myinfo.nickname) return true;
 				else return false;
@@ -689,7 +688,7 @@ Minitalk.ui = {
 			}
 		},{
 			icon:"icon_showip.png",
-			text:LANG.usermenu.showip,
+			text:Minitalk.getText("usermenu/showip"),
 			viewMenu:function(minitalk,user,myinfo) {
 				if (myinfo.opper == "ADMIN" && Minitalk.isPrivate == false) return true;
 				else return false;
@@ -699,7 +698,7 @@ Minitalk.ui = {
 			}
 		},{
 			icon:"icon_banip.png",
-			text:LANG.usermenu.banip,
+			text:Minitalk.getText("usermenu/banip"),
 			viewMenu:function(minitalk,user,myinfo) {
 				if (myinfo.opper == "ADMIN" && user.nickname != myinfo.nickname && Minitalk.isPrivate == false) return true;
 				else return false;
@@ -709,7 +708,7 @@ Minitalk.ui = {
 			}
 		},{
 			icon:"icon_opper.png",
-			text:LANG.usermenu.opper,
+			text:Minitalk.getText("usermenu/opper"),
 			viewMenu:function(minitalk,user,myinfo) {
 				if (myinfo.opper == "ADMIN" && user.nickname != myinfo.nickname && minitalk.isPrivate == false && user.opper != "ADMIN") return true;
 				else return false;
@@ -719,7 +718,7 @@ Minitalk.ui = {
 			}
 		},{
 			icon:"icon_deopper.png",
-			text:LANG.usermenu.deopper,
+			text:Minitalk.getText("usermenu/deopper"),
 			viewMenu:function(minitalk,user,myinfo) {
 				if (myinfo.opper == "ADMIN" && user.nickname != myinfo.nickname && Minitalk.isPrivate == false && user.opper == "ADMIN") return true;
 				else return false;
@@ -735,17 +734,9 @@ Minitalk.ui = {
 	 * @param int timestamp 유닉스타임스탬프
 	 * @param string type 포맷
 	 */
-	getTime:function(timestamp,type) {
-		var time = new Date(timestamp);
-		var year = time.getFullYear();
-		var month = time.getMonth()+1 < 10 ? "0"+(time.getMonth()+1) : time.getMonth()+1;
-		var date = time.getDate() < 10 ? "0"+time.getDate() : time.getDate();
-		
-		var hour = time.getHours() < 10 ? "0"+time.getHours() : time.getHours();
-		var minute = time.getMinutes() < 10 ? "0"+time.getMinutes() : time.getMinutes();
-		var second = time.getSeconds() < 10 ? "0"+time.getSeconds() : time.getSeconds();
-		
-		return LANG.time[type].replace("{year}",year).replace("{month}",month).replace("{date}",date).replace("{hour}",hour).replace("{minute}",minute).replace("{second}",second);
+	getTime:function(timestamp,format) {
+		var time = moment(timestamp).locale(Minitalk.language);
+		return time.format(format);
 	},
 	/**
 	 * 접속자수를 출력한다.
@@ -754,14 +745,14 @@ Minitalk.ui = {
 	 */
 	printUserCount:function(count) {
 		if (count > 0) {
-			$(".userCount").text("("+LANG.personCount.replace('{count}',count)+")");
+			$(".userCount").text("("+Minitalk.getText("text/unit").replace('{COUNT}',count)+")");
 		} else {
 			$(".userCount").text("");
 		}
 		
 		if (Minitalk.isAutoHideUserList == false && count > 200 && Minitalk.viewUserListStatus == true) {
 			Minitalk.isAutoHideUserList = true;
-			Minitalk.ui.printMessage("system",LANG.action.autoHideUser);
+			Minitalk.ui.printMessage("system",Minitalk.getText("action/autoHideUsers"));
 			Minitalk.ui.hideUser();
 		}
 	},
@@ -819,9 +810,9 @@ Minitalk.ui = {
 		item.append(user);
 		
 		var messageObject = $("<span>").addClass("body").html(Minitalk.splitString+message);
-		if (time) messageObject.attr("title",Minitalk.ui.getTime(time,"full"));
+		if (time) messageObject.attr("title",Minitalk.ui.getTime(time,"YYYY.MM.DD HH:mm:ss"));
 		item.append(messageObject);
-		if (time) item.append($("<span>").addClass("time").html(" ("+Minitalk.ui.getTime(time,"time")+")"));
+		if (time) item.append($("<span>").addClass("time").html(" ("+Minitalk.ui.getTime(time,"HH:mm:ss")+")"));
 		
 		$(".chatArea").append(item);
 		Minitalk.ui.autoScroll();
@@ -849,10 +840,10 @@ Minitalk.ui = {
 	 */
 	printWhisperMessage:function(type,sender,to,message,time) {
 		if (sender.nickname == Minitalk.user.me.nickname) {
-			var header = $("<span>").html(LANG.whisper.to.replace("{nickname}",'<span class="whisperTag"></span>'));
+			var header = $("<span>").html(Minitalk.getText("text/whisper_to").replace("{NICKNAME}",'<span class="whisperTag"></span>'));
 			var user = Minitalk.user.getTag(to,false);
 		} else {
-			var header = $("<span>").html(LANG.whisper.from.replace("{nickname}",'<span class="whisperTag"></span>'));
+			var header = $("<span>").html(Minitalk.getText("text/whisper_from").replace("{NICKNAME}",'<span class="whisperTag"></span>'));
 			var user = Minitalk.user.getTag(sender,false);
 		}
 		
@@ -876,9 +867,9 @@ Minitalk.ui = {
 		$(item.find(".whisperTag")).append(user);
 		
 		var messageObject = $("<span>").addClass("body").html(Minitalk.splitString+message);
-		if (time) messageObject.attr("title",Minitalk.ui.getTime(time,"full"));
+		if (time) messageObject.attr("title",Minitalk.ui.getTime(time,"YYYY.MM.DD HH:mm:ss"));
 		item.append(messageObject);
-		if (time) item.append($("<span>").addClass("time").html(" ("+Minitalk.ui.getTime(time,"time")+")"));
+		if (time) item.append($("<span>").addClass("time").html(" ("+Minitalk.ui.getTime(time,"HH:mm:ss")+")"));
 		
 		$(".chatArea").append(item);
 		Minitalk.ui.autoScroll();
@@ -960,6 +951,14 @@ Minitalk.ui = {
 		$(".chatArea").scrollTop($(".chatArea").prop("scrollHeight"));
 	},
 	/**
+	 * 채널명을 표시한다.
+	 *
+	 * @param string title
+	 */
+	printTitle:function(title) {
+		$("div.titleArea > span.title").html(title);
+	},
+	/**
 	 * 접속자목록을 출력한다.
 	 */
 	printUser:function(users) {
@@ -1025,7 +1024,7 @@ Minitalk.ui = {
 			$(".userList").append(user);
 		}
 		
-		Minitalk.ui.printMessage("system",LANG.action.loadedUserCount.replace("{count}","<b><u>"+Minitalk.viewUserListSort.length+"</u></b>"));
+		Minitalk.ui.printMessage("system",Minitalk.getText("text/unit").replace("{COUNT}","<b><u>"+Minitalk.viewUserListSort.length+"</u></b>"));
 	},
 	/**
 	 * 접속자목록을 숨긴다.
@@ -1073,7 +1072,7 @@ Minitalk.ui = {
 	 */
 	sendMessage:function(message,isRaw) {
 		if (Minitalk.user.checkLimit(Minitalk.chatLimit,Minitalk.user.me.opper) == false) {
-			Minitalk.ui.printMessage("error",LANG.error.notAllowChat);
+			Minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_ALLOWED_CHATTING"));
 			return;
 		}
 		
@@ -1087,7 +1086,7 @@ Minitalk.ui = {
 				var baned = Minitalk.storage("baned");
 				var check = baned[Minitalk.channel] ? baned[Minitalk.channel] : 0;
 				if (check > new Date().getTime()) {
-					Minitalk.ui.printMessage("system",LANG.action.banedtime.replace("{second}","<b><u>"+Math.ceil((check - new Date().getTime()) / 1000)+"</u></b>"));
+					Minitalk.ui.printMessage("system",Minitalk.getText("action/banedtime").replace("{SECOND}","<b><u>"+Math.ceil((check - new Date().getTime()) / 1000)+"</u></b>"));
 					return false;
 				}
 			}
@@ -1104,11 +1103,6 @@ Minitalk.ui = {
 							var nickname = commandLine.shift();
 							var message = Minitalk.ui.encodeMessage(commandLine.join(" "),false);
 							
-							if (nickname == Minitalk.user.me.nickname) {
-								Minitalk.ui.printMessage("error",LANG.error.whisperMe);
-								return;
-							}
-							
 							if (typeof Minitalk.listeners.beforeSendWhisper == "function") {
 								if (Minitalk.listeners.beforeSendWhisper(Minitalk,nickname,message,Minitalk.user.me) == false) return;
 							}
@@ -1121,7 +1115,7 @@ Minitalk.ui = {
 							
 							Minitalk.socket.send("whisper",{nickname:nickname,message:message});
 							
-							if (typeof this.listeners.onSendWhisper == "function") {
+							if (typeof Minitalk.listeners.onSendWhisper == "function") {
 								this.listeners.onSendWhisper(Minitalk,nickname,message,Minitalk.user.me);
 							}
 							
@@ -1131,7 +1125,7 @@ Minitalk.ui = {
 								}
 							}
 						} else {
-							Minitalk.ui.printMessage("error",LANG.error.whisperCommandError);
+							Minitalk.ui.printMessage("error",Minitalk.getErrorText("INVALID_COMMAND"));
 						}
 						
 						break;
@@ -1141,7 +1135,7 @@ Minitalk.ui = {
 							var nickname = commandLine.shift();
 							Minitalk.socket.sendCall(nickname);
 						} else {
-							Minitalk.ui.printMessage("error",LANG.error.callCommandError);
+							Minitalk.ui.printMessage("error",Minitalk.getErrorText("INVALID_COMMAND"));
 						}
 						break;
 						
@@ -1150,7 +1144,7 @@ Minitalk.ui = {
 							var password = commandLine.shift();
 							Minitalk.ui.login(password);
 						} else {
-							Minitalk.ui.printMessage("error",LANG.error.loginCommandError);
+							Minitalk.ui.printMessage("error",Minitalk.getErrorText("INVALID_COMMAND"));
 						}
 						break;
 				}
@@ -1161,7 +1155,7 @@ Minitalk.ui = {
 					var baned = Minitalk.storage("baned");
 					var check = baned[Minitalk.channel] ? baned[Minitalk.channel] : 0;
 					if (check > new Date().getTime()) {
-						Minitalk.ui.printMessage("system",LANG.action.banedtime.replace("{second}","<b><u>"+Math.ceil((check - new Date().getTime()) / 1000)+"</u></b>"));
+						Minitalk.ui.printMessage("system",Minitalk.getText("action/banedtime").replace("{SECOND}","<b><u>"+Math.ceil((check - new Date().getTime()) / 1000)+"</u></b>"));
 						return false;
 					}
 				}
@@ -1440,12 +1434,12 @@ Minitalk.ui = {
 	openPrivateChannel:function(mode,data) {
 		if (mode == "create") {
 			if (window[Minitalk.user.getUuid()] === undefined) {
-				Minitalk.ui.printMessage("system",LANG.action.createPrivateChannel);
+				Minitalk.ui.printMessage("system",Minitalk.getText("action/create_private_channel"));
 				return Minitalk.ui.createPrivateChannel(data);
 			}
 		} else if (mode == "join") {
 			if (window[data.code] === undefined) {
-				Minitalk.ui.printMessage("system",LANG.action.joinPrivateChannel.replace("{nickname}","<b><u>"+data.from.nickname+"</u></b>"));
+				Minitalk.ui.printMessage("system",Minitalk.getText("action/join_private_channel").replace("{NICKNAME}","<b><u>"+data.from.nickname+"</u></b>"));
 				return Minitalk.ui.createPrivateChannel(data);
 			}
 		}
@@ -1485,7 +1479,7 @@ Minitalk.ui = {
 			
 			return true;
 		} else {
-			Minitalk.ui.printMessage("error",LANG.error.popup);
+			Minitalk.ui.printMessage("error",Minitalk.getErrorText("DISABLED_POPUP"));
 			formObject.remove();
 			
 			return false;
@@ -1519,7 +1513,7 @@ Minitalk.ui = {
 			
 			return true;
 		} else {
-			Minitalk.ui.printMessage("error",LANG.error.popup);
+			Minitalk.ui.printMessage("error",Minitalk.getErrorText("DISABLED_POPUP"));
 			formObject.remove();
 			
 			return false;
@@ -1531,12 +1525,11 @@ Minitalk.ui = {
 	 * @param string password 채널패스워드
 	 */
 	login:function(password) {
-		Minitalk.ui.printMessage("system",LANG.action.login);
 		$.send(Minitalk.getUrl()+"/process/getChannelAdmin",{channel:Minitalk.channel,password:password},function(result) {
 			if (result.success == true) {
 				Minitalk.socket.send("oppercode",result.oppercode);
 			} else {
-				Minitalk.ui.printMessage("error",LANG.error.loginError);
+				Minitalk.ui.printMessage("error",Minitalk.getErrorText("INVALID_PASSWORD"));
 			}
 		});
 	},
