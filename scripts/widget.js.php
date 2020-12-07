@@ -15,7 +15,10 @@ header('Content-Type: application/x-javascript; charset=utf-8');
 
 $channel = isset($_GET['channel']) == true ? $_GET['channel'] : null;
 $templet = isset($_GET['templet']) == true ? $_GET['templet'] : null;
-$language = 'ko';
+$languages = GetDefaultLanguages();
+foreach ($languages as $language) {
+	if (is_file(__MINITALK_PATH__.'/languages/'.$language.'.json') == true) break;
+}
 
 $minifier = new Minifier();
 $js = $minifier->js();
