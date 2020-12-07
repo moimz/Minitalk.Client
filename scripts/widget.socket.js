@@ -89,6 +89,9 @@ Minitalk.socket = {
 		 */
 		Minitalk.user.printUserCount(0);
 		
+		/**
+		 * 소켓변수를 초기화한다.
+		 */
 		Minitalk.socket.io = null;
 		Minitalk.socket.connected = false;
 		Minitalk.socket.joined = false;

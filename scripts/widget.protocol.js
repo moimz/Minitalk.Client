@@ -19,7 +19,7 @@ Minitalk.protocol = {
 	/**
 	 * 채팅서버로 부터 접속승인을 받았을 경우, 접속된 유저의 정보를 수신한다.
 	 *
-	 * @param object data.myinfo 나의정보
+	 * @param object data.me 나의정보
 	 * @param object data.channel 채널정보
 	 * @param int data.usercount 채널접속자 수
 	 */
@@ -39,6 +39,7 @@ Minitalk.protocol = {
 		 * 나의정보를 저장한다.
 		 */
 		Minitalk.user.me = data.me;
+		Minitalk.storage("me",data.me);
 		Minitalk.session("authorization",data.authorization);
 		
 		/**
@@ -194,43 +195,17 @@ Minitalk.protocol = {
 	 * @param int data.time 서버에서 접속자수를 계산한 시각
 	 */
 	join:function(data) {
-		/**
-		 * 참여 메시지를 출력한다.
-		 */
-		if (Minitalk.socket.joined == true && Minitalk.viewUserMessage == true && Minitalk.viewUserLimit <= data.user.level) {
-			Minitalk.ui.printUserMessage("join",data.user);
-		}
-		
-		/**
-		 * 채널의 접속자수를 변경한다.
-		 */
-		Minitalk.user.printUserCount(data.count,data.time);
-		
-		/**
-		 * 이벤트를 발생시킨다.
-		 */
-		Minitalk.fireEvent("join",[data.user,data.count,data.time]);
+		Minitalk.user.join(data.user,data.count,data.time);
 	},
 	/**
 	 * 유저가 접속을 종료한 경우, 접속을 종료한 유저의 정보를 수신한다.
+	 *
+	 * @param object data.user 유저객체
+	 * @param int data.count 전체접속자수
+	 * @param int data.time 서버에서 접속자수를 계산한 시각
 	 */
 	leave:function(data) {
-		/**
-		 * 종료 메시지를 출력한다.
-		 */
-		if (Minitalk.socket.joined == true && Minitalk.viewUserMessage == true && Minitalk.viewUserLimit <= data.user.level) {
-			Minitalk.ui.printUserMessage("leave",data.user);
-		}
-		
-		/**
-		 * 채널의 접속자수를 변경한다.
-		 */
-		Minitalk.user.printUserCount(data.count,data.time);
-		
-		/**
-		 * 이벤트를 발생시킨다.
-		 */
-		Minitalk.fireEvent("leave",[data.user,data.count,data.time]);
+		Minitalk.user.leave(data.user,data.count,data.time);
 	},
 	/**
 	 * 유저정보가 변경되었을 경우

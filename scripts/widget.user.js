@@ -28,6 +28,56 @@ Minitalk.user = {
 		}
 	},
 	/**
+	 * 유저참여를 처리한다.
+	 *
+	 * @param object user 접속자유저
+	 * @param int count 접속자수
+	 * @param int time 참여시각
+	 */
+	join:function(user,count,time) {
+		/**
+		 * 참여 메시지를 출력한다.
+		 */
+		if (Minitalk.socket.joined == true && Minitalk.viewUserMessage == true && Minitalk.viewUserLimit <= user.level) {
+			Minitalk.ui.printUserMessage("join",user);
+		}
+		
+		/**
+		 * 채널의 접속자수를 변경한다.
+		 */
+		Minitalk.user.printUserCount(count,time);
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("join",[user,count,time]);
+	},
+	/**
+	 * 유저종료를 처리한다.
+	 *
+	 * @param object user 접속자유저
+	 * @param int count 접속자수
+	 * @param int time 참여시각
+	 */
+	leave:function(user,count,time) {
+		/**
+		 * 종료 메시지를 출력한다.
+		 */
+		if (Minitalk.socket.joined == true && Minitalk.viewUserMessage == true && Minitalk.viewUserLimit <= user.level) {
+			Minitalk.ui.printUserMessage("leave",user);
+		}
+		
+		/**
+		 * 채널의 접속자수를 변경한다.
+		 */
+		Minitalk.user.printUserCount(count,time);
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("leave",[user,count,time]);
+	},
+	/**
 	 * 접속자 닉네임 또는 닉이미지를 가져온다.
 	 *
 	 * @param object user 유저객체
