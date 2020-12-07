@@ -204,7 +204,6 @@ Minitalk.ui = {
 		});
 		
 		$(window).on("resize",function() {
-			console.log("resize!!");
 			if (Minitalk.ui.reinitTimer != null) {
 				clearTimeout(Minitalk.ui.reinitTimer);
 			}

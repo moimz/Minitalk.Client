@@ -165,27 +165,11 @@ Minitalk.user = {
 	 * 유저의 고유한 값을 가져온다.
 	 */
 	getUuid:function() {
-		if (window.localStorage === undefined) {
-			if (Minitalk.isAlertStorage == false) {
-				Minitalk.isAlertStorage = true;
-				Minitalk.printMessage("error",Minitalk.getErrorText("NOT_FOUND_STORAGE"));
-			}
-			return;
-		}
-		
-		if (window.localStorage.MiniTalkUserCode !== undefined && window.localStorage.MiniTalkUserCode.length == 32) {
-			return window.localStorage.MiniTalkUserCode;
+		if (Minitalk.storage("uuid") && Minitalk.storage("uuid").length == 32) {
+			return Minitalk.storage("uuid");
 		} else {
-			try {
-				window.localStorage.MiniTalkUserCode = Minitalk.userCode;
-			} catch (e) {
-				if (Minitalk.isAlertStorage == false) {
-					Minitalk.isAlertStorage = true;
-					Minitalk.printMessage("error",Minitalk.getErrorText("NOT_FOUND_STORAGE"));
-					return false;
-				}
-			}
-			return Minitalk.userCode;
+			Minitalk.storage("uuid",Minitalk.uuid);
+			return Minitalk.storage("uuid");
 		}
 	},
 	/**
