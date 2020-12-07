@@ -6,7 +6,8 @@
 		"password":"패스워드",
 		"whisper_to":"{nickname}님에게 귓속말",
 		"whisper_from":"{nickname}님의 귓속말",
-		"guest":"손님"
+		"guest":"손님",
+		"document":"미니톡 매뉴얼 보기"
 	},
 	"level":{
 		"0":"손님 (유저설정이 없는 손님)",

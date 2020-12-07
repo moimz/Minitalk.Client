@@ -279,7 +279,7 @@ $(document).ready(function() {
 		var $errorbox = $("<section>");
 		$errorbox.append($("<h2>").html(Minitalk.getText("text/error")));
 		$errorbox.append($("<p>").html(Minitalk.getText("error/"+$("body").attr("data-error"))));
-		$errorbox.append($("<a>").attr("href","https://www.minitalk.io/").attr("target","_blank").html(Minitalk.getText("text/minitalk_homepage")));
+		$errorbox.append($("<a>").attr("href","https://www.minitalk.io/ko/manual/documents").attr("target","_blank").html(Minitalk.getText("text/document")));
 		$error.append($("<div>").append($errorbox));
 		$("body").append($error);
 		return;
