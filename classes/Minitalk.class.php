@@ -355,6 +355,31 @@ class Minitalk {
 	}
 	
 	/**
+	 * 문자버전을 숫자버전로 변경한다.
+	 *
+	 * @param string $version
+	 * @param int $version
+	 */
+	function getVersionToInt($version) {
+		$temp = explode('.',$version);
+		return $temp[0].sprintf('%02d',$temp[1]).sprintf('%02d',$temp[2]);
+	}
+	
+	/**
+	 * 숫자버전을 문자버전으로 변경한다.
+	 *
+	 * @param string $version
+	 * @param int $version
+	 */
+	function getIntToVersion($version) {
+		$v1 = floor($version / 10000);
+		$v2 = floor(($version - $v1 * 10000) / 100);
+		$v3 = $version % 100;
+		
+		return $v1.'.'.$v2.'.'.$v3;
+	}
+	
+	/**
 	 * 서버정보를 가져온다.
 	 *
 	 * @param int $domain 서버도메인
