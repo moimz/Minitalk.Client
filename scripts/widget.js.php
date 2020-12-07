@@ -70,6 +70,13 @@ foreach ($emoticons as &$emoticon) {
 	$emoticon = json_decode(file_get_contents(__MINITALK_PATH__.'/emoticons/'.$emoticon.'/emoticon.json'));
 }
 $js->add('Minitalk.emoticons = '.json_encode($emoticons).';');
+
+$device = 'PC';
+if (preg_match('/(iPhone|iPad|iPod)/',$_SERVER['HTTP_USER_AGENT']) == true) $device = 'iOS';
+if (preg_match('/(Android)/',$_SERVER['HTTP_USER_AGENT']) == true) $device = 'Android';
+$js->add('Minitalk.device = "'.$device.'";');
+
+$js->add('Minitalk.uuid = "'.md5($_SERVER['REMOTE_ADDR'].time()).'"');
 ?>
 /**
  * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
