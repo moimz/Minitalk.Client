@@ -284,11 +284,17 @@ Minitalk.protocol = {
 	errorcode:function(code) {
 		Minitalk.ui.printMessage("error",Minitalk.getErrorText("code/"+code)+"(ErrorCode : "+code+")");
 		
-		if (code == 304 || code == 305) {
+		if (code >= 900) {
+			Minitalk.socket.reconnectable = false;
+		} else if (code >= 300) {
+			Minitalk.socket.reconnectable = false;
+		}
+		
+		if (code == 300 || code == 302) {
 			setTimeout(Minitalk.socket.sendConnection,5000);
 		}
 		
-		if (code == 202 || code == 203 || code == 204 || code == 315 || code == 402 || code == 909) {
+		if (code == 104 || code == 105) {
 			Minitalk.socket.reconnectable = false;
 		}
 	}

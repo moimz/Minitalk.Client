@@ -127,12 +127,10 @@ Minitalk.socket = {
 			room:Minitalk.private != null ? Minitalk.private : Minitalk.channel,
 			nickname:Minitalk.user.me.nickname,
 			nickcon:Minitalk.user.me.nickcon,
-			sns:Minitalk.user.me.sns,
 			info:Minitalk.user.me.info,
 			device:Minitalk.user.me.device,
 			status:Minitalk.user.me.status,
 			opperCode:Minitalk.opperCode,
-			channelCode:Minitalk.channelCode,
 			saveOpperCode:Minitalk.storage("opperCode"),
 			uuid:Minitalk.user.getUuid()
 		};
