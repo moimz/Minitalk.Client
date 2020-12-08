@@ -59,6 +59,14 @@ Minitalk.socket = {
 		});
 	},
 	/**
+	 * 소켓접속을 종료한다.
+	 *
+	 */
+	disconnect:function() {
+		Minitalk.socket.reconnectable = false;
+		Minitalk.socket.io.disconnect();
+	},
+	/**
 	 * 미니톡 채팅서버에 재접속한다.
 	 *
 	 * @param int time 재접속할 시간
