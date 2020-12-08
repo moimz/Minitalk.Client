@@ -37,8 +37,6 @@ Minitalk.getText = function(code,replacement) {
 		return string;
 	}
 	
-	console.log(code);
-	
 	return replacement == null ? code : replacement;
 };
 
@@ -177,8 +175,8 @@ Minitalk.setting = function(key,value) {
 			Minitalk.storage("setting",setting);
 		}
 		
-//		if (m.checkLimit(m.fontSettingLimit,Minitalk.user.me.opper) == false && get.indexOf("font") == 0) return false;
-//		if (get == "push" && (window.Notification === undefined || Notification.permission != "granted")) return false;
+		if (Minitalk.user.checkLimit(Minitalk.fontSettingLimit,Minitalk.user.me.opper) == false && key.indexOf("font") == 0) return false;
+		if (key == "push" && (window.Notification === undefined || Notification.permission != "granted")) return false;
 
 		return setting[key];
 	} else {
@@ -190,49 +188,6 @@ Minitalk.setting = function(key,value) {
 		setting[key] = value;
 		return Minitalk.storage("setting",setting);
 	}
-};
-
-/**
- * 이벤트를 추가한다.
- */
-Minitalk.addEvent = function(name,listeners) {
-	Minitalk[name].push(listeners);
-};
-
-/**
- * 프로토콜을 추가한다.
- */
-Minitalk.addProtocol = function(name,listeners) {
-	Minitalk.protocols[name] = listeners;
-};
-
-/**
- * 툴바버튼을 추가한다.
- */
-Minitalk.addTool = function(tool) {
-	Minitalk.addToolList.push(tool);
-};
-
-/**
- * 유저메뉴를 추가한다.
- */
-Minitalk.addUserMenu = function(usermenu) {
-	Minitalk.addUserMenuList.push(usermenu);
-};
-
-/**
- * 유저정보를 추가한다.
- */
-Minitalk.addUserInfo = function(key,value) {
-	if (!Minitalk.user.me.info || typeof Minitalk.user.me.info != "object") Minitalk.user.me.info = {};
-	Minitalk.user.me.info[key] = value;
-};
-
-/**
- * 재접속여부를 설정한다.
- */
-Minitalk.setReconnect = function(value) {
-	Minitalk.socket.reconnectable = value;
 };
 
 $(document).ready(function() {
@@ -251,6 +206,13 @@ $(document).ready(function() {
 	}
 	
 	/**
+	 * 이벤트리스너를 등록한다.
+	 */
+	for (var eventName in Minitalk.listeners) {
+		Minitalk.on(eventName,Minitalk.listeners[eventName]);
+	}
+	
+	/**
 	 * 채팅위젯 템플릿 HTML 을 가져온다.
 	 */
 	$.send(Minitalk.getProcessUrl("getWidget"),{templet:Minitalk.templet},function(result) {
@@ -258,6 +220,13 @@ $(document).ready(function() {
 			if (result.html) {
 				$("body").html(result.html);
 				Minitalk.ui.init();
+				
+				/**
+				 * 채팅위젯 템플릿 스타일시트를 새로 불러왔을 경우, 스타일시트에 영향을 받는 요소를 초기화한다.
+				 */
+				$("link[rel=stylesheet]").on("load",function() {
+					Minitalk.ui.reinit();
+				});
 			} else if (result.errorcode) {
 				Minitalk.ui.printErrorCode(result.errorcode);
 			}

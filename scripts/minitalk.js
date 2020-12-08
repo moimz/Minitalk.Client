@@ -159,8 +159,6 @@ if (isMinitalkIncluded === undefined) {
 		this.addUserMenuList = opt.addUserMenuList ? opt.addUserMenuList : [];
 		this.toolType = opt.toolType ? opt.toolType : "icon";
 		
-		this.emoticons = [];
-		
 		this.logLimit = opt.logLimit !== undefined ? opt.logLimit : 15;
 		this.chatLimit = opt.chatLimit ? opt.chatLimit : "ALL";
 		this.fontSettingLimit = opt.fontSettingLimit ? opt.fontSettingLimit : "ALL";
@@ -171,53 +169,18 @@ if (isMinitalkIncluded === undefined) {
 		/* listeners */
 		this.listeners = opt.listeners ? opt.listeners : {};
 		
-		/* protocol */
+		/* protocols */
 		this.protocols = opt.protocols ? opt.protocols : {};
 		
-		/* private */
-		this.connected = false;
-		this.reconnected = true;
-		this.reconnecting = false;
-		this.socket = null;
-		this.server = null;
-		this.serverCode = null;
-		this.channelCode = null;
-		this.userCode = opt.userCode;
+		/* properties */
+		this.emoticons = [];
+		this.uuid = null;
 		this.maxuser = 0;
-		this.myinfo = null;
-		this.viewUserListSort = [];
-		this.viewUserListStore = {};
-		this.viewUserListStatus = false;
-		this.toolList = [];
-		this.userMenuList = [];
 		this.isPrivate = this.private == null ? false : true;
 		this.isNickname = opt.isNickname !== false ? true : false;
 		this.isBroadcast = opt.isBroadcast !== false ? true : false;
 		this.isAutoHideUserList = false;
 		this.isAlertStorage = false;
-		
-		/* Event Listeners */
-		this.onInit = [];
-		this.onConnecting = [];
-		this.onConnect = [];
-		this.beforeSendMessage = [];
-		this.onSendMessage = [];
-		this.beforeSendWhisper = [];
-		this.onSendWhisper = [];
-		this.beforeSendCall = [];
-		this.onSendCall = [];
-		this.beforeSendInvite = [];
-		this.onSendInvite = [];
-		this.beforeMessage = [];
-		this.onMessage = [];
-		this.beforeWhisper = [];
-		this.onWhisper = [];
-		this.beforeCall = [];
-		this.onCall = [];
-		this.beforeInvite = [];
-		this.onInvite = [];
-		this.onJoinUser = [];
-		this.onLeaveUser = [];
 		
 		/**
 		 * 미니톡 경로를 가져온다.
@@ -241,6 +204,42 @@ if (isMinitalkIncluded === undefined) {
 			if (idx !== undefined) url+= "/" + idx;
 			
 			return url;
+		};
+		
+		/**
+		 * 이벤트리스너를 추가한다.
+		 */
+		this.on = function(event,handler) {
+			if (event.indexOf("before") === 0) {
+				this.frame.$(this.frame.document).on(event,function(e) {
+					var args = Array.prototype.slice.call(arguments);
+					args.shift();
+					var returnValue = handler.apply(this,args);
+					if (returnValue === false) {
+						e.stopImmediatePropagation();
+						return false;
+					} else {
+						return true;
+					}
+				});
+			} else {
+				this.frame.$(this.frame.document).on(event,function(e) {
+					var args = Array.prototype.slice.call(arguments);
+					args.shift();
+					handler.apply(this,args);
+				});
+			}
+		};
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		this.fireEvent = function(event,args) {
+			var args = args ? args : [];
+			var e = args.unshift(this);
+			args.push(e);
+			
+			return this.frame.$(this.frame.document).triggerHandler(event,args);
 		};
 		
 		/**

@@ -51,6 +51,14 @@ Minitalk.socket = {
 		});
 	},
 	/**
+	 * 소켓접속을 종료한다.
+	 *
+	 */
+	disconnect:function() {
+		Minitalk.socket.reconnectable = false;
+		Minitalk.socket.io.disconnect();
+	},
+	/**
 	 * 미니톡 채팅서버에 재접속한다.
 	 *
 	 * @param int time 재접속할 시간
@@ -95,7 +103,8 @@ Minitalk.socket = {
 		 * 채팅위젯 UI를 비활성화한다.
 		 */
 		$(".userList").html("");
-		$("input").attr("disabled",false);
+		$("input").attr("disabled",true);
+		Minitalk.ui.initToolButton(false);
 	},
 	/**
 	 * 서버에 접속중인지 확인한다.
@@ -148,27 +157,11 @@ Minitalk.socket = {
 	 * @param string nickname 호출할 닉네임
 	 */
 	sendCall:function(nickname) {
-		if (typeof Minitalk.listeners.beforeSendCall == "function") {
-			if (Minitalk.listeners.beforeSendCall(Minitalk,nickname,Minitalk.user.me) == false) return false;
-		}
-		
-		for (var i=0, loop=Minitalk.beforeSendCall.length;i<loop;i++) {
-			if (typeof Minitalk.beforeSendCall[i] == "function") {
-				if (Minitalk.beforeSendCall[i](Minitalk,nickname,Minitalk.user.me) == false) return false;
-			}
-		}
+		if (Minitalk.fireEvent("beforeSendCall",[nickname,Minitalk.user.me]) === false) return;
 		
 		Minitalk.socket.send("call",nickname);
 		
-		if (typeof Minitalk.listeners.onSendCall == "function") {
-			Minitalk.listeners.onSendCall(Minitalk,nickname,Minitalk.user.me);
-		}
-		
-		for (var i=0, loop=Minitalk.onSendCall.length;i<loop;i++) {
-			if (typeof Minitalk.onSendCall[i] == "function") {
-				Minitalk.onSendCall[i](Minitalk,nickname,Minitalk.user.me);
-			}
-		}
+		Minitalk.fireEvent("sendCall",[nickname,Minitalk.user.me]);
 	},
 	/**
 	 * 유저를 개인채널에 초대한다.
@@ -176,27 +169,20 @@ Minitalk.socket = {
 	 * @param string nickname 초대할 닉네임
 	 */
 	sendInvite:function(nickname) {
-		if (typeof Minitalk.listeners.beforeSendInvite == "function") {
-			if (Minitalk.listeners.beforeSendInvite(Minitalk,nickname,Minitalk.user.me) == false) return false;
-		}
-		
-		for (var i=0, loop=Minitalk.beforeSendInvite.length;i<loop;i++) {
-			if (typeof Minitalk.beforeSendInvite[i] == "function") {
-				if (Minitalk.beforeSendInvite[i](Minitalk,nickname,Minitalk.user.me) == false) return false;
-			}
-		}
+		if (Minitalk.fireEvent("beforeSendInvite",[nickname,Minitalk.user.me]) === false) return;
 		
 		Minitalk.socket.send("invite",nickname);
 		
-		if (typeof Minitalk.listeners.onSendInvite == "function") {
-			Minitalk.listeners.onSendInvite(Minitalk,nickname,Minitalk.user.me);
-		}
-		
-		for (var i=0, loop=Minitalk.onSendInvite.length;i<loop;i++) {
-			if (typeof Minitalk.onSendInvite[i] == "function") {
-				Minitalk.onSendInvite[i](Minitalk,nickname,Minitalk.user.me);
-			}
-		}
+		Minitalk.fireEvent("sendInvite",[nickname,Minitalk.user.me]);
+	},
+	/**
+	 * 사용자정의 프로토콜을 정의한다.
+	 *
+	 * @param name 프로토콜명
+	 * @param function callback
+	 */
+	addProtocol:function(name,callback) {
+		Minitalk.protocols[name] = callback;
 	},
 	/**
 	 * 사용자정의 프로토콜을 전송한다.

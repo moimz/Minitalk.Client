@@ -10,6 +10,7 @@
  * @modified 2020. 12. 7.
  */
 Minitalk.ui = {
+	tools:[],
 	reinitTimer:null,
 	isFixedScroll:false,
 	/**
@@ -50,18 +51,7 @@ Minitalk.ui = {
 		}
 		
 		Minitalk.user.init();
-		Minitalk.ui.initTool();
-		Minitalk.ui.initUserMenu();
-		
-		if (typeof Minitalk.listeners.onInit == "function") {
-			Minitalk.listeners.onInit(m);
-		}
-		
-		for (var i=0, loop=Minitalk.onInit.length;i<loop;i++) {
-			if (typeof Minitalk.onInit[i] == "function") {
-				Minitalk.onInit[i](m);
-			}
-		}
+		Minitalk.ui.initTools();
 		
 		$("input").attr("disabled",true);
 		Minitalk.ui.initToolButton(false);
@@ -128,11 +118,11 @@ Minitalk.ui = {
 		});
 		
 		$(".toggleUserList").on("click",function() {
-			if (Minitalk.viewUserListStatus == true) {
+			if (Minitalk.user.isVisibleUsers == true) {
 				Minitalk.ui.hideUser();
 			} else {
 				Minitalk.isAutoHideUserList = true;
-				Minitalk.ui.printMessage("system",Minitalk.getText("action/loadingUsers"));
+				Minitalk.ui.printMessage("system",Minitalk.getText("action/loading_users"));
 				Minitalk.socket.send("users",Minitalk.viewUserLimit);
 			}
 		});
@@ -214,6 +204,11 @@ Minitalk.ui = {
 			Minitalk.ui.reinit();
 		});
 		
+		/**
+		 * 초기화완료 이벤트를 발생한다.
+		 */
+		Minitalk.fireEvent("init");
+		
 		Minitalk.socket.connect();
 	},
 	/**
@@ -287,7 +282,7 @@ Minitalk.ui = {
 	/**
 	 * 툴바를 초기화한다.
 	 */
-	initTool:function() {
+	initTools:function() {
 		var defaultTool = [{
 			cls:"toolBold",
 			icon:"icon_bold.png",
@@ -469,30 +464,30 @@ Minitalk.ui = {
 		var listStart = 0;
 		var toolsWidth = 0;
 		var insertSplit = false;
-		Minitalk.toolList = defaultTool.concat(Minitalk.addToolList);
+		Minitalk.ui.tools = defaultTool.concat(Minitalk.addToolList);
 		
 		$(".toolArea").html("");
 		$(".toolListLayer").html("");
 
-		for (var i=0, loop=Minitalk.toolList.length;i<loop;i++) {
-			if (typeof Minitalk.toolList[i] == "object") {
+		for (var i=0, loop=Minitalk.ui.tools.length;i<loop;i++) {
+			if (typeof Minitalk.ui.tools[i] == "object") {
 				var thisButton = $("<button>").addClass("toolButton toolButtonOff");
-				thisButton.attr("title",Minitalk.toolList[i].text);
+				thisButton.attr("title",Minitalk.ui.tools[i].text);
 				thisButton.attr("toolIDX",i);
-				if (Minitalk.toolList[i].cls) thisButton.addClass(Minitalk.toolList[i].cls);
+				if (Minitalk.ui.tools[i].cls) thisButton.addClass(Minitalk.ui.tools[i].cls);
 				thisButton.on("mouseover",function() { $(this).addClass("mouseover"); });
 				thisButton.on("mouseout",function() { $(this).removeClass("mouseover"); });
-				thisButton.on("click",function() { Minitalk.toolList[$(this).attr("toolIDX")].fn(Minitalk); });
+				thisButton.on("click",function() { Minitalk.ui.tools[$(this).attr("toolIDX")].fn(Minitalk); });
 				
 				var thisButtonInner = $("<div>").addClass("toolButtonInner");
 				
 				if (Minitalk.toolType != "text") {
-					var iconPath = Minitalk.toolList[i].cls ? Minitalk.getUrl()+'/templets/'+Minitalk.templet+'/images/'+Minitalk.toolList[i].icon : Minitalk.toolList[i].icon;
+					var iconPath = Minitalk.ui.tools[i].cls ? Minitalk.getUrl()+'/templets/'+Minitalk.templet+'/images/'+Minitalk.ui.tools[i].icon : Minitalk.ui.tools[i].icon;
 					thisButtonInner.append($("<span>").addClass("toolButtonIcon").css("backgroundImage","url("+iconPath+")"));
 				}
 				
-				if (Minitalk.toolType != "icon" || Minitalk.toolList[i].viewText === true) {
-					thisButtonInner.append($("<span>").addClass("toolButtonText").text(Minitalk.toolList[i].text));
+				if (Minitalk.toolType != "icon" || Minitalk.ui.tools[i].viewText === true) {
+					thisButtonInner.append($("<span>").addClass("toolButtonText").text(Minitalk.ui.tools[i].text));
 				}
 				thisButton.append(thisButtonInner);
 				
@@ -525,19 +520,19 @@ Minitalk.ui = {
 			moreButton.on("mouseout",function() { if ($(this).attr("disabled") != "disabled") $(this).removeClass("mouseover"); });
 			$(".toolArea").append(moreButton);
 			
-			for (var i=listStart, loop=Minitalk.toolList.length;i<loop;i++) {
-				if (i == listStart && typeof Minitalk.toolList[i] != "object") continue;
+			for (var i=listStart, loop=Minitalk.ui.tools.length;i<loop;i++) {
+				if (i == listStart && typeof Minitalk.ui.tools[i] != "object") continue;
 
-				if (typeof Minitalk.toolList[i] == "object") {
+				if (typeof Minitalk.ui.tools[i] == "object") {
 					var thisButton = $("<div>").addClass("toolList");
-					if (Minitalk.toolList[i].cls) thisButton.addClass(Minitalk.toolList[i].cls);
+					if (Minitalk.ui.tools[i].cls) thisButton.addClass(Minitalk.ui.tools[i].cls);
 					thisButton.attr("toolIDX",i);
 					thisButton.on("mouseover",function() { $(this).addClass("mouseover"); });
 					thisButton.on("mouseout",function() { $(this).removeClass("mouseover"); });
-					thisButton.on("click",function() { Minitalk.toolList[$(this).attr("toolIDX")].fn(m); });
-					var iconPath = Minitalk.toolList[i].cls ? Minitalk.getUrl()+'/templets/'+Minitalk.templet+'/images/'+Minitalk.toolList[i].icon : Minitalk.toolList[i].icon;
+					thisButton.on("click",function() { Minitalk.ui.tools[$(this).attr("toolIDX")].fn(m); });
+					var iconPath = Minitalk.ui.tools[i].cls ? Minitalk.getUrl()+'/templets/'+Minitalk.templet+'/images/'+Minitalk.ui.tools[i].icon : Minitalk.ui.tools[i].icon;
 					thisButton.append($("<span>").addClass("toolListIcon").css("backgroundImage","url("+iconPath+")"));
-					thisButton.append($("<span>").addClass("toolListText").text(Minitalk.toolList[i].text));
+					thisButton.append($("<span>").addClass("toolListText").text(Minitalk.ui.tools[i].text));
 					
 					$(".toolListLayer").append(thisButton);
 				} else {
@@ -624,108 +619,8 @@ Minitalk.ui = {
 			$(".toolPush").removeClass("selected");
 		}
 	},
-	/**
-	 * 유저메뉴를 초기화한다.
-	 */
-	initUserMenu:function() {
-		Minitalk.userMenuList = [{
-			icon:"icon_myinfo.png",
-			text:Minitalk.getText("usermenu/myinfo"),
-			viewMenu:function(minitalk,user,myinfo) {
-				if (user.nickname == myinfo.nickname) return true;
-				else return false;
-			},
-			fn:function(minitalk,user,myinfo) {
-				$(".userInfoNickname").val(minitalk.user.me.nickname);
-				if (minitalk.isNickname == false || minitalk.isPrivate == true) $(".userInfoNickname").attr("disabled",true);
-				else $(".userInfoNickname").attr("disabled",false);
-				$(".userInfoStatusIcon").css("backgroundImage","url("+minitalk.statusIconPath+"/"+minitalk.user.me.device+"/"+minitalk.user.me.status+".png)");
-				$(".userInfoStatusText").text(Minitalk.getText("status/"+minitalk.user.me.status));
-				$(".userInfoStatus").attr("status",minitalk.user.me.status);
-				$(".userInfoLayer").fadeIn();
-			}
-		},{
-			icon:"icon_whisper.png",
-			text:Minitalk.getText("usermenu/whisper"),
-			viewMenu:function(minitalk,user,myinfo) {
-				if (user.nickname != myinfo.nickname) return true;
-				else return false;
-			},
-			fn:function(minitalk,user,myinfo) {
-				$(".inputText").focus();
-				$(".inputText").val("/w "+user.nickname+" ");
-			}
-		},{
-			icon:"icon_call.png",
-			text:Minitalk.getText("usermenu/call"),
-			viewMenu:function(minitalk,user,myinfo) {
-				if (user.nickname != myinfo.nickname) return true;
-				else return false;
-			},
-			fn:function(minitalk,user,myinfo) {
-				minitalk.socket.sendCall(user.nickname);
-			}
-		},{
-			icon:"icon_privchannel.png",
-			text:Minitalk.getText("usermenu/privchannel"),
-			viewMenu:function(minitalk,user,myinfo) {
-				if (user.nickname != myinfo.nickname && Minitalk.isPrivate == false) return true;
-				else return false;
-			},
-			fn:function(minitalk,user,myinfo) {
-				Minitalk.socket.sendInvite(user.nickname);
-			}
-		},{
-			icon:"icon_banmsg.png",
-			text:Minitalk.getText("usermenu/banmsg"),
-			viewMenu:function(minitalk,user,myinfo) {
-				if (myinfo.opper == "ADMIN" && user.nickname != myinfo.nickname) return true;
-				else return false;
-			},
-			fn:function(minitalk,user,myinfo) {
-				minitalk.socket.send("banmsg",{id:user.id,nickname:user.nickname});
-			}
-		},{
-			icon:"icon_showip.png",
-			text:Minitalk.getText("usermenu/showip"),
-			viewMenu:function(minitalk,user,myinfo) {
-				if (myinfo.opper == "ADMIN" && Minitalk.isPrivate == false) return true;
-				else return false;
-			},
-			fn:function(minitalk,user,myinfo) {
-				minitalk.socket.send("showip",{id:user.id,nickname:user.nickname});
-			}
-		},{
-			icon:"icon_banip.png",
-			text:Minitalk.getText("usermenu/banip"),
-			viewMenu:function(minitalk,user,myinfo) {
-				if (myinfo.opper == "ADMIN" && user.nickname != myinfo.nickname && Minitalk.isPrivate == false) return true;
-				else return false;
-			},
-			fn:function(minitalk,user,myinfo) {
-				minitalk.socket.send("banip",{id:user.id,nickname:user.nickname});
-			}
-		},{
-			icon:"icon_opper.png",
-			text:Minitalk.getText("usermenu/opper"),
-			viewMenu:function(minitalk,user,myinfo) {
-				if (myinfo.opper == "ADMIN" && user.nickname != myinfo.nickname && minitalk.isPrivate == false && user.opper != "ADMIN") return true;
-				else return false;
-			},
-			fn:function(minitalk,user,myinfo) {
-				minitalk.socket.send("opper",{id:user.id,nickname:user.nickname});
-			}
-		},{
-			icon:"icon_deopper.png",
-			text:Minitalk.getText("usermenu/deopper"),
-			viewMenu:function(minitalk,user,myinfo) {
-				if (myinfo.opper == "ADMIN" && user.nickname != myinfo.nickname && Minitalk.isPrivate == false && user.opper == "ADMIN") return true;
-				else return false;
-			},
-			fn:function(minitalk,user,myinfo) {
-				minitalk.socket.send("deopper",{id:user.id,nickname:user.nickname});
-			}
-		}];
+	addTool:function(tool) {
+		Minitalk.addToolList.push(tool);
 	},
 	/**
 	 * 시간을 정해진 형태로 변환하여 가져온다.
@@ -749,7 +644,7 @@ Minitalk.ui = {
 			$(".userCount").text("");
 		}
 		
-		if (Minitalk.isAutoHideUserList == false && count > 200 && Minitalk.viewUserListStatus == true) {
+		if (Minitalk.isAutoHideUserList == false && count > 200 && Minitalk.user.isVisibleUsers == true) {
 			Minitalk.isAutoHideUserList = true;
 			Minitalk.ui.printMessage("system",Minitalk.getText("action/autoHideUsers"));
 			Minitalk.ui.hideUser();
@@ -793,15 +688,7 @@ Minitalk.ui = {
 		var message = Minitalk.ui.decodeMessage(message,true);
 		
 		if (type == "chat" && sender.nickname != Minitalk.user.me.nickname) {
-			if (typeof Minitalk.listeners.beforeMessage == "function") {
-				if (Minitalk.listeners.beforeMessage(Minitalk,sender,message,time) == false) return;
-			}
-			
-			for (var i=0, loop=Minitalk.beforeMessage.length;i<loop;i++) {
-				if (typeof Minitalk.beforeMessage[i] == "function") {
-					if (Minitalk.beforeMessage[i](Minitalk,sender,message,time) == false) return;
-				}
-			}
+			if (Minitalk.fireEvent("beforeMessage",[sender,message,time]) === false) return;
 		}
 		
 		var item = $("<div>").addClass(type);
@@ -817,15 +704,7 @@ Minitalk.ui = {
 		Minitalk.ui.autoScroll();
 		
 		if (type == "chat" && sender.nickname != Minitalk.user.me.nickname) {
-			if (typeof Minitalk.listeners.onMessage == "function") {
-				Minitalk.listeners.onMessage(Minitalk,sender,message,time)
-			}
-			
-			for (var i=0, loop=Minitalk.onMessage.length;i<loop;i++) {
-				if (typeof Minitalk.onMessage[i] == "function") {
-					Minitalk.onMessage[i](Minitalk,sender,message,time)
-				}
-			}
+			Minitalk.fireEvent("message",[sender,message,time]);
 		}
 	},
 	/**
@@ -852,15 +731,7 @@ Minitalk.ui = {
 		var message = Minitalk.ui.decodeMessage(message,true);
 		
 		if (type == "whisper" && sender.nickname != Minitalk.user.me.nickname) {
-			if (typeof Minitalk.listeners.beforeWhisper == "function") {
-				if (Minitalk.listeners.beforeWhisper(Minitalk,sender,message,time) == false) return;
-			}
-			
-			for (var i=0, loop=Minitalk.beforeWhisper.length;i<loop;i++) {
-				if (typeof Minitalk.beforeWhisper[i] == "function") {
-					if (Minitalk.beforeWhisper[i](Minitalk,sender,message,time) == false) return;
-				}
-			}
+			if (Minitalk.fireEvent("beforeWhisper",[sender,message,time]) === false) return;
 		}
 		
 		$(item.find(".whisperTag")).append(user);
@@ -874,15 +745,7 @@ Minitalk.ui = {
 		Minitalk.ui.autoScroll();
 		
 		if (type == "whisper" && sender.nickname != Minitalk.user.me.nickname) {
-			if (typeof Minitalk.listeners.onWhisper == "function") {
-				Minitalk.listeners.onWhisper(Minitalk,sender,message,time)
-			}
-			
-			for (var i=0, loop=Minitalk.onWhisper.length;i<loop;i++) {
-				if (typeof Minitalk.onWhisper[i] == "function") {
-					Minitalk.onWhisper[i](Minitalk,sender,message,time)
-				}
-			}
+			Minitalk.fireEvent("whisper",[sender,message,time]);
 		}
 	},
 	printError:function(code,callback) {
@@ -1000,7 +863,7 @@ Minitalk.ui = {
 		
 		var sortUserCode = {"ADMIN":"#","POWERUSER":"*","MEMBER":"+","NICKGUEST":"-"};
 		
-		Minitalk.viewUserListStatus = true;
+		Minitalk.user.isVisibleUsers = true;
 		Minitalk.viewUserListSort = [];
 		Minitalk.viewUserListStore = {};
 		for (var i=0, loop=users.length;i<loop;i++) {
@@ -1023,14 +886,14 @@ Minitalk.ui = {
 			$(".userList").append(user);
 		}
 		
-		Minitalk.ui.printMessage("system",Minitalk.getText("text/unit").replace("{COUNT}","<b><u>"+Minitalk.viewUserListSort.length+"</u></b>"));
+		Minitalk.ui.printMessage("system",Minitalk.getText("action/loaded_users").replace("{COUNT}","<b><u>"+Minitalk.viewUserListSort.length+"</u></b>"));
 	},
 	/**
 	 * 접속자목록을 숨긴다.
 	 */
 	hideUser:function() {
 		$(".toggleUserList").removeClass("toggleUserListOn").addClass("toggleUserListOff");
-		Minitalk.viewUserListStatus = false;
+		Minitalk.user.isVisibleUsers = false;
 
 		if (Minitalk.type == "vertical") {
 			$(".userList").animate({height:1},{step:function(now,fx) {
@@ -1102,27 +965,11 @@ Minitalk.ui = {
 							var nickname = commandLine.shift();
 							var message = Minitalk.ui.encodeMessage(commandLine.join(" "),false);
 							
-							if (typeof Minitalk.listeners.beforeSendWhisper == "function") {
-								if (Minitalk.listeners.beforeSendWhisper(Minitalk,nickname,message,Minitalk.user.me) == false) return;
-							}
-							
-							for (var i=0, loop=Minitalk.beforeSendWhisper.length;i<loop;i++) {
-								if (typeof Minitalk.beforeSendWhisper[i] == "function") {
-									if (Minitalk.beforeSendWhisper[i](Minitalk,nickname,message,Minitalk.user.me) == false) return;
-								}
-							}
+							if (Minitalk.fireEvent("beforeSendWhisper",[nickname,message,Minitalk.user.me]) === false) return;
 							
 							Minitalk.socket.send("whisper",{nickname:nickname,message:message});
 							
-							if (typeof Minitalk.listeners.onSendWhisper == "function") {
-								this.listeners.onSendWhisper(Minitalk,nickname,message,Minitalk.user.me);
-							}
-							
-							for (var i=0, loop=Minitalk.onSendWhisper.length;i<loop;i++) {
-								if (typeof Minitalk.onSendWhisper[i] == "function") {
-									Minitalk.onSendWhisper[i](Minitalk,nickname,message,Minitalk.user.me);
-								}
-							}
+							Minitalk.fireEvent("sendWhisper",[nickname,message,Minitalk.user.me]);
 						} else {
 							Minitalk.ui.printMessage("error",Minitalk.getErrorText("INVALID_COMMAND"));
 						}
@@ -1159,15 +1006,7 @@ Minitalk.ui = {
 					}
 				}
 				
-				if (typeof Minitalk.listeners.beforeSendMessage == "function") {
-					if (Minitalk.listeners.beforeSendMessage(Minitalk,message,Minitalk.user.me) == false) return;
-				}
-				
-				for (var i=0, loop=Minitalk.beforeSendMessage.length;i<loop;i++) {
-					if (typeof Minitalk.beforeSendMessage[i] == "function") {
-						if (Minitalk.beforeSendMessage[i](Minitalk,message,Minitalk.user.me) == false) return;
-					}
-				}
+				if (Minitalk.fireEvent("beforeSendMessage",[message,Minitalk.user.me]) === false) return;
 				
 				var printMessage = Minitalk.ui.encodeMessage(message,true);
 				Minitalk.socket.send("message",printMessage);
@@ -1177,15 +1016,7 @@ Minitalk.ui = {
 		Minitalk.ui.printChatMessage("chat",Minitalk.user.me,printMessage);
 		
 		if (isRaw == false) {
-			if (typeof Minitalk.listeners.onSendMessage == "function") {
-				Minitalk.listeners.onSendMessage(Minitalk,message,Minitalk.user.me);
-			}
-			
-			for (var i=0, loop=Minitalk.onSendMessage.length;i<loop;i++) {
-				if (typeof Minitalk.onSendMessage[i] == "function") {
-					Minitalk.onSendMessage[i](Minitalk,message,Minitalk.user.me);
-				}
-			}
+			Minitalk.fireEvent("sendMessage",[message,Minitalk.user.me]);
 		}
 	},
 	/**

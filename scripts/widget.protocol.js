@@ -49,21 +49,13 @@ Minitalk.protocol = {
 		Minitalk.ui.printUserCount(data.usercount);
 		
 		if (Minitalk.viewUser == true && data.usercount < 200) {
-			Minitalk.ui.printMessage("system",Minitalk.getText("action/loadingUsers"));
+			Minitalk.ui.printMessage("system",Minitalk.getText("action/loading_users"));
 			Minitalk.socket.send("users",Minitalk.viewUserLimit);
 		} else {
-			Minitalk.viewUserListStatus = false;
+			Minitalk.user.isVisibleUsers = false;
 		}
 		
-		if (typeof Minitalk.listeners.onConnecting == "function") {
-			Minitalk.listeners.onConnecting(Minitalk,data.channel,data.usercount);
-		}
-		
-		for (var i=0, loop=Minitalk.onConnecting.length;i<loop;i++) {
-			if (typeof Minitalk.onConnecting[i] == "function") {
-				Minitalk.onConnecting[i](Minitalk,data.channel,data.usercount);
-			}
-		}
+		Minitalk.fireEvent("connect",[data.channel,data.usercount]);
 		
 		Minitalk.socket.send("logs",{limit:Minitalk.logLimit,time:Minitalk.storage("lastLogTime")});
 	},
@@ -112,8 +104,8 @@ Minitalk.protocol = {
 	 * 사용자정의 프로토콜을 수신하였을 경우
 	 */
 	protocol:function(data) {
-		if (data.protocol !== undefined && typeof m.protocols[data.protocol] == "function") {
-			Minitalk.protocols[data.protocol](m,data.data);
+		if (data.protocol !== undefined && typeof Minitalk.protocols[data.protocol] == "function") {
+			Minitalk.protocols[data.protocol](Minitalk,data.data);
 		}
 	},
 	/**
@@ -141,16 +133,6 @@ Minitalk.protocol = {
 		Minitalk.ui.autoScroll();
 		
 		$("input").attr("disabled",null);
-		
-		if (typeof Minitalk.listeners.onConnect == "function") {
-			Minitalk.listeners.onConnect(Minitalk,Minitalk.channel,Minitalk.user.me);
-		}
-		
-		for (var i=0, loop=Minitalk.onConnect.length;i<loop;i++) {
-			if (typeof Minitalk.onConnect[i] == "function") {
-				Minitalk.onConnect[i](Minitalk,Minitalk.channel,Minitalk.user.me);
-			}
-		}
 	},
 	/**
 	 * 유저가 참여하였을 때
