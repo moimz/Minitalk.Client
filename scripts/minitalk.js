@@ -179,6 +179,13 @@ if (isMinitalkIncluded === undefined) {
 		};
 		
 		/**
+		 * 플러그인 경로를 가져온다.
+		 */
+		this.getPluginUrl = function(plugin) {
+			return this.getUrl() + "/plugins/" + plugin;
+		};
+		
+		/**
 		 * 이벤트리스너를 추가한다.
 		 */
 		this.on = function(event,handler) {
