@@ -14,10 +14,26 @@ if (defined('__MINITALK__') == false) exit;
 
 $templet = Param('templet');
 
-$results->success = true;
 if ($this->isBanIp() == true) {
+	$results->success = false;
 	$results->errorcode = 403;
 } else {
-	$results->html = file_get_contents($this->getPath().'/templets/'.$templet.'/skin.html');
+	if (strpos($templet,'@') === 0) {
+		if (is_dir($this->getPath().'/plugins/'.substr($templet,1)) == true && is_file($this->getPath().'/plugins/'.substr($templet,1).'/channel.html') == true) {
+			$results->success = true;
+			$results->html = file_get_contents($this->getPath().'/plugins/'.substr($templet,1).'/channel.html');
+		} else {
+			$results->success = false;
+			$results->error = 'NOT_FOUND_TEMPLET';
+		}
+	} else {
+		if (is_dir($this->getPath().'/templets/'.$templet) == true && is_file($this->getPath().'/templets/'.$templet.'/skin.html') == true) {
+			$results->success = true;
+			$results->html = file_get_contents($this->getPath().'/templets/'.$templet.'/skin.html');
+		} else {
+			$results->success = false;
+			$results->error = 'NOT_FOUND_TEMPLET';
+		}
+	}
 }
 ?>

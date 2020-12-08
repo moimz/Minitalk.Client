@@ -217,21 +217,23 @@ $(document).ready(function() {
 	 */
 	$.send(Minitalk.getProcessUrl("getWidget"),{templet:Minitalk.templet},function(result) {
 		if (result.success == true) {
-			if (result.html) {
-				$("body").html(result.html);
-				Minitalk.ui.init();
-				
-				/**
-				 * 채팅위젯 템플릿 스타일시트를 새로 불러왔을 경우, 스타일시트에 영향을 받는 요소를 초기화한다.
-				 */
-				$("link[rel=stylesheet]").on("load",function() {
-					Minitalk.ui.reinit();
-				});
-			} else if (result.errorcode) {
-				Minitalk.ui.printErrorCode(result.errorcode);
-			}
+			$("body").html(result.html);
+			Minitalk.ui.init();
+			
+			$("div.loading").remove();
+			
+			/**
+			 * 채팅위젯 템플릿 스타일시트를 새로 불러왔을 경우, 스타일시트에 영향을 받는 요소를 초기화한다.
+			 */
+			$("link[rel=stylesheet]").on("load",function() {
+				Minitalk.ui.reinit();
+			});
 		} else {
-			Minitalk.ui.printError("NOT_FOUND_TEMPLET","");
+			if (result.errorcode) {
+				Minitalk.ui.printErrorCode(result.errorcode);
+			} else {
+				Minitalk.ui.printError(result.error,"");
+			}
 		}
 	});
 });

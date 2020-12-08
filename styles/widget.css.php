@@ -38,6 +38,25 @@ $css->add(__MINITALK_PATH__.'/styles/widget.css');
 if ($templet !== null && is_file(__MINITALK_PATH__.'/templets/'.$templet.'/style.css') == true) {
 	$css->add(__MINITALK_PATH__.'/templets/'.$templet.'/style.css');
 }
+
+/**
+ * 플러그인을 불러온다.
+ */
+$pluginsPath = @opendir(__MINITALK_PATH__.'/plugins');
+while ($plugin = @readdir($pluginsPath)) {
+	if ($plugin != '.' && $plugin != '..' && is_dir(__MINITALK_PATH__.'/plugins/'.$plugin) == true) {
+		if (is_file(__MINITALK_PATH__.'/plugins/'.$plugin.'/plugin.css') == true) {
+			$css->add(__MINITALK_PATH__.'/plugins/'.$plugin.'/plugin.css');
+		}
+	}
+}
+@closedir($pluginsPath);
+
+if (strpos($templet,'@') === 0) {
+	if (is_dir(__MINITALK_PATH__.'/plugins/'.substr($templet,1)) == true && is_file(__MINITALK_PATH__.'/plugins/'.substr($templet,1).'/channel.css') == true) {
+		$css->add(__MINITALK_PATH__.'/plugins/'.substr($templet,1).'/channel.css');
+	}
+}
 ?>
 /**
  * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)

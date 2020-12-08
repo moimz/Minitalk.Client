@@ -1,42 +1,36 @@
 <?php
-REQUIRE_ONCE '../config/default.conf.php';
+/**
+ * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
+ *
+ * 미니톡 개인채널 내부 HTML을 정의한다.
+ * 
+ * @file /scripts/html/PrivateChannel.php
+ * @author Arzz (arzz@arzz.com)
+ * @license MIT License
+ * @version 6.4.0
+ * @modified 2020. 12. 4.
+ */
+REQUIRE_ONCE '../configs/init.config.php';
+
+$MINITALK = new Minitalk();
 
 $channel = Request('channel');
-$code = Request('code');
+$code = Request('code') ? Request('code') : md5(Request('myinfo').time());
+$templet = Request('templet');
 $owner = Request('owner');
 $myinfo = json_decode(Request('myinfo'),true);
 $config = json_decode(Request('config'),true);
 $invite = Request('invite');
+$plugin = Request('plugin') ? Request('plugin') : null;
 
-$plugin = Request('plugin');
-
-$device = 'PC';
-if (preg_match('/(iPhone|iPad|iPod)/',$_SERVER['HTTP_USER_AGENT']) == true) $device = 'iOS';
-if (preg_match('/(Android)/',$_SERVER['HTTP_USER_AGENT']) == true) $device = 'Android';
-
-$usePlugin = true;
-$pluginList = array();
-if (isset($plugin) == true && $plugin == 'NONE') $usePlugin = false;
-if (isset($plugin) == true && $plugin != 'ALL' && $plugin != 'NONE') {
-	$usePlugin = false;
-	$pluginList = json_decode($plugin,true);
+if ($plugin !== null && is_file($MINITALK->getPath().'/plugins/'.$plugin.'/channel.html') == true) {
+	$templet = '@'.$plugin;
+	$data = Request('data') ? json_decode(Request('data')) : new stdClass();
 }
-
-$emoticons = array();
-$emoticonPath = @opendir($_ENV['path'].'/emoticon');
-while ($emoticon = @readdir($emoticonPath)) {
-	if ($emoticon != '.' && $emoticon != '..' && is_dir($_ENV['path'].'/emoticon/'.$emoticon) == true) {
-		$emoticons[] = preg_replace('/(\t|\n)/','',file_get_contents($_ENV['path'].'/emoticon/'.$emoticon.'/emoticon.json'));
-	}
-}
-@closedir($emoticonPath);
 
 $errorCode = 0;
-$mDB = new DB();
-$channel = $mDB->DBfetch('minitalk_channel_table','*',"where `channel`='{$channel}'");
-if (isset($channel['channel']) == true) {
-
-} else {
+$channel = $MINITALK->getChannel($channel);
+if ($channel == null) {
 	$errorCode = 101;
 }
 ?>
@@ -45,65 +39,39 @@ if (isset($channel['channel']) == true) {
 <head>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
 <title>Minitalk6 Private Channect Connecting...</title>
-<link rel="stylesheet" href="../skin/<?php echo $config['skin']; ?>/style.css" type="text/css" title="style" />
 <style>
 HTML, BODY {padding:0px; margin:0px; overflow:hidden; width:100%; height:100%;}
 </style>
 </head>
 <body>
-	<div class="loading"></div>
-	<?php INCLUDE_ONCE '../skin/'.$config['skin'].'/skin.html'; ?>
-
-	<script type="text/javascript" src="../script/jquery.1.9.0.min.js"></script>
-	<script type="text/javascript" src="../script/socket.io.min.js"></script>
-	<script type="text/javascript" src="../language/<?php echo $config['language']; ?>.js"></script>
-	<script type="text/javascript" src="../script/minitalk.js?rnd=<?php echo time(); ?>"></script>
+	<script type="text/javascript" src="../scripts/minitalk.js?rnd=<?php echo time(); ?>"></script>
 	<script>
-	var m = new MinitalkComponent({
+	<?php if ($plugin !== null) { ?>
+	var plugin = {
+		code:"<?php echo $code; ?>",
+		data:<?php echo json_encode($data); ?>,
+		parentChannel:"<?php echo $channel->channel; ?>",
+		pluginChannel:"#<?php echo $code; ?>:<?php echo $owner; ?>:<?php echo $channel->channel; ?>"
+	};
+	<?php } ?>
+	new Minitalk({
 		id:"minitalk",
-		channel:"<?php echo $channel['channel']; ?>",
-		private:"#<?php echo $code; ?>:<?php echo $owner; ?>:<?php echo $channel['channel']; ?>",
+		channel:"<?php echo $channel->channel; ?>",
+		private:"#<?php echo $code; ?>:<?php echo $owner; ?>:<?php echo $channel->channel; ?>",
 		width:"100%",
 		height:"100%",
 		alertLimit:"ALL",
 		type:"auto",
 		nickcon:"<?php echo $myinfo['nickcon']; ?>",
 		nickname:"<?php echo $myinfo['nickname']; ?>",
-		opperCode:"<?php echo $owner == $myinfo['nickname'] ? GetOpperCode('ADMIN') : ''; ?>",
-		title:LANG.privateTitle.replace("{nickname}","<?php echo $owner; ?>"),
-		device:"<?php echo $device; ?>",
-		plugin:<?php if ($plugin == 'ALL' || $plugin == 'NONE') { ?>"<?php echo $plugin; ?>"<?php } else { ?><?php echo $plugin; ?><?php } ?>,
-		skin:"<?php echo $config['skin']; ?>",
-		emoticons:[<?php echo implode(',',$emoticons); ?>],
+		opperCode:"<?php echo $owner == $myinfo['nickname'] ? $MINITALK->getOpperCode('ADMIN') : ''; ?>",
+		templet:"<?php echo $templet; ?>",
 		listeners:{
-			onConnect:function(minitalk) {
+			connect:function(minitalk) {
 				<?php if ($invite != null) { ?>
-				minitalk.send("invite","<?php echo $invite; ?>");
+				minitalk.socket.send("invite","<?php echo $invite; ?>");
 				<?php } ?>
 			}
-		}
-	});
-	</script>
-	<?php
-	$pluginPath = @opendir($_ENV['path'].'/plugin');
-	while ($plugin = @readdir($pluginPath)) {
-		if ($usePlugin == true || in_array($plugin,$pluginList) == true) {
-			if ($plugin != '.' && $plugin != '..' && is_dir($_ENV['path'].'/plugin/'.$plugin) == true) {
-				echo '<script type="text/javascript" src="../plugin/'.$plugin.'/plugin.js"></script>'."\n";
-			}
-		}
-	}
-	@closedir($pluginPath);
-	?>
-	<script>
-	$(document).ready(function() {
-		document.title = LANG.privateTitle.replace("{nickname}","<?php echo $owner; ?>");
-		m.init(<?php echo $errorCode; ?>);
-	});
-	$(window).on("unload",function() {
-		if (opener) {
-			opener["<?php echo $code; ?>"] = null;
-			delete opener["<?php echo $code; ?>"];
 		}
 	});
 	</script>

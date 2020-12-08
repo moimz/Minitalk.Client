@@ -39,6 +39,7 @@ if (is_file(__MINITALK_PATH__.'/languages/'.$language.'.json') == false) {
 $lang = file_get_contents(__MINITALK_PATH__.'/languages/'.$language.'.json');
 
 $js->add('Minitalk.LANG = '.$lang.';');
+$js->add('Minitalk.version = '.$MINITALK->getVersionToInt(__MINITALK_VERSION__).';');
 $js->add('Minitalk.language = "'.$language.'";');
 
 $js->add(__MINITALK_PATH__.'/scripts/jquery.extend.js');
@@ -52,7 +53,132 @@ if ($channel !== null) {
 	$js->add(__MINITALK_PATH__.'/scripts/widget.protocol.js');
 }
 
-$js->add('Minitalk.version = '.$MINITALK->getVersionToInt(__MINITALK_VERSION__).';');
+/**
+ * v6.3 버전 마이그레이션을 위한 자바스크립트를 불러온다.
+ * 해당 마이그레이션 코드는 v6.5 버전에서 제거될 예정입니다.
+ */
+$methods = array(
+	'getTime'=>'Minitalk.ui.getTime',
+	'showAlert'=>'Minitalk.ui.showAlert',
+	'addEvent'=>'Minitalk.on',
+	'addProtocol'=>'Minitalk.socket.addProtocol',
+	'addTool'=>'Minitalk.ui.addTool',
+	'addUserInfo'=>'Minitalk.user.addInfo',
+	'addUserMenu'=>'Minitalk.user.addMenu',
+	'disconnect'=>'Minitalk.socket.disconnect',
+	'getStorage'=>'Minitalk.storage',
+	'playSound'=>'Minitalk.ui.playsound',
+	'printMessage'=>'Minitalk.ui.printMessage',
+	'sendMessage'=>'Minitalk.ui.sendMessage',
+	'sendProtocol'=>'Minitalk.socket.sendProtocol',
+	'setReconnect'=>null,
+	'setStorage'=>'Minitalk.storage',
+	'showNotice'=>'Minitalk.ui.showNotice',
+	'getPluginPath'=>'Minitalk.getPluginUrl',
+	'openPluginChannel'=>'Minitalk.ui.openPluginChannel'
+);
+
+$js->add('var m = {};');
+if (strpos($templet,'@') === 0) {
+	$js->add('var plugin = parent.plugin;');
+}
+foreach ($methods as $name=>$newname) {
+	if ($newname === null) {
+		$js->add('
+			m.'.$name.' = function() {
+				console.warn("[deprecated] m.'.$name.'() is deprecated in v6.5.");
+			};
+		');
+		
+		$js->add('
+			Minitalk.'.$name.' = function() {
+				console.warn("[deprecated] Minitalk.'.$name.'() is deprecated in v6.5.");
+			};
+		');
+	} else {
+		$js->add('
+			m.'.$name.' = function() {
+				console.warn("[deprecated] m.'.$name.'() is deprecated in v6.5. use '.$newname.'()");
+				return '.$newname.'.apply(Minitalk,arguments);
+			};
+		');
+		
+		if ('Minitalk.'.$name != $newname) {
+			$js->add('
+				Minitalk.'.$name.' = function() {
+					console.warn("[deprecated] Minitalk.'.$name.'() is deprecated in v6.5. use '.$newname.'()");
+					return '.$newname.'.apply(Minitalk,arguments);
+				};
+			');
+		}
+	}
+}
+
+$events = array(
+	'onInit'=>'init',
+	'onMessage'=>'message',
+	'onWhisper'=>'whisper',
+	'onConnect'=>'connect',
+	'onSendWhisper'=>'sendWhisper',
+	'onSendMessage'=>'sendMessage',
+	'onJoinUser'=>'join',
+	'onLeaveUser'=>'leave',
+	'onInvite'=>'invite',
+	'onSendCall'=>'sendCall',
+	'onSendInvite'=>'sendInvite'
+);
+$js->add('
+	Minitalk.on = function(event,handler) {
+		var newevents = '.json_encode($events).';
+		
+		if ($.inArray(event,Object.keys(newevents)) > -1) {
+			console.warn("[deprecated] " + event + " event name is deprecated in v6.5. use " + newevents[event] + " event name.");
+			event = newevents[event];
+		}
+		
+		if (event.indexOf("before") === 0) {
+			this.frame.$(this.frame.document).on(event,function(e) {
+				var args = Array.prototype.slice.call(arguments);
+				args.shift();
+				var returnValue = handler.apply(this,args);
+				if (returnValue === false) {
+					e.stopImmediatePropagation();
+					return false;
+				} else {
+					return true;
+				}
+			});
+		} else {
+			this.frame.$(this.frame.document).on(event,function(e) {
+				var args = Array.prototype.slice.call(arguments);
+				args.shift();
+				handler.apply(this,args);
+			});
+		}
+	};
+');
+
+$js->add('m.myinfo = Minitalk.user.me; Minitalk.on("connecting",function(minitalk,channel,user) { m.myinfo = user; });');
+$js->add('m.viewUser = Minitalk.viewUser; Minitalk.on("init",function(minitalk) { Minitalk.viewUser = m.viewUser; });');
+
+/**
+ * 플러그인을 불러온다.
+ */
+$pluginsPath = @opendir(__MINITALK_PATH__.'/plugins');
+while ($plugin = @readdir($pluginsPath)) {
+	if ($plugin != '.' && $plugin != '..' && is_dir(__MINITALK_PATH__.'/plugins/'.$plugin) == true) {
+		if (is_file(__MINITALK_PATH__.'/plugins/'.$plugin.'/plugin.js') == true) {
+			$js->add(__MINITALK_PATH__.'/plugins/'.$plugin.'/plugin.js');
+		}
+	}
+}
+@closedir($pluginsPath);
+
+if (strpos($templet,'@') === 0) {
+	if (is_dir(__MINITALK_PATH__.'/plugins/'.substr($templet,1)) == true && is_file(__MINITALK_PATH__.'/plugins/'.substr($templet,1).'/channel.js') == true) {
+		$js->add(__MINITALK_PATH__.'/plugins/'.substr($templet,1).'/channel.js');
+	}
+}
 
 /**
  * 이모티콘을 읽어온다.
@@ -64,7 +190,7 @@ while ($emoticon = @readdir($emoticonsPath)) {
 		$emoticons[] = $emoticon;
 	}
 }
-@closedir($emoticonPath);
+@closedir($emoticonsPath);
 sort($emoticons);
 foreach ($emoticons as &$emoticon) {
 	$emoticon = json_decode(file_get_contents(__MINITALK_PATH__.'/emoticons/'.$emoticon.'/emoticon.json'));
@@ -75,7 +201,6 @@ $device = 'PC';
 if (preg_match('/(iPhone|iPad|iPod)/',$_SERVER['HTTP_USER_AGENT']) == true) $device = 'iOS';
 if (preg_match('/(Android)/',$_SERVER['HTTP_USER_AGENT']) == true) $device = 'Android';
 $js->add('Minitalk.device = "'.$device.'";');
-
 $js->add('Minitalk.uuid = "'.md5($_SERVER['REMOTE_ADDR'].time()).'"');
 ?>
 /**

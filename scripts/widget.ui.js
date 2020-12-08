@@ -256,7 +256,7 @@ Minitalk.ui = {
 		$(".chatArea").outerWidth($(".frame").innerWidth(),true);
 		$(".chatArea").outerHeight(height,true);
 		
-		Minitalk.ui.initTool();
+		Minitalk.ui.initTools();
 		Minitalk.ui.autoScroll();
 	},
 	/**
@@ -1290,11 +1290,10 @@ Minitalk.ui = {
 		var formObject = $("<form>").css("display","none").attr("action",Minitalk.getUrl()+"/html/PrivateChannel.php").attr("target",target).attr("method","POST");
 		
 		formObject.append($("<input>").attr("name","channel").attr("value",Minitalk.channel));
+		formObject.append($("<input>").attr("name","code").attr("value",data.code));
+		formObject.append($("<input>").attr("name","templet").attr("value",Minitalk.templet));
 		formObject.append($("<input>").attr("name","owner").attr("value",data.from.nickname));
 		formObject.append($("<input>").attr("name","myinfo").attr("value",JSON.stringify(Minitalk.user.me)));
-		formObject.append($("<input>").attr("name","config").attr("value",JSON.stringify({templet:Minitalk.templet,language:Minitalk.language})));
-		formObject.append($("<input>").attr("name","code").attr("value",data.code));
-		formObject.append($("<input>").attr("name","plugin").attr("value",JSON.stringify(Minitalk.plugin)));
 			
 		if (data.from.nickname == Minitalk.user.me.nickname) {
 			formObject.append($("<input>").attr("name","invite").attr("value",data.to.nickname));
@@ -1321,20 +1320,20 @@ Minitalk.ui = {
 	openPluginChannel:function(plugin,code,width,height,data) {
 		var windowLeft = Math.ceil((screen.width-width)/2);
 		var windowTop = Math.ceil((screen.height-height)/2 > 2);
-		
+		console.log("openPluginChannel",plugin,code,data);
 		var target = plugin+Math.random();
 		
-		var formObject = $("<form>").css("display","none").attr("action",Minitalk.getUrl()+"/html/PluginChannel.php").attr("target",target).attr("method","POST");
+		var formObject = $("<form>").css("display","none").attr("action",Minitalk.getUrl()+"/html/PrivateChannel.php").attr("target",target).attr("method","POST");
 		
 		formObject.append($("<input>").attr("name","channel").attr("value",Minitalk.channel));
 		formObject.append($("<input>").attr("name","code").attr("value",code));
-		formObject.append($("<input>").attr("name","parent").attr("value",Minitalk.isPrivate ? m.private : Minitalk.channel));
+		formObject.append($("<input>").attr("name","templet").attr("value",Minitalk.templet));
+		formObject.append($("<input>").attr("name","owner").attr("value",data.nickname ? data.nickname : Minitalk.user.me.nickname));
 		formObject.append($("<input>").attr("name","myinfo").attr("value",JSON.stringify(Minitalk.user.me)));
-		formObject.append($("<input>").attr("name","config").attr("value",JSON.stringify({templet:Minitalk.templet,language:Minitalk.language})));
 		formObject.append($("<input>").attr("name","plugin").attr("value",plugin));
 		formObject.append($("<input>").attr("name","data").attr("value",JSON.stringify(data)));
 		$("body").append(formObject);
-
+		
 		var popup = window.open("",target,"top="+windowTop+",left="+windowLeft+",width="+width+",height="+height+",scrollbars=0");
 		if (popup) {
 			popup.focus();

@@ -55,7 +55,8 @@ Minitalk.protocol = {
 			Minitalk.user.isVisibleUsers = false;
 		}
 		
-		Minitalk.fireEvent("connect",[data.channel,data.usercount]);
+		Minitalk.fireEvent("connecting",[Minitalk.channel,data.me,data.usercount]);
+		Minitalk.fireEvent("connect",[Minitalk.channel,data.me,data.usercount]);
 		
 		Minitalk.socket.send("logs",{limit:Minitalk.logLimit,time:Minitalk.storage("lastLogTime")});
 	},

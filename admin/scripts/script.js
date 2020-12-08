@@ -1059,8 +1059,6 @@ var Minitalk = {
 			}
 		}
 		
-		console.log(code);
-		
 		return replacement == null ? code : replacement;
 	},
 	/**

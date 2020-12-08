@@ -312,7 +312,7 @@ Minitalk.user = {
 		}
 		
 		if (user.opper == "ADMIN") {
-			sHTML+= '<img src="'+Minitalk.getUrl()+'/templets/'+Minitalk.templet+'/images/icon_admin.gif" />';
+			sHTML+= '<img src="'+Minitalk.getTempletUrl(Minitalk.templet)+'/images/icon_admin.gif" />';
 		}
 		tag.html(sHTML);
 		tag.on("click",function(e) {
@@ -329,9 +329,14 @@ Minitalk.user = {
 	/**
 	 * 유저정보를 추가한다.
 	 */
-	addUInfo:function(key,value) {
-		if (!Minitalk.user.me.info || typeof Minitalk.user.me.info != "object") Minitalk.user.me.info = {};
-		Minitalk.user.me.info[key] = value;
+	addInfo:function(key,value) {
+		if (Minitalk.socket.isConnected() == true) {
+			if (!Minitalk.user.me.info || typeof Minitalk.user.me.info != "object") Minitalk.user.me.info = {};
+			Minitalk.user.me.info[key] = value;
+		} else {
+			if (!Minitalk.info || typeof Minitalk.info != "object") Minitalk.info = {};
+			Minitalk.info[key] = value;
+		}
 	},
 	/**
 	 * 유저메뉴를 토클한다.

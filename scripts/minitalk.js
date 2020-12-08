@@ -124,7 +124,7 @@ if (isMinitalkIncluded === undefined) {
 		 * @public object[] listeners 이벤트리스너를 정의한다.
 		 * @public object[] protocols 사용자정의 프로토콜을 정의한다.
 		 */
-		this.id = "MiniTalk" + Math.ceil(Math.random() * 10000000);
+		this.id = opt.id ? opt.id : null;
 		this.channel = opt.channel ? opt.channel : null;
 		this.private = opt.private ? opt.private : null;
 		this.nickname = opt.nickname ? opt.nickname : "";
@@ -204,6 +204,24 @@ if (isMinitalkIncluded === undefined) {
 			if (idx !== undefined) url+= "/" + idx;
 			
 			return url;
+		};
+		
+		/**
+		 * 플러그인 경로를 가져온다.
+		 */
+		this.getPluginUrl = function(plugin) {
+			return this.getUrl() + "/plugins/" + plugin;
+		};
+		
+		/**
+		 * 템플릿 경로를 가져온다.
+		 */
+		this.getTempletUrl = function(templet) {
+			if (templet.indexOf("@") === 0) {
+				return this.getPluginUrl(templet.replace(/^@/,''));
+			} else {
+				return this.getUrl() + "/templets/" + templet;
+			}
 		};
 		
 		/**
