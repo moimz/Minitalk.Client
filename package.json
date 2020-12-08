@@ -11,8 +11,7 @@
 	"requirements":{
 	},
 	"directories":{
-		"configs":"0707",
-		"logs":"0707"
+		"configs":"0707"
 	},
 	"language":"ko",
 	"configs":["key","db"],
