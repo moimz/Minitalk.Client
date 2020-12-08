@@ -3,6 +3,8 @@
 	Deny from all
 </LimitExcept>
 
+php_flag display_errors on
+
 RewriteEngine On
 
 RewriteCond %{REQUEST_FILENAME} !-f
