@@ -54,6 +54,7 @@ if ($logged === null) {
 	<script type="text/javascript" src="../scripts/minitalk.js?rnd=<?php echo time(); ?>"></script>
 	<script type="text/javascript">
 	new Minitalk({
+		id:"MinitalkPreview",
 		channel:"<?php echo $channel->channel; ?>",
 		width:"100%",
 		height:"100%",
