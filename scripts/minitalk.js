@@ -160,7 +160,6 @@ if (isMinitalkIncluded === undefined) {
 		this.toolType = opt.toolType ? opt.toolType : "icon";
 		
 		this.logLimit = opt.logLimit !== undefined ? opt.logLimit : 15;
-		this.chatLimit = opt.chatLimit ? opt.chatLimit : "ALL";
 		this.fontSettingLimit = opt.fontSettingLimit ? opt.fontSettingLimit : "ALL";
 		this.fontSettingHide = opt.fontSettingHide === true ? true : false;
 		
@@ -177,8 +176,6 @@ if (isMinitalkIncluded === undefined) {
 		this.uuid = null;
 		this.maxuser = 0;
 		this.isPrivate = this.private == null ? false : true;
-		this.isNickname = opt.isNickname !== false ? true : false;
-		this.isBroadcast = opt.isBroadcast !== false ? true : false;
 		this.isAutoHideUserList = false;
 		this.isAlertStorage = false;
 		

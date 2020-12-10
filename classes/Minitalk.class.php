@@ -636,7 +636,7 @@ class Minitalk {
 			$results->success = true;
 			$results->connection = $server->connection;
 			
-			$results->connection->channel = Encoder(json_encode(array('name'=>$channel->channel,'title'=>$channel->title,'password'=>$channel->password,'max_user'=>$channel->max_user,'is_nickname'=>$channel->is_nickname,'grade_chat'=>$channel->grade_chat,'grade_font'=>$channel->grade_font)));
+			$results->connection->channel = Encoder(json_encode(array('name'=>$channel->channel,'title'=>$channel->title,'password'=>$channel->password,'max_user'=>$channel->max_user,'is_nickname'=>$channel->is_nickname,'is_broadcast'=>$channel->is_broadcast,'grade_chat'=>$channel->grade_chat,'grade_font'=>$channel->grade_font)));
 		}
 		
 		$results->channel = new stdClass();

@@ -47,8 +47,8 @@ Minitalk.user = {
 			},
 			fn:function(minitalk,user,myinfo) {
 				$(".userInfoNickname").val(minitalk.user.me.nickname);
-				if (minitalk.isNickname == false || minitalk.isPrivate == true) $(".userInfoNickname").attr("disabled",true);
-				else $(".userInfoNickname").attr("disabled",false);
+				if (minitalk.socket.getPermission("nickname") == true) $(".userInfoNickname").attr("disabled",null);
+				else $(".userInfoNickname").attr("disabled","disabled");
 				$(".userInfoStatusIcon").css("backgroundImage","url("+minitalk.statusIconPath+"/"+minitalk.user.me.device+"/"+minitalk.user.me.status+".png)");
 				$(".userInfoStatusText").text(Minitalk.getText("status/"+minitalk.user.me.status));
 				$(".userInfoStatus").attr("status",minitalk.user.me.status);

@@ -128,10 +128,11 @@ Minitalk.ui = {
 		});
 		
 		$(".toggleUserInfo").on("click",function() {
+			console.log("click",Minitalk.socket.getPermission("nickname"));
 			if ($(".userInfoLayer").css("display") == "none") {
 				$(".userInfoNickname").val(Minitalk.user.me.nickname);
-				if (Minitalk.isNickname == false || Minitalk.isPrivate == true) $(".userInfoNickname").attr("disabled",true);
-				else $(".userInfoNickname").attr("disabled",false);
+				if (Minitalk.socket.getPermission("nickname") == true) $(".userInfoNickname").attr("disabled",null);
+				else $(".userInfoNickname").attr("disabled","disabled");
 				$(".userInfoStatusIcon").css("backgroundImage","url("+Minitalk.statusIconPath+"/"+Minitalk.user.me.device+"/"+Minitalk.user.me.status+".png)");
 				$(".userInfoStatusText").text(Minitalk.getText("status/"+Minitalk.user.me.status));
 				$(".userInfoStatus").attr("status",Minitalk.user.me.status);
@@ -933,7 +934,7 @@ Minitalk.ui = {
 	 * @param isRaw 가공되지 않은 메시지인지 여부
 	 */
 	sendMessage:function(message,isRaw) {
-		if (Minitalk.user.checkLimit(Minitalk.chatLimit,Minitalk.user.me.opper) == false) {
+		if (Minitalk.socket.getPermission("chat") == false) {
 			Minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_ALLOWED_CHATTING"));
 			return;
 		}

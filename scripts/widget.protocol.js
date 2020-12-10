@@ -31,6 +31,7 @@ Minitalk.protocol = {
 		Minitalk.socket.connecting = false;
 		Minitalk.socket.reconnectable = true;
 		Minitalk.socket.joined = false;
+		Minitalk.socket.permission = data.permission;
 		Minitalk.socket.channel.title = data.channel.title;
 		
 		/**
@@ -92,7 +93,7 @@ Minitalk.protocol = {
 		if (data.type == "NOTICE") {
 			Minitalk.ui.showNotice(data.message,data.url);
 		} else {
-			if (Minitalk.isBroadcast === true) {
+			if (Minitalk.socket.getPermission("broadcast") === true) {
 				if (data.url) {
 					Minitalk.ui.printMessage("broadcast",data.nickname+m.splitString+'<a href="'+data.url+'" target="_blank">'+data.message+'</a>');
 				} else {
