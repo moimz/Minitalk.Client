@@ -30,7 +30,7 @@ Minitalk.ui = {
 		$(".frame").removeClass("vertical").removeClass("horizontal").addClass(Minitalk.type);
 		$(".frame").outerHeight($(".outFrame").length == 0 ? $(document).height() : $(".outFrame").innerHeight(),true);
 		$(".inputText").outerWidth($(".inputArea").innerWidth() - $(".inputButton").outerWidth(true),true);
-		$(".title").text(Minitalk.title == null ? "Minitalk" : Minitalk.title);
+		$(".title").text(Minitalk.title == null ? "Connecting..." : Minitalk.title);
 		
 		var height = $(".frame").innerHeight() - $(".titleArea").outerHeight(true) - $(".actionArea").outerHeight(true);
 		
@@ -530,7 +530,7 @@ Minitalk.ui = {
 					thisButton.attr("toolIDX",i);
 					thisButton.on("mouseover",function() { $(this).addClass("mouseover"); });
 					thisButton.on("mouseout",function() { $(this).removeClass("mouseover"); });
-					thisButton.on("click",function() { Minitalk.ui.tools[$(this).attr("toolIDX")].fn(m); });
+					thisButton.on("click",function() { Minitalk.ui.tools[$(this).attr("toolIDX")].fn(Minitalk); });
 					var iconPath = Minitalk.ui.tools[i].cls ? Minitalk.getUrl()+'/templets/'+Minitalk.templet+'/images/'+Minitalk.ui.tools[i].icon : Minitalk.ui.tools[i].icon;
 					thisButton.append($("<span>").addClass("toolListIcon").css("backgroundImage","url("+iconPath+")"));
 					thisButton.append($("<span>").addClass("toolListText").text(Minitalk.ui.tools[i].text));
