@@ -700,7 +700,7 @@ Ext.onReady(function () {
 						},{
 							header:Admin.getText("channel/columns/grade_font"),
 							dataIndex:"grade_font",
-							width:80,
+							width:90,
 							align:"center",
 							renderer:function(value) {
 								var colors = {ADMIN:"red",POWERUSER:"orange",MEMBER:"green",ALL:"blue"};
@@ -709,7 +709,7 @@ Ext.onReady(function () {
 						},{
 							header:Admin.getText("channel/columns/grade_chat"),
 							dataIndex:"grade_chat",
-							width:80,
+							width:90,
 							align:"center",
 							renderer:function(value) {
 								var colors = {ADMIN:"red",POWERUSER:"orange",MEMBER:"green",ALL:"blue"};
