@@ -105,12 +105,22 @@ function MinitalkDecoder($value,$key=null,$mode='base64') {
 }
 
 /**
+ * 클라이언트 아이피를 가져온다.
+ * Proxy 서버를 통해 접속하였을 경우에도 가급적 실제 아이피를 가져온다.
+ *
+ * @return string $ip
+ */
+function GetClientIp() {
+	return isset($_SERVER['HTTP_X_FORWARDED_FOR']) == true ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
+}
+
+/**
  * 유저 권한코드를 생성한다.
  *
  * @param string $opper 권한코드 (ADMIN | POWERUSER | MEMBER)
  */
 function MinitalkOpperCode($opper) {
-	$value = json_encode(array('opper'=>$opper,'ip'=>$_SERVER['REMOTE_ADDR']));
+	$value = json_encode(array('opper'=>$opper,'ip'=>GetClientIp()));
 	return MinitalkEncoder($value);
 }
 ?>
