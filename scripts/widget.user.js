@@ -38,14 +38,14 @@ Minitalk.user = {
 		/**
 		 * 참여 메시지를 출력한다.
 		 */
-		if (Minitalk.socket.joined == true && Minitalk.viewUserMessage == true && Minitalk.viewUserLimit <= user.level) {
+		if (Minitalk.socket.joined == true && Minitalk.viewUserNotification == true && Minitalk.viewUserNotificationLimit <= user.level) {
 			Minitalk.ui.printUserMessage("join",user);
 		}
 		
 		/**
 		 * 채널의 접속자수를 변경한다.
 		 */
-		Minitalk.user.printUserCount(count,time);
+		Minitalk.ui.printUserCount(count,time);
 		
 		/**
 		 * 이벤트를 발생시킨다.
@@ -63,7 +63,7 @@ Minitalk.user = {
 		/**
 		 * 종료 메시지를 출력한다.
 		 */
-		if (Minitalk.socket.joined == true && Minitalk.viewUserMessage == true && Minitalk.viewUserLimit <= user.level) {
+		if (Minitalk.socket.joined == true && Minitalk.viewUserNotification == true && Minitalk.viewUserNotificationLimit <= user.level) {
 			Minitalk.ui.printUserMessage("leave",user);
 		}
 		
@@ -203,14 +203,8 @@ Minitalk.user = {
 	 */
 	toggleMenus:function($dom,e) {
 		var user = $dom.data("user");
-		if (user === undefined) {
-			e.stopImmediatePropagation();
-			return;
-		}
-		
-		if (Minitalk.socket.isConnected() === false) {
-			return;
-		}
+		if (user === undefined) return;
+		if (Minitalk.socket.isConnected() === false) return;
 		
 		/**
 		 * 기존에 보이고 있던 유저메뉴가 있다면 제거한다.
@@ -218,6 +212,10 @@ Minitalk.user = {
 		if ($("ul[data-role=usermenus]").length > 0) {
 			$("ul[data-role=usermenus]").remove();
 		}
+		
+		$("ul[data-role=usermenus]").on("click",function(e) {
+			e.stopImmediatePropagation();
+		});
 		
 		var separator = true;
 		
@@ -253,6 +251,8 @@ Minitalk.user = {
 		
 		$menus.height($menus.height());
 		
+		var separator = true;
+		
 		Minitalk.user.getUser(user.nickname,function(result) {
 			var $menus = $("ul[data-role=usermenus]");
 			if ($menus.length == 0) return;
@@ -285,12 +285,27 @@ Minitalk.user = {
 						$menu.addClass("separator");
 						$menu.append($("<i>"));
 					} else {
-						separator = false;
-						
 						/**
 						 * 기본 메뉴를 추가한다.
 						 */
-						if ($.inArray(menu,["whisper","call","showip","banip"]) === -1) continue;
+						if ($.inArray(menu,["configs","whisper","call","showip","banip"]) === -1) continue;
+						
+						/**
+						 * 관리자가 아닌 경우 관리자 메뉴를 표시하지 않는다.
+						 */
+						if ($.inArray(menu,["banmsg","showip","banip","opper","deopper"]) !== -1 && Minitalk.user.me.level < 9) continue;
+						
+						/**
+						 * 자신에게 숨겨야 하는 메뉴를 표시하지 않는다.
+						 */
+						if ($.inArray(menu,["whisper","call"]) !== -1 && Minitalk.user.me.nickname == user.nickname) continue;
+						
+						/**
+						 * 자신에게만 보여야하는 메뉴를 표시하지 않는다.
+						 */
+						if ($.inArray(menu,["configs"]) !== -1 && Minitalk.user.me.nickname != user.nickname) continue;
+						
+						separator = false;
 						
 						var $menu = $("<li>");
 						var $button = $("<button>").attr("type","button").attr("data-menu",menu);
@@ -323,6 +338,14 @@ Minitalk.user = {
 				}
 			}
 			
+			if ($("li:last",$menus).hasClass("separator") === true) {
+				$("li:last",$menus).remove();
+			}
+			
+			if ($("li:first",$menus).hasClass("separator") === true) {
+				$("li:first",$menus).remove();
+			}
+			
 			var oHeight = $menus.height();
 			$menus.height("auto");
 			var height = $menus.height();
@@ -347,10 +370,12 @@ Minitalk.user = {
 		
 		if (typeof menu == "string") {
 			switch (menu) {
+				case "configs" :
+					Minitalk.ui.activeTab("configs");
+					break;
+					
 				case "whisper" :
-					var $input = $("div[data-role=input] > textarea");
-					$input.focus();
-					$input.val("/w " + user.nickname + " ");
+					Minitalk.ui.setInputVal("/w " + user.nickname);
 					$menus.remove();
 					break;
 					
@@ -371,8 +396,6 @@ Minitalk.user = {
 			}
 		}
 		
-		if (Minitalk.fireEvent("afterActiveUserMenu",[menu,$menu,e]) === false) return;
-		
-		e.stopImmediatePropagation();
+		Minitalk.fireEvent("afterActiveUserMenu",[menu,$menu,e]);
 	}
 };
