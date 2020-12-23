@@ -33,6 +33,7 @@ Minitalk.protocol = {
 		Minitalk.socket.joined = false;
 		Minitalk.socket.permission = data.permission;
 		Minitalk.socket.channel.title = data.channel.title;
+		Minitalk.socket.token = data.token;
 		
 		/**
 		 * 나의정보를 저장한다.
@@ -40,6 +41,9 @@ Minitalk.protocol = {
 		Minitalk.user.me = data.me;
 		Minitalk.storage("me",data.me);
 		
+		/**
+		 * 채널명을 출력한다.
+		 */
 		Minitalk.ui.printTitle(data.channel.title);
 		if (data.channel.room.indexOf("#") == 0 && data.channel.room.split(":").length == 3) {
 			var temp = data.channel.room.split(":");
