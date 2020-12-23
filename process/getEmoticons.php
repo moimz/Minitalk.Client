@@ -23,6 +23,7 @@ while ($emoticonName = @readdir($emoticonsPath)) {
 		$emoticons[] = $package;
 	}
 }
+sort($emoticons);
 
 $results->success = true;
 $results->emoticons = $emoticons;

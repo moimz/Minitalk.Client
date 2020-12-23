@@ -26,6 +26,7 @@ while ($emoticonName = @readdir($emoticonsPath)) {
 		$items[] = $category.'/'.$emoticonName;
 	}
 }
+sort($items);
 
 $results->success = true;
 $results->items = $items;
