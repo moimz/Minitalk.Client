@@ -49,17 +49,17 @@ Minitalk.protocol = {
 		Minitalk.ui.unnotify("disconnect");
 		
 		/**
-		 * 박스에 접속한 경우
+		 * 채널명을 출력한다.
 		 */
 		if (data.box !== null) {
 			Minitalk.box.connection = data.box;
 			
 			Minitalk.ui.printTitle(data.box.title);
-			Minitalk.ui.notify("connecting","success",Minitalk.getText("action/connected").replace("{CHANNEL}",data.box.title),true,true);
+			Minitalk.ui.notify("connecting","success",Minitalk.getText("action/connected").replace("{CHANNEL}",data.box.title));
 		} else {
 			Minitalk.box.connection = null;
 			Minitalk.ui.printTitle(data.channel.title);
-			Minitalk.ui.notify("connecting","success",Minitalk.getText("action/connected").replace("{CHANNEL}",data.channel.title),true,true);
+			Minitalk.ui.notify("connecting","success",Minitalk.getText("action/connected").replace("{CHANNEL}",data.channel.title));
 		}
 		
 		/**
@@ -68,9 +68,14 @@ Minitalk.protocol = {
 		Minitalk.ui.initTools();
 		
 		/**
+		 * 메시지 폰트설정을 초기화한다.
+		 */
+		Minitalk.ui.initFonts();
+		
+		/**
 		 * 접속자수를 갱신한다.
 		 */
-		Minitalk.user.printUserCount(data.count,data.time);
+		Minitalk.ui.printUserCount(data.count,data.time);
 		
 		/**
 		 * 이전대화기록을 사용하는 채널의 경우, 이전대화 불러오기 버튼을 추가한다.
@@ -87,11 +92,6 @@ Minitalk.protocol = {
 		} else {
 			Minitalk.socket.joined = true;
 		}
-		
-		/**
-		 * 메시지 폰트설정을 초기화한다.
-		 */
-		Minitalk.ui.initFonts();
 		
 		/**
 		 * 채팅위젯의 UI를 활성화한다.
