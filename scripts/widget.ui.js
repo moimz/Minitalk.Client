@@ -1442,6 +1442,23 @@ Minitalk.ui = {
 			var notification = new Notification("Minitalk",{body:message,icon:Minitalk.getUrl()+"/images/minitalk.png"});
 		}
 	},
+	/**
+	 * 토글된 객체를 초기화한다.
+	 */
+	resetToggle:function() {
+		if ($("div[data-role=configs]").length > 0) {
+			$("div[data-role=configs]").remove();
+		}
+		
+		if ($("ul[data-role=usermenus]").length > 0) {
+			$("ul[data-role=usermenus]").remove();
+		}
+		
+		var $toolLayers = $("footer > div[data-role=layers] > div[data-tool]");
+		if ($toolLayers.length > 0) {
+			$toolLayers.each(function() {
+				Minitalk.ui.closeToolLayer($(this).attr("data-tool"));
+			});
 		}
 	}
 };
