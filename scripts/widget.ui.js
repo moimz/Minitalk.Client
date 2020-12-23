@@ -187,294 +187,143 @@ Minitalk.ui = {
 	 * 툴바를 초기화한다.
 	 */
 	initTools:function() {
-		var defaultTool = [{
-			cls:"toolBold",
-			icon:"icon_bold.png",
-			text:Minitalk.getText("tool/bold"),
-			fn:function(minitalk) {
-				if (minitalk.user.checkLimit(minitalk.fontSettingLimit,minitalk.user.me.opper) == false) {
-					minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_ALLOWED_FONT_SETTING"));
-					minitalk.setting("fontBold",false);
-					$(".toolBold").removeClass("selected");
-					$(".inputText").css("fontWeight","normal");
-					return false;
-				}
-				
-				if (minitalk.setting("fontBold") == true) {
-					minitalk.setting("fontBold",false);
-					$(".toolBold").removeClass("selected");
-					$(".inputText").css("fontWeight","normal");
-				} else {
-					minitalk.setting("fontBold",true);
-					$(".toolBold").addClass("selected");
-					$(".inputText").css("fontWeight","bold");
-				}
-			}
-		},{
-			cls:"toolItalic",
-			icon:"icon_italic.png",
-			text:Minitalk.getText("tool/italic"),
-			fn:function(minitalk) {
-				if (minitalk.user.checkLimit(minitalk.fontSettingLimit,minitalk.user.me.opper) == false) {
-					minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_ALLOWED_FONT_SETTING"));
-					minitalk.setting("fontItalic",false);
-					$(".toolItalic").removeClass("selected");
-					$(".inputText").css("fontStyle","");
-					return false;
-				}
-				
-				if (minitalk.setting("fontItalic") == true) {
-					minitalk.setting("fontItalic",false);
-					$(".toolItalic").removeClass("selected");
-					$(".inputText").css("fontStyle","");
-				} else {
-					minitalk.setting("fontItalic",true);
-					$(".toolItalic").addClass("selected");
-					$(".inputText").css("fontStyle","italic");
-				}
-			}
-		},{
-			cls:"toolUnderline",
-			icon:"icon_underline.png",
-			text:Minitalk.getText("tool/underline"),
-			fn:function(minitalk) {
-				if (minitalk.user.checkLimit(minitalk.fontSettingLimit,minitalk.user.me.opper) == false) {
-					minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_ALLOWED_FONT_SETTING"));
-					minitalk.setting("fontUnderline",false);
-					$(".toolUnderline").removeClass("selected");
-					$(".inputText").css("textDecoration","");
-					return false;
-				}
-				
-				if (minitalk.setting("fontUnderline") == true) {
-					minitalk.setting("fontUnderline",false);
-					$(".toolUnderline").removeClass("selected");
-					$(".inputText").css("textDecoration","");
-				} else {
-					minitalk.setting("fontUnderline",true);
-					$(".toolUnderline").addClass("selected");
-					$(".inputText").css("textDecoration","underline");
-				}
-			}
-		},{
-			cls:"toolColor",
-			icon:"icon_color.png",
-			text:Minitalk.getText("tool/color"),
-			fn:function(minitalk) {
-				if (minitalk.user.checkLimit(minitalk.fontSettingLimit,minitalk.user.me.opper) == false) {
-					minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_ALLOWED_FONT_SETTING"));
-					$(".inputText").css("color","");
-					return false;
-				}
-				
-				minitalk.ui.selectFontColor();
-			}
-		},"-",{
-			cls:"toolEmoticon",
-			icon:"icon_emoticon.png",
-			text:Minitalk.getText("tool/emoticon"),
-			fn:function(minitalk) {
-				minitalk.ui.insertEmoticon();
-			}
-		},"-",{
-			cls:"toolMute",
-			icon:"icon_mute.png",
-			text:Minitalk.getText("tool/mute"),
-			fn:function(minitalk) {
-				if (minitalk.setting("mute") == true) {
-					minitalk.setting("mute",false);
-					minitalk.ui.printMessage("system",Minitalk.getText("action/play_sound"));
-					$(".toolMute").removeClass("selected");
-				} else {
-					minitalk.setting("mute",true);
-					minitalk.ui.printMessage("system",Minitalk.getText("action/mute_sound"));
-					$(".toolMute").addClass("selected");
-				}
-			}
-		},{
-			cls:"toolPush",
-			icon:"icon_push.png",
-			text:Minitalk.getText("tool/push"),
-			fn:function(minitalk) {
-				if (minitalk.setting("push") == false) {
-					if (window.Notification !== undefined) {
-						if (Notification.permission == "granted") {
-							minitalk.setting("push",true);
-							minitalk.ui.printMessage("system",Minitalk.getText("action/use_push"));
-							$(".toolPush").addClass("selected");
-						} else if (Notification.permission != "granted") {
-							Notification.requestPermission(function(permission) {
-								if (Notification.permission !== undefined) {
-									Notification.permission = permission;
-								}
-								
-								if (permission == "granted") {
-									Minitalk.setSetting("push",true);
-									Minitalk.ui.printMessage("system",Minitalk.getText("action/use_push"));
-									$(".toolPush").addClass("selected");
-								} else {
-									Minitalk.ui.printMessage("error",Minitalk.getErrorText("DISABLED_PUSH"));
-								}
-							});
-						}
-					} else {
-						Minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_SUPPORTED_BROWSER"));
-					}
-				} else {
-					minitalk.setting("push",false);
-					$(".toolPush").removeClass("selected");
-					Minitalk.ui.printMessage("system",Minitalk.getText("action/stop_push"));
-				}
-			}
-		},"-",{
-			cls:"toolScroll",
-			icon:"icon_scroll.png",
-			text:Minitalk.getText("tool/scroll"),
-			fn:function(minitalk) {
-				if (minitalk.ui.isFixedScroll == true) {
-					minitalk.ui.printMessage("system",Minitalk.getText("action/use_auto_scroll"));
-					minitalk.ui.isFixedScroll = false;
-					minitalk.ui.autoScroll();
-					$(".toolScroll").removeClass("selected");
-				} else {
-					minitalk.ui.printMessage("system",Minitalk.getText("action/use_fixed_scroll"));
-					minitalk.ui.isFixedScroll = true;
-					$(".toolScroll").addClass("selected");
-				}
-			}
-		},{
-			cls:"toolClear",
-			icon:"icon_clear.png",
-			text:Minitalk.getText("tool/clear"),
-			fn:function(minitalk) {
-				if (minitalk.user.me.opper == "ADMIN" && minitalk.logLimit > 0 && confirm(Minitalk.getText("action/clear_log_confirm")) == true) {
-					minitalk.socket.send("clearlog",null);
-				} else {
-					$(".chatArea").html("");
-					minitalk.ui.printMessage("system",Minitalk.getText("action/clear_log_self"));
-					minitalk.storage("logList",[]);
-				}
-			}
-		}];
+		var $footer = $("footer");
+		var $tools = $("ul[data-role=tools]",$footer);
+		var $lists = $("ul[data-role=lists]",$footer);
+		$tools.attr("data-type",Minitalk.toolType);
+		$tools.empty();
+		$lists.empty();
 		
-		if (Minitalk.fontSettingHide == true) {
-			defaultTool.shift();
-			defaultTool.shift();
-			defaultTool.shift();
-			defaultTool.shift();
-			defaultTool.shift();
-		}
+		var $more = $("<li>").addClass("more");
+		var $button = $("<button>").attr("type","button").attr("data-tool","more");
+		$button.append($("<i>").addClass("icon"));
+		$button.append($("<span>").html(Minitalk.getText("tool/more")));
+		$button.on("click",function(e) {
+			Minitalk.ui.toggleTools();
+			e.stopImmediatePropagation();
+		});
+		$more.append($button);
+		$tools.append($more);
 		
-		var listStart = 0;
-		var toolsWidth = 0;
-		var insertSplit = false;
-		Minitalk.ui.tools = defaultTool.concat(Minitalk.addToolList);
+		var limit = $tools.width();
+		var limiter = $more.outerWidth(true);
+		var separator = true;
 		
-		$(".toolArea").html("");
-		$(".toolListLayer").html("");
-
-		for (var i=0, loop=Minitalk.ui.tools.length;i<loop;i++) {
-			if (typeof Minitalk.ui.tools[i] == "object") {
-				var thisButton = $("<button>").addClass("toolButton toolButtonOff");
-				thisButton.attr("title",Minitalk.ui.tools[i].text);
-				thisButton.attr("toolIDX",i);
-				if (Minitalk.ui.tools[i].cls) thisButton.addClass(Minitalk.ui.tools[i].cls);
-				thisButton.on("mouseover",function() { $(this).addClass("mouseover"); });
-				thisButton.on("mouseout",function() { $(this).removeClass("mouseover"); });
-				thisButton.on("click",function() { Minitalk.ui.tools[$(this).attr("toolIDX")].fn(Minitalk); });
+		for (var index in Minitalk.tools) {
+			var tool = Minitalk.tools[index];
+			if (typeof tool == "string") {
+				/**
+				 * 권한에 따라 툴바 버튼을 추가한다.
+				 */
+				if (Minitalk.socket.getPermission("font") !== true && $.inArray(tool,["bold","italic","underline","color"]) > -1) continue;
 				
-				var thisButtonInner = $("<div>").addClass("toolButtonInner");
-				
-				if (Minitalk.toolType != "text") {
-					var iconPath = Minitalk.ui.tools[i].cls ? Minitalk.getUrl()+'/templets/'+Minitalk.templet+'/images/'+Minitalk.ui.tools[i].icon : Minitalk.ui.tools[i].icon;
-					thisButtonInner.append($("<span>").addClass("toolButtonIcon").css("backgroundImage","url("+iconPath+")"));
-				}
-				
-				if (Minitalk.toolType != "icon" || Minitalk.ui.tools[i].viewText === true) {
-					thisButtonInner.append($("<span>").addClass("toolButtonText").text(Minitalk.ui.tools[i].text));
-				}
-				thisButton.append(thisButtonInner);
-				
-				if (insertSplit == true) {
-					insertSplit = false;
-					var thisSplit = $("<div>").addClass("toolSeparator");
-					$(".toolArea").append(thisSplit);
-					toolsWidth+= thisSplit.outerWidth(true);
-				} else {
-					thisSplit = null;
-				}
-				
-				$(".toolArea").append(thisButton);
-				toolsWidth+= thisButton.outerWidth(true);
-				
-				if (toolsWidth > $(".toolArea").innerWidth()-25) {
-					thisButton.remove();
-					if (thisSplit != null) thisSplit.remove();
-					listStart = i;
-					break;
-				}
-			} else {
-				insertSplit = true;
-			}
-		}
-		
-		if (listStart > 0) {
-			var moreButton = $("<div>").addClass("toolButtonMore");
-			moreButton.on("mouseover",function() { if ($(this).attr("disabled") != "disabled") $(this).addClass("mouseover"); });
-			moreButton.on("mouseout",function() { if ($(this).attr("disabled") != "disabled") $(this).removeClass("mouseover"); });
-			$(".toolArea").append(moreButton);
-			
-			for (var i=listStart, loop=Minitalk.ui.tools.length;i<loop;i++) {
-				if (i == listStart && typeof Minitalk.ui.tools[i] != "object") continue;
-
-				if (typeof Minitalk.ui.tools[i] == "object") {
-					var thisButton = $("<div>").addClass("toolList");
-					if (Minitalk.ui.tools[i].cls) thisButton.addClass(Minitalk.ui.tools[i].cls);
-					thisButton.attr("toolIDX",i);
-					thisButton.on("mouseover",function() { $(this).addClass("mouseover"); });
-					thisButton.on("mouseout",function() { $(this).removeClass("mouseover"); });
-					thisButton.on("click",function() { Minitalk.ui.tools[$(this).attr("toolIDX")].fn(Minitalk); });
-					var iconPath = Minitalk.ui.tools[i].cls ? Minitalk.getUrl()+'/templets/'+Minitalk.templet+'/images/'+Minitalk.ui.tools[i].icon : Minitalk.ui.tools[i].icon;
-					thisButton.append($("<span>").addClass("toolListIcon").css("backgroundImage","url("+iconPath+")"));
-					thisButton.append($("<span>").addClass("toolListText").text(Minitalk.ui.tools[i].text));
+				/**
+				 * 구분자일 경우
+				 */
+				if (tool == "-") {
+					/**
+					 * 툴바 처음이거나, 현 구분자 직전에 구분자가 추가된 경우 추가로 구분자를 추가하지 않는다.
+					 */
+					if (separator === true) continue;
+					separator = true;
 					
-					$(".toolListLayer").append(thisButton);
+					var $tool = $("<li>");
+					$tool.addClass("separator");
+					$tool.append($("<i>"));
 				} else {
-					$(".toolListLayer").append($("<div>").addClass("toolSeparator"));
+					separator = false;
+					
+					/**
+					 * 기본툴버튼을 추가한다.
+					 */
+					if ($.inArray(tool,["bold","underline","italic","color","emoticon","mute","push","scroll","clear"]) === -1) continue;
+					
+					var $tool = $("<li>");
+					var $button = $("<button>").attr("type","button").attr("data-tool",tool);
+					
+					$button.append($("<i>").addClass("icon"));
+					$button.append($("<span>").html(Minitalk.getText("tool/" + tool)));
+					$button.data("tool",tool);
+					$button.on("click",function(e) {
+						Minitalk.ui.activeTool($(this),e);
+					});
+					$tool.append($button);
 				}
+				
+				$tools.append($tool);
+			} else {
+				separator = false;
+				
+				/**
+				 * 사용자정의 툴버튼을 추가한다.
+				 */
+				var $tool = $("<li>");
+				var $button = $("<button>").attr("type","button").attr("data-tool","custom");
+				$button.append($("<i>").addClass(tool.iconCls));
+				$button.append($("<span>").html(tool.text));
+				$button.data("tool",tool);
+				$button.on("click",function(e) {
+					Minitalk.ui.activeTool($(this),e);
+				});
+				$tool.append($button);
+				$tools.append($tool);
 			}
 			
-			moreButton.on("click",function() {
-				if ($(this).attr("disabled") != "disabled") {
-					if ($(".toolListLayer").css("display") == "none") {
-						$(".toolListLayer").show();
-						var height = $(".toolListLayer").outerHeight(true);
-						$(".toolListLayer").outerHeight(1);
-						$(".toolListLayer").animate({height:height},400);
-						
-						$(".toolButtonMore").addClass("selected");
-					} else {
-						$(".toolListLayer").animate({height:1},400,function() { $(".toolListLayer").hide(); $(".toolListLayer").height("auto"); });
-						
-						$(".toolButtonMore").removeClass("selected");
-					}
+			limiter+= $tool.outerWidth(true);
+		}
+		
+		/**
+		 * 툴바영역을 벗어난 툴버튼을 툴 목록으로 이동시킨다.
+		 */
+		if (limit < limiter) {
+			var current = 0;
+			var split = 0;
+			
+			$("li",$tools).each(function(index) {
+				if (current + $(this).outerWidth(true) > limit) {
+					return false;
 				}
+				
+				current+= $(this).outerWidth(true);
+				split++;
 			});
+			
+			for (var i=loop=$("li",$tools).length - 1;i>=Math.max(1,split);i--) {
+				var $tool = $("li",$tools).eq(i).clone(true);
+				
+				$lists.prepend($tool);
+				$("li",$tools).eq(i).remove();
+			}
+			
+			if ($("li:last",$tools).hasClass("separator") === true) {
+				$("li:last",$tools).remove();
+			}
+			
+			if ($("li:first",$lists).hasClass("separator") === true) {
+				$("li:first",$lists).remove();
+			}
+			
+			if ($("li",$lists).length === 0) {
+				$more.hide();
+			}
+		} else {
+			$more.hide();
+		}
+		
+		/**
+		 * 설정에 따라 버튼활성화 여부를 지정한다.
+		 */
+		if (Minitalk.setting("mute") == true) {
+			$("footer > ul > li > button[data-tool=mute]").addClass("on");
+		}
+		
+		if (Minitalk.setting("push") == true) {
+			$("footer > ul > li > button[data-tool=push]").addClass("on");
 		}
 	},
 	/**
-	 * 툴버튼을 초기화한다.
-	 *
-	 * @param boolean mode 버튼 활성화여부
 	 * 메시지 폰트설정권한이 있는 경우, 현재 저장된 폰트설정에 따라 툴바 및 입력폼의 스타일을 변경한다.
 	 */
-	initToolButton:function(mode) {
-		if (mode == false) {
-			$($(".toolArea").find("button")).attr("disabled");
-			$($(".toolArea").find("button")).removeClass("selected").addClass("disabled");
-			$($(".toolArea").find(".toolButtonMore")).attr("disabled");
-			$($(".toolArea").find(".toolButtonMore")).removeClass("selected").addClass("disabled");
-			return;
 	initFonts:function() {
 		/**
 		 * 서버에 접속하기전이라면, 폰트 업데이트를 중단한다.
@@ -491,20 +340,9 @@ Minitalk.ui = {
 			Minitalk.fonts("color",null);
 		}
 		
-		$($(".toolArea").find("button")).attr("disabled",null);
-		$($(".toolArea").find("button")).removeClass("disabled");
-		$($(".toolArea").find(".toolButtonMore")).attr("disabled",null);
-		$($(".toolArea").find(".toolButtonMore")).removeClass("disabled");
 		var fonts = Minitalk.fonts();
 		if (fonts === null) return;
 		
-		if (Minitalk.setting("fontBold") == true) {
-			$(".toolBold").addClass("selected");
-			$(".inputText").css("fontWeight","bold");
-		} else {
-			$(".toolBold").removeClass("selected");
-			$(".inputText").css("fontWeight","normal");
-		}
 		/**
 		 * 입력폼 스타일적용
 		 */
@@ -514,13 +352,6 @@ Minitalk.ui = {
 		$input.css("textDecoration",fonts.underline === true ? "underline" : "none");
 		$input.css("color",fonts.color === null ? null : fonts.color);
 		
-		if (Minitalk.setting("fontItalic") == true) {
-			$(".toolItalic").addClass("selected");
-			$(".inputText").css("fontStyle","italic");
-		} else {
-			$(".toolItalic").removeClass("selected");
-			$(".inputText").css("fontStyle","");
-		}
 		/**
 		 * 툴바 스타일적용
 		 */
@@ -542,14 +373,9 @@ Minitalk.ui = {
 	enable:function(inputmode) {
 		var inputmode = inputmode === true;
 		
-		if (Minitalk.setting("fontUnderline") == true) {
-			$(".toolUnderline").addClass("selected");
-			$(".inputText").css("textDecoration","underline");
 		if (inputmode === true) {
 			$("div[data-role=input] > button").enable();
 		} else {
-			$(".toolUnderline").removeClass("selected");
-			$(".inputText").css("textDecoration","");
 			var $frame = $("div[data-role=frame]");
 			$("div[data-role=disable]",$frame).remove();
 		}
@@ -562,29 +388,252 @@ Minitalk.ui = {
 	disable:function(inputmode) {
 		var inputmode = inputmode === true;
 		
-		if (Minitalk.setting("fontColor") !== false && Minitalk.setting("fontColor") != "") {
-			$(".inputText").css("color","#"+Minitalk.setting("fontColor"));
 		if (inputmode === true) {
 			$("div[data-role=input] > button").disable();
 		} else {
-			$(".inputText").css("color","");
 			var $frame = $("div[data-role=frame]");
 			if ($("div[data-role=disable]",$frame).length > 0) return;
 			
 			$frame.append($("<div>").attr("data-role","disable"));
 		}
 	},
+	/**
+	 * 툴버튼 실행
+	 *
+	 * @param object $tool 툴버튼의 DOM 객체
+	 * @param event e 이벤트객체
+	 */
+	activeTool:function($tool,e) {
+		var tool = $tool.data("tool");
+		if (Minitalk.fireEvent("beforeActiveTool",[tool,$tool,e]) === false) return;
 		
-		if (Minitalk.setting("mute") == true) {
-			$(".toolMute").addClass("selected");
+		var $tool = $("footer > ul > li > button[data-tool=" + tool + "]");
+		
+		if (typeof tool == "string") {
+			switch (tool) {
+				case "bold" :
+					if (Minitalk.fonts("bold") === true) {
+						Minitalk.fonts("bold",false);
+					} else {
+						Minitalk.fonts("bold",true);
+					}
+					
+					Minitalk.ui.initFonts();
+					break;
+					
+				case "underline" :
+					if (Minitalk.fonts("underline") === true) {
+						Minitalk.fonts("underline",false);
+					} else {
+						Minitalk.fonts("underline",true);
+					}
+					
+					Minitalk.ui.initFonts();
+					break;
+					
+				case "italic" :
+					if (Minitalk.fonts("italic") === true) {
+						Minitalk.fonts("italic",false);
+					} else {
+						Minitalk.fonts("italic",true);
+					}
+					
+					Minitalk.ui.initFonts();
+					break;
+					
+				case "color" :
+					var colors = ["#7F7F7F","#880015","#ED1C24","#FF7F27","#FFF200","#22B14C","#00A2E8","#3F48CC","#A349A4","#000000","#C3C3C3","#B97A57","#FFAEC9","#FFC90E","#EFE4B0","#B5E61D","#99D9EA","#7092BE","#C8BFE7"];
+					
+					var html = [];
+					html.push('<ul>');
+					html.push('<li><button type="button" data-color="reset"></button></li>');
+					for (var i=0, loop=colors.length;i<loop;i++) {
+						html.push('<li><button type="button" data-color="' + colors[i] + '" style="background:' + colors[i] + ';"></button></li>');
+					}
+					html.push('</ul>');
+					html = html.join("");
+					Minitalk.ui.createToolLayer("color",html,function($dom) {
+						$("button[data-color]",$dom).on("click",function(e) {
+							var $button = $(this);
+							var color = $button.attr("data-color");
+							
+							if (color == "reset") {
+								Minitalk.fonts("color",null);
+							} else {
+								Minitalk.fonts("color",color);
+							}
+							
+							Minitalk.ui.initFonts();
+							$("div[data-role=input] > input").focus();
+							
+							Minitalk.ui.closeToolLayer("color");
+						});
+					});
+					break;
+					
+				case "emoticon" :
+					var html = [
+						'<ul data-role="category">',
+							'<li><button type="button" data-action="prev"></button></li>',
+							'<li data-role="items"></li>',
+							'<li><button type="button" data-action="next"></button></li>',
+						'</ul>',
+						'<div data-role="lists"></div>'
+					];
+					
+					html = html.join("");
+					Minitalk.ui.createToolLayer("emoticon",html,function($dom) {
+						$.send(Minitalk.getProcessUrl("getEmoticons"),function(result) {
+							var $categories = $("ul[data-role=category] > li[data-role=items]",$dom);
+							
+							var opened = null;
+							if (result.success == true && result.emoticons.length > 0) {
+								for (var i=0, loop=result.emoticons.length;i<loop;i++) {
+									var emoticon = result.emoticons[i];
+									var $category = $("<button>").attr("data-category",emoticon.category);
+									$category.data("width",emoticon.width);
+									$category.data("height",emoticon.height);
+									$category.html(emoticon.title);
+									$category.on("click",function() {
+										var $category = $(this);
+										var $lists = $("div[data-role=lists]",$dom);
+										var category = $(this).attr("data-category");
+										var $item = $("ul[data-category="+category+"]",$lists);
+										if ($item.length == 1) {
+											$("ul[data-category]",$lists).hide();
+											$("ul[data-category="+category+"]",$lists).show();
+										} else {
+											$.send(Minitalk.getProcessUrl("getEmoticon"),{category:category},function(result) {
+												if (result.success == true) {
+													var $items = $("<ul>").attr("data-category",category);
+													for (var i=0, loop=result.items.length;i<loop;i++) {
+														var item = result.items[i];
+														var $item = $("<button>");
+														var path = item.split("/");
+														
+														$item.attr("data-code","#" + path[0] + "/" + path[1]);
+														$item.css("backgroundImage","url(" + Minitalk.getUrl()+"/emoticons/" + path[0] + "/items/" + path[1] + ")");
+														$item.css("width",$category.data("width") + "px");
+														$item.css("height",$category.data("height") + "px");
+														
+														$item.on("click",function() {
+															var code = $(this).attr("data-code");
+															var $input = $("div[data-role=input] > input");
+															
+															$input.focus();
+															$input.val($input.val() + "[" + code + "]");
+														});
+														
+														$items.append($("<li>").append($item));
+													}
+													$lists.append($items);
+													
+													$("ul[data-category]",$lists).hide();
+													$("ul[data-category="+category+"]",$lists).show();
+												}
+											});
+										}
+									});
+									$categories.append($category);
+									
+									if (opened == null) opened = result.emoticons[i].category;
+								}
+								
+								if (opened != null && $("button[data-category="+opened+"]",$dom).length == 1) {
+									$("button[data-category="+opened+"]",$dom).triggerHandler("click");
+								}
+							}
+						});
+					});
+					break;
+					
+				case "mute" :
+					if (Minitalk.setting("mute") == true) {
+						Minitalk.setting("mute",false);
+						Minitalk.ui.printMessage("system",Minitalk.getText("action/play_sound"));
+						$tool.removeClass("on");
+					} else {
+						Minitalk.setting("mute",true);
+						Minitalk.ui.printMessage("system",Minitalk.getText("action/mute_sound"));
+						$tool.addClass("on");
+					}
+					break;
+					
+				case "push" :
+					if (Minitalk.setting("push") == false) {
+						if (window.Notification !== undefined) {
+							if (Notification.permission == "granted") {
+								Minitalk.setting("push",true);
+								Minitalk.ui.printMessage("system",Minitalk.getText("action/use_push"));
+								$tool.addClass("on");
+							} else if (Notification.permission != "granted") {
+								Notification.requestPermission(function(permission) {
+									if (Notification.permission !== undefined) {
+										Notification.permission = permission;
+									}
+									
+									if (permission == "granted") {
+										Minitalk.setting("push",true);
+										Minitalk.ui.printMessage("system",Minitalk.getText("action/use_push"));
+										$tool.addClass("on");
+									} else {
+										Minitalk.ui.printMessage("error",Minitalk.getErrorText("DISABLED_PUSH"));
+									}
+								});
+							}
+						} else {
+							Minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_SUPPORTED_BROWSER"));
+						}
+					} else {
+						Minitalk.setting("push",false);
+						$tool.removeClass("on");
+						Minitalk.ui.printMessage("system",Minitalk.getText("action/stop_push"));
+					}
+					break;
+					
+				case "scroll" :
+					if (Minitalk.ui.isFixedScroll == true) {
+						Minitalk.ui.printMessage("system",Minitalk.getText("action/use_auto_scroll"));
+						Minitalk.ui.isFixedScroll = false;
+						Minitalk.ui.autoScroll();
+						$tool.removeClass("on");
+					} else {
+						Minitalk.ui.printMessage("system",Minitalk.getText("action/use_fixed_scroll"));
+						Minitalk.ui.isFixedScroll = true;
+						$tool.addClass("on");
+					}
+					break;
+					
+				case "clear" :
+					if (Minitalk.user.me.opper == "ADMIN" && Minitalk.logCount > 0 && confirm(Minitalk.getText("action/clear_log_confirm")) == true) {
+						Minitalk.socket.send("clearlog",null);
+					} else {
+						$("section[data-role=chat]").html("");
+						Minitalk.ui.printMessage("system",Minitalk.getText("action/clear_log_self"));
+						Minitalk.storage("logList",[]);
+					}
+					break;
+			}
 		} else {
-			$(".toolMute").removeClass("selected");
+			if (typeof tool.handler == "function") {
+				tool.handler(e);
+			}
 		}
+		$("footer").removeClass("open");
 		
-		if (Minitalk.setting("push") == true) {
-			$(".toolPush").addClass("selected");
-		} else {
-			$(".toolPush").removeClass("selected");
+		Minitalk.fireEvent("afterActiveTool",[tool,$tool,e]);
+		
+		e.stopImmediatePropagation();
+	},
+	/**
+	 * 툴버튼목록을 토글한다.
+	 */
+	toggleTools:function() {
+		var $footer = $("footer");
+		$footer.toggleClass("open");
+		
+		if ($("footer > div[data-role=layers] > div[data-tool]").length > 0) {
+			$("footer > div[data-role=layers] > div[data-tool]").remove();
 		}
 	},
 	addTool:function(tool) {
@@ -773,13 +822,62 @@ Minitalk.ui = {
 	/**
 	 * 환경설정창을 불러온다.
 	 */
-						$(".chatArea").outerWidth(width,true);
-						Minitalk.ui.autoScroll();
-					}
-				}});
-			}
+	toggleConfigs:function() {
+		var $frame = $("div[data-role=frame]");
+		
+		/**
+		 * 설정레이어 객체를 추가한다.
+		 */
+		var $configs = $("<div>").attr("data-role","configs");
+		$frame.append($configs);
+		$configs.append('<div data-config="nickname"><input type="text" placeholder="' + Minitalk.getText("text/nickname") + '"></div>');
+		$configs.append('<div data-config="status"><button type="button"><i class="icon"></i><span></span><i class="arrow"></i></button><ul></ul></div>');
+		$configs.append('<button type="button">' + Minitalk.getText("button/confirm") + '</button>');
+		
+		$configs.on("click",function(e) {
+			e.stopImmediatePropagation();
+		});
+		
+		var $nickname = $("div[data-config=nickname] > input",$configs);
+		$nickname.val(Minitalk.user.me.nickname);
+		if (Minitalk.socket.getPermission("nickname") == true) $nickname.enable();
+		else $nickname.disable();
+		
+		var $status = $("div[data-config=status]",$configs);
+		$status.data("status",Minitalk.user.me.status);
+		$("button > i.icon",$status).css("backgroundImage","url("+Minitalk.statusIconPath+"/"+Minitalk.user.me.device+"/"+Minitalk.user.me.status+".png)");
+		$("button > span",$status).html(Minitalk.getText("status/"+Minitalk.user.me.status));
+		$("button",$status).off("click");
+		$("button",$status).on("click",function() {
+			$status.toggleClass("on");
+		});
+		$status.removeClass("on");
+		
+		$("ul",$status).empty();
+		for (var status in Minitalk.getText("status")) {
+			if (status == "offline") continue;
+			var $item = $("<li>");
+			$item.data("status",status);
+			var $icon = $("<i>").addClass("icon").css("backgroundImage","url("+Minitalk.statusIconPath+"/"+Minitalk.device+"/"+status+".png)");
+			$item.append($icon);
+			
+			var $text = $("<span>");
+			$text.html(Minitalk.getText("status/"+status));
+			$item.append($text);
+			$item.on("click",function() {
+				$("button > i.icon",$status).css("backgroundImage","url("+Minitalk.statusIconPath+"/"+Minitalk.device+"/"+$(this).data("status")+".png)");
+				$("button > span",$status).html(Minitalk.getText("status/"+$(this).data("status")));
+				$status.data("status",$(this).data("status"));
+				$status.removeClass("on");
+			});
+			$("ul",$status).append($item);
 		}
 		
+		$("> button",$configs).on("click",function() {
+			Minitalk.socket.send("change",{nickname:$nickname.val(),status:$status.data("status")});
+			$configs.remove();
+		});
+	},
 	/**
 	 * 접속자수를 출력한다.
 	 *
@@ -1037,7 +1135,6 @@ Minitalk.ui = {
 		return message;
 	},
 	/**
-	 * 툴바의 색상선택기 레이어를 출력한다.
 	 * 메시지 입력창의 내용을 수정한다.
 	 *
 	 * @param string message 수정할 내용
@@ -1046,197 +1143,73 @@ Minitalk.ui = {
 		var $input = $("div[data-role=input] > input");
 		$input.focus().val(value);
 	},
+	/**
+	 * 툴바 레이어를 생성한다.
+	 *
+	 * @param string tool 툴버튼코드
+	 * @param string html 레이어 HTML 코드
+	 * @param function callback
 	 */
-	selectFontColor:function() {
-		if ($(".toolEmoticonLayer").css("display") != "none") Minitalk.ui.insertEmoticon();
-		if ($(".toolListLayer").css("display") != "none") {
-			$(".toolListLayer").animate({height:1},400,function() { $(".toolListLayer").hide(); $(".toolListLayer").height("auto"); });
-			$(".toolButtonMore").removeClass("selected");
+	createToolLayer:function(tool,html,callback) {
+		var $frame = $("div[data-role=frame]");
+		var $footer = $("footer");
+		var $tools = $("ul[data-role=tools]",$footer);
+		var $tool = $("footer > ul > li > button[data-tool=" + tool + "]");
+		var $toolsTool = $("button[data-tool=" + tool + "]",$tools);
+		
+		var $layers = $("footer > div[data-role=layers]");
+		if ($("div[data-tool=" + tool + "]",$layers).length == 0) {
+			var $layer = $("<div>").attr("data-tool",tool);
+			$layers.append($layer);
+		} else {
+			var $layer = $("div[data-tool=" + tool + "]",$layers);
 		}
 		
-		if ($(".toolFontColorLayer").css("display") == "none") {
-			$(".toolColor").addClass("selected");
-			
-			$(".toolFontColorLayer").html("");
-			var colorbox = $("<div>").addClass("default");
-			colorbox.attr("code","");
-			if (Minitalk.setting("fontColor") == false || Minitalk.setting("fontColor") == "") colorbox.addClass("selected");
-			colorbox.on("mouseover",function() { $(this).addClass("mouseover"); });
-			colorbox.on("mouseout",function() { $(this).removeClass("mouseover"); });
-			colorbox.on("click",function() {
-				$($(".toolFontColorLayer").find("div")).removeClass("selected");
-				$(this).addClass("selected");
-				Minitalk.setting("fontColor",$(this).attr("code"));
-				$(".inputText").css("color","#"+$(this).attr("code"));
-			});
-			$(".toolFontColorLayer").append(colorbox);
-			
-			var colors = ["#7F7F7F","#880015","#ED1C24","#FF7F27","#FFF200","#22B14C","#00A2E8","#3F48CC","#A349A4","#000000","#C3C3C3","#B97A57","#FFAEC9","#FFC90E","#EFE4B0","#B5E61D","#99D9EA","#7092BE","#C8BFE7"];
-			for (var i=0, loop=colors.length;i<loop;i++) {
-				var colorbox = $("<div>").addClass("color").css("backgroundColor",colors[i]);
-				colorbox.attr("code",colors[i].replace("#",""));
-				if (Minitalk.setting("fontColor") == colors[i]) colorbox.addClass("selected");
-				
-				colorbox.on("mouseover",function() { $(this).addClass("mouseover"); });
-				colorbox.on("mouseout",function() { $(this).removeClass("mouseover"); });
-				colorbox.on("click",function() {
-					$($(".toolFontColorLayer").find("div")).removeClass("selected");
-					$(this).addClass("selected");
-					Minitalk.setting("fontColor",$(this).attr("code"));
-					$(".inputText").css("color","#"+$(this).attr("code"));
-				});
-				$(".toolFontColorLayer").append(colorbox);
-			}
-			
-			if ($(".toolArea").find(".toolColor").length > 0 && $(".toolColor").position().left + $(".toolFontColorLayer").outerWidth(true) < $(".frame").innerWidth()) {
-				$(".toolFontColorLayer").css("right","auto");
-				$(".toolFontColorLayer").css("left",$(".toolColor").position().left);
+		$layer.on("click",function(e) {
+			e.stopImmediatePropagation();
+		});
+		
+		$layer.empty();
+		$layer.append(html);
+		
+		if ($toolsTool.length > 0) {
+			if ($toolsTool.position().left + $layer.outerWidth(true) < $frame.innerWidth()) {
+				$layer.css("left",$toolsTool.position().left);
 			} else {
-				$(".toolFontColorLayer").css("left","auto");
-				$(".toolFontColorLayer").css("right",Math.ceil(($(".frame").outerWidth(true)-$(".frame").innerWidth())/2));
+				$layer.css("left",$frame.innerWidth() - $layer.outerWidth(true));
 			}
-			
-			$(".toolFontColorLayer").show();
-			var height = 0;
-			if ($(".toolFontColorLayer").attr("height")) {
-				height = parseInt($(".toolFontColorLayer").attr("height"));
-			} else {
-				height = $(".toolFontColorLayer").height();
-				$(".toolFontColorLayer").attr("height",height);
-			}
-			
-			$(".toolFontColorLayer").height(1);
-			$(".toolFontColorLayer").animate({height:height},"fast");
+			$toolsTool.addClass("on");
 		} else {
-			$(".toolColor").removeClass("selected");
-			$(".toolFontColorLayer").animate({height:1},"fast",function() { $(".toolFontColorLayer").hide(); });
+			var $more = $("button[data-tool=more]",$tools);
+			if ($more.position().left + $layer.outerWidth(true) < $frame.innerWidth()) {
+				$layer.css("left",$more.position().left);
+			} else {
+				$layer.css("left",$frame.innerWidth() - $layer.outerWidth(true));
+			}
+			$more.addClass("on");
 		}
+		
+		callback($layer);
 	},
 	/**
-	 * 툴바의 이모티콘선택기 레이어를 출력한다.
+	 * 툴바 레이어를 제거한다.
 	 */
-	insertEmoticon:function() {
-		if ($(".toolFontColorLayer").css("display") != "none") Minitalk.ui.selectFontColor();
+	closeToolLayer:function(tool) {
+		var $frame = $("div[data-role=frame]");
+		var $footer = $("footer");
+		var $tools = $("ul[data-role=tools]",$footer);
+		var $tool = $("footer > ul > li > button[data-tool=" + tool + "]");
+		var $toolsTool = $("button[data-tool=" + tool + "]",$tools);
+		var $layers = $("footer > div[data-role=layers]");
+		var $layer = $("div[data-tool=" + tool + "]",$layers);
 		
-		if ($(".toolEmoticonLayer").find(".toolEmoticonLayerTab").length == 0) {
-			var tab = $("<div>").addClass("toolEmoticonLayerTab");
-			var tabList = $("<div>").addClass("toolEmoticonLayerTabList").data("position",0);
-			var list = $("<div>").addClass("toolEmoticonLayerList");
-			
-			for (var i=0, loop=Minitalk.emoticons.length;i<loop;i++) {
-				var thisTab = $("<div>");
-				thisTab.attr("tabIDX",i);
-				if (i == 0) thisTab.addClass("selected first");
-				else if (i == Minitalk.emoticons.length - 1) thisTab.addClass("last");
-				thisTab.html('<img src="'+Minitalk.getUrl()+'/emoticons/'+Minitalk.emoticons[i].path+'/'+Minitalk.emoticons[i].icon+'" />');
-				thisTab.on("click",function() {
-					$(".toolEmoticonLayerTabList > DIV").removeClass("selected");
-					$(this).addClass("selected");
-					$(".toolEmoticonLayerListTab").hide();
-					$($(".toolEmoticonLayerList").find(".toolEmoticonLayerListTab")[$(this).attr("tabIDX")]).show();
-				});
-				tabList.append(thisTab);
-				
-				var listTab = $("<div>").addClass("toolEmoticonLayerListTab");
-				for (var j=0, loopj=Minitalk.emoticons[i].emoticon.length;j<loopj;j++) {
-					var icon = $("<div>").addClass(".toolEmoticonLayerIcon").addClass(Minitalk.emoticons[i].type);
-					icon.on("mouseover",function() { $(this).addClass("mouseover"); });
-					icon.on("mouseout",function() { $(this).removeClass("mouseover"); });
-					icon.on("click",function() {
-						$(".inputText").val($(".inputText").val()+$(this).attr("code"));
-						$(".inputText").focus();
-					});
-					
-					if (Minitalk.emoticons[i].type == "image") {
-						icon.attr("code","[EMO:"+Minitalk.emoticons[i].path+"/"+Minitalk.emoticons[i].emoticon[j]+"]");
-						icon.html('<img src="'+Minitalk.getUrl()+'/emoticons/'+Minitalk.emoticons[i].path+'/'+Minitalk.emoticons[i].emoticon[j]+'" />');
-					} else {
-						icon.attr("code",Minitalk.emoticons[i].emoticon[j]);
-						icon.html(Minitalk.emoticons[i].emoticon[j]);
-					}
-					listTab.append(icon);
-				}
-				list.append(listTab);
-			}
-			var leftMore = $("<div>").addClass("left");
-			leftMore.on("click",function() {
-				var position = $(".toolEmoticonLayerTabList").data("position");
-				if (position > 0) {
-					position--;
-					$(".toolEmoticonLayerTabList").data("position",position);
-					
-					var width = 0;
-					
-					for (var i=0;i<position;i++) {
-						width+= $($(".toolEmoticonLayerTabList > DIV")[i]).outerWidth(true);
-					}
-					$(".toolEmoticonLayerTabList").animate({scrollLeft:width},"fast",function() {
-						$(".toolEmoticonLayerTabList > DIV").removeClass("selected");
-						$($(".toolEmoticonLayerTabList > DIV")[$(".toolEmoticonLayerTabList").data("position")]).addClass("selected");
-						$(".toolEmoticonLayerListTab").hide();
-						$($(".toolEmoticonLayerList").find(".toolEmoticonLayerListTab")[$(".toolEmoticonLayerTabList").data("position")]).show();
-					});
-				}
-			});
-			tab.append(leftMore);
-			tab.append(tabList);
-			var rightMore = $("<div>").addClass("right");
-			rightMore.on("click",function() {
-				var position = $(".toolEmoticonLayerTabList").data("position");
-				if (position < $(".toolEmoticonLayerTabList > DIV").length - 1) {
-					position++;
-					$(".toolEmoticonLayerTabList").data("position",position);
-					
-					var width = 0;
-					
-					for (var i=0;i<position;i++) {
-						width+= $($(".toolEmoticonLayerTabList > DIV")[i]).outerWidth(true);
-					}
-					$(".toolEmoticonLayerTabList").animate({scrollLeft:width},"fast",function() {
-						$(".toolEmoticonLayerTabList > DIV").removeClass("selected");
-						$($(".toolEmoticonLayerTabList > DIV")[$(".toolEmoticonLayerTabList").data("position")]).addClass("selected");
-						$(".toolEmoticonLayerListTab").hide();
-						$($(".toolEmoticonLayerList").find(".toolEmoticonLayerListTab")[$(".toolEmoticonLayerTabList").data("position")]).show();
-					});
-				}
-			});
-			tab.append(rightMore);
-			$(".toolEmoticonLayer").append(tab);
-			$(".toolEmoticonLayer").append(list);
-			
-			$(".toolEmoticonLayerListTab").hide();
-			$($(".toolEmoticonLayerList").find(".toolEmoticonLayerListTab")[0]).show();
-		}
+		$layer.remove();
 		
-		if ($(".toolListLayer").css("display") != "none") {
-			$(".toolListLayer").hide();
-			$(".toolButtonMore").removeClass("selected");
-		}
-		
-		$(".toolEmoticonLayer").outerWidth(165,true);
-		$(".toolEmoticonLayerTabList").outerWidth($(".toolEmoticonLayer").innerWidth() - $(".toolEmoticonLayerTab > .left").outerWidth(true) - $(".toolEmoticonLayerTab > .left").outerWidth(true),true);
-		
-		if ($(".toolEmoticonLayer").css("display") != "none") {
-			$(".toolEmoticon").removeClass("selected");
-			$(".toolEmoticonLayer").animate({height:1},"fast",function() {
-				$(".toolEmoticonLayer").hide();
-			});
+		if ($toolsTool.length > 0) {
+			$toolsTool.removeClass("on");
 		} else {
-			$(".toolEmoticonLayer").height(1);
-			$(".toolEmoticonLayer").show();
-			if ($(".toolArea").find(".toolEmoticon").length > 0 && $(".toolEmoticon").position().left + 165 < $(".frame").innerWidth()) {
-				$(".toolEmoticonLayer").css("right","auto");
-				$(".toolEmoticonLayer").css("left",$(".toolEmoticon").position().left);
-			} else {
-				$(".toolEmoticonLayer").css("left","auto");
-				$(".toolEmoticonLayer").css("right",Math.ceil(($(".frame").outerWidth(true)-$(".frame").innerWidth())/2));
-			}
-			$(".toolEmoticon").addClass("selected");
-			
-			var height = $(".chatArea").outerHeight(true) > 150 ? 150 : $(".chatArea").outerHeight(true);
-			$(".toolEmoticonLayer").animate({height:height},"fast",function() {
-				$(".toolEmoticonLayerList").outerHeight($(".toolEmoticonLayer").innerHeight() -  $(".toolEmoticonLayerTab").outerHeight(true),true);
-			});
+			var $more = $("button[data-tool=more]",$tools);
+			$more.removeClass("on");
 		}
 	},
 	/**
