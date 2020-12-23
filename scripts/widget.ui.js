@@ -198,6 +198,13 @@ Minitalk.ui = {
 			Minitalk.ui.resetToggle();
 			Minitalk.ui.closeWindow(false);
 		});
+		
+		/**
+		 * 웹폰트 로드가 완료되면, UI 를 재정의한다.
+		 */
+		document.fonts.ready.then(function () {
+			Minitalk.ui.initFrame();
+		});
 	},
 	/**
 	 * 브라우저 사이즈가 변경되거나, UI가 최초표시될 때 UI 요소를 초기화한다.
