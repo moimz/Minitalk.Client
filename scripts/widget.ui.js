@@ -1364,68 +1364,106 @@ Minitalk.ui = {
 		});
 	},
 	/**
-	 * 알림창을 표시한다.
+	 * 알림메시지를 출력한다.
 	 *
-	 * @param string type 알림형태
-	 * @param string code 알림고유값
-	 * @param string message 알림메시지
-	 * @param boolean autoHide 자동숨김여부
-	 * @param object data 알림데이터
+	 * @param string code 알림메시지 고유값 (같은 고유값을 가진 알림메시지는 동시에 출력되지 않는다.)
+	 * @param string type 알림메시지 타입 (action, error, warning, success)
+	 * @param string message 알림메시지 메시지
+	 * @param boolean closable 알림메시지를 닫을 수 있는 여부 (기본값 : true)
+	 * @param boolean autoHide 알림메시지 자동닫기 여부 (기본값 : true)
+	 * @param object data 알림메시지에 담을 데이터
 	 * @param function callback
 	 */
-	showAlert:function(type,code,message,autoHide,data,callback) {
-		if ($(".alertLayer").find("."+code).length > 0) {
-			$($(".alertLayer").find("."+code)).html();
-			return false;
+	notify:function(code,type,message,closable,autoHide,data,callback) {
+		var $notifications = $("div[data-role=notifications]");
+		var $notification = $("div[data-code=" + code + "]",$notifications);
+		if ($notification.length == 0) {
+			var $notification = $("<div>").attr("data-code",code).addClass("ready");
+			var $balloon = $("<div>");
+			$notification.append($balloon);
+			$notifications.append($notification);
+		} else {
+			var $balloon = $("div",$notification);
 		}
 		
+		$notification.data("autoHide",null);
+		$notification.data("data",data ? data : null);
+		$balloon.removeClass("action error warning success").addClass(type);
+		
+		if ($notification.data("unnotify") !== null) {
+			clearTimeout($notification.data("unnotify"));
+			$notification.data("unnotify",null);
+		}
+		
+		/**
+		 * 자동닫기가 활성화되어 있는 경우, 5초 뒤에 알림을 닫는다.
+		 */
 		var autoHide = autoHide === false ? false : true;
-		var data = data ? data : null;
-		
-		var alertLayer = $("<div>").addClass(type).addClass(code).html(message);
-		alertLayer.attr("code",code);
-		alertLayer.data("data",data);
-		alertLayer.on("click",function() {
-			Minitalk.ui.removeAlert($(this).attr("code"),callback);
-		});
-		$(".alertLayer").append(alertLayer);
-		var height = alertLayer.height();
-		alertLayer.height(1);
-		alertLayer.animate({height:height},"fast");
-		
-		if (autoHide == true) {
-			setTimeout(Minitalk.ui.removeAlert,15000,code);
+		if (autoHide === true) {
+			Minitalk.ui.unnotify(code,5);
 		}
 		
-		return true;
+		$balloon.html(message);
+		
+		/**
+		 * 브라우저 푸시메시지를 표시한다.
+		 */
+		Minitalk.ui.push(message);
+		
+		/**
+		 * 콜백함수가 있거나, 자동닫기가 활성화되어있거나, 닫을 수 있는 알림인 경우 닫기버튼을 추가한다.
+		 */
+		var closable = closable === false && autoHide === false ? false : true;
+		if (typeof callback == "function" || closable === true) {
+			if (typeof callback == "function") {
+				$balloon.addClass("callback");
+				$balloon.on("click",function() {
+					var $notification = $(this).parent();
+					callback($notification);
+					if (closable === true) Minitalk.ui.unnotify($(this).parent().attr("data-code"));
+				});
+			} else {
+				$balloon.addClass("closable");
+				$balloon.append($("<i>").addClass("mi mi-close"));
+				$balloon.on("click",function() {
+					Minitalk.ui.unnotify($(this).parent().attr("data-code"));
+				});
+			}
+		}
 	},
 	/**
-	 * 알림창을 제거한다.
+	 * 알림메시지를 삭제한다.
 	 *
-	 * @param string code 알림고유값
-	 * @param function callback
+	 * @param string code 알림메시지 고유값 (같은 고유값을 가진 알림메시지는 동시에 출력되지 않는다.)
+	 * @param int delay 지연시간(초) (기본값 : 0)
+	 */
+	unnotify:function(code,delay) {
+		var delay = delay ? delay : 0;
+		var $notifications = $("div[data-role=notifications]");
+		var $notification = $("div[data-code=" + code + "]",$notifications);
+		
+		if (delay > 0) {
+			$notification.data("unnotify",setTimeout(function(code) {
+				Minitalk.ui.unnotify(code);
+			},5000,code));
+		} else {
+			$notification.remove();
+		}
+	},
+	/**
+	 * v6.5.0 에서 제거예정
+	 */
+	showAlert:function(type,code,message,autoHide,data,callback) {
+		if ($.inArray(type,["action","success","error","warning"]) === -1) type = "action";
+		console.warn("[deprecated] showAlert() is deprecated in v6.5. use notify().");
+		Minitalk.ui.notify(code,type,message,true,autoHide,data,callback);
+	},
+	/**
+	 * v6.5.0 에서 제거예정
 	 */
 	removeAlert:function(code,callback) {
-		var alert = $($(".alertLayer").find("."+code));
-		alert.attr("oMarginLeft",alert.css("marginLeft"));
-		var width = alert.width();
-		var height = alert.height();
-		alert.css("width",width);
-		alert.css("height",height);
-		alert.animate({marginLeft:-$(".frame").outerWidth()},"fast",function() {
-			$(this).animate({height:1},"fast",function() {
-				if (typeof callback == "function") {
-					if (callback($(this)) === false) {
-						$($(".alertLayer").find("."+code)).css("marginLeft",$($(".alertLayer").find("."+code)).attr("oMarginLeft"));
-						$($(".alertLayer").find("."+code)).css("height","auto");
-					} else {
-						$(this).remove();
-					}
-				} else {
-					$(this).remove();
-				}
-			});
-		});
+		console.warn("[deprecated] removeAlert() is deprecated in v6.5. use unnotify().");
+		Minitalk.ui.unnotify(code);
 	},
 	/**
 	 * 공지사항을 표시한다.
@@ -1436,8 +1474,8 @@ Minitalk.ui = {
 	showNotice:function(message,url) {
 		if (!url) url = "";
 		
-		Minitalk.ui.showAlert("notice","notice"+Math.ceil(Math.random()*10000),message,true,url,function(alert) {
-			if (alert.data("data").length > 0) window.open(alert.data("data"));
+		Minitalk.ui.notify("notice" + Math.ceil(Math.random()*10000),"warning",message,true,true,url,function($notification) {
+			if ($notification.data("data")) window.open($notification.data("data"));
 		});
 	},
 	/**
@@ -1460,10 +1498,16 @@ Minitalk.ui = {
 	},
 	/**
 	 * 브라우저 알림을 전송한다.
+	 *
+	 * @param string message 표시할 메시지
 	 */
-	push:function(title,message) {
+	push:function(message) {
+		message = message.replace(/<\/?[a-zA-Z]+(.*?)>/g,'');
+		
 		if (Minitalk.setting("push") == true && window.Notification !== undefined && Notification.permission == "granted") {
-			var notification = new Notification(title,{body:message,icon:Minitalk.getUrl()+"/images/minitalk.png"});
+			var notification = new Notification("Minitalk",{body:message,icon:Minitalk.getUrl()+"/images/minitalk.png"});
+		}
+	},
 		}
 	}
 };

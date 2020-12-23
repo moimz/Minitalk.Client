@@ -511,10 +511,8 @@ Minitalk.user = {
 		} else {
 			if (Minitalk.fireEvent("beforeCall",[from,to]) === false) return;
 			
-			Minitalk.ui.printMessage("system",Minitalk.getText("action/called").replace("{NICKNAME}","<b><u>"+from.nickname+"</u></b>"));
+			Minitalk.ui.notify("call","action",Minitalk.getText("action/called").replace("{NICKNAME}","<b><u>"+from.nickname+"</u></b>"));
 			Minitalk.ui.playSound("call");
-			Minitalk.ui.push("[MiniTalk6] "+Minitalk.getText("action/called").replace("{NICKNAME}",from.nickname),"channel : "+Minitalk.channel);
-			
 			Minitalk.fireEvent("call",[from,to]);
 		}
 	},
@@ -531,21 +529,17 @@ Minitalk.user = {
 		} else {
 			if (Minitalk.fireEvent("beforeInvite",[from,code,to]) === false) return;
 			
-			var showAlert = Minitalk.ui.showAlert("invite",code,Minitalk.getText("action/invited_detail").replace("{NICKNAME}","<b><u>"+from.nickname+"</u></b>").replace("{TIME}","<b><u>"+Minitalk.ui.getTime(moment().valueOf(),"YYYY.MM.DD HH:mm:ss")+"</u></b>"),false,{from:from,to:to,code:code},function(alert) {
+			Minitalk.ui.notify("invite-" + code,"action",Minitalk.getText("action/invited").replace("{NICKNAME}","<b><u>"+from.nickname+"</u></b>").replace("{TIME}","<b><u>" + Minitalk.ui.getTime(moment().valueOf(),"YYYY.MM.DD HH:mm:ss") + "</u></b>"),false,false,{from:from,to:to,code:code},function($notification) {
 				if (confirm(Minitalk.getText("action/invite_confirm")) == true) {
-					return Minitalk.ui.openPrivateChannel("join",alert.data("data"));
+					return Minitalk.ui.openPrivateChannel("join",$notification.data("data"));
 				} else {
-					Minitalk.socket.send("reject",alert.data("data"));
+					Minitalk.socket.send("reject",$notification.data("data"));
 				}
 				return true;
 			});
-			if (showAlert == true) {
-				Minitalk.ui.playSound("query");
-				Minitalk.ui.push("[MiniTalk6] "+Minitalk.getText("action/invited").replace("{NICKNAME}",from.nickname),"channel : "+Minitalk.channel);
-				Minitalk.ui.printMessage("system",Minitalk.getText("action/invited").replace("{NICKNAME}","<b><u>"+from.nickname+"</u></b>"));
-				
-				Minitalk.fireEvent("invite",[from,code,to]);
-			}
+			
+			Minitalk.ui.playSound("query");
+			Minitalk.fireEvent("invite",[from,code,to]);
 		}
 	}
 };
