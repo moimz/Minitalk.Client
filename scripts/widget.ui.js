@@ -617,7 +617,7 @@ Minitalk.ui = {
 	 */
 	printLogMessage:function() {
 		var logList = Minitalk.log();
-		for (var i=(logList.length > Minitalk.logLimit ? logList.length-Minitalk.logLimit : 0), loop=logList.length;i<loop;i++) {
+		for (var i=(logList.length > Minitalk.logCount ? logList.length - Minitalk.logCount : 0), loop=logList.length;i<loop;i++) {
 			if (logList[i].type == "chat") {
 				Minitalk.ui.printChatMessage("log",logList[i].log.user,logList[i].log.message,logList[i].log.time);
 			} else {
@@ -648,7 +648,7 @@ Minitalk.ui = {
 		var messageObject = $("<span>").addClass("body").html(Minitalk.splitString+message);
 		if (time) messageObject.attr("title",Minitalk.ui.getTime(time,"YYYY.MM.DD HH:mm:ss"));
 		item.append(messageObject);
-		if (time) item.append($("<span>").addClass("time").html(" ("+Minitalk.ui.getTime(time,"HH:mm:ss")+")"));
+		if (time) item.append($("<span>").addClass("time").html(Minitalk.ui.getTime(time,Minitalk.dateFormat)));
 		
 		$(".chatArea").append(item);
 		Minitalk.ui.autoScroll();
