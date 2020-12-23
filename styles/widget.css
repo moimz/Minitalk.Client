@@ -153,13 +153,15 @@ div[data-role=window] section[data-role] > div[data-role=button] > ul > li > but
  * 기본적으로 숨김상태이며, 채팅탭인 경우에만 표시한다.
  * 탭바형식이 세로형식을 경우, 채팅탭이 항상 표시되므로, 푸터영역도 항상 표시되도록 설정한다.
  */
-footer {position:absolute; z-index:3; width:100%; display:none;}
+footer {position:absolute; z-index:3; width:100%; display:none; font-size:0;}
 footer > div[data-role=progress] {display:none;}
 footer > div[data-role=progress] > div {width:0;}
-footer > ul[data-role=tools] {list-style:none; white-space:nowrap; overflow:hidden;}
-footer > ul[data-role=tools] > li {display:inline-block;}
+footer > ul[data-role=tools] {list-style:none; white-space:nowrap; overflow:hidden; font-size:0; display:block;}
+footer > ul[data-role=tools] > li {display:inline-block; font-size:1rem;}
+footer > ul[data-role=tools] > li > button > i {display:inline-block; vertical-align:middle; font-size:1rem;}
+footer > ul[data-role=tools] > li > button > span {display:inline-block; vertical-align:middle; font-size:1rem;}
 footer > ul[data-role=lists] {display:none; position:absolute; z-index:5;}
-footer.open > ul[data-role=lists] {display:block;}
+footer.open > ul[data-role=lists] {display:block; list-style:none;}
 div[data-role=frame][data-current-tab=chat] footer {display:block;}
 div[data-role=frame][data-tab-type=vertical] footer {display:block;}
 
