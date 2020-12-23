@@ -180,23 +180,6 @@ if (strpos($templet,'@') === 0) {
 	}
 }
 
-/**
- * 이모티콘을 읽어온다.
- */
-$emoticons = array();
-$emoticonsPath = @opendir(__MINITALK_PATH__.'/emoticons');
-while ($emoticon = @readdir($emoticonsPath)) {
-	if ($emoticon != '.' && $emoticon != '..' && is_dir(__MINITALK_PATH__.'/emoticons/'.$emoticon) == true && is_file(__MINITALK_PATH__.'/emoticons/'.$emoticon.'/emoticon.json') == true) {
-		$emoticons[] = $emoticon;
-	}
-}
-@closedir($emoticonsPath);
-sort($emoticons);
-foreach ($emoticons as &$emoticon) {
-	$emoticon = json_decode(file_get_contents(__MINITALK_PATH__.'/emoticons/'.$emoticon.'/emoticon.json'));
-}
-$js->add('Minitalk.emoticons = '.json_encode($emoticons).';');
-
 $device = 'PC';
 if (preg_match('/(iPhone|iPad|iPod)/',$_SERVER['HTTP_USER_AGENT']) == true) $device = 'iOS';
 if (preg_match('/(Android)/',$_SERVER['HTTP_USER_AGENT']) == true) $device = 'Android';
