@@ -31,111 +31,6 @@ Minitalk.user = {
 			if (Minitalk.nickcon) this.me.nickcon = Minitalk.nickcon;
 			if (Minitalk.info && typeof Minitalk.info == "object") this.me.info = Minitalk.info;
 		}
-		
-		Minitalk.user.initMenus();
-	},
-	/**
-	 * 유저메뉴를 초기화한다.
-	 */
-	initMenus:function() {
-		Minitalk.user.menus = [{
-			icon:"icon_myinfo.png",
-			text:Minitalk.getText("usermenu/myinfo"),
-			viewMenu:function(minitalk,user,myinfo) {
-				if (user.nickname == myinfo.nickname) return true;
-				else return false;
-			},
-			fn:function(minitalk,user,myinfo) {
-				$(".userInfoNickname").val(minitalk.user.me.nickname);
-				if (minitalk.socket.getPermission("nickname") == true) $(".userInfoNickname").attr("disabled",null);
-				else $(".userInfoNickname").attr("disabled","disabled");
-				$(".userInfoStatusIcon").css("backgroundImage","url("+minitalk.statusIconPath+"/"+minitalk.user.me.device+"/"+minitalk.user.me.status+".png)");
-				$(".userInfoStatusText").text(Minitalk.getText("status/"+minitalk.user.me.status));
-				$(".userInfoStatus").attr("status",minitalk.user.me.status);
-				$(".userInfoLayer").fadeIn();
-			}
-		},{
-			icon:"icon_whisper.png",
-			text:Minitalk.getText("usermenu/whisper"),
-			viewMenu:function(minitalk,user,myinfo) {
-				if (user.nickname != myinfo.nickname) return true;
-				else return false;
-			},
-			fn:function(minitalk,user,myinfo) {
-				$(".inputText").focus();
-				$(".inputText").val("/w "+user.nickname+" ");
-			}
-		},{
-			icon:"icon_call.png",
-			text:Minitalk.getText("usermenu/call"),
-			viewMenu:function(minitalk,user,myinfo) {
-				if (user.nickname != myinfo.nickname) return true;
-				else return false;
-			},
-			fn:function(minitalk,user,myinfo) {
-				minitalk.socket.sendCall(user.nickname);
-			}
-		},{
-			icon:"icon_privchannel.png",
-			text:Minitalk.getText("usermenu/privchannel"),
-			viewMenu:function(minitalk,user,myinfo) {
-				if (user.nickname != myinfo.nickname && Minitalk.isPrivate == false) return true;
-				else return false;
-			},
-			fn:function(minitalk,user,myinfo) {
-				Minitalk.socket.sendInvite(user.nickname);
-			}
-		},{
-			icon:"icon_banmsg.png",
-			text:Minitalk.getText("usermenu/banmsg"),
-			viewMenu:function(minitalk,user,myinfo) {
-				if (myinfo.opper == "ADMIN" && user.nickname != myinfo.nickname) return true;
-				else return false;
-			},
-			fn:function(minitalk,user,myinfo) {
-				minitalk.socket.send("banmsg",{id:user.id,nickname:user.nickname});
-			}
-		},{
-			icon:"icon_showip.png",
-			text:Minitalk.getText("usermenu/showip"),
-			viewMenu:function(minitalk,user,myinfo) {
-				if (myinfo.opper == "ADMIN" && Minitalk.isPrivate == false) return true;
-				else return false;
-			},
-			fn:function(minitalk,user,myinfo) {
-				minitalk.socket.send("showip",{id:user.id,nickname:user.nickname});
-			}
-		},{
-			icon:"icon_banip.png",
-			text:Minitalk.getText("usermenu/banip"),
-			viewMenu:function(minitalk,user,myinfo) {
-				if (myinfo.opper == "ADMIN" && user.nickname != myinfo.nickname && Minitalk.isPrivate == false) return true;
-				else return false;
-			},
-			fn:function(minitalk,user,myinfo) {
-				minitalk.socket.send("banip",{id:user.id,nickname:user.nickname});
-			}
-		},{
-			icon:"icon_opper.png",
-			text:Minitalk.getText("usermenu/opper"),
-			viewMenu:function(minitalk,user,myinfo) {
-				if (myinfo.opper == "ADMIN" && user.nickname != myinfo.nickname && minitalk.isPrivate == false && user.opper != "ADMIN") return true;
-				else return false;
-			},
-			fn:function(minitalk,user,myinfo) {
-				minitalk.socket.send("opper",{id:user.id,nickname:user.nickname});
-			}
-		},{
-			icon:"icon_deopper.png",
-			text:Minitalk.getText("usermenu/deopper"),
-			viewMenu:function(minitalk,user,myinfo) {
-				if (myinfo.opper == "ADMIN" && user.nickname != myinfo.nickname && Minitalk.isPrivate == false && user.opper == "ADMIN") return true;
-				else return false;
-			},
-			fn:function(minitalk,user,myinfo) {
-				minitalk.socket.send("deopper",{id:user.id,nickname:user.nickname});
-			}
-		}];
 	},
 	/**
 	 * 유저가 참여하였을 때
@@ -341,109 +236,229 @@ Minitalk.user = {
 	/**
 	 * 유저메뉴를 토클한다.
 	 *
-	 * @param object userinfo 유저정보
+	 * @param object $dom 메뉴를 호출한 대상의 DOM객체
 	 * @param event e
 	 */
-	toggleMenu:function(userinfo,e) {
-		$(".userMenu").html("");
-		$(".userMenu").attr("nickname",userinfo.nickname);
-		$(".userMenu").data("userinfo",userinfo);
-		$(".userMenu").show();
-		var width = $(".userMenu").outerWidth(true);
+	toggleMenus:function($dom,e) {
+		var user = $dom.data("user");
+		if (user === undefined) return;
+		if (Minitalk.socket.isConnected() === false) return;
 		
-		var frameWidth = $(".frame").outerWidth(true);
-		var frameHeight = $(".frame").outerHeight(true);
+		/**
+		 * 기존에 보이고 있던 유저메뉴가 있다면 제거한다.
+		 */
+		if ($("ul[data-role=usermenus]").length > 0) {
+			$("ul[data-role=usermenus]").remove();
+		}
+		
+		$("ul[data-role=usermenus]").on("click",function(e) {
+			e.stopImmediatePropagation();
+		});
+		
+		var separator = true;
+		
+		var $menus = $("<ul>").attr("data-role","usermenus");
+		$menus.data("user",user);
+		
+		var $name = $("<li>").attr("data-role","nickname");
+		$name.append($("<i>").addClass("mi mi-loading"));
+		$name.append($("<label>").html(user.nickname));
+		$menus.append($name);
+		
+		$("div[data-role=frame]").append($menus);
+		
+		var frameWidth = $("div[data-role=frame]").outerWidth(true);
+		var frameHeight = $("div[data-role=frame]").outerHeight(true);
+		var width = $menus.outerWidth(true);
 		
 		if (e.pageX + width < frameWidth) {
-			$(".userMenu").css("left",e.pageX);
-			$(".userMenu").css("right","auto");
+			$menus.css("left",e.pageX);
+			$menus.css("right","auto");
 		} else {
-			$(".userMenu").css("left","auto");
-			$(".userMenu").css("right",5);
+			$menus.css("left","auto");
+			$menus.css("right",5);
 		}
 		
 		if (e.pageY < frameHeight/2) {
-			$(".userMenu").attr("position","top");
-			$(".userMenu").css("top",e.pageY);
-			$(".userMenu").css("bottom","auto");
+			$menus.css("top",e.pageY);
+			$menus.css("bottom","auto");
 		} else {
-			$(".userMenu").attr("position","bottom");
-			$(".userMenu").css("top","auto");
-			$(".userMenu").css("bottom",frameHeight - e.pageY);
+			$menus.css("top","auto");
+			$menus.css("bottom",frameHeight - e.pageY);
 		}
 		
-		$(".userMenu").append($("<div>").addClass("nickname").css("backgroundImage","url("+Minitalk.getUrl()+"/images/loader16.gif)").html(userinfo.nickname));
+		$menus.height($menus.height());
 		
-		Minitalk.socket.send("userinfo",{id:userinfo.id,nickname:userinfo.nickname});
+		Minitalk.user.getUser(user.nickname,function(result) {
+			var $menus = $("ul[data-role=usermenus]");
+			if ($menus.length == 0) return;
+			
+			var user = $menus.data("user");
+			var $name = $("li[data-role=nickname]",$menus);
+			
+			if (result.success == true && user.nickname == result.user.nickname) {
+				user.status = result.user.status;
+			} else {
+				user.status = "offline";
+			}
+			$("i",$name).removeClass("mi mi-loading").addClass("status").css("backgroundImage","url("+Minitalk.statusIconPath+"/"+user.device+"/"+user.status+".png)");
+			
+			var separator = true;
+			
+			for (var index in Minitalk.usermenus) {
+				var menu = Minitalk.usermenus[index];
+				if (typeof menu == "string") {
+					/**
+					 * 구분자일 경우
+					 */
+					if (menu == "-") {
+						/**
+						 * 메뉴가 처음이거나, 현 구분자 직전에 구분자가 추가된 경우 추가로 구분자를 추가하지 않는다.
+						 */
+						if (separator === true) continue;
+						separator = true;
+						
+						var $menu = $("<li>");
+						$menu.addClass("separator");
+						$menu.append($("<i>"));
+					} else {
+						/**
+						 * 기본 메뉴를 추가한다.
+						 */
+						if ($.inArray(menu,["configs","whisper","call","create","invite","banmsg","showip","banip","opper","deopper"]) === -1) continue;
+						
+						/**
+						 * 관리자가 아닌 경우 관리자 메뉴를 표시하지 않는다.
+						 */
+						if ($.inArray(menu,["banmsg","showip","banip","opper","deopper"]) !== -1 && Minitalk.user.me.opper != "ADMIN") continue;
+						
+						/**
+						 * 자신에게 숨겨야 하는 메뉴를 표시하지 않는다.
+						 */
+						if ($.inArray(menu,["whisper","call","invite"]) !== -1 && Minitalk.user.me.nickname == user.nickname) continue;
+						
+						/**
+						 * 자신에게만 보여야하는 메뉴를 표시하지 않는다.
+						 */
+						if ($.inArray(menu,["configs","create"]) !== -1 && Minitalk.user.me.nickname != user.nickname) continue;
+						
+						/**
+						 * 개인채널에 숨겨야하는 메뉴를 표시하지 않는다.
+						 */
+						if ($.inArray(menu,["invite","create"]) !== -1 && Minitalk.isPrivate == true) continue;
+						
+						separator = false;
+						
+						var $menu = $("<li>");
+						var $button = $("<button>").attr("type","button").attr("data-menu",menu);
+						$button.append($("<i>").addClass("icon"));
+						$button.append($("<span>").html(Minitalk.getText("usermenu/" + menu)));
+						$button.data("menu",menu);
+						$button.on("click",function(e) {
+							Minitalk.user.activeMenu($(this),e);
+						});
+						$menu.append($button);
+					}
+					
+					$menus.append($menu);
+				} else {
+					separator = false;
+					
+					/**
+					 * 사용자정의 툴버튼을 추가한다.
+					 */
+					var $menu = $("<li>");
+					var $button = $("<button>").attr("type","button").attr("data-menu","custom");
+					$button.append($("<i>").addClass(menu.iconCls));
+					$button.append($("<span>").html(menu.text));
+					$button.data("menu",menu);
+					$button.on("click",function(e) {
+						Minitalk.user.activeMenu($(this),e);
+					});
+					$menu.append($button);
+					$menus.append($menu);
+				}
+			}
+			
+			if ($("li:last",$menus).hasClass("separator") === true) {
+				$("li:last",$menus).remove();
+			}
+			
+			if ($("li:first",$menus).hasClass("separator") === true) {
+				$("li:first",$menus).remove();
+			}
+			
+			var oHeight = $menus.height();
+			$menus.height("auto");
+			var height = $menus.height();
+			$menus.height(oHeight);
+			
+			$menus.animate({height:height});
+		});
 	},
 	/**
-	 * 유저메뉴를 출력한다.
+	 * 유저메뉴를 실행한다.
 	 *
-	 * @param object userinfo 유저정보
+	 * @param object $menu 메뉴의 DOM 객체
+	 * @param event e 이벤트객체
 	 */
-	printMenu:function(userinfo) {
-		if ($(".userMenu").css("display") == "none" || $(".userMenu").attr("nickname") != userinfo.nickname) return;
+	activeMenu:function($menu,e) {
+		var menu = $menu.data("menu");
+		if (Minitalk.fireEvent("beforeActiveUserMenu",[menu,$menu,e]) === false) return;
 		
-		var user = $(".userMenu").data().userinfo;
-		user.status = userinfo.status;
-		user.opper = userinfo.opper;
+		var $menus = $("ul[data-role=usermenus]");
+		var $menu = $("button[data-menu=" + menu + "]",$menus);
+		var user = $menus.data("user");
 		
-		$($(".userMenu").find(".nickname")).css("backgroundImage","url("+Minitalk.statusIconPath+"/"+user.device+"/"+user.status+".png)");
-		$(".userMenu").append($("<div>").addClass("list").css("overflow","hidden").height(1));
-		
-		var height = 0;
-		for (var i=0, loop=Minitalk.user.menus.length;i<loop;i++) {
-			if (typeof Minitalk.user.menus[i].viewMenu !== "function" || Minitalk.user.menus[i].viewMenu(Minitalk,user,Minitalk.user.me) == true) {
-				var thisMenu = $("<div>").addClass("menu");
-				thisMenu.attr("menuIDX",i);
-				thisMenu.data("userinfo",user);
-				thisMenu.on("mouseover",function() { $(this).addClass("mouseover"); });
-				thisMenu.on("mouseout",function() { $(this).removeClass("mouseover"); });
-				thisMenu.on("click",function() {
-					var user = $(this).data().userinfo;
-					Minitalk.user.menus[parseInt($(this).attr("menuIDX"))].fn(Minitalk,user,Minitalk.user.me);
-					$(".userMenu").hide();
-				});
-				thisMenu.css("backgroundImage","url("+Minitalk.getUrl()+"/templets/"+Minitalk.templet+"/images/"+Minitalk.user.menus[i].icon+")");
-				thisMenu.html(Minitalk.user.menus[i].text);
-
-				$($(".userMenu").find(".list")).append(thisMenu);
-				height+= thisMenu.outerHeight(true);
+		if (typeof menu == "string") {
+			switch (menu) {
+				case "configs" :
+					Minitalk.ui.toggleConfigs();
+					break;
+					
+				case "whisper" :
+					Minitalk.ui.setInputVal("/w " + user.nickname);
+					$menus.remove();
+					break;
+					
+				case "call" :
+					Minitalk.socket.sendCall(user.nickname);
+					break;
+					
+				case "invite" :
+					Minitalk.socket.sendInvite(user.nickname);
+					break;
+					
+				case "create" :
+					Minitalk.socket.sendCreate();
+					break;
+					
+				case "banmsg" :
+					Minitalk.socket.send("banmsg",{id:user.id,nickname:user.nickname});
+					break;
+					
+				case "showip" :
+					Minitalk.socket.send("showip",{id:user.id,nickname:user.nickname});
+					break;
+					
+				case "banip" :
+					Minitalk.socket.send("banip",{id:user.id,nickname:user.nickname});
+					break;
+					
+				case "opper" :
+					Minitalk.socket.send("opper",{id:user.id,nickname:user.nickname});
+					break;
+					
+				case "deopper" :
+					Minitalk.socket.send("deopper",{id:user.id,nickname:user.nickname});
 			}
-		}
-		
-		for (var i=0, loop=Minitalk.addUserMenuList.length;i<loop;i++) {
-			if (typeof Minitalk.addUserMenuList[i].viewMenu !== "function" || Minitalk.addUserMenuList[i].viewMenu(Minitalk,user,Minitalk.user.me) == true) {
-				var thisMenu = $("<div>").addClass("menu");
-				thisMenu.attr("menuIDX",i);
-				thisMenu.data("userinfo",user);
-				thisMenu.on("mouseover",function() { $(this).addClass("mouseover"); });
-				thisMenu.on("mouseout",function() { $(this).removeClass("mouseover"); });
-				thisMenu.on("click",function() {
-					var user = $(this).data().userinfo;
-					Minitalk.addUserMenuList[parseInt($(this).attr("menuIDX"))].fn(Minitalk,user,Minitalk.user.me);
-					$(".userMenu").hide();
-				});
-				thisMenu.css("backgroundImage","url("+Minitalk.addUserMenuList[i].icon+")");
-				thisMenu.html(Minitalk.addUserMenuList[i].text);
-
-				$($(".userMenu").find(".list")).append(thisMenu);
-				height+= thisMenu.outerHeight(true);
-			}
-		}
-		
-		var frameWidth = $(".frame").outerWidth(true);
-		var frameHeight = $(".frame").outerHeight(true);
-		var padding = $(".userMenu").outerHeight(true) - $(".userMenu").height();
-		
-		if (padding + $($(".userMenu").find(".nickname")).outerHeight(true) + height + 10 < frameHeight - parseInt($(".userMenu").css($(".userMenu").attr("position")).replace("px",""))) {
-			height = height;
 		} else {
-			height = frameHeight - padding - $($(".userMenu").find(".nickname")).outerHeight(true) - parseInt($(".userMenu").css($(".userMenu").attr("position")).replace("px","")) - 10;
-			$($(".userMenu").find(".list")).css("overflowY","scroll");
+			if (typeof menu.handler == "function") {
+				menu.handler(e);
+			}
 		}
 		
-		$($(".userMenu").find(".list")).animate({height:height},"fast");
+		Minitalk.fireEvent("afterActiveUserMenu",[menu,$menu,e]);
 	},
 	/**
 	 * 권한 최소레벨에 해당하는지 확인한다.
