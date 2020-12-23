@@ -2089,9 +2089,10 @@ Minitalk.ui = {
 	 * @param string message 알림메시지 메시지
 	 * @param boolean closable 알림메시지를 닫을 수 있는 여부 (기본값 : true)
 	 * @param boolean autoHide 알림메시지 자동닫기 여부 (기본값 : true)
+	 * @param object data 알림메시지에 담을 데이터
 	 * @param function callback
 	 */
-	notify:function(code,type,message,closable,autoHide,callback) {
+	notify:function(code,type,message,closable,autoHide,data,callback) {
 		var $notifications = $("div[data-role=notifications]");
 		var $notification = $("div[data-code=" + code + "]",$notifications);
 		if ($notification.length == 0) {
@@ -2099,11 +2100,12 @@ Minitalk.ui = {
 			var $balloon = $("<div>");
 			$notification.append($balloon);
 			$notifications.append($notification);
-			$notification.data("autoHide",null);
 		} else {
 			var $balloon = $("div",$notification);
 		}
 		
+		$notification.data("autoHide",null);
+		$notification.data("data",data ? data : null);
 		$balloon.removeClass("action error warning success").addClass(type);
 		
 		if ($notification.data("unnotify") !== null) {
@@ -2130,7 +2132,7 @@ Minitalk.ui = {
 				$balloon.addClass("callback");
 				$balloon.on("click",function() {
 					var $notification = $(this).parent();
-					callback($notification.attr("data-code"));
+					callback($notification);
 				});
 			} else {
 				$balloon.addClass("closable");
