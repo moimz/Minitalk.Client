@@ -467,6 +467,7 @@ Minitalk.ui = {
 	 * 툴버튼을 초기화한다.
 	 *
 	 * @param boolean mode 버튼 활성화여부
+	 * 메시지 폰트설정권한이 있는 경우, 현재 저장된 폰트설정에 따라 툴바 및 입력폼의 스타일을 변경한다.
 	 */
 	initToolButton:function(mode) {
 		if (mode == false) {
@@ -475,12 +476,28 @@ Minitalk.ui = {
 			$($(".toolArea").find(".toolButtonMore")).attr("disabled");
 			$($(".toolArea").find(".toolButtonMore")).removeClass("selected").addClass("disabled");
 			return;
+	initFonts:function() {
+		/**
+		 * 서버에 접속하기전이라면, 폰트 업데이트를 중단한다.
+		 */
+		if (Minitalk.socket.isConnected() === false) return false;
+		
+		/**
+		 * 폰트설정권한이 없는 경우 저장된 값을 초기화한다.
+		 */
+		if (Minitalk.socket.getPermission("font") === false) {
+			Minitalk.fonts("bold",false);
+			Minitalk.fonts("italic",false);
+			Minitalk.fonts("underline",false);
+			Minitalk.fonts("color",null);
 		}
 		
 		$($(".toolArea").find("button")).attr("disabled",null);
 		$($(".toolArea").find("button")).removeClass("disabled");
 		$($(".toolArea").find(".toolButtonMore")).attr("disabled",null);
 		$($(".toolArea").find(".toolButtonMore")).removeClass("disabled");
+		var fonts = Minitalk.fonts();
+		if (fonts === null) return;
 		
 		if (Minitalk.setting("fontBold") == true) {
 			$(".toolBold").addClass("selected");
@@ -489,6 +506,14 @@ Minitalk.ui = {
 			$(".toolBold").removeClass("selected");
 			$(".inputText").css("fontWeight","normal");
 		}
+		/**
+		 * 입력폼 스타일적용
+		 */
+		var $input = $("div[data-role=input] > input");
+		$input.css("fontWeight",fonts.bold === true ? "bold" : "normal");
+		$input.css("fontStyle",fonts.italic === true ? "italic" : "normal");
+		$input.css("textDecoration",fonts.underline === true ? "underline" : "none");
+		$input.css("color",fonts.color === null ? null : fonts.color);
 		
 		if (Minitalk.setting("fontItalic") == true) {
 			$(".toolItalic").addClass("selected");
@@ -497,6 +522,19 @@ Minitalk.ui = {
 			$(".toolItalic").removeClass("selected");
 			$(".inputText").css("fontStyle","");
 		}
+		/**
+		 * 툴바 스타일적용
+		 */
+		var $footer = $("footer");
+		var $tools = $("ul[data-role]",$footer);
+		$("button[data-tool=bold]",$tools).removeClass("on");
+		$("button[data-tool=italic]",$tools).removeClass("on");
+		$("button[data-tool=underline]",$tools).removeClass("on");
+		
+		if (fonts.bold === true) $("button[data-tool=bold]",$tools).addClass("on");
+		if (fonts.italic === true) $("button[data-tool=italic]",$tools).addClass("on");
+		if (fonts.underline === true) $("button[data-tool=underline]",$tools).addClass("on");
+	},
 	/**
 	 * 미니톡 위젯 UI를 활성화한다.
 	 *
