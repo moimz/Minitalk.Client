@@ -70,7 +70,7 @@ Minitalk.user = {
 		/**
 		 * 채널의 접속자수를 변경한다.
 		 */
-		Minitalk.user.printUserCount(count,time);
+		Minitalk.ui.printUserCount(count,time);
 		
 		/**
 		 * 이벤트를 발생시킨다.
@@ -127,30 +127,6 @@ Minitalk.user = {
 		});
 		
 		return $user;
-	},
-	/**
-	 * 접속자수를 표시한다.
-	 *
-	 * @param int count 접속자
-	 */
-	printUserCount:function(count,time) {
-		if (time !== undefined) {
-			if (Minitalk.user.latestRefreshTime > time) return;
-			Minitalk.user.latestRefreshTime = time;
-		}
-		
-		var $count = $("label[data-role=count]");
-		
-		if (count == 0) {
-			$count.empty();
-		} else {
-			$count.html(Minitalk.getText("text/unit").replace("{COUNT}",count));
-		}
-		
-		/**
-		 * 이벤트를 발생시킨다.
-		 */
-		$(document).triggerHandler("printUserCount",[Minitalk,$count,count]);
 	},
 	/**
 	 * 접속자 정보를 서버로부터 가져온다.
