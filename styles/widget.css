@@ -31,6 +31,7 @@ div[data-role=notifications] > div {width:90%; max-width:400px; margin:5px auto;
 div[data-role=notifications] > div > div {padding:8px 10px; min-height:20px; line-height:20px; background:red; border-radius:5px; font-size:12px; box-sizing:border-box;}
 div[data-role=notifications] > div > div.closable {cursor:pointer; padding-right:25px; position:relative;}
 div[data-role=notifications] > div > div.closable > i.mi-close {width:10px; height:20px; position:absolute; top:8px; right:10px; line-height:20px;}
+div[data-role=notifications] > div > div.callback {cursor:pointer;}
 
 /**
  * 알림종류별 기본색상을 정의한다.
@@ -61,10 +62,7 @@ div[data-role=frame][data-tab-type=none] aside {display:none;}
 /**
  * 메인컨텐츠 영역의 기본속성을 정의한다.
  */
-main {position:relative; display:block; overflow:hidden;}
-section[data-tab] {position:absolute; z-index:0; top:0; left:0; width:100%; height:100%; overflow-x:hidden; overflow-y:scroll; display:none;}
-section[data-tab].open {display:block;}
-div[data-role=frame][data-tab-type=vertical] main > section[data-tab=chat] {display:block;} /* 세로형태의 탭바의 경우 채팅영역은 항상 표시한다. */
+main {position:relative; display:block; overflow:hidden; z-index:1;}
 
 /**
  * 윈도우의 경우
@@ -84,19 +82,6 @@ section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=website] > div[data-role=video] > div > div {position:absolute; top:0; left:0; border:0; width:100%; height:100%;}
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=website] > div[data-role=video] > div > div > iframe {width:100%; height:100%; border:0;}
 section[data-tab=chat] > div[data-role=message] > div.box > div > div[data-role=website] > a > div[data-role=image] > div {width:100%; height:0; overflow:hidden; background-image:no-repeat; background-size:cover; background-position:50% 50%;}
-
-i[data-role=file] {display:block; background-size:contain; background-repeat:no-repeat; background-position:50% 50%;}
-i[data-role=file][data-type=document] {background-image:url(../images/file/document.png);}
-i[data-role=file][data-type=image] {background-image:url(../images/file/image.png);}
-i[data-role=file][data-type=video] {background-image:url(../images/file/video.png);}
-i[data-role=file][data-type=audio] {background-image:url(../images/file/audio.png);}
-i[data-role=file][data-type=archive] {background-image:url(../images/file/archive.png);}
-
-i[data-role=file][data-extension^=ppt] {background-image:url(../images/file/ppt.png);}
-i[data-role=file][data-extension^=doc] {background-image:url(../images/file/doc.png);}
-i[data-role=file][data-extension^=xls] {background-image:url(../images/file/xls.png);}
-i[data-role=file][data-extension^=hwp] {background-image:url(../images/file/hwp.png);}
-i[data-role=file][data-extension^=pdf] {background-image:url(../images/file/pdf.png);}
 
 /**
  * 환경설정탭
@@ -150,29 +135,35 @@ div[data-role=window] section[data-role] > div[data-role=button] > ul > li > but
 
 /**
  * 푸터 기본속성을 정의한다.
- * 기본적으로 숨김상태이며, 채팅탭인 경우에만 표시한다.
- * 탭바형식이 세로형식을 경우, 채팅탭이 항상 표시되므로, 푸터영역도 항상 표시되도록 설정한다.
  */
-footer {position:absolute; z-index:3; width:100%; display:none;}
-footer > div[data-role=progress] {display:none;}
-footer > div[data-role=progress] > div {width:0;}
-footer > ul[data-role=tools] {list-style:none; white-space:nowrap; overflow:hidden;}
-footer > ul[data-role=tools] > li {display:inline-block;}
+footer {position:absolute; z-index:3; width:100%; display:block;}
+footer > ul[data-role=tools] {display:block; list-style:none; white-space:nowrap; overflow:hidden; font-size:0;}
+footer > ul[data-role=tools] > li {display:inline-block; vertical-align:middle;}
+footer > ul[data-role=tools] > li > button > i {display:none; vertical-align:middle; font-size:1rem;}
+footer > ul[data-role=tools] > li > button > span {display:none; vertical-align:middle; font-size:1rem;}
+footer > ul[data-role=tools][data-type*=icon] > li > button > i {display:inline-block;}
+footer > ul[data-role=tools][data-type*=text] > li > button > span {display:inline-block;}
 footer > ul[data-role=lists] {display:none; position:absolute; z-index:5;}
-footer.open > ul[data-role=lists] {display:block;}
-div[data-role=frame][data-current-tab=chat] footer {display:block;}
-div[data-role=frame][data-tab-type=vertical] footer {display:block;}
+footer.open > ul[data-role=lists] {display:block; list-style:none;}
 
 /**
  * 툴바 레이어 기본속성을 정의한다.
  */
 footer > div[data-role=layers] {position:absolute; z-index:10; width:100%;}
-footer > div[data-role=layers] > div[data-tool] {width:100%; box-sizing:border-box; max-width:300px;}
+footer > div[data-role=layers] > div[data-tool] {width:90%; box-sizing:border-box; max-width:300px;}
 footer > div[data-role=layers] > div[data-tool=color] > ul {list-style:none; width:100%; font-size:0; box-sizing:border-box; padding:1px;}
 footer > div[data-role=layers] > div[data-tool=color] > ul > li {display:inline-block; vertical-align:middle; width:10%; height:20px; padding:1px; box-sizing:border-box;}
 footer > div[data-role=layers] > div[data-tool=color] > ul > li:hover {background:#10b8c3;}
 footer > div[data-role=layers] > div[data-tool=color] > ul > li > button {box-sizing:border-box; width:100%; height:100%; cursor:pointer; border:0;}
 
+footer > div[data-role=layers] > div[data-tool=emoticon] {padding-top:30px;}
+footer > div[data-role=layers] > div[data-tool=emoticon] > ul[data-role=categories] {list-style:none; display:block; width:100%; height:30px; font-size:0; background:transparent; overflow:hidden; position:absolute; top:0; left:0;}
+footer > div[data-role=layers] > div[data-tool=emoticon] > ul[data-role=categories] > li {display:inline-block; width:20px; height:30px; vertical-align:top;}
+footer > div[data-role=layers] > div[data-tool=emoticon] > ul[data-role=categories] > li > button[data-action] {border:0; width:100%; height:30px; box-sizing:border-box; background:#fff; cursor:pointer;}
+footer > div[data-role=layers] > div[data-tool=emoticon] > ul[data-role=categories] > li[data-role=items] {width:calc(100% - 40px); white-space:nowrap; overflow-y:hidden; overflow-x:auto; height:50px;}
+footer > div[data-role=layers] > div[data-tool=emoticon] > ul[data-role=categories] > li[data-role=items] > button {cursor:pointer; border:0; height:30px; line-height:30px; vertical-align:top; background:transparent;}
+footer > div[data-role=layers] > div[data-tool=emoticon] > ul[data-role=categories] > li[data-role=items] > button > i {width:20px; height:20px; margin:5px; display:inline-block; vertical-align:middle; background-size:contain; background-repeat:no-repeat; background-position:50% 50%;}
+footer > div[data-role=layers] > div[data-tool=emoticon] > ul[data-role=categories] > li[data-role=items] > button > span {display:inline-block; height:20px; line-height:20px; white-space:nowrap; vertical-align:middle; font-size:1rem;}
 footer > div[data-role=layers] > div[data-tool=emoticon] > div[data-role=lists] > ul[data-category] {display:block; font-size:0; list-style:none; width:100%; height:100%; max-height:200px; overflow-x:hidden; overflow-y:auto; padding:3px; box-sizing:border-box;}
 footer > div[data-role=layers] > div[data-tool=emoticon] > div[data-role=lists] > ul[data-category] > li {display:inline-block; padding:3px; vertical-align:middle;}
 footer > div[data-role=layers] > div[data-tool=emoticon] > div[data-role=lists] > ul[data-category] > li > button {cursor:pointer; background-size:contain; background-repeat:no-repeat; background-position:50% 50%; background-color:transparent; border:0;}

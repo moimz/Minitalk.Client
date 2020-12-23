@@ -1,153 +1,216 @@
-/*********************************************************************************************
- * 스타일 수정시 주의사항
- * 클래스명 수정금지
- ********************************************************************************************/
+/**
+ * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
+ *
+ * 미니톡 채팅위젯 기본템플릿
+ * 
+ * @file /templets/default/style.css
+ * @author Arzz (arzz@arzz.com)
+ * @license MIT License
+ * @version 6.4.0
+ * @modified 2020. 3. 23.
+ */
+@import url("../../styles/fonts/FontAwesome.css");
+@import url("../../styles/fonts/NanumBarunGothic.css");
+* {font-family:NanumBarunGothic;}
+div[data-role=frame] {border:1px solid #9abce6; background:#fff; font-size:12px;}
 
-* {font-family:"Apple SD Gothic Neo","malgun gothic","nanumgothic"; font-size:12px; -ms-user-select:none; -moz-user-select:none; -webkit-user-select:none;}
-INPUT {-ms-user-select:text; -moz-user-select:text; -webkit-user-select:text;}
+/**
+ * 헤더
+ */
+header {background:linear-gradient(to bottom,#dae7f6 0%,#cddef3 49%,#abc7ec 50%,#b8cfee 51%,#cbddf3 100%); height:24px; border-bottom:1px solid #9abce6; font-size:0; position:relative;}
+header > h1 {height:24px; line-height:24px; font-size:12px; color:#1a4595; padding:0px 0px 0px 8px; font-size:12px; font-weight:bold; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:inline-block; max-width:calc(100% - 80px); vertical-align:middle;}
+header > label[data-role=count] {display:inline-block; font-weight:normal; font-size:12px; height:24px; line-height:24px; vertical-align:middle; color:#1a4595;}
+header > label[data-role=count]:before {content:"(";}
+header > label[data-role=count]:after {content:")";}
+header > label[data-role=count]:empty {display:none;}
 
-/* 로딩레이어 */
-.loading {width:100%; height:100%; background:#ffffff url(./images/loading.gif) no-repeat 50% 50%; position:absolute; top:0px; left:0px; z-index:10000;}
+header > button[data-action] {border:1px solid #99bbe8; border-radius:3px; width:15px; height:15px; cursor:pointer; position:absolute; top:5px; right:5px; background:linear-gradient(to bottom,#effdff 0%,#e6f5ff 50%,#d7e9fc 51%,#d9ecff 100%); box-shadow:inset 0px 0px 1px 1px rgba(255,255,255,0.2); font-family:FontAwesome; font-size:12px; color:#5080b0; line-height:15px; text-align:center; font-weight:normal;}
+header > button[data-action]:hover {border-color:#71a0dd; box-shadow:inset 0px 0px 1px 1px rgba(49,88,161,0.1); color:#3158a1;}
+header > button[data-action=configs] {right:21px; font-size:10px;}
+header > button[data-action=configs]:before {content:"\f013";}
+header[data-type=vertical] > button[data-action=users]:before {content:"\f103"; line-height:16px;}
+header[data-type=vertical] > button[data-action=users].on:before {content:"\f102";}
+header[data-type=horizontal] > button[data-action=users]:before {content:"\f100";}
+header[data-type=horizontal] > button[data-action=users].on:before {content:"\f101";}
 
-/* 액션 레이어 */
-.alertLayer {position:absolute; top:26px; left:0px; width:100%; z-index:5001;}
-.alertLayer DIV {line-height:1.5; margin:0px 1px 0px 1px; background:#f4f4f4; color:#000000; padding:5px; cursor:pointer; border-bottom:1px solid #cccccc;}
-.alertLayer .invite {background:#ffffea; color:#c10000; border-bottom:1px solid #cccccc;}
-.alertLayer .notice {background:#ffc4c4; color:#960000; border-bottom:1px solid #ffb8b8;}
+/**
+ * 알림영역
+ */
+div[data-role=notifications] {top:30px;}
 
-/* 유저정보 레이어 */
-.userInfoLayer {position:absolute; z-index:10001; top:22px; right:4px; width:150px; border:2px solid #2F2F2F; padding:3px; background:#ffffff; display:none;}
-.userInfoLayer .userInfoNickname {border:1px solid #cccccc; padding:3px; width:142px; height:16px; outline:none; margin-bottom:2px;}
-.userInfoLayer .userInfoStatus {width:148px; height:22px; border:1px solid #cccccc; position:relative; background:transparent; font-size:0px; position:relative; margin-bottom:2px;}
-.userInfoLayer .userInfoStatusBox {cursor:pointer;}
-.userInfoLayer .userInfoStatusIcon {background-repeat:no-repeat; background-position:3px 50%; width:22px; height:22px; float:left;}
-.userInfoLayer .userInfoStatusText {width:105px; height:22px; float:right; background:#ffffff url(./images/btn_arrow.gif) no-repeat right 0px; padding-right:21px; font-size:12px; line-height:22px; overflow:hidden;}
-.userInfoLayer .userInfoStatusList {position:absolute; background:#ffffff; border:1px solid #cccccc; top:22px; left:-1px; width:148px; z-index:10002; display:none;}
-.userInfoLayer .userInfoStatusList UL {list-style:none; padding:0px; margin:0px;}
-.userInfoLayer .userInfoStatusList UL LI {font-size:12px; cursor:pointer; background-repeat:no-repeat; background-position:3px 2px; height:20px; line-height:20px; padding-left:22px;}
-.userInfoLayer .userInfoStatusList UL LI.mouseover {background-color:#f4f4f4;}
-.userInfoLayer .userInfoButton {width:150px; height:22px; border:0px; outline:none; background:url(./images/btn_button.gif) no-repeat 0 0; display:block; cursor:pointer;}
+/**
+ * 메인영역
+ */
+main {width:100%; height:calc(100% - 25px - 58px); position:relative;}
 
-/* 유저메뉴 */
-.userMenu {position:absolute; z-index:10001; width:140px; top:0px; left:0px; background:#F0F0F0; border:1px solid #718BB7; display:none;}
-.userMenu DIV.nickname {border:1px solid #99BBE8; padding:4px 4px 4px 24px; background-position:3px 50%; background-repeat:no-repeat; background-color:#D6E3F2; font-weight:bold; color:#15428B; margin:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.userMenu .list {overflow:hidden; padding:1px;}
-.userMenu DIV.menu {border:1px solid #F0F0F0; padding:4px 4px 4px 24px; background-position:3px 50%; background-repeat:no-repeat; background-color:#F0F0F0; cursor:pointer; height:16px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.userMenu DIV.mouseover {background-color:#DFE8F6; border:1px solid #A3BAE9;}
+/**
+ * 채팅영역
+ */
+main > section[data-role=chat] {width:100%; height:100%; overflow-y:scroll; position:absolute; bottom:0; left:0; z-index:0;}
+main > section[data-role=chat] DIV {margin:1px; padding:2px 3px; line-height:1.4; -ms-user-select:auto; -moz-user-select:auto; -webkit-user-select:auto;}
+main > section[data-role=chat] SPAN {-ms-user-select:auto; -moz-user-select:auto; -webkit-user-select:auto;}
+main > section[data-role=chat] B {-ms-user-select:auto; -moz-user-select:auto; -webkit-user-select:auto;}
+main > section[data-role=chat] I {-ms-user-select:auto; -moz-user-select:auto; -webkit-user-select:auto;}
+main > section[data-role=chat] U {-ms-user-select:auto; -moz-user-select:auto; -webkit-user-select:auto;}
+main > section[data-role=chat] DIV.mymessage {background:#f4f4f4;}
+main > section[data-role=chat] DIV.system {color:green;}
+main > section[data-role=chat] DIV.error {color:red;}
+main > section[data-role=chat] DIV.broadcast {color:blue;}
+main > section[data-role=chat] DIV.broadcast A {color:blue !important;}
+main > section[data-role=chat] DIV.plugin {color:purple;}
+main > section[data-role=chat] DIV.chat {color:black;}
+main > section[data-role=chat] DIV.whisper {color:#ff00ff !important;}
+main > section[data-role=chat] DIV.log {color:gray !important;}
+main > section[data-role=chat] SPAN.body {}
+main > section[data-role=chat] SPAN.time {font-family:tahoma; font-size:10px !important; color:skyblue !important; padding-left:5px;}
+main > section[data-role=chat] SPAN.time:before {content:"(";}
+main > section[data-role=chat] SPAN.time:after {content:")";}
 
-/* 전체 외곽 프레임 */
-.frame {border:1px solid #9abce6; background:#ffffff; overflow:hidden;}
+main > section[data-role=chat] div[data-role=line] {border-top:1px dotted #ccc; text-align:center; padding:0px; margin:0px; font-size:0px; height:-13px;}
+main > section[data-role=chat] div[data-role=line] > div {background:#fff; display:inline-block; height:13px; line-height:13px; font-size:10px; font-family:tahoma; color:#666; padding:0px 5px 0px 5px; margin:-7px 5px 0px 5px !important;}
 
-/* 타이틀 영역 (기본) */
-.titleArea {background:url(./images/bg_title.gif) repeat-x; height:24px; line-height:25px; overflow:hidden; padding:0px 4px 0px 7px; color:#1a4595; font-size:12px; font-weight:bold; border-bottom:1px solid #9abce6;}
+/**
+ * 유저목록
+ */
+main > aside[data-role=users] {background:#fff; position:absolute; z-index:1; overflow:hidden; overflow-y:scroll;}
+main[data-type=vertical] > aside[data-role=users] {width:100%; height:0; top:-1px; left:0; border-bottom:1px solid #9abce6;}
+main[data-type=vertical].users > aside[data-role=users] {height:100px;}
+main[data-type=vertical].users > section[data-role=chat] {height:calc(100% - 100px); top:100px;}
+main[data-type=horizontal] > aside[data-role=users] {width:0; height:100%; right:-1px; border-left:1px solid #9abce6;}
+main[data-type=horizontal].users > aside[data-role=users] {width:140px;}
+main[data-type=horizontal].users > section[data-role=chat] {width:calc(100% - 140px);}
 
-/* 접속자수 영역 */
-.userCount {}
+main > aside[data-role=users] label[data-role=user] {display:block; margin:1px; border:1px solid #FFFFFF; padding:2px 0px 2px 2px; background-repeat:no-repeat; background-position:2px center; cursor:pointer; font-weight:normal; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; height:18px; line-height:18px;}
+main > aside[data-role=users] label[data-role=user]:hover {border:1px solid #E5E5E5; background-color:#F4F4F4;}
 
-/* 상단버튼 */
-.titleArea DIV {background-image:url(./images/btn_top.gif); background-repeat:no-repeat; width:15px; height:15px; float:right; cursor:pointer; margin-top:4px;}
-.titleArea DIV.mouseover {background-position-x:-15px;}
-.toggleUserList {} /* 세로/가로형태에 따라 버튼아이콘이 다르므로 세로/가로형태 정의에 정의 */
-.toggleUserInfo {background-position:0px -60px; margin-right:1px;}
 
-/* 닉네임영역 관련 */
-.user {cursor:pointer; font-weight:bold;}
-.user IMG {vertical-align:middle; margin-right:2px;}
+/**
+ * 푸터
+ */
+footer {min-height:58px; font-size:0; bottom:0; left:0; background:#fff; border-top:1px solid #9abce6;}
 
-/* 유저목록 */
-.userList {background:#ffffff; position:absolute; z-index:1;}
-.userList SPAN {display:block; margin:1px; border:1px solid #FFFFFF; padding:2px 0px 2px 2px; background-repeat:no-repeat; background-position:2px center; cursor:pointer; font-weight:normal; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;}
-.userList SPAN.mouseover {border:1px solid #E5E5E5; background-color:#F4F4F4; }
+/**
+ * 툴바
+ */
+footer > ul[data-role=tools] {padding-left:2px; height:27px; background:linear-gradient(to bottom,#dae6f4 0%,#ceddef 100%); border-top:1px solid #f0f5fa; border-bottom:1px solid #9abce6;}
+footer > ul[data-role=tools] > li {height:26px;}
+footer > ul[data-role=tools] > li.separator {width:1px; height:16px; margin:5px 2px; border-left:1px solid #9ac6ff; background:#fff;}
+footer > ul[data-role=tools] > li > button {height:24px; margin:1px; font-size:12px; background:transparent; color:#666; border:1px solid transparent; cursor:pointer; border-radius:4px;}
+footer > ul[data-role=tools] > li > button:hover {border-top-color:#aac8f1; border-right-color:#8aabd7; border-bottom-color:#a5c4eb; border-left-color:#80a2cf; box-shadow:inset 0px 0px 1px 1px rgba(255,255,255,0.7); background:linear-gradient(to bottom,#e4f3ff 0%,#d8edff 59%,#c2d8f2 60%,#c6dcf6 100%);}
+footer > ul[data-role=tools] > li > button.on {border-top-color:#9ebae1; border-right-color:#7999c3; border-bottom-color:#99b6db; border-left-color:#7596c1; box-shadow:none; background:linear-gradient(to bottom,#b6cbe4 0%,#bfd2e6 59%,#8dc0f5 60%,#98c5f5 100%);}
+footer > ul[data-role=tools] > li > button > i {width:22px; height:22px; line-height:22px; background-repeat:no-repeat; background-position:50% 50%;}
+footer > ul[data-role=tools] > li > button > span {height:22px; line-height:23px; padding-right:5px; color:#666; font-size:12px;}
+footer > ul[data-role=tools] > li.more {float:right;}
+footer > ul[data-role=tools] > li > button[data-tool=more] {width:16px;}
+footer > ul[data-role=tools] > li > button[data-tool=more] > i {width:16px; background-image:url(./images/icon_more.png);}
+footer > ul[data-role=tools] > li > button[data-tool=more] > span {display:none;}
+footer.open > ul[data-role=tools] > li > button[data-tool=more] {border-top-color:#9ebae1; border-right-color:#7999c3; border-bottom-color:#99b6db; border-left-color:#7596c1; box-shadow:none; background:linear-gradient(to bottom,#b6cbe4 0%,#bfd2e6 59%,#8dc0f5 60%,#98c5f5 100%);}
 
-/* 채팅영역 (기본) */
-.chatArea {padding:3px 0px 3px 0px; overflow-y:scroll; -ms-word-break:break-all; word-wrap:break-word; -ms-user-select:auto; -moz-user-select:auto; -webkit-user-select:auto;}
-.chatArea DIV {margin:1px; padding:2px 3px; line-height:1.4; -ms-user-select:auto; -moz-user-select:auto; -webkit-user-select:auto;}
-.chatArea SPAN {-ms-user-select:auto; -moz-user-select:auto; -webkit-user-select:auto;}
-.chatArea B {-ms-user-select:auto; -moz-user-select:auto; -webkit-user-select:auto;}
-.chatArea I {-ms-user-select:auto; -moz-user-select:auto; -webkit-user-select:auto;}
-.chatArea U {-ms-user-select:auto; -moz-user-select:auto; -webkit-user-select:auto;}
-.chatArea DIV.mymessage {background:#f4f4f4;}
-.chatArea DIV.system {color:green;}
-.chatArea DIV.error {color:red;}
-.chatArea DIV.broadcast {color:blue;}
-.chatArea DIV.broadcast A {color:blue !important;}
-.chatArea DIV.plugin {color:purple;}
-.chatArea DIV.chat {color:black;}
-.chatArea DIV.whisper {color:#ff00ff !important;}
-.chatArea DIV.log {color:gray !important;}
-.chatArea DIV.logEnd {background:url(./images/bar.gif) repeat-x center; text-align:center; padding:0px; margin:0px; font-size:0px;}
-.chatArea DIV.logEnd DIV {background:white; display:inline-block; height:13px; line-height:13px; font-size:10px; font-family:tahoma; color:#666666; padding:0px 5px 0px 5px; margin:0px 5px 0px 5px !important;}
-.chatArea SPAN.body {}
-.chatArea SPAN.time {font-family:tahoma; font-size:10px !important; color:skyblue !important;}
+/**
+ * 툴목록
+ */
+footer > ul[data-role=lists] {width:140px; bottom:55px; right:2px; background:#F0F0F0; border:1px solid #718BB7;}
+footer > ul[data-role=lists] > li {padding:2px;}
+footer > ul[data-role=lists] > li > button {width:100%; height:24px; line-height:22px; padding:0px 12px 0px 30px; text-align:left; border:0; cursor:pointer; background:transparent; color:#666; font-size:0; white-space:nowrap; max-width:150px; position:relative; border:1px solid transparent; border-radius:2px;}
+footer > ul[data-role=lists] > li > button > i {position:absolute; top:0; left:5px; width:22px; height:22px; line-height:22px; vertical-align:middle; font-size:12px; text-align:center; margin-right:5px; background-repeat:no-repeat; background-position:50% 50%;}
+footer > ul[data-role=lists] > li > button > i.icon {font-family:moimz;}
+footer > ul[data-role=lists] > li > button > span {display:inline-block; width:100%; height:22px; line-height:22px; vertical-align:middle; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; font-size:12px;}
+footer > ul[data-role=lists] > li > button:hover {border-top-color:#aac8f1; border-right-color:#8aabd7; border-bottom-color:#a5c4eb; border-left-color:#80a2cf; box-shadow:inset 0px 0px 1px 1px rgba(255,255,255,0.7); background:linear-gradient(to bottom,#e4f3ff 0%,#d8edff 59%,#c2d8f2 60%,#c6dcf6 100%);}
+footer > ul[data-role=lists] > li > button.on {border-top-color:#9ebae1; border-right-color:#7999c3; border-bottom-color:#99b6db; border-left-color:#7596c1; box-shadow:none; background:linear-gradient(to bottom,#b6cbe4 0%,#bfd2e6 59%,#8dc0f5 60%,#98c5f5 100%);}
+footer > ul[data-role=lists] > li.separator {border-top:1px solid #d8d8d9; height:1px; background:#fff; padding:0;}
 
-/* 액션박스영역 (기본) */
-.actionArea {border-top:1px solid #9abce6;}
-.actionArea .toolArea {padding-left:2px; height:26px; background:url(./images/bg_tool.gif) repeat-x; border-bottom:1px solid #9abce6;}
-.actionArea .inputArea {font-size:0px;}
-.actionArea .inputArea .inputText {display:inline-block; padding:0px 3px; margin:3px; border:1px solid #C9C9C9; background:url(./images/bg_input.gif) repeat-x 0; height:20px; outline:none; line-height:20px; vertical-align:middle; -ms-user-select:auto; -moz-user-select:auto; -webkit-user-select:auto;}
-.actionArea .inputArea .inputText:focus {border:1px solid #9abce6;}
-.actionArea .inputArea .inputButton {display:inline-block; cursor:pointer; width:22px; height:22px; border:0px; background-image:url(./images/btn_submit.gif); background-repeat:no-repeat; background-position:0 0; vertical-align:middle; margin-right:3px; outline:none;}
-.actionArea .inputArea .inputButton:hover {background-position:0 -22px;}
+/**
+ * 기본툴
+ */
+footer > ul[data-role] > li > button[data-tool=bold] > i.icon {background-image:url(./images/icon_bold.png);}
+footer > ul[data-role] > li > button[data-tool=underline] > i.icon {background-image:url(./images/icon_underline.png);}
+footer > ul[data-role] > li > button[data-tool=italic] > i.icon {background-image:url(./images/icon_italic.png);}
+footer > ul[data-role] > li > button[data-tool=color] > i.icon {background-image:url(./images/icon_color.png);}
+footer > ul[data-role] > li > button[data-tool=emoticon] > i.icon {background-image:url(./images/icon_emoticon.png);}
+footer > ul[data-role] > li > button[data-tool=mute] > i.icon {background-image:url(./images/icon_mute.png);}
+footer > ul[data-role] > li > button[data-tool=push] > i.icon {background-image:url(./images/icon_push.png);}
+footer > ul[data-role] > li > button[data-tool=scroll] > i.icon {background-image:url(./images/icon_scroll.png);}
+footer > ul[data-role] > li > button[data-tool=clear] > i.icon {background-image:url(./images/icon_clear.png);}
 
-/* 툴버튼 디자인 */
-.toolArea .toolSeparator {width:7px; height:22px; background:url(./images/bar_tool.gif) no-repeat 50% 50%; float:left;}
-.toolArea .toolButton {padding:0px 0px 0px 3px; margin:2px 1px 0px 0px; height:22px; cursor:pointer; float:left; border:0px; outline:none; background:transparent;}
-.toolArea .toolButton .toolButtonInner {height:22px; padding-right:3px; line-height:22px; overflow:hidden;}
-.toolArea .toolButton .toolButtonIcon {display:inline-block; width:16px; height:16px; background-repeat:no-repeat; background-position:50% 50%; background-color:transparent; vertical-align:middle;}
-.toolArea .toolButton .toolButtonText {padding:0px 2px 0px 2px; display:inline-block; height:16px; line-height:18px; color:#666666; overflow:hidden; vertical-align:middle;}
-.toolArea .toolButtonMore {background:url(./images/btn_more.gif) no-repeat 0 0; width:16px; height:22px; float:right; cursor:pointer; margin:2px 2px 0px 0px;}
-.toolArea DIV.mouseover {background-position-y:-22px;}
-.toolArea DIV.selected {background-position-y:-44px !important;}
-.toolArea DIV.disabled {opacity:0.5; -webkit-filter:grayscale(100%); -moz-filter:grayscale(100%); -ms-filter:grayscale(100%); -o-filter:grayscale(100%); filter:grayscale(100%); filter:gray;}
+/**
+ * 입력폼
+ */
+footer > div[data-role=input] {font-size:0px;}
+footer > div[data-role=input] input {display:inline-block; padding:0px 3px; margin:3px; border:1px solid #C9C9C9; background:url(./images/bg_input.gif) repeat-x 0; width:calc(100% - 31px); height:22px; outline:none; line-height:20px; vertical-align:middle; box-sizing:border-box;}
+footer > div[data-role=input] input:focus {border:1px solid #9abce6;}
+footer > div[data-role=input] button {display:inline-block; cursor:pointer; width:22px; height:22px; border:0px; background-image:url(./images/btn_submit.gif); background-repeat:no-repeat; background-position:0 0; vertical-align:middle; margin-right:3px; outline:none;}
+footer > div[data-role=input] button:hover {background-position:0 -22px;}
 
-.toolArea BUTTON.mouseover {background:url(./images/btn_tool.gif) no-repeat 0 0;}
-.toolArea BUTTON.mouseover .toolButtonInner {background:url(./images/btn_tool.gif) no-repeat 100% 0;}
-.toolArea BUTTON.selected {background:url(./images/btn_tool.gif) no-repeat 0 100%;}
-.toolArea BUTTON.selected .toolButtonInner {background:url(./images/btn_tool.gif) no-repeat 100% 100%;}
-.toolArea BUTTON.disabled {opacity:0.5; -webkit-filter:grayscale(100%); -moz-filter:grayscale(100%); -ms-filter:grayscale(100%); -o-filter:grayscale(100%); filter:grayscale(100%); filter:gray;}
+/**
+ * 툴바레이어
+ */
+footer > div[data-role=layers] {left:0; bottom:100%;}
+footer > div[data-role=layers] > div[data-tool] {background:#fff; width:calc(100% - 5px); max-width:300px; border:1px solid #d8d8d9; background:#f6f6f6; position:relative; margin-bottom:1px;}
+footer > div[data-role=layers] > div[data-tool=color] {border:1px solid #d8d8d9;}
 
-/* 툴버튼 목록 */
-.toolListLayer {position:absolute; z-index:101; width:140px; bottom:55px; right:2px; background:#F0F0F0; border:1px solid #718BB7; display:none;}
-.toolListLayer .toolList {cursor:pointer; border:1px solid #F0F0F0; background:#F0F0F0; margin:1px; padding:2px 3px 2px 3px;}
-.toolListLayer .toolList .toolListIcon {display:inline-block; width:16px; height:16px; background-repeat:no-repeat; background-position:50% 50%; background-color:transparent; vertical-align:middle;}
-.toolListLayer .toolList .toolListText {padding:0px 2px 0px 4px; display:inline-block; width:100px; height:16px; line-height:18px; color:#666666; overflow:hidden; vertical-align:middle; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
-.toolListLayer DIV.mouseover {border:1px solid #AACCF6; background:url(./images/btn_toollist.gif) repeat-x top; margin:1px; padding:2px 3px 2px 3px;}
-.toolListLayer DIV.selected {border:1px solid #AACCF6; background:url(./images/btn_toollist.gif) repeat-x bottom; margin:1px; padding:2px 3px 2px 3px;}
+footer > div[data-role=layers] > div[data-tool=emoticon] > ul[data-role=categories] > li > button[data-action] {background:linear-gradient(to bottom,#fff 0%,#f5f5f5 100%); border-bottom:1px solid #d8d8d9; color:#222; font-family:FontAwesome;}
+footer > div[data-role=layers] > div[data-tool=emoticon] > ul[data-role=categories] > li > button[data-action]:hover {background:#fff;}
+footer > div[data-role=layers] > div[data-tool=emoticon] > ul[data-role=categories] > li > button[data-action=prev] {border-right:1px solid #d8d8d9;}
+footer > div[data-role=layers] > div[data-tool=emoticon] > ul[data-role=categories] > li > button[data-action=prev]:before {content:"\f0d9";}
+footer > div[data-role=layers] > div[data-tool=emoticon] > ul[data-role=categories] > li > button[data-action=next] {border-left:1px solid #d8d8d9;}
+footer > div[data-role=layers] > div[data-tool=emoticon] > ul[data-role=categories] > li > button[data-action=next]:before {content:"\f0da";}
+footer > div[data-role=layers] > div[data-tool=emoticon] > ul[data-role=categories] > li[data-role=items] > button {padding:0px 8px; border-bottom:1px solid #d8d8d9; border-right:1px solid #d8d8d9;}
+footer > div[data-role=layers] > div[data-tool=emoticon] > ul[data-role=categories] > li[data-role=items] > button:hover {background:#fff;}
+footer > div[data-role=layers] > div[data-tool=emoticon] > ul[data-role=categories] > li[data-role=items] > button.on {border-bottom:1px solid #fff; background:#fff;}
+footer > div[data-role=layers] > div[data-tool=emoticon] > ul[data-role=categories] > li[data-role=items] > button > span {font-size:12px; color:#222;}
+footer > div[data-role=layers] > div[data-tool=emoticon] > div[data-role=lists] {background:#fff; height:150px; overflow-y:auto; border-top:1px solid #d8d8d9; margin-top:-1px;}
 
-/* 툴버튼 레이어 */
-.toolEmoticonLayer {position:absolute; z-index:10; left:0px; bottom:55px; border:1px solid #9abce6; background:#ffffff; display:none; overflow:hidden;}
-.toolEmoticonLayer .toolEmoticonLayerTab {height:25px; font-size:0px; background:url(./images/tab_emoticon.gif) repeat-x top;}
-.toolEmoticonLayer .toolEmoticonLayerTab DIV.left {display:inline-block; width:15px; height:25px; background:url(./images/tab_emoticon_more.gif) no-repeat 0 0; cursor:pointer; border:0px; vertical-align:top;}
-.toolEmoticonLayer .toolEmoticonLayerTab DIV.left:HOVER {background-position:0px -25px;}
-.toolEmoticonLayer .toolEmoticonLayerTab DIV.right {display:inline-block; width:15px; height:25px; background:url(./images/tab_emoticon_more.gif) no-repeat -15px 0; cursor:pointer; border:0px; vertical-align:top;}
-.toolEmoticonLayer .toolEmoticonLayerTab DIV.right:HOVER {background-position:-15px -25px;}
-.toolEmoticonLayer .toolEmoticonLayerTabList {display:inline-block; height:25px; overflow:hidden; white-space:nowrap; vertical-align:top;}
-.toolEmoticonLayer .toolEmoticonLayerTabList DIV {width:45px; height:24px; line-height:24px; text-align:center; overflow:hidden; cursor:pointer; border-right:1px solid #cccccc; display:inline-block;}
-.toolEmoticonLayer .toolEmoticonLayerTabList DIV.selected {height:25px; background:#ffffff;}
-.toolEmoticonLayer .toolEmoticonLayerTabList DIV.first {}
-.toolEmoticonLayer .toolEmoticonLayerTabList DIV.last {border-right:0px;}
-.toolEmoticonLayer .toolEmoticonLayerTabList IMG {vertical-align:middle; max-width:40px; max-height:20px;}
-.toolEmoticonLayer .toolEmoticonLayerList {overflow-y:scroll;}
-.toolEmoticonLayer .toolEmoticonLayerListTab {padding:3px;}
-.toolEmoticonLayer .toolEmoticonLayerListTab DIV {display:inline-block; white-space:nowrap; max-width:160px; overflow-x:hidden; text-overflow:ellipsis; border:1px solid #ffffff; margin:1px; cursor:pointer; padding:2px;}
-.toolEmoticonLayer .toolEmoticonLayerListTab DIV.image {font-size:0px;}
-.toolEmoticonLayer .toolEmoticonLayerListTab DIV.image IMG {vertical-align:middle;}
-.toolEmoticonLayer .toolEmoticonLayerListTab DIV.mouseover {border:1px solid #cccccc;}
+/**
+ * 유저태그
+ */
+label[data-role=user] img.nickname {max-width:100px; max-height:18px;}
+label[data-role=user] img {vertical-align:middle;}
 
-.toolFontColorLayer {position:absolute; z-index:10; left:0px; bottom:55px; border:1px solid #9abce6; background:#ffffff; padding:2px; width:140px; height:28px; margin:0px; overflow:hidden; display:none;}
-.toolFontColorLayer DIV {overflow:hidden; float:left; width:12px; height:12px; margin:1px; background-repeat:no-repeat; background-position:0px 0px; cursor:pointer;}
-.toolFontColorLayer DIV.default {background-image:url(./images/colorbox_default.gif);}
-.toolFontColorLayer DIV.color {background-image:url(./images/colorbox.gif);}
+/**
+ * 유저메뉴
+ */
+ul[data-role=usermenus] {top:0; left:0; max-width:80%; border:1px solid #718bb7; background:#f0f0f0; box-shadow:1px 1px 2px rgba(0,0,0,0.1);}
+ul[data-role=usermenus] > li[data-role=nickname] {width:100%; height:26px; padding:0px 8px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; font-size:0; background:linear-gradient(to bottom,#dae7f6 0%,#cddef3 49%,#abc7ec 50%,#b8cfee 51%,#cbddf3 100%); box-sizing:border-box; border-bottom:1px solid #718bb7;}
+ul[data-role=usermenus] > li[data-role=nickname] > i {display:inline-block; vertical-align:middle; width:16px; height:16px; margin:5px 4px 5px 0px;}
+ul[data-role=usermenus] > li[data-role=nickname] > i.status {background-repeat:no-repeat; background-position:50% 50%; background-size:contain;}
+ul[data-role=usermenus] > li[data-role=nickname] > i.mi-loading {font-size:12px; line-height:16px; text-align:center; color:#666;}
+ul[data-role=usermenus] > li[data-role=nickname] > label {display:inline-block; width:calc(100% - 20px); height:26px; line-height:26px; font-size:12px; color:#1a4595; font-weight:bold; vertical-align:middle;}
+ul[data-role=usermenus] > li > button {width:100%; height:26px; border:0; background:transparent; cursor:pointer; text-align:left; font-size:12px; padding:0px 8px; box-sizing:border-box; color:#666; font-size:0;}
+ul[data-role=usermenus] > li > button:hover {background:#dfe8f6; color:#222;}
+ul[data-role=usermenus] > li > button > i.icon {width:16px; height:16px; margin:5px 4px 5px 0px; display:inline-block; vertical-align:middle;}
+ul[data-role=usermenus] > li > button > span {display:inline-block; width:calc(100% - 20px); height:26px; line-height:26px; font-size:12px; vertical-align:middle;}
+ul[data-role=usermenus] > li.separator {border-top:1px solid #ccc; height:1px; background:#fff;}
 
-.toolFontColorLayer DIV.mouseover {background-position:0px -12px;}
-.toolFontColorLayer DIV.selected {background-position:0px -24px;}
+/**
+ * 기본 유저메뉴
+ */
+ul[data-role=usermenus] > li > button[data-menu=configs] > i.icon {background-image:url(./images/icon_me.png);}
+ul[data-role=usermenus] > li > button[data-menu=whisper] > i.icon {background-image:url(./images/icon_whisper.png);}
+ul[data-role=usermenus] > li > button[data-menu=call] > i.icon {background-image:url(./images/icon_call.png);}
+ul[data-role=usermenus] > li > button[data-menu=create] > i.icon {background-image:url(./images/icon_private.png);}
+ul[data-role=usermenus] > li > button[data-menu=invite] > i.icon {background-image:url(./images/icon_private.png);}
+ul[data-role=usermenus] > li > button[data-menu=banmsg] > i.icon {background-image:url(./images/icon_banmsg.png);}
+ul[data-role=usermenus] > li > button[data-menu=showip] > i.icon {background-image:url(./images/icon_showip.png);}
+ul[data-role=usermenus] > li > button[data-menu=banip] > i.icon {background-image:url(./images/icon_banip.png);}
+ul[data-role=usermenus] > li > button[data-menu=opper] > i.icon {background-image:url(./images/icon_opper.png);}
+ul[data-role=usermenus] > li > button[data-menu=deopper] > i.icon {background-image:url(./images/icon_deopper.png);}
 
-/* 세로형태 정의 */
-.vertical .userList {border-bottom:1px solid #9abce6; overflow-y:scroll;}
-.vertical .toggleUserListOff {background-position:0px -15px;} /* 접속자목록이 닫힌상태 */
-.vertical .toggleUserListOn {background-position:0px 0px;} /* 접속자목록이 열린상태 */
-
-/* 가로형태 정의 */
-.horizontal .userList {border-left:1px solid #9abce6; overflow-y:scroll;}
-.horizontal .toggleUserListOff {background-position:0px -45px;} /* 접속자목록이 닫힌상태 */
-.horizontal .toggleUserListOn {background-position:0px -30px;} /* 접속자목록이 열린상태 */
+/**
+ * 환경설정 레이어
+ */
+div[data-role=configs] {position:absolute; z-index:10001; top:22px; right:4px; width:150px; border:2px solid #2F2F2F; padding:3px; background:#fff;}
+div[data-role=configs] > div[data-config=nickname] > input {border:1px solid #ccc; padding:3px; width:142px; height:16px; margin-bottom:2px;}
+div[data-role=configs] > div[data-config=status] {width:148px; border:1px solid #ccc; position:relative; background:#fff; font-size:0px; margin-bottom:2px;}
+div[data-role=configs] > div[data-config=status] > button {width:100%; height:22px; display:block; font-size:0; cursor:pointer; border:0; background:transparent; text-align:left; color:#222;}
+div[data-role=configs] > div[data-config=status] > button > i.icon {width:16px; height:16px; margin:3px; display:inline-block; vertical-align:middle; background-size:contain; background-repeat:no-repeat; background-position:50% 50%;}
+div[data-role=configs] > div[data-config=status] > button > span {display:inline-block; font-size:12px; width:calc(100% - 22px - 20px); height:22px; line-height:22px; vertical-align:middle; box-sizing:border-box; padding:0px 4px;}
+div[data-role=configs] > div[data-config=status] > button > i.arrow {display:inline-block; width:19px; border-left:1px solid #ccc; background:linear-gradient(to bottom,#fff 0%,#f5f5f5 100%); font-family:FontAwesome; font-size:12px; line-height:22px; text-align:center; vertical-align:middle; font-style:normal;}
+div[data-role=configs] > div[data-config=status] > button > i.arrow:before {content:"\f107";}
+div[data-role=configs] > div[data-config=status] > ul {position:absolute; background:#fff; border:1px solid #ccc; top:22px; left:-1px; width:148px; z-index:10002; display:none; list-style:none;}
+div[data-role=configs] > div[data-config=status] > ul > li {font-size:0px; cursor:pointer; background-repeat:no-repeat; background-position:3px 2px; height:22px; line-height:22px;}
+div[data-role=configs] > div[data-config=status] > ul > li > i {width:16px; height:16px; margin:3px; display:inline-block; vertical-align:middle; background-size:contain; background-repeat:no-repeat; background-position:50% 50%;}
+div[data-role=configs] > div[data-config=status] > ul > li > span {display:inline-block; font-size:12px; width:calc(100% - 22px); height:22px; line-height:22px; vertical-align:middle; box-sizing:border-box; padding:0px 4px;}
+div[data-role=configs] > div[data-config=status] > ul > li:hover {background-color:#f4f4f4;}
+div[data-role=configs] > div[data-config=status].on > ul {display:block;}
+div[data-role=configs] > div[data-config=status].on > button > i.arrow:before {content:"\f106";}
+div[data-role=configs] > button {width:150px; height:24px; border:1px solid #d6d3d6; border-right-color:#aeaeae; border-bottom-color:#aeaeae; background:linear-gradient(to bottom,#fbfbfb 0%,#e8e8e9 100%); color:#222; cursor:pointer;}
