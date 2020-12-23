@@ -609,7 +609,7 @@ Minitalk.ui = {
 	printMessage:function(type,message) {
 		var item = $("<div>").addClass(type);
 		item.html(message);
-		$(".chatArea").append(item);
+		$("section[data-role=chat]").append(item);
 		Minitalk.ui.autoScroll();
 	},
 	/**
@@ -650,7 +650,7 @@ Minitalk.ui = {
 		item.append(messageObject);
 		if (time) item.append($("<span>").addClass("time").html(Minitalk.ui.getTime(time,Minitalk.dateFormat)));
 		
-		$(".chatArea").append(item);
+		$("section[data-role=chat]").append(item);
 		Minitalk.ui.autoScroll();
 		
 		if (type == "chat" && sender.nickname != Minitalk.user.me.nickname) {
