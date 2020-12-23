@@ -11,251 +11,155 @@
  */
 Minitalk.ui = {
 	tools:[],
-	reinitTimer:null,
+	resizeTimer:null,
 	isFixedScroll:false,
 	/**
 	 * 미니톡 채팅위젯 UI 를 초기화한다.
 	 */
 	init:function() {
-		Minitalk.statusIconPath = Minitalk.statusIconPath == "" ? Minitalk.getUrl()+"/images/status" : Minitalk.statusIconPath;
-		
-		if (Minitalk.type == "auto") {
-			if ($(document).height() >= $(document).width()) {
-				Minitalk.type = "vertical";
-			} else {
-				Minitalk.type = "horizontal";
-			}
-		}
-		
-		$(".frame").removeClass("vertical").removeClass("horizontal").addClass(Minitalk.type);
-		$(".frame").outerHeight($(".outFrame").length == 0 ? $(document).height() : $(".outFrame").innerHeight(),true);
-		$(".inputText").outerWidth($(".inputArea").innerWidth() - $(".inputButton").outerWidth(true),true);
-		$(".title").text(Minitalk.title == null ? "Connecting..." : Minitalk.title);
-		
-		var height = $(".frame").innerHeight() - $(".titleArea").outerHeight(true) - $(".actionArea").outerHeight(true);
-		
-		$(".userList").css("top",$(".titleArea").position().top + $(".titleArea").outerHeight(true));
-		
-		if (Minitalk.type == "vertical") {
-			$(".toggleUserList").addClass("toggleUserListOff");
-			$(".userList").outerWidth($(".frame").innerWidth(),true);
-			$(".userList").css("left",Math.ceil(($(".frame").outerHeight(true)-$(".frame").innerHeight())/2));
-			$(".userList").hide();
-			$(".chatArea").outerHeight(height,true);
-		} else {
-			$(".toggleUserList").addClass("toggleUserListOff");
-			$(".userList").outerHeight(height,true);
-			$(".userList").css("right",Math.ceil(($(".frame").outerHeight(true)-$(".frame").innerHeight())/2));
-			$(".userList").hide();
-			$(".chatArea").outerHeight(height,true);
-		}
-		
-		Minitalk.user.init();
-		Minitalk.ui.initTools();
-		
-		$("input").attr("disabled",true);
-		Minitalk.ui.initToolButton(false);
+		var $frame = $("div[data-role=frame]");
 		
 		/**
-		 * UI 객체 이벤트를 정의한다.
+		 * 알림영역을 추가한다.
 		 */
-		/* UI Events */
-		$(".titleArea").on("mousedown",function(event) { event.preventDefault(); });
-		$(".userList").on("mousedown",function(event) { event.preventDefault(); });
-		$(".userMenu").on("mousedown",function(event) { event.preventDefault(); });
-		$(".userInfoStatus").on("mousedown",function(event) { event.preventDefault(); });
-		$(".toolArea").on("mousedown",function(event) { event.preventDefault(); });
+		$frame.append('<div data-role="notifications"></div>');
 		
-		$(".frame").on("click",function(event) {
-			if ($(".userMenu").css("display") != "none") {
-				if (!$(event.target).attr("nickname")) $(".userMenu").hide();
-			}
-		});
-		
-		$(".chatArea").on("click",function(event) {
-			if ($(".toolListLayer").css("display") != "none") {
-				$(".toolListLayer").animate({height:1},400,function() { $(".toolListLayer").hide(); $(".toolListLayer").height("auto"); });
-				$(".toolButtonMore").removeClass("selected");
-			}
-		});
-		
-		$(".inputButton").on("click",function() {
-			if ($(".toolEmoticonLayer").css("display") != "none") Minitalk.ui.insertEmoticon();
-			if ($(".toolFontColorLayer").css("display") != "none") Minitalk.ui.selectFontColor();
-			if ($(".toolListLayer").css("display") != "none") {
-				$(".toolListLayer").animate({height:1},400,function() { $(".toolListLayer").hide(); $(".toolListLayer").height("auto"); });
-				$(".toolButtonMore").removeClass("selected");
-			}
-			Minitalk.ui.sendMessage($(".inputText").val());
-			$(".inputText").val("");
-			$(".inputText").focus();
-		});
-		
-		$(".inputText").on("click",function() {
-			if ($(".toolEmoticonLayer").css("display") != "none") Minitalk.ui.insertEmoticon();
-			if ($(".toolFontColorLayer").css("display") != "none") Minitalk.ui.selectFontColor();
-			if ($(".toolListLayer").css("display") != "none") {
-				$(".toolListLayer").animate({height:1},400,function() { $(".toolListLayer").hide(); $(".toolListLayer").height("auto"); });
-				$(".toolButtonMore").removeClass("selected");
-			}
-		});
-		
-		$(".inputText").on("keypress",function(event) {
-			if (event.which == 13) {
-				Minitalk.ui.sendMessage($(".inputText").val());
-				$(".inputText").val("");
-				$(".inputText").focus();
-				event.preventDefault();
-			}
-		});
-		
-		$(".titleArea > DIV").on("mouseover",function() {
-			$(this).addClass("mouseover");
-		});
-		
-		$(".titleArea > DIV").on("mouseout",function() {
-			$(this).removeClass("mouseover");
-		});
-		
-		$(".toggleUserList").on("click",function() {
-			if (Minitalk.user.isVisibleUsers == true) {
-				Minitalk.ui.hideUser();
-			} else {
-				Minitalk.isAutoHideUserList = true;
-				Minitalk.ui.printMessage("system",Minitalk.getText("action/loading_users"));
-				Minitalk.socket.send("users",Minitalk.viewUserLimit);
-			}
-		});
-		
-		$(".toggleUserInfo").on("click",function() {
-			console.log("click",Minitalk.socket.getPermission("nickname"));
-			if ($(".userInfoLayer").css("display") == "none") {
-				$(".userInfoNickname").val(Minitalk.user.me.nickname);
-				if (Minitalk.socket.getPermission("nickname") == true) $(".userInfoNickname").attr("disabled",null);
-				else $(".userInfoNickname").attr("disabled","disabled");
-				$(".userInfoStatusIcon").css("backgroundImage","url("+Minitalk.statusIconPath+"/"+Minitalk.user.me.device+"/"+Minitalk.user.me.status+".png)");
-				$(".userInfoStatusText").text(Minitalk.getText("status/"+Minitalk.user.me.status));
-				$(".userInfoStatus").attr("status",Minitalk.user.me.status);
-				$(".userInfoLayer").fadeIn();
-			} else {
-				$(".userInfoLayer").fadeOut();
-			}
-		});
-		
-		$(".userInfoStatusBox").on("click",function() {
-			if ($(".userInfoStatusList").css("display") == "none") {
-				var list = $("<ul>");
-				
-				for (var status in Minitalk.getText("status")) {
-					if (status == "offline") continue;
-					var item = $("<li>");
-					item.text(Minitalk.getText("status/"+status));
-					item.css("backgroundImage","url("+Minitalk.statusIconPath+"/"+Minitalk.device+"/"+status+".png)");
-					item.attr("status",status);
-					item.on("mouseover",function() {
-						$(this).addClass("mouseover");
-					});
-					item.on("mouseout",function() {
-						$(this).removeClass("mouseover");
-					});
-					item.on("click",function() {
-						$(".userInfoStatusIcon").css("backgroundImage","url("+Minitalk.statusIconPath+"/"+Minitalk.device+"/"+$(this).attr("status")+".png)");
-						$(".userInfoStatusText").text(Minitalk.getText("status/"+$(this).attr("status")));
-						$(".userInfoStatus").attr("status",$(this).attr("status"));
-						$(".userInfoStatusList").hide();
-					});
-					list.append(item);
-				}
-				
-				$(".userInfoStatusList").html("");
-				$(".userInfoStatusList").append(list);
-				$(".userInfoStatusList").slideDown();
-			} else {
-				$(".userInfoStatusList").slideUp();
-			}
-		});
-		
-		$(".userInfoButton").on("click",function() {
-			Minitalk.socket.send("change",{nickname:$(".userInfoNickname").val(),status:$(".userInfoStatus").attr("status")});
-			$(".userInfoLayer").fadeOut();
-		});
 		
 		/**
 		 * 필수 audio 객체를 추가한다.
 		 */
-		$(".frame").append('<audio data-type="call"><source src="' + Minitalk.getUrl() + '/sounds/call.mp3" type="audio/mpeg"></audio>');
-		$(".frame").append('<audio data-type="message"><source src="' + Minitalk.getUrl() + '/sounds/message.mp3" type="audio/mpeg"></audio>');
-		$(".frame").append('<audio data-type="query"><source src="' + Minitalk.getUrl() + '/sounds/query.mp3" type="audio/mpeg"></audio>');
+		$frame.append('<audio data-type="call"><source src="' + Minitalk.getUrl() + '/sounds/call.mp3" type="audio/mpeg"></audio>');
+		$frame.append('<audio data-type="message"><source src="' + Minitalk.getUrl() + '/sounds/message.mp3" type="audio/mpeg"></audio>');
+		$frame.append('<audio data-type="query"><source src="' + Minitalk.getUrl() + '/sounds/query.mp3" type="audio/mpeg"></audio>');
+		
+		/**
+		 * UI 초기화함수 실행
+		 */
+		Minitalk.ui.initEvents();
+		Minitalk.ui.initFrame();
+		Minitalk.ui.disable();
+	},
+	/**
+	 * UI DOM 객체의 이벤트를 정의한다.
+	 */
+	initEvents:function() {
+		/**
+		 * 헤더 버튼 이벤트 추가
+		 */
+		var $header = $("header");
+		$("button[data-action]",$header).on("click",function(e) {
+			var $button = $(this);
+			var action = $button.attr("data-action");
+			
+			if (action == "users") {
+				Minitalk.ui.toggleUsers();
+			}
+			
+			if (action == "configs") {
+				Minitalk.ui.toggleConfigs();
+			}
+			
+			e.stopImmediatePropagation();
+		});
+		
+		/**
+		 * 채팅입력폼 이벤트 추가
+		 */
+		$("div[data-role=input] > input").on("keypress",function(e) {
+			if (e.keyCode == 13) {
+				Minitalk.ui.sendMessage($(this).val());
+				e.stopImmediatePropagation();
+				e.preventDefault();
+			}
+		});
+		
+		/**
+		 * 메시지 전송버튼 이벤트 추가
+		 */
+		$("div[data-role=input] > button").on("click",function() {
+			Minitalk.ui.sendMessage($("div[data-role=input] > input").val());
+		});
+
+		/**
+		 * 리사이즈 이벤트 추가
+		 */
+		$(window).on("resize",function() {
+			if (Minitalk.ui.resizeTimer != null) {
+				clearTimeout(Minitalk.ui.resizeTimer);
+				Minitalk.ui.resizeTimer = null;
+			}
+			
+			Minitalk.ui.resizeTimer = setTimeout(Minitalk.ui.initFrame,200);
+		});
+		
+		/**
+		 * 화면전환 이벤트 추가
+		 */
+		$(window).on("orientationchange",function() {
+			if (Minitalk.ui.resizeTimer != null) {
+				clearTimeout(Minitalk.ui.resizeTimer);
+				Minitalk.ui.resizeTimer = null;
+			}
+			
+			Minitalk.ui.resizeTimer = setTimeout(Minitalk.ui.initFrame,200);
+		});
 		
 		/**
 		 * 클릭이벤트를 이용하여 특수한 DOM 객체를 초기화한다.
 		 */
 		$(document).on("click",function(e) {
 			Minitalk.ui.initSounds();
-		});
-		
-		$(window).on("resize",function() {
-			if (Minitalk.ui.reinitTimer != null) {
-				clearTimeout(Minitalk.ui.reinitTimer);
-			}
-			Minitalk.ui.reinitTimer = setTimeout(Minitalk.ui.reinit,100);
-		});
-		
-		$(window).on("orientationchange",function() {
-			Minitalk.ui.reinit();
+			Minitalk.ui.resetToggle();
 		});
 		
 		/**
-		 * 초기화완료 이벤트를 발생한다.
+		 * Keypress 이벤트처리
 		 */
-		Minitalk.fireEvent("init");
+		$(document).on("keydown",function(e) {
+			if (e.keyCode == 27) {
+				$(document).triggerHandler("esc");
+			}
+		});
 		
-		Minitalk.socket.connect();
+		/**
+		 * ESC 기본이벤트 처리
+		 */
+		$(document).on("esc",function() {
+			Minitalk.ui.resetToggle();
+		});
+		
+		/**
+		 * 웹폰트 로드가 완료되면, UI 를 재정의한다.
+		 */
+		document.fonts.ready.then(function () {
+			Minitalk.ui.initFrame();
+		});
 	},
 	/**
-	 * 스크린사이즈가 변경되었을 때, UI를 재정의한다.
+	 * 브라우저 사이즈가 변경되거나, UI가 최초표시될 때 UI 요소를 초기화한다.
 	 */
-	reinit:function() {
-		Minitalk.ui.reinitTimer = null;
-		
+	initFrame:function() {
 		if (Minitalk.type == "auto") {
 			if ($(document).height() >= $(document).width()) {
-				Minitalk.type = "vertical";
+				var type = "vertical";
 			} else {
-				Minitalk.type = "horizontal";
+				var type = "horizontal";
 			}
+		} else {
+			var type = Minitalk.type;
 		}
 		
-		$(".frame").height(1);
-		$(".userList").height(1);
-		$(".frame").removeClass("vertical").removeClass("horizontal").addClass(Minitalk.type);
-		$(".frame").outerHeight($(".outFrame").length == 0 ? $(document).height() : $(".outFrame").innerHeight(),true);
-		$(".inputText").outerWidth($(".inputArea").innerWidth() - $(".inputButton").outerWidth(true),true);
+		var $frame = $("div[data-role=frame]");
+		$frame.attr("data-type",type);
 		
-		var height = $(".frame").innerHeight() - $(".titleArea").outerHeight(true) - $(".actionArea").outerHeight(true);
+		var $header = $("header",$frame);
+		$header.attr("data-type",type);
 		
-		$(".userList").css("top",$(".titleArea").position().top + $(".titleArea").outerHeight(true));
-
-		$(".chatArea").css("marginTop",0);
-		$(".chatArea").css("marginRight",0);
-		if ($(".userList").css("display") != "none") {
-			if (Minitalk.type == "vertical") {
-				$(".userList").css("left",Math.ceil(($(".frame").outerHeight(true)-$(".frame").innerHeight())/2));
-				$(".userList").css("right","auto");
-				$(".userList").outerWidth($(".frame").innerWidth(),true);
-				$(".userList").outerHeight(Minitalk.userListHeight,true);
-				$(".chatArea").css("marginTop",$(".userList").outerHeight(true));
-			} else {
-				$(".userList").css("left","auto");
-				$(".userList").css("right",Math.ceil(($(".frame").outerHeight(true)-$(".frame").innerHeight())/2));
-				$(".userList").outerWidth(Minitalk.userListWidth,true);
-				$(".userList").outerHeight(height,true);
-				$(".chatArea").css("marginRight",$(".userList").outerWidth(true));
-			}
-		}
+		var $main = $("main");
+		$main.attr("data-type",type);
 		
-		$(".chatArea").outerWidth($(".frame").innerWidth(),true);
-		$(".chatArea").outerHeight(height,true);
+		var $footer = $("footer");
+		$footer.attr("data-type",type);
 		
 		Minitalk.ui.initTools();
 		Minitalk.ui.autoScroll();
