@@ -872,20 +872,95 @@ Minitalk.ui = {
 	 * 메시지를 전송한다.
 	 *
 	 * @param string message 메시지
-	 * @param isRaw 가공되지 않은 메시지인지 여부
 	 */
-	sendMessage:function(message,isRaw) {
+	sendMessage:function(message) {
+		var message = $.trim(message);
+		if (message.length == 0) return;
+		
 		if (Minitalk.socket.getPermission("chat") == false) {
 			Minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_ALLOWED_CHATTING"));
 			return;
 		}
 		
-		if (message.replace(/ /g,'').length == 0) return;
-		
-		isRaw = isRaw === true ? true : false;
-		if (message.length == 0) return;
-
-		if (isRaw == true) {
+		/**
+		 * 슬래시(/) 명령어 처리
+		 */
+		if (message.indexOf("/") == 0) {
+			var commands = message.substr(1).split(" ");
+			var command = commands.shift().toLowerCase();
+			
+			switch (command) {
+				/**
+				 * 귓속말
+				 */
+				case "w" :
+					var nickname = commands.shift();
+					var message = $.trim(commands.join(" "));
+					if (message.length == 0) return;
+					
+					/**
+					 * 메시지 전송전 이벤트 처리
+					 */
+					
+					if (Minitalk.fireEvent("beforeSendWhisper",[nickname,message,Minitalk.user.me]) === false) return;
+					
+					/**
+					 * 서버로 메시지를 전송한다.
+					 */
+					Minitalk.socket.send("whisper",{nickname:nickname,message:message});
+					
+					/**
+					 * 메시지 전송후 이벤트 처리
+					 */
+					Minitalk.fireEvent("sendWhisper",[nickname,message,Minitalk.user.me])
+					
+					/**
+					 * 직전의 귓속말 보낸 사람의 닉네임을 유지한다.
+					 */
+					Minitalk.ui.setInputVal("/w " + nickname + " ");
+					break;
+				
+				/**
+				 * 호출
+				 */
+				case "call" :
+					var nickname = commands.shift();
+					
+					/**
+					 * 서버로 호출메시지를 전송한다.
+					 */
+					Minitalk.socket.sendCall(nickname);
+					Minitalk.ui.setInputVal("");
+					break;
+				
+				/**
+				 * 채널관리자 로그인
+				 */
+				case "login" :
+					var password = commands.shift();
+					Minitalk.ui.login(password);
+					Minitalk.ui.setInputVal("");
+					break;
+					
+				/**
+				 * 기본 명령어가 아닌 경우, 플러그인 등에서 처리할 수 있도록 이벤트를 발생시킨다.
+				 */
+				default :
+					var result = Minitalk.fireEvent("command",[command,commands]);
+					if (result === undefined) { // 플러그인 등에서 명령어를 처리하지 못하였을 경우
+						Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("NOT_FOUND_COMMAND"));
+						return;
+					} else if (result !== true) { // 플러그인에서 명령어 처리시 오류가 발생한 경우
+						return;
+					}
+					break;
+			}
+			
+			return;
+		} else {
+			/**
+			 * 대화일시차단 확인
+			 */
 			if (Minitalk.storage("baned") != null && typeof Minitalk.storage("baned") == "object") {
 				var baned = Minitalk.storage("baned");
 				var check = baned[Minitalk.channel] ? baned[Minitalk.channel] : 0;
@@ -894,72 +969,39 @@ Minitalk.ui = {
 					return false;
 				}
 			}
-			var printMessage = message;
-			Minitalk.socket.send("message",message);
-		} else {
-			if (message.indexOf("/") == 0) {
-				var commandLine = message.split(" ");
-				var command = commandLine.shift().toLowerCase();
-				
-				switch (command) {
-					case "/w" :
-						if (commandLine.length >= 2) {
-							var nickname = commandLine.shift();
-							var message = Minitalk.ui.encodeMessage(commandLine.join(" "),false);
-							
-							if (Minitalk.fireEvent("beforeSendWhisper",[nickname,message,Minitalk.user.me]) === false) return;
-							
-							Minitalk.socket.send("whisper",{nickname:nickname,message:message});
-							
-							Minitalk.fireEvent("sendWhisper",[nickname,message,Minitalk.user.me]);
-						} else {
-							Minitalk.ui.printMessage("error",Minitalk.getErrorText("INVALID_COMMAND"));
-						}
-						
-						break;
-						
-					case "/call" :
-						if (commandLine.length == 1) {
-							var nickname = commandLine.shift();
-							Minitalk.socket.sendCall(nickname);
-						} else {
-							Minitalk.ui.printMessage("error",Minitalk.getErrorText("INVALID_COMMAND"));
-						}
-						break;
-						
-					case "/login" :
-						if (commandLine.length == 1) {
-							var password = commandLine.shift();
-							Minitalk.ui.login(password);
-						} else {
-							Minitalk.ui.printMessage("error",Minitalk.getErrorText("INVALID_COMMAND"));
-						}
-						break;
-				}
-				
-				return;
-			} else {
-				if (Minitalk.storage("baned") != null && typeof Minitalk.storage("baned") == "object") {
-					var baned = Minitalk.storage("baned");
-					var check = baned[Minitalk.channel] ? baned[Minitalk.channel] : 0;
-					if (check > new Date().getTime()) {
-						Minitalk.ui.printMessage("system",Minitalk.getText("action/banedtime").replace("{SECOND}","<b><u>"+Math.ceil((check - new Date().getTime()) / 1000)+"</u></b>"));
-						return false;
-					}
-				}
-				
-				if (Minitalk.fireEvent("beforeSendMessage",[message,Minitalk.user.me]) === false) return;
-				
-				var printMessage = Minitalk.ui.encodeMessage(message,true);
-				Minitalk.socket.send("message",printMessage);
+			
+			/**
+			 * 메시지 전송전 이벤트 처리
+			 */
+			if (Minitalk.fireEvent("beforeSendMessage",[message,Minitalk.user.me]) === false) return;
+			
+			/**
+			 * 폰트권한이 있고 폰트설정이 있다면 메시지 데이터에 포함하여 전송한다.
+			 */
+			if (Minitalk.socket.getPermission("font") == true) {
+				if (Minitalk.fonts("bold") == true) message = "[B]" + message + "[/B]";
+				if (Minitalk.fonts("italic") == true) message = "[I]" + message + "[/I]";
+				if (Minitalk.fonts("underline") == true) message = "[U]" + message + "[/U]";
+				if (Minitalk.fonts("color") !== null) message = "[COLOR=" + Minitalk.fonts("color") + "]" + message + "[/COLOR]";
 			}
-		}
-		
-		Minitalk.ui.printChatMessage("chat",Minitalk.user.me,printMessage);
-		
-		if (isRaw == false) {
+			
+			/**
+			 * 서버로 메시지를 전송한다.
+			 */
+			Minitalk.socket.send("message",message);
+			
+			/**
+			 * 자신의 메시지를 화면에 출력한다.
+			 */
+			Minitalk.ui.printChatMessage("chat",Minitalk.user.me,Minitalk.ui.encodeMessage(message));
+			
+			/**
+			 * 메시지 전송후 이벤트 처리
+			 */
 			Minitalk.fireEvent("sendMessage",[message,Minitalk.user.me]);
 		}
+		
+		Minitalk.ui.setInputVal("");
 	},
 	/**
 	 * 자신이 입력한 메시지를 채팅창에 출력할 때, 이모티콘 치환과 메시지 스타일을 처리한다.
@@ -996,6 +1038,14 @@ Minitalk.ui = {
 	},
 	/**
 	 * 툴바의 색상선택기 레이어를 출력한다.
+	 * 메시지 입력창의 내용을 수정한다.
+	 *
+	 * @param string message 수정할 내용
+	 */
+	setInputVal:function(value) {
+		var $input = $("div[data-role=input] > input");
+		$input.focus().val(value);
+	},
 	 */
 	selectFontColor:function() {
 		if ($(".toolEmoticonLayer").css("display") != "none") Minitalk.ui.insertEmoticon();
