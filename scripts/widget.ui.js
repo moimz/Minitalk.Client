@@ -163,6 +163,18 @@ Minitalk.ui = {
 		});
 		
 		/**
+		 * 화면전환 이벤트 추가
+		 */
+		$(window).on("orientationchange",function() {
+			if (Minitalk.ui.resizeTimer != null) {
+				clearTimeout(Minitalk.ui.resizeTimer);
+				Minitalk.ui.resizeTimer = null;
+			}
+			
+			Minitalk.ui.resizeTimer = setTimeout(Minitalk.ui.initFrame,200);
+		});
+		
+		/**
 		 * 클릭이벤트를 이용하여 특수한 DOM 객체를 초기화한다.
 		 */
 		$(document).on("click",function(e) {
