@@ -109,7 +109,7 @@ Minitalk.user = {
 				$(".userList").prepend(Minitalk.user.getTag(Minitalk.user.me,true));
 			}
 			
-			Minitalk.ui.initToolButton(true);
+			Minitalk.ui.initTools();
 		}
 		
 		if (before.nickname != after.nickname) {
