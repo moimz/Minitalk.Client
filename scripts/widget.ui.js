@@ -24,7 +24,6 @@ Minitalk.ui = {
 		 */
 		$frame.append('<div data-role="notifications"></div>');
 		
-		
 		/**
 		 * 필수 audio 객체를 추가한다.
 		 */
@@ -602,24 +601,6 @@ Minitalk.ui = {
 		return time.format(format);
 	},
 	/**
-	 * 접속자수를 출력한다.
-	 *
-	 * @param int count 접속자수
-	 */
-	printUserCount:function(count) {
-		if (count > 0) {
-			$(".userCount").text("("+Minitalk.getText("text/unit").replace('{COUNT}',count)+")");
-		} else {
-			$(".userCount").text("");
-		}
-		
-		if (Minitalk.isAutoHideUserList == false && count > 200 && Minitalk.user.isVisibleUsers == true) {
-			Minitalk.isAutoHideUserList = true;
-			Minitalk.ui.printMessage("system",Minitalk.getText("action/autoHideUsers"));
-			Minitalk.ui.hideUser();
-		}
-	},
-	/**
 	 * 채팅화면상에 메시지를 출력한다.
 	 *
 	 * @param string type 메시지종류
@@ -799,72 +780,93 @@ Minitalk.ui = {
 			}
 		}
 		
-		$(".toggleUserList").removeClass("toggleUserListOff").addClass("toggleUserListOn");
+	/**
+	 * 접속자수를 출력한다.
+	 *
+	 * @param int count 접속자수
+	 */
+	printUserCount:function(count) {
+		var $count = $("label[data-role=count]");
+		if (count == 0) {
+			$count.empty();
+		} else {
+			$count.html(Minitalk.getText("text/unit").replace("{COUNT}",count));
+		}
 		
+		if (Minitalk.user.isAutoHideUsers == false && count > 200 && Minitalk.user.isVisibleUsers == true) {
+			Minitalk.user.isAutoHideUsers = true;
+			Minitalk.ui.printMessage("system",Minitalk.getText("action/autoHideUsers"));
+			Minitalk.ui.toggleUsers(false);
+		}
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		$(document).triggerHandler("printUserCount",[Minitalk,$count,count]);
+	},
+	/**
+	 * 접속자목록을 토글한다.
+	 *
+	 * @param boolean is_visible 보임여부
+	 */
+	toggleUsers:function(is_visible) {
+		var $main = $("main");
+		if (is_visible === undefined) {
+			var is_visible = $main.hasClass("users") == true ? false : true;
+		}
+		
+		var $header = $("header");
+		var $button = $("button[data-action=users]",$header);
+		
+		$("aside[data-role=users]").empty();
+		if (is_visible == true) {
+			Minitalk.ui.printMessage("system",Minitalk.getText("action/loading_users"));
+			Minitalk.socket.send("users",Minitalk.viewUserLimit);
+			$main.addClass("users");
+			$button.addClass("on");
+			
+			Minitalk.user.isVisibleUsers = true;
+		} else {
+			$main.removeClass("users");
+			$button.removeClass("on");
+			
+			Minitalk.user.usersSort = [];
+			Minitalk.user.users = {};
+			
+			Minitalk.user.isVisibleUsers = false;
+		}
+		
+		Minitalk.ui.autoScroll();
+	},
+	/**
+	 * 접속자목록을 출력한다.
+	 */
+	printUser:function(users) {
 		var sortUserCode = {"ADMIN":"#","POWERUSER":"*","MEMBER":"+","NICKGUEST":"-"};
 		
-		Minitalk.user.isVisibleUsers = true;
-		Minitalk.viewUserListSort = [];
-		Minitalk.viewUserListStore = {};
+		Minitalk.user.usersSort = [];
+		Minitalk.user.users = {};
 		for (var i=0, loop=users.length;i<loop;i++) {
-			Minitalk.viewUserListSort.push("["+(users[i].opper ? sortUserCode[users[i].opper] : "")+users[i].nickname+"]");
-			Minitalk.viewUserListStore[users[i].nickname] = users[i];
+			Minitalk.user.usersSort.push("["+(users[i].opper ? sortUserCode[users[i].opper] : "")+users[i].nickname+"]");
+			Minitalk.user.users[users[i].nickname] = users[i];
 		}
-		Minitalk.viewUserListSort.sort();
+		Minitalk.user.usersSort.sort();
 		
-		$(".userList").html("");
-		$(".userList").append(Minitalk.user.getTag(Minitalk.user.me,true));
+		$("aside[data-role=users]").html("");
+		$("aside[data-role=users]").append(Minitalk.user.getTag(Minitalk.user.me,true));
 		
-		for (var i=0, loop=Minitalk.viewUserListSort.length;i<loop;i++) {
-			var nickname = Minitalk.viewUserListSort[i].replace(/^\[(#|\*|\+|\-)?(.*?)\]$/,"$2");
-			var user = Minitalk.user.getTag(Minitalk.viewUserListStore[nickname],true);
+		for (var i=0, loop=Minitalk.user.usersSort.length;i<loop;i++) {
+			var nickname = Minitalk.user.usersSort[i].replace(/^\[(#|\*|\+|\-)?(.*?)\]$/,"$2");
+			var user = Minitalk.user.getTag(Minitalk.user.users[nickname],true);
 			
-			if (Minitalk.viewUserListStore[nickname].nickname == Minitalk.user.me.nickname) {
+			if (Minitalk.user.users[nickname].nickname == Minitalk.user.me.nickname) {
 				user.css("display","none");
 			}
 			
-			$(".userList").append(user);
+			$("aside[data-role=users]").append(user);
 		}
 		
-		Minitalk.ui.printMessage("system",Minitalk.getText("action/loaded_users").replace("{COUNT}","<b><u>"+Minitalk.viewUserListSort.length+"</u></b>"));
-	},
-	/**
-	 * 접속자목록을 숨긴다.
-	 */
-	hideUser:function() {
-		$(".toggleUserList").removeClass("toggleUserListOn").addClass("toggleUserListOff");
-		Minitalk.user.isVisibleUsers = false;
-
-		if (Minitalk.type == "vertical") {
-			$(".userList").animate({height:1},{step:function(now,fx) {
-				var height = $(".frame").innerHeight() - $(".titleArea").outerHeight(true) - $(".actionArea").outerHeight(true);
-				$(".chatArea").css("marginTop",$(".userList").outerHeight(true));
-				$(".chatArea").outerHeight(height,true);
-				
-				if (now == 1) {
-					$(".userList").hide();
-					$(".chatArea").css("marginTop",0);
-					$(".chatArea").outerHeight(height,true);
-					$(".userList").html("");
-					Minitalk.ui.autoScroll();
-				}
-			}});
-		} else {
-			$(".userList").animate({width:1},{step:function(now,fx) {
-				$(".chatArea").css("marginRight",$(".userList").outerWidth(true));
-				$(".chatArea").outerWidth($(".frame").innerWidth(),true);
-				
-				if (now == 1) {
-					$(".userList").hide();
-					$(".chatArea").css("marginRight",0);
-					$(".chatArea").outerWidth($(".frame").innerWidth(),true);
-					$(".userList").html("");
-					Minitalk.ui.autoScroll();
-				}
-			}});
-		}
-		Minitalk.viewUserListSort = [];
-		Minitalk.viewUserListStore = {};
+		Minitalk.ui.printMessage("system",Minitalk.getText("action/loaded_users").replace("{COUNT}","<b><u>"+Minitalk.user.usersSort.length+"</u></b>"));
 	},
 	/**
 	 * 메시지를 전송한다.
@@ -1260,7 +1262,6 @@ Minitalk.ui = {
 	openPluginChannel:function(plugin,code,width,height,data) {
 		var windowLeft = Math.ceil((screen.width-width)/2);
 		var windowTop = Math.ceil((screen.height-height)/2 > 2);
-		console.log("openPluginChannel",plugin,code,data);
 		var target = plugin+Math.random();
 		
 		var formObject = $("<form>").css("display","none").attr("action",Minitalk.getUrl()+"/html/PrivateChannel.php").attr("target",target).attr("method","POST");
