@@ -307,14 +307,14 @@ Minitalk.ui = {
 			$("li",$tabs).each(function() {
 				if (type == "horizontal") {
 					if (current + $(this).width() > limit) {
-						return;
+						return false;
 					}
 				}
 				current+= $(this).width();
 				split++;
 			});
 			
-			for (var i=loop=$("li",$tabs).length - 1;i>=split-1;i--) {
+			for (var i=loop=$("li",$tabs).length - 1;i>=Math.max(1,split);i--) {
 				var $tab = $("li",$tabs).eq(i).clone(true);
 				
 				$lists.prepend($tab);
@@ -382,7 +382,7 @@ Minitalk.ui = {
 		$tools.empty();
 		$lists.empty();
 		
-		var $more = $("<li>");
+		var $more = $("<li>").addClass("more");
 		var $button = $("<button>").attr("type","button").attr("data-tool","more");
 		$button.append($("<i>").addClass("icon"));
 		$button.append($("<span>").html(Minitalk.getText("tool/more")));
@@ -467,15 +467,15 @@ Minitalk.ui = {
 			var split = 0;
 			
 			$("li",$tools).each(function() {
-				if (current + $(this).width() > limit) {
-					return;
+				if (current + $(this).outerWidth(true) > limit) {
+					return false;
 				}
 				
-				current+= $(this).width();
+				current+= $(this).outerWidth(true);
 				split++;
 			});
 			
-			for (var i=loop=$("li",$tools).length - 1;i>=split;i--) {
+			for (var i=loop=$("li",$tools).length - 1;i>=Math.max(1,split);i--) {
 				var $tool = $("li",$tools).eq(i).clone(true);
 				
 				$lists.prepend($tool);
