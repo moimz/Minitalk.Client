@@ -2336,6 +2336,8 @@ Minitalk.ui = {
 		if ($audio.length == 0) return;
 		
 		var audio = $audio.get(0);
+		audio.pause();
+		audio.currentTime = 0;
 		audio.muted = false;
 		var promise = audio.play();
 		if (promise !== undefined) {
