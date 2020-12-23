@@ -497,20 +497,46 @@ Minitalk.ui = {
 			$(".toolItalic").removeClass("selected");
 			$(".inputText").css("fontStyle","");
 		}
+	/**
+	 * 미니톡 위젯 UI를 활성화한다.
+	 *
+	 * @param boolean inputmode 메시지 입력창만 활성화할지 여부 (기본값 : false)
+	 */
+	enable:function(inputmode) {
+		var inputmode = inputmode === true;
 		
 		if (Minitalk.setting("fontUnderline") == true) {
 			$(".toolUnderline").addClass("selected");
 			$(".inputText").css("textDecoration","underline");
+		if (inputmode === true) {
+			$("div[data-role=input] > button").enable();
 		} else {
 			$(".toolUnderline").removeClass("selected");
 			$(".inputText").css("textDecoration","");
+			var $frame = $("div[data-role=frame]");
+			$("div[data-role=disable]",$frame).remove();
 		}
+	},
+	/**
+	 * 미니톡 위젯 UI를 비활성화한다.
+	 *
+	 * @param boolean inputmode 메시지 입력창만 비활성화할지 여부 (기본값 : false)
+	 */
+	disable:function(inputmode) {
+		var inputmode = inputmode === true;
 		
 		if (Minitalk.setting("fontColor") !== false && Minitalk.setting("fontColor") != "") {
 			$(".inputText").css("color","#"+Minitalk.setting("fontColor"));
+		if (inputmode === true) {
+			$("div[data-role=input] > button").disable();
 		} else {
 			$(".inputText").css("color","");
+			var $frame = $("div[data-role=frame]");
+			if ($("div[data-role=disable]",$frame).length > 0) return;
+			
+			$frame.append($("<div>").attr("data-role","disable"));
 		}
+	},
 		
 		if (Minitalk.setting("mute") == true) {
 			$(".toolMute").addClass("selected");
