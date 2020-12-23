@@ -51,19 +51,36 @@ Minitalk.protocol = {
 		} else {
 			if (Minitalk.showChannelConnectMessage == true) Minitalk.ui.printMessage("system",Minitalk.getText("action/connected").replace("{CHANNEL}","<b><u>"+data.channel.title+"</u></b>"));
 		}
+		
+		/**
+		 * 실제 유저권한에 따라 툴바를 다시 초기화한다.
+		 */
+		Minitalk.ui.initTools();
+		
+		/**
+		 * 메시지 폰트설정을 초기화한다.
+		 */
+		Minitalk.ui.initFonts();
+		
+		/**
+		 * 접속자수를 갱신한다.
+		 */
 		Minitalk.ui.printUserCount(data.usercount);
 		
+		/**
+		 * 접속자목록을 사용하고, 접속자수가 200명 이하라면 유저목록을 불러온다.
+		 */
 		if (Minitalk.viewUser == true && data.usercount < 200) {
-			Minitalk.ui.printMessage("system",Minitalk.getText("action/loading_users"));
-			Minitalk.socket.send("users",Minitalk.viewUserLimit);
-		} else {
-			Minitalk.user.isVisibleUsers = false;
+			Minitalk.ui.toggleUsers(true);
 		}
 		
 		Minitalk.fireEvent("connecting",[Minitalk.channel,data.me,data.usercount]);
 		Minitalk.fireEvent("connect",[Minitalk.channel,data.me,data.usercount]);
 		
-		Minitalk.socket.send("logs",{limit:Minitalk.logLimit,time:Minitalk.storage("lastLogTime")});
+		/**
+		 * 이전대화기록을 가져온다.
+		 */
+		Minitalk.socket.send("logs",{limit:Minitalk.logCount,time:Minitalk.storage("lastLogTime")});
 	},
 	/**
 	 * 채팅서버에 접속을 실패하였을 경우
@@ -135,7 +152,7 @@ Minitalk.protocol = {
 	logend:function(data) {
 		Minitalk.ui.printLogMessage();
 		$(".chatArea").append($("<div>").addClass("logEnd").append($("<div>").html("NEW TALK START")));
-		Minitalk.ui.initToolButton(true);
+		Minitalk.ui.enable();
 		Minitalk.ui.autoScroll();
 		
 		$("input").attr("disabled",null);
