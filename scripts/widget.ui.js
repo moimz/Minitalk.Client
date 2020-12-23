@@ -101,12 +101,24 @@ Minitalk.ui = {
 		$("body").append($frame);
 		
 		/**
+		 * UI 초기화함수 실행
+		 */
+		Minitalk.ui.initEvents();
+		Minitalk.ui.initFrame();
+		Minitalk.ui.initSection();
+		Minitalk.ui.disable();
+	},
+	/**
+	 * UI DOM 객체의 이벤트를 정의한다.
+	 */
+	initEvents:function() {
+		/**
 		 * 채팅입력폼 이벤트 추가
 		 */
 		$("div[data-role=input] > textarea").on("keydown",function(e) {
 			if (e.keyCode == 13 && e.shiftKey === false) {
 				Minitalk.ui.sendMessage($(this).val());
-				e.stopPropagation();
+				e.stopImmediatePropagation();
 				e.preventDefault();
 			}
 		}).on("keyup",function(e) {
@@ -120,7 +132,7 @@ Minitalk.ui = {
 			if ($("div[data-role=input] > textarea").val().length > 0) {
 				Minitalk.ui.sendMessage($("div[data-role=input] > textarea").val());
 			}
-			e.stopPropagation();
+			e.stopImmediatePropagation();
 			e.preventDefault();
 		});
 		
@@ -137,10 +149,6 @@ Minitalk.ui = {
 				Minitalk.ui.uploadFiles();
 			}
 		});
-		
-		Minitalk.ui.initFrame();
-		Minitalk.ui.initSection();
-		Minitalk.ui.disable();
 		
 		/**
 		 * 리사이즈 이벤트 추가
