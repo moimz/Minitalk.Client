@@ -168,22 +168,23 @@ Minitalk.user = {
 	 * @return object $user 접속자태그
 	 */
 	getTag:function(user,isUserList) {
-		var tag = $("<span>").addClass("user");
-		tag.data("userinfo",user);
+		var $user = $("<span>").addClass("user");
+		$user.data("user",user);
+		
 		if (isUserList == true && Minitalk.viewStatusIcon == true) {
-			tag.css("paddingLeft",20);
-			tag.css("backgroundImage","url("+Minitalk.statusIconPath+"/"+user.device+"/"+user.status+".png)");
+			$user.css("paddingLeft",20);
+			$user.css("backgroundImage","url("+Minitalk.statusIconPath+"/"+user.device+"/"+user.status+".png)");
 		}
 		
 		if (isUserList == true) {
-			tag.on("mouseover",function() {
+			$user.on("mouseover",function() {
 				$(this).addClass("mouseover");
 			});
-			tag.on("mouseout",function() {
+			$user.on("mouseout",function() {
 				$(this).removeClass("mouseover");
 			});
 		}
-		tag.attr("nickname",user.nickname);
+		$user.attr("nickname",user.nickname);
 		
 		var sHTML = "";
 		if (user.nickcon != "") {
@@ -203,17 +204,21 @@ Minitalk.user = {
 		if (isUserList == true && Minitalk.user.me.nickname == user.nickname) {
 			sHTML+= "("+Minitalk.getText("text/me")+")";
 		} else {
-			tag.attr("code",user.nickname);
+			$user.attr("code",user.nickname);
 		}
 		
 		if (user.opper == "ADMIN") {
 			sHTML+= '<img src="'+Minitalk.getTempletUrl(Minitalk.templet)+'/images/icon_admin.gif" />';
 		}
-		tag.html(sHTML);
-		tag.on("click",function(e) {
-			Minitalk.user.toggleMenu($(this).data().userinfo,e);
+		$user.html(sHTML);
+		$user.on("click",function(e) {
+			Minitalk.user.toggleMenus($(this),e);
+			e.stopImmediatePropagation();
 		});
-		return tag;
+		
+		return $user;
+	},
+		});
 	},
 	/**
 	 * 유저메뉴를 추가한다.
