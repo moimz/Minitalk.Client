@@ -102,49 +102,54 @@ if (isMinitalkIncluded === undefined) {
 		 * 상세한 내용은 https://www.minitalk.io/ko/manual/api/widget 페이지를 참고하여 주십시오.
 		 *
 		 * @public string id 미니톡 채팅위젯의 고유 ID (없을 경우 랜덤생성)
-		 * @public string templet 미니톡 채팅위젯의 템플릿 (기본값 : default)
 		 * @public string channel 미니톡 채팅위젯의 채널명 (필수)
 		 * @public string usercode 암호화된 접속자정보(닉네임, 레벨, 닉이미지, 사진)
-		 * @public object userdata 암호화되지 않은 접속자 추가정보
 		 *
-		 * @public string background 미니톡 채팅위젯 영역의 기본 배경스타일
-		 * @public boolean viewUserMessage 다른 접속자의 접속안내 메시지를 보일지 설정한다. (기본값 : true, true : 접속안내메시지 보임, false : 접속안내메시지 숨김)
-		 * @public int viewUserLimit 접속안내 메시지 및 유저목록에서 보일 유저의 최소레벨 (기본값 : 0)
+		 * @public string templet 미니톡 채팅위젯의 템플릿 (기본값 : default)
+		 * @public int/string width 미니톡 채팅위젯 가로크기 (기본값 : 200, 픽셀 또는 % 단위)
+		 * @public int/string height 미니톡 채팅위젯 세로크기 (기본값 : 600, 픽셀 또는 % 단위)
+		 *
+		 * @public boolean viewUserNotification 다른 접속자의 접속안내 메시지를 보일지 설정한다. (기본값 : true, true : 접속안내메시지 보임, false : 접속안내메시지 숨김)
+		 * @public int viewUserNotificationLimit 접속안내 메시지 및 유저목록에서 보일 유저의 최소레벨 (기본값 : 0)
+		 *
 		 * @public int logCount 이전 대화내역을 몇개까지 보일지 설정한다. (기본값 : 15, 최대 : 30, 0 일 경우 이전 대화내역을 사용하지 않는다.)
+		 * @public string dateFormat 미니톡 채팅위젯내에서 표시되는 날짜/시각의 표시형태
 		 *
-		 * @public string/object[] tabs 탭바의 탭을 설정한다.
 		 * @public string tabType 탭바 형식을 정의한다.  (기본값 : auto, auto : 채팅위젯 가로크기(400px 기준)에 따라 가로/세로 자동변환, horizontal : 가로형태, vertical : 세로형태)
+		 * @public string/object[] tabs 탭바의 탭을 설정한다.
+		 * @public string toolType 툴바 형식을 정의한다. (기본값 : icon, icon : 툴바아이콘만 표시, text : 툴바명칭만 표시, icontext : 툴바 아이콘 및 명칭표시)
 		 * @public object[] tools 툴바의 버튼을 정의한다.
 		 * @public object[] usermenus 접속자를 클릭했을 때 보일 메뉴를 설정한다.
 		 *
-		 * @public int/string width 미니톡 채팅위젯 가로크기를 픽셀 또는 % 단위로 설정한다. (기본값 : 200)
-		 * @public int/string height 미니톡 채팅위젯 세로크기를 픽셀 또는 % 단위로 설정한다. (기본값 : 600)
-		 * @public string dateFormat 미니톡 채팅위젯내에서 표시되는 날짜/시각의 표시형태
+		 * @public string background 미니톡 채팅위젯 영역의 기본 배경스타일
 		 *
 		 * @public object[] listeners 이벤트리스너를 정의한다.
 		 * @public object[] protocols 사용자정의 프로토콜을 정의한다.
 		 */
 		this.id = opt.id ? opt.id : null;
-		this.templet = opt.templet  && opt.templet.length > 0 ? opt.templet : "default";
 		this.channel = opt.channel && opt.channel.length > 0 ? opt.channel : null;
 		this.usercode = opt.usercode && opt.usercode.length > 0 ? opt.usercode : null;
-		this.userdata = opt.userdata && typeof opt.userdata == "object" ? opt.userdata : null;
 		
-		this.background = opt.background ? opt.background : null;
-		this.viewUserMessage = opt.viewUserMessage === false ? false : true;
-		this.viewUserLimit = opt.viewUserLimit ? opt.viewUserLimit : 0;
-		this.logCount = opt.logCount !== undefined ? opt.logCount : 15;
-		
-		this.tabs = opt.tabs ? opt.tabs : ["users","boxes","configs"];
-		this.tabType = opt.tabType ? opt.tabType : "auto";
-		this.tools = opt.tools ? opt.tools : ["bold","underline","italic","color","-","emoticon","file"];
-		this.usermenus = opt.usermenus ? opt.usermenus : ["whisper","call","-","showip","banip"];
-		
+		this.templet = opt.templet  && opt.templet.length > 0 ? opt.templet : "default";
 		opt.width = opt.width ? opt.width : 200;
 		opt.height = opt.height ? opt.height : 600;
 		this.width = opt.width.toString().indexOf("%") < 0 ? opt.width+"px" : opt.width;
 		this.height = opt.height.toString().indexOf("%") < 0 ? opt.height+"px" : opt.height;
+		
+		this.viewUserNotification = opt.viewUserNotification === false ? false : true;
+		this.viewUserNotificationLimit = opt.viewUserNotificationLimit ? opt.viewUserNotificationLimit : 0;
+		
+		this.logCount = opt.logCount !== undefined ? opt.logCount : 15;
 		this.dateFormat = opt.dateFormat ? opt.dateFormat : "A HH:mm";
+		
+		this.tabs = opt.tabs ? opt.tabs : ["users","boxes","configs"];
+		this.tabType = opt.tabType ? opt.tabType : "auto";
+		this.toolType = opt.toolType ? opt.toolType : "icon";
+		this.tools = opt.tools ? opt.tools : ["bold","underline","italic","color","-","emoticon","file"];
+		this.usermenus = opt.usermenus ? opt.usermenus : ["configs","whisper","call","-","showip","banip"];
+		
+		this.background = opt.background ? opt.background : null;
+		
 		
 		this.listeners = opt.listeners ? opt.listeners : {};
 		this.protocols = opt.protocols ? opt.protocols : {};
