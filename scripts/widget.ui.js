@@ -1360,6 +1360,16 @@ Minitalk.ui = {
 		}
 	},
 	/**
+	 * 시간을 정해진 형태로 변환하여 가져온다.
+	 *
+	 * @param int timestamp 유닉스타임스탬프
+	 * @param string type 포맷
+	 */
+	getTime:function(timestamp,format) {
+		var time = moment(timestamp).locale(Minitalk.language);
+		return time.format(format);
+	},
+	/**
 	 * 이전대화기록을 불러온다.
 	 */
 	getHistory:function() {
@@ -1675,7 +1685,7 @@ Minitalk.ui = {
 			} else if (message.fail === true) {
 				$inner.append($("<span>").addClass("time").html('<i class="fail"></i>'));
 			} else {
-				$inner.append($("<span>").addClass("time").html($("<time>").attr("datetime",message.time).html(moment(message.time).locale(Minitalk.language).format(Minitalk.dateFormat))));
+				$inner.append($("<span>").addClass("time").html($("<time>").attr("datetime",message.time).html(Minitalk.ui.getTime(message.time,Minitalk.dateFormat))));
 			}
 			
 			$message.append($inner);
