@@ -184,6 +184,16 @@ Minitalk.socket = {
 		Minitalk.fireEvent("sendInvite",[nickname,Minitalk.user.me]);
 	},
 	/**
+	 * 개인채널개설을 개설한다.
+	 */
+	sendCreate:function() {
+		if (Minitalk.fireEvent("beforeSendCreate",[Minitalk.user.me]) === false) return;
+		
+		Minitalk.socket.send("create");
+		
+		Minitalk.fireEvent("sendCreate",[nickname,Minitalk.user.me]);
+	},
+	/**
 	 * 사용자정의 프로토콜을 정의한다.
 	 *
 	 * @param name 프로토콜명
