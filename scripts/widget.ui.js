@@ -1228,8 +1228,8 @@ Minitalk.ui = {
 		formObject.append($("<input>").attr("name","templet").attr("value",Minitalk.templet));
 		formObject.append($("<input>").attr("name","owner").attr("value",data.from.nickname));
 		formObject.append($("<input>").attr("name","myinfo").attr("value",JSON.stringify(Minitalk.user.me)));
-			
-		if (data.from.nickname == Minitalk.user.me.nickname) {
+		
+		if (data.to != null && data.from.nickname == Minitalk.user.me.nickname) {
 			formObject.append($("<input>").attr("name","invite").attr("value",data.to.nickname));
 		}
 		$("body").append(formObject);
