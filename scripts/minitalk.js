@@ -214,7 +214,6 @@ if (isMinitalkIncluded === undefined) {
 		this.protocols = opt.protocols ? opt.protocols : {};
 		
 		/* properties */
-		this.emoticons = [];
 		this.uuid = null;
 		this.maxuser = 0;
 		this.isPrivate = this.private == null ? false : true;
