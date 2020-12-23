@@ -151,11 +151,9 @@ Minitalk.protocol = {
 	 */
 	logend:function(data) {
 		Minitalk.ui.printLogMessage();
-		$(".chatArea").append($("<div>").addClass("logEnd").append($("<div>").html("NEW TALK START")));
+		$("section[data-role=chat]").append($("<div>").attr("data-role","line").append($("<div>").html("NEW TALK START")));
 		Minitalk.ui.enable();
 		Minitalk.ui.autoScroll();
-		
-		$("input").attr("disabled",null);
 	},
 	/**
 	 * 유저가 참여하였을 때
