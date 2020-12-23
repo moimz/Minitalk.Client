@@ -962,43 +962,35 @@ Minitalk.ui = {
 		}
 	},
 	/**
-	 * 메시지를 인코딩한다.
+	 * 자신이 입력한 메시지를 채팅창에 출력할 때, 이모티콘 치환과 메시지 스타일을 처리한다.
 	 *
-	 * @param string message 인코딩 전 메시지
-	 * @param boolean isBBcode BB코드적용여부
-	 * @return string message 인코딩 된 메시지
+	 * @param string message 원본 메시지
+	 * @return string message 처리된 메시지
 	 */
-	encodeMessage:function(message,isBBcode) {
-		message = message.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\\/,"");
+	encodeMessage:function(message) {
+		message = message.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\\/,"").replace(/\n/g,"<br>");
 		
-		message = message.replace(/\[COLOR=(.*?)\]/g,'');
-		message = message.replace(/\[(B|I|U)\]/g,'');
-		message = message.replace(/\[\/(COLOR|B|I|U)\]/g,'');
-			
-		if (isBBcode == true) {
-			if (Minitalk.setting("fontColor") !== false && Minitalk.setting("fontColor").length == 6) message = '[COLOR='+Minitalk.setting("fontColor")+']'+message+'[/COLOR]';
-			if (Minitalk.setting("fontBold") == true) message = '[B]'+message+'[/B]';
-			if (Minitalk.setting("fontItalic") == true) message = '[I]'+message+'[/I]';
-			if (Minitalk.setting("fontUnderline") == true) message = '[U]'+message+'[/U]';
-		}
+		/**
+		 * 폰트설정을 치환한다.
+		 */
+		message = message.replace(/\[COLOR=(#[a-z0-9]{6})\](.*?)\[\/COLOR\]/gi,Minitalk.socket.getPermission("font") == true ? '<span style="color:$1;">$2</span>' : '$2');
+		message = message.replace(/\[U\](.*?)\[\/U\]/gi,Minitalk.socket.getPermission("font") == true ? '<u>$1</u>' : '$1');
+		message = message.replace(/\[I\](.*?)\[\/I\]/gi,Minitalk.socket.getPermission("font") == true ? '<i>$1</i>' : '$1');
+		message = message.replace(/\[B\](.*?)\[\/B\]/gi,Minitalk.socket.getPermission("font") == true ? '<b>$1</b>' : '$1');
 		
 		return message;
 	},
 	/**
-	 * 인코딩된 메시지를 디코딩한다.
+	 * 서버에서 전송된 RAW 채팅메시지를 HTML 태그로 변환한다.
 	 *
-	 * @param string message 인코딩 전 메시지
-	 * @param boolean isFontColor 폰트색상적용여부
-	 * @return string message 인코딩 된 메시지
+	 * @param string message 원본 메시지
+	 * @return string message 처리된 메시지
 	 */
 	decodeMessage:function(message,isFontColor) {
-		if (isFontColor == true) message = message.replace(/\[COLOR=([a-zA-Z0-9]{6})\](.*?)\[\/COLOR\]/g,'<span style="color:#$1;">$2</span>');
-		else message = message.replace(/\[COLOR=([a-zA-Z0-9]{6})\](.*?)\[\/COLOR\]/g,'$2');
-		message = message.replace(/\[B\](.*?)\[\/B\]/g,'<b>$1</b>');
-		message = message.replace(/\[I\](.*?)\[\/I\]/g,'<i>$1</i>');
-		message = message.replace(/\[U\](.*?)\[\/U\]/g,'<span style="text-decoration:underline;">$1</span>');
-		message = message.replace(/((http|ftp|https):\/\/[^ \(\)<>]+)/g,'<a href="$1" target="_blank">$1</a>');
-		message = message.replace(/\[EMO:(.*?)\]/g,'<img src="'+Minitalk.getUrl()+'/emoticons/$1" style="vertical-align:middle" onload="Minitalk.ui.autoScroll();" />');
+		/**
+		 * 이모티콘을 치환한다.
+		 */
+		message = message.replace(/\[#([a-z0-9]+)\/([a-z0-9\.]+)\]/gi,'<img src="' + Minitalk.getUrl() + '/emoticons/$1/items/$2" style="vertical-align:middle;">');
 		
 		return message;
 	},
