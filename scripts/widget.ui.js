@@ -704,7 +704,7 @@ Minitalk.ui = {
 					
 				case "emoticon" :
 					var html = [
-						'<ul data-role="category">',
+						'<ul data-role="categories">',
 							'<li><button type="button" data-action="prev"></button></li>',
 							'<li data-role="items"></li>',
 							'<li><button type="button" data-action="next"></button></li>',
@@ -715,7 +715,23 @@ Minitalk.ui = {
 					html = html.join("");
 					Minitalk.ui.createToolLayer("emoticon",html,function($dom) {
 						$.send(Minitalk.getProcessUrl("getEmoticons"),function(result) {
-							var $categories = $("ul[data-role=category] > li[data-role=items]",$dom);
+							var $categories = $("ul[data-role=categories] > li[data-role=items]",$dom);
+							
+							$("button[data-action]",$("ul[data-role=categories]")).on("mousedown",function() {
+								var direction = $(this).attr("data-action");
+								
+								var scroll = $categories.prop("scrollWidth") - $categories.width();
+								var timer = scroll * 5;
+								if (direction == "prev") {
+									$categories.animate({scrollLeft:0},timer);
+								} else {
+									$categories.animate({scrollLeft:scroll},timer);
+								}
+							});
+							
+							$("button[data-action]",$("ul[data-role=categories]")).on("mouseup",function() {
+								$categories.stop();
+							});
 							
 							var opened = null;
 							if (result.success == true && result.emoticons.length > 0) {
@@ -724,12 +740,18 @@ Minitalk.ui = {
 									var $category = $("<button>").attr("data-category",emoticon.category);
 									$category.data("width",emoticon.width);
 									$category.data("height",emoticon.height);
-									$category.html(emoticon.title);
+									$category.append($("<i>").css("backgroundImage","url("+Minitalk.getUrl()+"/emoticons/" + emoticon.category + "/" + emoticon.icon + ")"));
+									$category.append($("<span>").html(emoticon.title));
+									
 									$category.on("click",function() {
 										var $category = $(this);
 										var $lists = $("div[data-role=lists]",$dom);
 										var category = $(this).attr("data-category");
 										var $item = $("ul[data-category="+category+"]",$lists);
+										
+										$("button",$categories).removeClass("on");
+										$category.addClass("on");
+										
 										if ($item.length == 1) {
 											$("ul[data-category]",$lists).hide();
 											$("ul[data-category="+category+"]",$lists).show();
@@ -749,7 +771,7 @@ Minitalk.ui = {
 														
 														$item.on("click",function() {
 															var code = $(this).attr("data-code");
-															var $input = $("div[data-role=input] > textarea");
+															var $input = $("div[data-role=input] > input");
 															
 															$input.focus();
 															$input.val($input.val() + "[" + code + "]");
@@ -1180,12 +1202,21 @@ Minitalk.ui = {
 		var $toolsTool = $("button[data-tool=" + tool + "]",$tools);
 		
 		var $layers = $("footer > div[data-role=layers]");
-		if ($("div[data-tool=" + tool + "]",$layers).length == 0) {
-			var $layer = $("<div>").attr("data-tool",tool);
-			$layers.append($layer);
-		} else {
-			var $layer = $("div[data-tool=" + tool + "]",$layers);
+		
+		if ($("div[data-tool=" + tool + "]",$layers).length == 1) {
+			Minitalk.ui.closeToolLayer(tool);
+			return;
 		}
+		
+		var $toolLayers = $("div[data-tool]",$layers);
+		if ($toolLayers.length > 0) {
+			$toolLayers.each(function() {
+				Minitalk.ui.closeToolLayer($(this).attr("data-tool"));
+			});
+		}
+		
+		var $layer = $("<div>").attr("data-tool",tool);
+		$layers.append($layer);
 		
 		$layer.on("click",function(e) {
 			e.stopImmediatePropagation();

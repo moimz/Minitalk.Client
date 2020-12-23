@@ -1,5 +1,6 @@
 {
 	"title":"기본 이모티콘",
 	"width":20,
-	"height":20
+	"height":20,
+	"icon":"icon.gif"
 }
