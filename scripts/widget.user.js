@@ -56,10 +56,10 @@ Minitalk.user = {
 				Minitalk.user.usersSort.sort();
 				var position = $.inArray("["+(user.opper ? sortUserCode[user.opper] : "")+user.nickname+"]",Minitalk.user.usersSort);
 
-				if ($(".userList > span").length < position) {
-					$(".userList").append(Minitalk.user.getTag(user,true));
+				if ($("aside[data-role=users] > span").length < position) {
+					$("aside[data-role=users]").append(Minitalk.user.getTag(user,true));
 				} else {
-					$($(".userList > span")[position]).after(Minitalk.user.getTag(user,true));
+					$($("aside[data-role=users] > span")[position]).after(Minitalk.user.getTag(user,true));
 				}
 			}
 		}
@@ -87,7 +87,7 @@ Minitalk.user = {
 			if (Minitalk.user.checkLimit(Minitalk.viewUserLimit,user.opper) == true) {
 				Minitalk.user.usersSort.splice($.inArray("["+(user.opper ? sortUserCode[user.opper] : "")+user.nickname+"]",Minitalk.user.usersSort),1);
 				delete Minitalk.user.users[user.nickname];
-				$(".userList").find("[code='"+user.nickname+"']").remove();
+				$("aside[data-role=users]").find("[code='"+user.nickname+"']").remove();
 			}
 		}
 		
@@ -105,8 +105,8 @@ Minitalk.user = {
 			Minitalk.storage("me",Minitalk.user.me);
 			
 			if (Minitalk.user.isVisibleUsers == true) {
-				$(".userList > span")[0].remove();
-				$(".userList").prepend(Minitalk.user.getTag(Minitalk.user.me,true));
+				$("aside[data-role=users] > span")[0].remove();
+				$("aside[data-role=users]").prepend(Minitalk.user.getTag(Minitalk.user.me,true));
 			}
 			
 			Minitalk.ui.initTools();
@@ -129,7 +129,7 @@ Minitalk.user = {
 			if (Minitalk.user.users[before.nickname] != undefined) {
 				delete Minitalk.user.users[before.nickname];
 			}
-			$(".userList").find("[code='"+before.nickname+"']").remove();
+			$("aside[data-role=users]").find("[code='"+before.nickname+"']").remove();
 			
 			if (Minitalk.user.checkLimit(Minitalk.viewUserLimit,after.opper) == true) {
 				Minitalk.user.usersSort.push("["+(after.opper ? sortUserCode[after.opper] : "")+after.nickname+"]");
@@ -141,10 +141,10 @@ Minitalk.user = {
 				if (after.nickname == Minitalk.user.me.nickname) {
 					user.css("display","none");
 				}
-				if ($(".userList > span").length < position) {
-					$(".userList").append(user);
+				if ($("aside[data-role=users] > span").length < position) {
+					$("aside[data-role=users]").append(user);
 				} else {
-					$($(".userList > span")[position]).after(user);
+					$($("aside[data-role=users] > span")[position]).after(user);
 				}
 			}
 		}

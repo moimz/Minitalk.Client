@@ -708,9 +708,9 @@ Minitalk.ui = {
 		var messageObject = $("<span>").addClass("body").html(Minitalk.splitString+message);
 		if (time) messageObject.attr("title",Minitalk.ui.getTime(time,"YYYY.MM.DD HH:mm:ss"));
 		item.append(messageObject);
-		if (time) item.append($("<span>").addClass("time").html(" ("+Minitalk.ui.getTime(time,"HH:mm:ss")+")"));
+		if (time) item.append($("<span>").addClass("time").html(Minitalk.ui.getTime(time,Minitalk.dateFormat)));
 		
-		$(".chatArea").append(item);
+		$("section[data-role=chat]").append(item);
 		Minitalk.ui.autoScroll();
 		
 		if (type == "whisper" && sender.nickname != Minitalk.user.me.nickname) {
@@ -779,7 +779,7 @@ Minitalk.ui = {
 	 */
 	autoScroll:function() {
 		if (Minitalk.ui.isFixedScroll == true) return;
-		$(".chatArea").scrollTop($(".chatArea").prop("scrollHeight"));
+		$("section[data-role=chat]").scrollTop($("section[data-role=chat]").prop("scrollHeight"));
 	},
 	/**
 	 * 채널명을 표시한다.
@@ -787,40 +787,11 @@ Minitalk.ui = {
 	 * @param string title
 	 */
 	printTitle:function(title) {
-		$("div.titleArea > span.title").html(title);
+		$("h1").html(title);
 	},
 	/**
-	 * 접속자목록을 출력한다.
+	 * 환경설정창을 불러온다.
 	 */
-	printUser:function(users) {
-		if ($(".userList").css("display") == "none") {
-			if (Minitalk.type == "vertical") {
-				var width = $(".chatArea").innerWidth();
-				var height = $(".frame").innerHeight() - $(".titleArea").outerHeight(true) - $(".actionArea").outerHeight(true);
-				$(".userList").height(1);
-				$(".userList").show();
-				$(".userList").animate({height:Minitalk.userListHeight},{step:function(now,fx) {
-					$(".chatArea").css("marginTop",$(".userList").outerHeight(true));
-					$(".chatArea").width(width);
-					$(".chatArea").outerHeight(height,true);
-					
-					if (now == Minitalk.userListHeight) {
-						$(".chatArea").css("marginTop",Minitalk.userListHeight);
-						$(".chatArea").outerHeight(height,true);
-						$(".chatArea").width(width);
-						Minitalk.ui.autoScroll();
-					}
-				}});
-			} else {
-				var width = $(".chatArea").outerWidth(true);
-				$(".userList").width(1);
-				$(".userList").show();
-				$(".userList").animate({width:Minitalk.userListWidth},{step:function(now,fx) {
-					$(".chatArea").css("marginRight",$(".userList").outerWidth(true));
-					$(".chatArea").outerWidth(width,true);
-					
-					if (now == Minitalk.userListWidth) {
-						$(".chatArea").css("marginRight",Minitalk.userListWidth);
 						$(".chatArea").outerWidth(width,true);
 						Minitalk.ui.autoScroll();
 					}
