@@ -13,8 +13,8 @@ Minitalk.user = {
 	menus:[],
 	usersSort:[],
 	users:{},
+	isAutoHideUsers:false,
 	isVisibleUsers:false,
-	latestRefreshTime:0, // 접속자목록을 마지막으로 갱신한 시각
 	me:{},
 	/**
 	 * 나의정보를 초기화한다.
@@ -41,8 +41,8 @@ Minitalk.user = {
 	join:function(user,usercount) {
 		Minitalk.ui.printUserCount(usercount);
 		
-		if (Minitalk.viewAlert == true) {
-			if (Minitalk.user.checkLimit(Minitalk.viewAlertLimit,user.opper) == true) {
+		if (Minitalk.viewUserNotification == true) {
+			if (Minitalk.user.checkLimit(Minitalk.viewUserNotificationLimit,user.opper) == true) {
 				Minitalk.ui.printMessage("system",Minitalk.getText("action/join").replace("{NICKNAME}","<b><u>"+user.nickname+"</u></b>"));
 			}
 		}
@@ -75,8 +75,8 @@ Minitalk.user = {
 	leave:function(user,usercount) {
 		Minitalk.ui.printUserCount(usercount);
 		
-		if (Minitalk.viewAlert == true) {
-			if (Minitalk.user.checkLimit(Minitalk.viewAlertLimit,user.opper) == true) {
+		if (Minitalk.viewUserNotification == true) {
+			if (Minitalk.user.checkLimit(Minitalk.viewUserNotificationLimit,user.opper) == true) {
 				Minitalk.ui.printMessage("system",Minitalk.getText("action/leave").replace("{NICKNAME}","<b><u>"+user.nickname+"</u></b>"));
 			}
 		}
