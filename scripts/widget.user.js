@@ -218,6 +218,26 @@ Minitalk.user = {
 		
 		return $user;
 	},
+	/**
+	 * 접속자 정보를 서버로부터 가져온다.
+	 *
+	 * @param string nickname 정보를 가져올 유저닉네임
+	 * @param function callback
+	 */
+	getUser:function(nickname,callback) {
+		if (Minitalk.socket.isConnected() === false) callback({success:false,error:"NOT_CONNECTED"});
+		
+		$.get({
+			url:Minitalk.socket.connection.domain+"/user/" + nickname,
+			dataType:"json",
+			headers:{authorization:"TOKEN " + Minitalk.socket.token},
+			success:function(result) {
+				if (result.success == true && result.user === undefined) result.success = false;
+				callback(result);
+			},
+			error:function() {
+				callback({success:false,error:"CONNECT_ERROR"});
+			}
 		});
 	},
 	/**

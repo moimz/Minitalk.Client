@@ -202,12 +202,6 @@ Minitalk.protocol = {
 		Minitalk.ui.printMessage("system",Minitalk.getText("action/login"));
 	},
 	/**
-	 * 특정유저의 정보를 수신하였을 때
-	 */
-	userinfo:function(userinfo) {
-		Minitalk.user.printMenu(userinfo);
-	},
-	/**
 	 * 아이피를 확인하였을 때
 	 */
 	showip:function(data) {
