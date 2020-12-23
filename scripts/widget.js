@@ -161,6 +161,42 @@ Minitalk.log = function(type,log) {
 };
 
 /**
+ * 미니톡 글꼴설정 데이터를 저장한다.
+ *
+ * @param string name 변수명
+ * @param any value 저장될 데이터 (없을 경우 저장되어 있는 데이터를 반환한다.)
+ * @return boolean/any 데이터저장성공여부, 저장되어 있는 데이터
+ */
+Minitalk.fonts = function(name,value) {
+	/**
+	 * 기본설정값
+	 */
+	var defaults = {
+		bold:false,
+		italic:false,
+		underline:false,
+		color:null
+	};
+	
+	var fonts = Minitalk.socket.getPermission("font") !== true || Minitalk.storage("fonts") == null ? defaults : Minitalk.storage("fonts");
+	if (value === undefined) {
+		if (name === undefined) return fonts;
+		if (fonts[name] !== undefined) {
+			return fonts[name];
+		} else {
+			return null;
+		}
+	} else {
+		if (Minitalk.socket.getPermission("font") == true) {
+			fonts[name] = value;
+			return Minitalk.storage("fonts",fonts);
+		} else {
+			return false;
+		}
+	}
+};
+
+/**
  * 브라우져의 세션스토리지에 유저설정을 저장한다.
  *
  * @param string key 저장할 데이터키
@@ -171,18 +207,17 @@ Minitalk.setting = function(key,value) {
 	if (value === undefined) {
 		var setting = Minitalk.storage("setting");
 		if (setting == null) {
-			setting = {fontBold:false,fontItalic:false,fontUnderline:false,fontColor:"",mute:false,push:false,banTime:0};
+			setting = {mute:false,push:false,banTime:0};
 			Minitalk.storage("setting",setting);
 		}
 		
-		if (Minitalk.user.checkLimit(Minitalk.fontSettingLimit,Minitalk.user.me.opper) == false && key.indexOf("font") == 0) return false;
 		if (key == "push" && (window.Notification === undefined || Notification.permission != "granted")) return false;
 
 		return setting[key];
 	} else {
 		var setting = Minitalk.storage("setting");
 		if (setting == null) {
-			setting = {fontBold:false,fontItalic:false,fontUnderline:false,fontColor:"",mute:false,push:false,banTime:0};
+			setting = {mute:false,push:false,banTime:0};
 		}
 		
 		setting[key] = value;
