@@ -248,21 +248,38 @@ $(document).ready(function() {
 	}
 	
 	/**
+	 * 채팅위젯 클래스를 초기화한다.
+	 */
+	Minitalk.user.init();
+	
+	/**
 	 * 채팅위젯 템플릿 HTML 을 가져온다.
 	 */
 	$.send(Minitalk.getProcessUrl("getWidget"),{templet:Minitalk.templet},function(result) {
 		if (result.success == true) {
 			$("body").html(result.html);
-			Minitalk.ui.init();
 			
-			$("div.loading").remove();
+			/**
+			 * UI 를 초기화한다.
+			 */
+			Minitalk.ui.init();
 			
 			/**
 			 * 채팅위젯 템플릿 스타일시트를 새로 불러왔을 경우, 스타일시트에 영향을 받는 요소를 초기화한다.
 			 */
 			$("link[rel=stylesheet]").on("load",function() {
-				Minitalk.ui.reinit();
+				Minitalk.ui.initFrame();
 			});
+			
+			/**
+			 * 초기화완료 이벤트를 발생한다.
+			 */
+			Minitalk.fireEvent("init");
+			
+			/**
+			 * 소켓서버에 접속한다.
+			 */
+			Minitalk.socket.connect();
 		} else {
 			if (result.errorcode) {
 				Minitalk.ui.printErrorCode(result.errorcode);
