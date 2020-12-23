@@ -56,10 +56,10 @@ Minitalk.user = {
 				Minitalk.user.usersSort.sort();
 				var position = $.inArray("["+(user.opper ? sortUserCode[user.opper] : "")+user.nickname+"]",Minitalk.user.usersSort);
 
-				if ($("aside[data-role=users] > span").length < position) {
+				if ($("aside[data-role=users] > label[data-role=user]").length < position) {
 					$("aside[data-role=users]").append(Minitalk.user.getTag(user,true));
 				} else {
-					$($("aside[data-role=users] > span")[position]).after(Minitalk.user.getTag(user,true));
+					$($("aside[data-role=users] > label[data-role=user]")[position]).after(Minitalk.user.getTag(user,true));
 				}
 			}
 		}
@@ -105,7 +105,7 @@ Minitalk.user = {
 			Minitalk.storage("me",Minitalk.user.me);
 			
 			if (Minitalk.user.isVisibleUsers == true) {
-				$("aside[data-role=users] > span")[0].remove();
+				$("aside[data-role=users] > label[data-role=user]")[0].remove();
 				$("aside[data-role=users]").prepend(Minitalk.user.getTag(Minitalk.user.me,true));
 			}
 			
@@ -141,10 +141,10 @@ Minitalk.user = {
 				if (after.nickname == Minitalk.user.me.nickname) {
 					user.css("display","none");
 				}
-				if ($("aside[data-role=users] > span").length < position) {
+				if ($("aside[data-role=users] > label[data-role=user]").length < position) {
 					$("aside[data-role=users]").append(user);
 				} else {
-					$($("aside[data-role=users] > span")[position]).after(user);
+					$($("aside[data-role=users] > label[data-role=user]")[position]).after(user);
 				}
 			}
 		}
@@ -168,23 +168,14 @@ Minitalk.user = {
 	 * @return object $user 접속자태그
 	 */
 	getTag:function(user,isUserList) {
-		var $user = $("<span>").addClass("user");
-		$user.data("user",user);
+		var $user = $("<label>").attr("data-role","user").data("user",user);
 		
 		if (isUserList == true && Minitalk.viewStatusIcon == true) {
 			$user.css("paddingLeft",20);
 			$user.css("backgroundImage","url("+Minitalk.statusIconPath+"/"+user.device+"/"+user.status+".png)");
 		}
 		
-		if (isUserList == true) {
-			$user.on("mouseover",function() {
-				$(this).addClass("mouseover");
-			});
-			$user.on("mouseout",function() {
-				$(this).removeClass("mouseover");
-			});
-		}
-		$user.attr("nickname",user.nickname);
+		$user.attr("title",user.nickname);
 		
 		var sHTML = "";
 		if (user.nickcon != "") {
@@ -193,8 +184,7 @@ Minitalk.user = {
 				if (temp[i] == "{nickname}") {
 					sHTML+= user.nickname;
 				} else {
-					if (isUserList == true) sHTML+= '<img src="'+temp[i]+'" nickname="'+user.nickname+'" />';
-					else sHTML+= '<img src="'+temp[i]+'" nickname="'+user.nickname+'" onload="Minitalk.ui.autoScroll();" />';
+					sHTML+= '<img src="'+temp[i]+'" class="nickname">';
 				}
 			}
 		} else {
@@ -210,6 +200,7 @@ Minitalk.user = {
 		if (user.opper == "ADMIN") {
 			sHTML+= '<img src="'+Minitalk.getTempletUrl(Minitalk.templet)+'/images/icon_admin.gif" />';
 		}
+		
 		$user.html(sHTML);
 		$user.on("click",function(e) {
 			Minitalk.user.toggleMenus($(this),e);
