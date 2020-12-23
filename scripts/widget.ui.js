@@ -2210,7 +2210,7 @@ Minitalk.ui = {
 		 */
 		if (message.indexOf("/") === 0) {
 			var commands = message.substr(1).split(" ");
-			var command = commands.shift();
+			var command = commands.shift().toLowerCase();
 			
 			switch (command) {
 				/**
@@ -2218,8 +2218,7 @@ Minitalk.ui = {
 				 */
 				case "w" :
 					var nickname = commands.shift();
-					var message = commands.join(" ");
-					
+					var message = $.trim(commands.join(" "));
 					if (message.length == 0) return;
 					
 					/**
@@ -2244,10 +2243,15 @@ Minitalk.ui = {
 					Minitalk.ui.disable(true);
 					
 					/**
+					 * 메시지 전송후 이벤트 처리
+					 */
+					Minitalk.fireEvent("sendWhisper",[nickname,message,Minitalk.user.me])
+					
+					/**
 					 * 직전의 귓속말 보낸 사람의 닉네임을 유지한다.
 					 */
 					Minitalk.ui.setInputVal("/w " + nickname + " ");
-					return;
+					break;
 					
 				/**
 				 * 채널관리자 로그인
@@ -2319,6 +2323,11 @@ Minitalk.ui = {
 			 */
 			Minitalk.ui.printChatMessage({id:uuid,type:"message",message:Minitalk.ui.encodeMessage(message),user:Minitalk.user.me});
 			Minitalk.ui.disable(true);
+			
+			/**
+			 * 메시지 전송후 이벤트 처리
+			 */
+			Minitalk.fireEvent("sendMessage",[message,Minitalk.user.me]);
 		}
 		
 		Minitalk.ui.setInputVal("");
