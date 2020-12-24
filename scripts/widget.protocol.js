@@ -101,7 +101,7 @@ Minitalk.protocol = {
 		/**
 		 * 이벤트를 발생시킨다.
 		 */
-		Minitalk.fireEvent("connected");
+		Minitalk.fireEvent("connect",[data.channel,data.me,data.count]);
 	},
 	/**
 	 * 채팅서버에 접속을 실패하였을 경우
