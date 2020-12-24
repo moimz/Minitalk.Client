@@ -107,6 +107,11 @@ Minitalk.socket = {
 		$(".userList").html("");
 		$("input").attr("disabled",true);
 		Minitalk.ui.disable();
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("disconnect",[Minitalk.socket.reconnectable]);
 	},
 	/**
 	 * 서버에 접속중인지 확인한다.

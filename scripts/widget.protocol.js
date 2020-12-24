@@ -75,6 +75,10 @@ Minitalk.protocol = {
 		}
 		
 		Minitalk.fireEvent("connecting",[Minitalk.channel,data.me,data.usercount]);
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
 		Minitalk.fireEvent("connect",[Minitalk.channel,data.me,data.usercount]);
 		
 		/**
