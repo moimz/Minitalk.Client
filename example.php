@@ -34,7 +34,7 @@ html, body {width:100%; height:100%; padding:0; margin:0;}
 		width:"100%",
 		height:"100%",
 		templet:"default",
-		usercode:"<?php echo MinitalkUserCode('닉네임',1,null,null,array()); ?>",
+		usercode:"<?php echo MinitalkUserCode('닉네임',1,null,null,array()); ?>"
 	});
 	</script>
 </body>
