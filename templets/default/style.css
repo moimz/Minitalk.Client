@@ -163,6 +163,7 @@ footer > div[data-role=layers] > div[data-tool=emoticon] > div[data-role=lists] 
 /**
  * 유저태그
  */
+label[data-role=user] {cursor:pointer;}
 label[data-role=user] img.nickname {max-width:100px; max-height:18px;}
 label[data-role=user] img {vertical-align:middle;}
 
