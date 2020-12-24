@@ -320,14 +320,25 @@ Minitalk.user = {
 					
 					$menus.append($menu);
 				} else {
+					/**
+					 * 메뉴가 보여야하는 조건함수가 있는 경우, 조건에 만족하지 못하면 추가하지 않는다.
+					 */
+					if (typeof menu.visible == "function") {
+						if (menu.visible(Minitalk,user,Minitalk.user.me) === false) continue;
+					}
+					
 					separator = false;
 					
 					/**
-					 * 사용자정의 툴버튼을 추가한다.
+					 * 사용자정의 메뉴를 추가한다.
 					 */
 					var $menu = $("<li>");
-					var $button = $("<button>").attr("type","button").attr("data-menu","custom");
-					$button.append($("<i>").addClass(menu.iconCls));
+					var $button = $("<button>").attr("type","button").attr("data-menu",menu.name);
+					var $icon = $("<i>");
+					if (menu.icon) $icon.css("backgroundImage","url(" + menu.icon + ")");
+					if (menu.iconClass) $icon.addClass(menu.iconClass);
+					$button.append($icon);
+				
 					$button.append($("<span>").html(menu.text));
 					$button.data("menu",menu);
 					$button.on("click",function(e) {
@@ -365,7 +376,6 @@ Minitalk.user = {
 		if (Minitalk.fireEvent("beforeActiveUserMenu",[menu,$menu,e]) === false) return;
 		
 		var $menus = $("ul[data-role=usermenus]");
-		var $menu = $("button[data-menu=" + menu + "]",$menus);
 		var user = $menus.data("user");
 		
 		if (typeof menu == "string") {
@@ -392,7 +402,7 @@ Minitalk.user = {
 			}
 		} else {
 			if (typeof menu.handler == "function") {
-				menu.handler(e);
+				menu.handler(Minitalk,user,e);
 			}
 		}
 		
