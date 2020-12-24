@@ -112,7 +112,7 @@ Minitalk.socket = {
 		/**
 		 * 이벤트를 발생시킨다.
 		 */
-		Minitalk.fireEvent("disconnected");
+		Minitalk.fireEvent("disconnect",[Minitalk.socket.reconnectable]);
 	},
 	/**
 	 * 서버에 접속중인지 확인한다.
