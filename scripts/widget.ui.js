@@ -439,14 +439,26 @@ Minitalk.ui = {
 				
 				$tools.append($tool);
 			} else {
+				/**
+				 * 툴바가 보여야하는 조건함수가 있는 경우, 조건에 만족하지 못하면 추가하지 않는다.
+				 */
+				if (typeof tool.visible == "function") {
+					if (tool.visible(Minitalk,Minitalk.user.me) === false) continue;
+				}
+				
 				separator = false;
 				
 				/**
 				 * 사용자정의 툴버튼을 추가한다.
 				 */
 				var $tool = $("<li>");
-				var $button = $("<button>").attr("type","button").attr("data-tool","custom");
-				$button.append($("<i>").addClass(tool.iconCls));
+				var $button = $("<button>").attr("type","button").attr("data-tool",tool.name);
+				
+				var $icon = $("<i>");
+				if (tool.icon) $icon.css("backgroundImage","url(" + tool.icon + ")");
+				if (tool.iconClass) $icon.addClass(tool.iconClass);
+				$button.append($icon);
+				
 				$button.append($("<span>").html(tool.text));
 				$button.data("tool",tool);
 				$button.on("click",function(e) {
@@ -633,7 +645,6 @@ Minitalk.ui = {
 		var tool = $tool.data("tool");
 		if (Minitalk.fireEvent("beforeActiveTool",[tool,$tool,e]) === false) return;
 		
-		var $tool = $("footer > ul > li > button[data-tool=" + tool + "]");
 		var $file = $("input[type=file]");
 		
 		if (typeof tool == "string") {
@@ -802,7 +813,7 @@ Minitalk.ui = {
 			}
 		} else {
 			if (typeof tool.handler == "function") {
-				tool.handler(e);
+				tool.handler(Minitalk,e);
 			}
 		}
 		$("footer").removeClass("open");
