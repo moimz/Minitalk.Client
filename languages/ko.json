@@ -34,8 +34,6 @@
 		"reconnect":"재접속",
 		"call":"{NICKNAME}님을 호출하였습니다.",
 		"called":"{NICKNAME}님이 호출하였습니다.",
-		"loading_users":"접속자목록을 불러오고 있습니다.",
-		"loaded_users":"총 {COUNT}명의 접속자목록을 불러왔습니다.",
 		"showip":"{NICKNAME}님의 IP는 {IP}입니다.",
 		"banip":"{FROM}님이 {TO}님의 아이피를 차단하였습니다.",
 		"opper":"{FROM}님이 {TO}님에게 관리자권한을 부여하였습니다.",

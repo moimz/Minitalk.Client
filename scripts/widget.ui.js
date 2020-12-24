@@ -951,7 +951,6 @@ Minitalk.ui = {
 		
 		$("aside[data-role=users]").empty();
 		if (is_visible == true) {
-			Minitalk.ui.printMessage("system",Minitalk.getText("action/loading_users"));
 			Minitalk.socket.send("users",Minitalk.viewUserLimit);
 			$main.addClass("users");
 			$button.addClass("on");
@@ -996,8 +995,6 @@ Minitalk.ui = {
 			
 			$("aside[data-role=users]").append(user);
 		}
-		
-		Minitalk.ui.printMessage("system",Minitalk.getText("action/loaded_users").replace("{COUNT}","<b><u>"+Minitalk.user.usersSort.length+"</u></b>"));
 	},
 	/**
 	 * 메시지를 전송한다.
