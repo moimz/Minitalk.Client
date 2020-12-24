@@ -26,22 +26,20 @@ HTML, BODY {padding:10px; margin:0px; overflow:hidden; width:100%; height:100%;}
 html, body {width:100%; height:100%; padding:0; margin:0;}
 </style>
 <body>
-	<div style="width:405px; height:505px; background:red;">
-		<script type="text/javascript" src="./scripts/minitalk.js" charset="UTF-8"></script>
-		<script type="text/javascript">
-		var m = new Minitalk({
-			id:"MinitalkExample",
-			channel:"example",
-			width:"100%",
-			height:"100%",
-			templet:"default",
-			language:"ko",
-			type:"auto",
-			nickname:"손님(<?php echo rand(10000,99999); ?>)",
-			opperCode:"<?php echo MinitalkOpperCode('MEMBER'); ?>",
-			toolType:"icontext"
-		});
-		</script>
-	</div>
+	<script type="text/javascript" src="./scripts/minitalk.js" charset="UTF-8"></script>
+	<script type="text/javascript">
+	var m = new Minitalk({
+		id:"MinitalkExample",
+		channel:"example",
+		width:"100%",
+		height:"100%",
+		templet:"default",
+		language:"ko",
+		type:"auto",
+		nickname:"손님(<?php echo rand(10000,99999); ?>)",
+		opperCode:"<?php echo MinitalkOpperCode('MEMBER'); ?>",
+		toolType:"icontext"
+	});
+	</script>
 </body>
 </html>
