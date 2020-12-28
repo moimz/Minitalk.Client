@@ -206,6 +206,16 @@ if (isMinitalkIncluded === undefined) {
 						return true;
 					}
 				});
+			} else if (event == "command") {
+				this.frame.$(this.frame.document).on(event,function(e) {
+					var args = Array.prototype.slice.call(arguments);
+					args.shift();
+					var returnValue = handler.apply(this,args);
+					if (returnValue !== undefined) {
+						e.stopImmediatePropagation();
+						return returnValue;
+					}
+				});
 			} else {
 				this.frame.$(this.frame.document).on(event,function(e) {
 					var args = Array.prototype.slice.call(arguments);
