@@ -161,7 +161,7 @@ Minitalk.user = {
 		/**
 		 * 이벤트를 발생시킨다.
 		 */
-		$(document).triggerHandler("updateUserCount",[Minitalk.user.count]);
+		Minitalk.fireEvent("updateUserCount",[Minitalk.user.count]);
 		
 		/**
 		 * 접속자수를 표시한다.
