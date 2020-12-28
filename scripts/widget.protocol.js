@@ -85,23 +85,28 @@ Minitalk.protocol = {
 		}
 		
 		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("connecting",[data.channel,data.me,data.count]);
+		
+		/**
 		 * 채팅로그를 불러온다.
 		 */
 		if (Minitalk.logCount > 0) {
 			Minitalk.socket.send("logs",{count:Minitalk.logCount,time:Minitalk.log().latest});
 		} else {
 			Minitalk.socket.joined = true;
+			
+			/**
+			 * 이벤트를 발생시킨다.
+			 */
+			Minitalk.fireEvent("connect",[data.channel,data.me,data.count]);
 		}
 		
 		/**
 		 * 채팅위젯의 UI를 활성화한다.
 		 */
 		Minitalk.ui.enable();
-		
-		/**
-		 * 이벤트를 발생시킨다.
-		 */
-		Minitalk.fireEvent("connect",[data.channel,data.me,data.count]);
 	},
 	/**
 	 * 채팅서버에 접속을 실패하였을 경우
@@ -237,7 +242,15 @@ Minitalk.protocol = {
 			Minitalk.ui.printChatMessage(logs[i],"log");
 		}
 		
+		$("section[data-tab=chat]").append($("<div>").attr("data-role","line").append($("<div>").html("NEW MESSAGE START")));
+		Minitalk.ui.autoScroll();
+		
 		Minitalk.socket.joined = true;
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("connect",[Minitalk.channel,Minitalk.user.me,Minitalk.user.count]);
 	},
 	/**
 	 * 메시지를 수신하였을 경우
