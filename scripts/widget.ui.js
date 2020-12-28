@@ -1489,23 +1489,13 @@ Minitalk.ui = {
 	 *
 	 * @param int count 접속자
 	 */
-	printUserCount:function(count,time) {
-		if (time !== undefined) {
-			if (Minitalk.user.latestRefreshTime > time) return;
-			Minitalk.user.latestRefreshTime = time;
-		}
-		
+	printUserCount:function(count) {
 		var $count = $("label[data-role=count]");
 		if (count == 0) {
 			$count.empty();
 		} else {
 			$count.html(Minitalk.getText("text/unit").replace("{COUNT}",count));
 		}
-		
-		/**
-		 * 이벤트를 발생시킨다.
-		 */
-		$(document).triggerHandler("printUserCount",[Minitalk,$count,count]);
 	},
 	/**
 	 * 에러메시지를 출력한다.
