@@ -165,6 +165,21 @@ Minitalk.socket = {
 		Minitalk.socket.io.emit(protocol,object);
 	},
 	/**
+	 * 메시지를 전송한다.
+	 *
+	 * @param message 전송할 메시지
+	 */
+	sendMessage:function(message,isPrint) {
+		Minitalk.socket.send("message",message);
+		
+		if (isPrint == true) {
+			/**
+			 * 메시지를 화면에 출력한다.
+			 */
+			Minitalk.ui.printChatMessage("chat",Minitalk.user.me,Minitalk.ui.encodeMessage(message));
+		}
+	},
+	/**
 	 * 유저를 호출한다.
 	 *
 	 * @param string nickname 호출할 닉네임

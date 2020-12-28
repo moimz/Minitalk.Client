@@ -1111,12 +1111,7 @@ Minitalk.ui = {
 			/**
 			 * 서버로 메시지를 전송한다.
 			 */
-			Minitalk.socket.send("message",message);
-			
-			/**
-			 * 자신의 메시지를 화면에 출력한다.
-			 */
-			Minitalk.ui.printChatMessage("chat",Minitalk.user.me,Minitalk.ui.encodeMessage(message));
+			Minitalk.socket.sendMessage(message,true);
 			
 			/**
 			 * 메시지 전송후 이벤트 처리
