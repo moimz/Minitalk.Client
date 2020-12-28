@@ -74,17 +74,29 @@ Minitalk.protocol = {
 			Minitalk.ui.toggleUsers(true);
 		}
 		
-		Minitalk.fireEvent("connecting",[Minitalk.channel,data.me,data.usercount]);
-		
 		/**
 		 * 이벤트를 발생시킨다.
 		 */
-		Minitalk.fireEvent("connect",[Minitalk.channel,data.me,data.usercount]);
+		Minitalk.fireEvent("connecting",[Minitalk.channel,data.me,data.usercount]);
+		
+		if (Minitalk.logCount > 0) {
+			/**
+			 * 이전대화기록을 가져온다.
+			 */
+			Minitalk.socket.send("logs",{limit:Minitalk.logCount,time:Minitalk.storage("lastLogTime")});
+		} else {
+			Minitalk.ui.enable();
+		
+			/**
+			 * 이벤트를 발생시킨다.
+			 */
+			Minitalk.fireEvent("connect",[Minitalk.channel,data.me,data.usercount]);
+		}
 		
 		/**
-		 * 이전대화기록을 가져온다.
+		 * 채팅위젯의 UI를 활성화한다.
 		 */
-		Minitalk.socket.send("logs",{limit:Minitalk.logCount,time:Minitalk.storage("lastLogTime")});
+		Minitalk.ui.enable();
 	},
 	/**
 	 * 채팅서버에 접속을 실패하였을 경우
@@ -155,9 +167,12 @@ Minitalk.protocol = {
 	 */
 	logend:function(data) {
 		Minitalk.ui.printLogMessage();
-		$("section[data-role=chat]").append($("<div>").attr("data-role","line").append($("<div>").html("NEW TALK START")));
-		Minitalk.ui.enable();
-		Minitalk.ui.autoScroll();
+		$("section[data-role=chat]").append($("<div>").attr("data-role","line").append($("<div>").html("NEW MESSAGE START")));
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("connect",[Minitalk.channel,Minitalk.user.me,Minitalk.user.count]);
 	},
 	/**
 	 * 유저가 참여하였을 때

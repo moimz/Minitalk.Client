@@ -34,6 +34,11 @@ Minitalk.socket = {
 		
 		$.send(Minitalk.getProcessUrl("getServer"),{channel:Minitalk.channel},function(result) {
 			if (result.success == true) {
+				/**
+				 * 이벤트를 발생시킨다.
+				 */
+				if (Minitalk.fireEvent("beforeConnect",[result.connection]) === false) return;
+				
 				Minitalk.socket.channel = result.channel;
 				Minitalk.ui.printMessage("system",Minitalk.getText("action/connecting"));
 				Minitalk.socket.connecting = true;
