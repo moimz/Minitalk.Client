@@ -2104,7 +2104,7 @@ Minitalk.ui = {
 		var $chat = $("section[data-tab=chat]");
 		if ($chat.length == 0) return;
 		
-		var $item = $item ? $item : $("div[data-role=item]:last",$chat);
+		var $item = $item ? $item : $("div[data-role]:last",$chat);
 		if ($item === true || $chat.prop("scrollHeight") - $chat.scrollTop() - $chat.height() < $item.outerHeight(true) + 10) {
 			$chat.scrollTop($chat.prop("scrollHeight"));
 		}
