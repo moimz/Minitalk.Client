@@ -1071,15 +1071,13 @@ Minitalk.ui = {
 				default :
 					var result = Minitalk.fireEvent("command",[command,commands]);
 					if (result === undefined) { // 플러그인 등에서 명령어를 처리하지 못하였을 경우
-						Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("NOT_FOUND_COMMAND"));
+						Minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_FOUND_COMMAND"));
 						return;
 					} else if (result !== true) { // 플러그인에서 명령어 처리시 오류가 발생한 경우
 						return;
 					}
 					break;
 			}
-			
-			return;
 		} else {
 			/**
 			 * 대화일시차단 확인
