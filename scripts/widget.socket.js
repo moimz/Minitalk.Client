@@ -90,7 +90,7 @@ Minitalk.socket = {
 		 * 접속자수를 초기화한다.
 		 */
 		Minitalk.ui.printMessage("error",Minitalk.getErrorText("DISCONNECTED"));
-		Minitalk.ui.printUserCount(0);
+		Minitalk.user.updateCount(0);
 		Minitalk.user.usersSort = [];
 		Minitalk.user.users = {};
 		

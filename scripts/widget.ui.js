@@ -929,11 +929,6 @@ Minitalk.ui = {
 			Minitalk.ui.printMessage("system",Minitalk.getText("action/autoHideUsers"));
 			Minitalk.ui.toggleUsers(false);
 		}
-		
-		/**
-		 * 이벤트를 발생시킨다.
-		 */
-		$(document).triggerHandler("printUserCount",[Minitalk,$count,count]);
 	},
 	/**
 	 * 접속자목록을 토글한다.

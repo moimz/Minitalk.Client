@@ -15,6 +15,7 @@ Minitalk.user = {
 	users:{},
 	isAutoHideUsers:false,
 	isVisibleUsers:false,
+	count:0,
 	me:{},
 	/**
 	 * 나의정보를 초기화한다.
@@ -39,7 +40,7 @@ Minitalk.user = {
 	 * @param int usercount 유저수
 	 */
 	join:function(user,usercount) {
-		Minitalk.ui.printUserCount(usercount);
+		Minitalk.user.updateCount(usercount);
 		
 		if (Minitalk.viewUserNotification == true) {
 			if (Minitalk.user.checkLimit(Minitalk.viewUserNotificationLimit,user.opper) == true) {
@@ -73,7 +74,7 @@ Minitalk.user = {
 	 * @param int usercount 유저수
 	 */
 	leave:function(user,usercount) {
-		Minitalk.ui.printUserCount(usercount);
+		Minitalk.user.updateCount(usercount);
 		
 		if (Minitalk.viewUserNotification == true) {
 			if (Minitalk.user.checkLimit(Minitalk.viewUserNotificationLimit,user.opper) == true) {
@@ -148,6 +149,32 @@ Minitalk.user = {
 				}
 			}
 		}
+	},
+	/**
+	 * 접속자수를 업데이트한다.
+	 *
+	 * @param int usercount
+	 */
+	updateCount:function(usercount) {
+		Minitalk.user.count = usercount;
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		$(document).triggerHandler("updateUserCount",[Minitalk.user.count]);
+		
+		/**
+		 * 접속자수를 표시한다.
+		 */
+		Minitalk.ui.printUserCount(Minitalk.user.count);
+	},
+	/**
+	 * 접속자수를 가져온다.
+	 *
+	 * @return int usercount
+	 */
+	getCount:function() {
+		return Minitalk.user.count;
 	},
 	/**
 	 * 유저의 고유한 값을 가져온다.

@@ -65,7 +65,7 @@ Minitalk.protocol = {
 		/**
 		 * 접속자수를 갱신한다.
 		 */
-		Minitalk.ui.printUserCount(data.usercount);
+		Minitalk.user.updateCount(data.usercount);
 		
 		/**
 		 * 접속자목록을 사용하고, 접속자수가 200명 이하라면 유저목록을 불러온다.
@@ -139,8 +139,8 @@ Minitalk.protocol = {
 	 * 접속자목록을 불러오는 경우
 	 */
 	users:function(data) {
+		Minitalk.user.updateCount(data.usercount);
 		Minitalk.ui.printUser(data.users);
-		Minitalk.ui.printUserCount(data.usercount);
 	},
 	/**
 	 * 이전대화를 불러오는 경우
