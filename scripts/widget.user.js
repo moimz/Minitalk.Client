@@ -159,14 +159,14 @@ Minitalk.user = {
 		Minitalk.user.count = usercount;
 		
 		/**
-		 * 이벤트를 발생시킨다.
-		 */
-		Minitalk.fireEvent("updateUserCount",[Minitalk.user.count]);
-		
-		/**
 		 * 접속자수를 표시한다.
 		 */
 		Minitalk.ui.printUserCount(Minitalk.user.count);
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("updateUserCount",[Minitalk.user.count]);
 	},
 	/**
 	 * 접속자수를 가져온다.
