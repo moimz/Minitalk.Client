@@ -470,7 +470,7 @@ Minitalk.user = {
 					break;
 					
 				case "whisper" :
-					Minitalk.ui.setInputVal("/w " + user.nickname);
+					Minitalk.ui.setInputVal("/w " + user.nickname + " ");
 					$menus.remove();
 					break;
 					
