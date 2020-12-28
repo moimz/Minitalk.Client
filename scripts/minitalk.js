@@ -220,6 +220,11 @@ if (isMinitalkIncluded === undefined) {
 		this.isAlertStorage = false;
 		
 		/**
+		 * 플러그인을 위한 객체를 생성한다.
+		 */
+		this.plugins = {};
+		
+		/**
 		 * 미니톡 경로를 가져온다.
 		 */
 		this.getUrl = function() {

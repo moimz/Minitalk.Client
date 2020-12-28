@@ -21,7 +21,6 @@ foreach ($languages as $language) {
 }
 
 $MINITALK = new Minitalk();
-
 $minifier = new Minifier();
 $js = $minifier->js();
 $js->add(__MINITALK_PATH__.'/scripts/jquery.js');
@@ -38,8 +37,8 @@ if (is_file(__MINITALK_PATH__.'/languages/'.$language.'.json') == false) {
 }
 $lang = file_get_contents(__MINITALK_PATH__.'/languages/'.$language.'.json');
 
-$js->add('Minitalk.LANG = '.$lang.';');
 $js->add('Minitalk.version = '.$MINITALK->getVersionToInt(__MINITALK_VERSION__).';');
+$js->add('Minitalk.LANG = '.$lang.';');
 $js->add('Minitalk.language = "'.$language.'";');
 
 $js->add(__MINITALK_PATH__.'/scripts/jquery.extend.js');
@@ -51,6 +50,13 @@ if ($channel !== null) {
 	$js->add(__MINITALK_PATH__.'/scripts/widget.ui.js');
 	$js->add(__MINITALK_PATH__.'/scripts/widget.socket.js');
 	$js->add(__MINITALK_PATH__.'/scripts/widget.protocol.js');
+	
+	/**
+	 * 템플릿 전용 스크립트가 있을 경우 해당 스크립트를 불러온다.
+	 */
+	if ($templet !== null && is_file(__MINITALK_PATH__.'/templets/'.$templet.'/script.js') == true) {
+		$js->add(__MINITALK_PATH__.'/templets/'.$templet.'/script.js');
+	}
 }
 
 /**
@@ -167,9 +173,44 @@ $js->add('m.viewUser = Minitalk.viewUser; Minitalk.on("init",function(minitalk) 
 $pluginsPath = @opendir(__MINITALK_PATH__.'/plugins');
 while ($plugin = @readdir($pluginsPath)) {
 	if ($plugin != '.' && $plugin != '..' && is_dir(__MINITALK_PATH__.'/plugins/'.$plugin) == true) {
-		if (is_file(__MINITALK_PATH__.'/plugins/'.$plugin.'/plugin.js') == true) {
-			$js->add(__MINITALK_PATH__.'/plugins/'.$plugin.'/plugin.js');
+		$js->add('Minitalk.plugins.'.$plugin.' = function() {');
+		$js->add('
+			var me = this;
+			me.getText = function(code,replacement) {
+				var replacement = replacement ? replacement : null;
+				var temp = code.split("/");
+				var string = me.LANG;
+				for (var i=0, loop=temp.length;i<loop;i++) {
+					if (string[temp[i]]) {
+						string = string[temp[i]];
+					} else {
+						string = null;
+						break;
+					}
+				}
+				if (string != null) return string;
+				return replacement == null ? code : replacement;
+			};
+		');
+		
+		/**
+		 * 플러그인에 언어팩이 존재할 경우
+		 */
+		if (is_dir(__MINITALK_PATH__.'/plugins/'.$plugin.'/languages') == true) {
+			if (is_file(__MINITALK_PATH__.'/plugins/'.$plugin.'/languages/'.$language.'.json') == false) {
+				$language = $package->language;
+			}
+			$lang = file_get_contents(__MINITALK_PATH__.'/plugins/'.$plugin.'/languages/'.$language.'.json');
+		} else {
+			$lang = 'null';
 		}
+		$js->add('me.LANG = '.$lang.';');
+		
+		if (is_file(__MINITALK_PATH__.'/plugins/'.$plugin.'/script.js') == true) {
+			$js->add(__MINITALK_PATH__.'/plugins/'.$plugin.'/script.js');
+		}
+		$js->add('};');
+		$js->add('new Minitalk.plugins.'.$plugin.'();');
 	}
 }
 @closedir($pluginsPath);
