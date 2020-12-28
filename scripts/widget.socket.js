@@ -95,7 +95,7 @@ Minitalk.socket = {
 		/**
 		 * 접속자수를 초기화한다.
 		 */
-		Minitalk.ui.printUserCount(0);
+		Minitalk.user.updateCount(0);
 		
 		/**
 		 * 소켓변수를 초기화한다.

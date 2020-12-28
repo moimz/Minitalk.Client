@@ -11,6 +11,7 @@
  */
 Minitalk.user = {
 	latestRefreshTime:0, // 접속자목록을 마지막으로 갱신한 시각
+	count:0, // 접속자수
 	me:{}, // 나의정보
 	/**
 	 * 나의정보를 초기화한다.
@@ -45,7 +46,7 @@ Minitalk.user = {
 		/**
 		 * 채널의 접속자수를 변경한다.
 		 */
-		Minitalk.ui.printUserCount(count,time);
+		Minitalk.user.updateCount(count,time);
 		
 		/**
 		 * 이벤트를 발생시킨다.
@@ -70,7 +71,7 @@ Minitalk.user = {
 		/**
 		 * 채널의 접속자수를 변경한다.
 		 */
-		Minitalk.ui.printUserCount(count,time);
+		Minitalk.user.updateCount(count,time);
 		
 		/**
 		 * 이벤트를 발생시킨다.
@@ -85,6 +86,35 @@ Minitalk.user = {
 	 */
 	getNickname:function(user,is_nickcon) {
 		return user.nickname;
+	},
+	/**
+	 * 접속자수를 업데이트한다.
+	 *
+	 * @param int usercount
+	 */
+	updateCount:function(usercount,time) {
+		// 마지막 접속자수 갱신시간보다 과거일 경우 접속자수를 변경하지 않는다.
+		if (time !== undefined && Minitalk.user.latestRefreshTime > time) return;
+		Minitalk.user.latestRefreshTime = time;
+		Minitalk.user.count = usercount;
+		
+		/**
+		 * 접속자수를 표시한다.
+		 */
+		Minitalk.ui.printUserCount(Minitalk.user.count);
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("updateUserCount",[Minitalk.user.count]);
+	},
+	/**
+	 * 접속자수를 가져온다.
+	 *
+	 * @return int usercount
+	 */
+	getCount:function() {
+		return Minitalk.user.count;
 	},
 	/**
 	 * 접속자태그를 가져온다.

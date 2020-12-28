@@ -75,7 +75,7 @@ Minitalk.protocol = {
 		/**
 		 * 접속자수를 갱신한다.
 		 */
-		Minitalk.ui.printUserCount(data.count,data.time);
+		Minitalk.user.updateCount(data.count,data.time);
 		
 		/**
 		 * 이전대화기록을 사용하는 채널의 경우, 이전대화 불러오기 버튼을 추가한다.
