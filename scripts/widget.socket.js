@@ -167,7 +167,8 @@ Minitalk.socket = {
 	/**
 	 * 메시지를 전송한다.
 	 *
-	 * @param message 전송할 메시지
+	 * @param string message 전송할 메시지
+	 * @param boolean isPrint 메시지를 출력할지 여부
 	 */
 	sendMessage:function(message,isPrint) {
 		/**
@@ -182,6 +183,7 @@ Minitalk.socket = {
 		
 		Minitalk.socket.send("message",message);
 		
+		var isPrint = isPrint === false ? false : true;
 		if (isPrint == true) {
 			/**
 			 * 메시지를 화면에 출력한다.
