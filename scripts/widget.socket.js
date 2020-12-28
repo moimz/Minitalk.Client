@@ -189,7 +189,6 @@ Minitalk.socket = {
 		Minitalk.socket.send("message",{id:uuid,type:"message",message:message});
 		
 		var isPrint = isPrint === false ? false : true;
-		
 		if (isPrint == true) {
 			/**
 			 * 메시지를 화면에 출력한다.
