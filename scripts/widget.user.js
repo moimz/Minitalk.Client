@@ -15,8 +15,8 @@ Minitalk.user = {
 	users:{},
 	isAutoHideUsers:false,
 	isVisibleUsers:false,
-	count:0,
-	me:{},
+	count:0, // 접속자수
+	me:{}, // 나의정보
 	/**
 	 * 나의정보를 초기화한다.
 	 */
