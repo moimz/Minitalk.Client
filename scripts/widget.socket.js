@@ -162,6 +162,43 @@ Minitalk.socket = {
 		Minitalk.socket.io.emit(protocol,data);
 	},
 	/**
+	 * 메시지를 전송한다.
+	 *
+	 * @param string message 전송할 메시지
+	 * @param boolean isPrint 메시지를 출력할지 여부
+	 */
+	sendMessage:function(message,isPrint) {
+		/**
+		 * 메시지의 고유 ID를 할당한다.
+		 */
+		var uuid = uuidv4();
+		
+		/**
+		 * 폰트권한이 있고 폰트설정이 있다면 메시지 데이터에 포함하여 전송한다.
+		 */
+		if (Minitalk.socket.getPermission("font") == true) {
+			if (Minitalk.fonts("bold") == true) message = "[B]" + message + "[/B]";
+			if (Minitalk.fonts("italic") == true) message = "[I]" + message + "[/I]";
+			if (Minitalk.fonts("underline") == true) message = "[U]" + message + "[/U]";
+			if (Minitalk.fonts("color") !== null) message = "[COLOR=" + Minitalk.fonts("color") + "]" + message + "[/COLOR]";
+		}
+		
+		/**
+		 * 서버로 메시지를 전송한다.
+		 */
+		Minitalk.socket.send("message",{id:uuid,type:"message",message:message});
+		
+		var isPrint = isPrint === false ? false : true;
+		
+		if (isPrint == true) {
+			/**
+			 * 메시지를 화면에 출력한다.
+			 */
+			Minitalk.ui.printChatMessage({id:uuid,type:"message",message:Minitalk.ui.encodeMessage(message),user:Minitalk.user.me});
+			Minitalk.ui.disable(true);
+		}
+	},
+	/**
 	 * 데이터를 전송한다.
 	 *
 	 * @param string protocol 프로토콜
