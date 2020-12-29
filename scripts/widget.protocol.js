@@ -250,7 +250,7 @@ Minitalk.protocol = {
 		/**
 		 * 이벤트를 발생시킨다.
 		 */
-		Minitalk.fireEvent("connect",[Minitalk.channel,Minitalk.user.me,Minitalk.user.count]);
+		Minitalk.fireEvent("connect",[Minitalk.socket.channel,Minitalk.user.me,Minitalk.user.count]);
 	},
 	/**
 	 * 메시지를 수신하였을 경우
