@@ -77,7 +77,7 @@ Minitalk.protocol = {
 		/**
 		 * 이벤트를 발생시킨다.
 		 */
-		Minitalk.fireEvent("connecting",[Minitalk.channel,data.me,data.usercount]);
+		Minitalk.fireEvent("connecting",[Minitalk.socket.channel,data.me,data.usercount]);
 		
 		if (Minitalk.logCount > 0) {
 			/**
@@ -90,7 +90,7 @@ Minitalk.protocol = {
 			/**
 			 * 이벤트를 발생시킨다.
 			 */
-			Minitalk.fireEvent("connect",[Minitalk.channel,data.me,data.usercount]);
+			Minitalk.fireEvent("connect",[Minitalk.socket.channel,data.me,data.usercount]);
 		}
 		
 		/**
@@ -172,7 +172,7 @@ Minitalk.protocol = {
 		/**
 		 * 이벤트를 발생시킨다.
 		 */
-		Minitalk.fireEvent("connect",[Minitalk.channel,Minitalk.user.me,Minitalk.user.count]);
+		Minitalk.fireEvent("connect",[Minitalk.socket.channel,Minitalk.user.me,Minitalk.user.count]);
 	},
 	/**
 	 * 유저가 참여하였을 때
