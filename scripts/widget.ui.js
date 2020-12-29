@@ -410,6 +410,38 @@ Minitalk.ui = {
 		}
 	},
 	/**
+	 * 툴버튼을 추가한다.
+	 *
+	 * @param string/tool 툴버튼
+	 * @param int/string position 위치
+	 */
+	appendTool:function(tool,position) {
+		if (position === undefined || position === null) {
+			Minitalk.tools.push(tool);
+		} else if (typeof position == "string") {
+			var index = null;
+			for (var i=0, loop=Minitalk.tools.length;i<loop;i++) {
+				if (typeof Minitalk.tools[i] == "string" && Minitalk.tools[i] == position) {
+					index = i + 1;
+					break;
+				}
+				
+				if (typeof Minitalk.tools[i] == "object" && Minitalk.tools[i].name == position) {
+					index = i + 1;
+					break;
+				}
+			}
+			
+			if (index === null) Minitalk.ui.appendTool(tool);
+			else Minitalk.ui.appendTool(tool,index);
+			return;
+		} else if (typeof position == "number") {
+			Minitalk.tools.splice(position,0,tool);
+		}
+		
+		Minitalk.ui.initTools();
+	},
+	/**
 	 * 툴버튼 실행
 	 *
 	 * @param object $tool 툴버튼의 DOM 객체
@@ -647,7 +679,6 @@ Minitalk.ui = {
 					break;
 			}
 		} else {
-			alert(typeof tool.handler);
 			if (typeof tool.handler == "function") {
 				tool.handler(Minitalk,e);
 			}
@@ -668,9 +699,6 @@ Minitalk.ui = {
 		if ($("footer > div[data-role=layers] > div[data-tool]").length > 0) {
 			$("footer > div[data-role=layers] > div[data-tool]").remove();
 		}
-	},
-	addTool:function(tool) {
-		Minitalk.addToolList.push(tool);
 	},
 	/**
 	 * 시간을 정해진 형태로 변환하여 가져온다.
