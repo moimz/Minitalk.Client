@@ -65,7 +65,7 @@ Minitalk.ui = {
 		 * 메인 DOM 객체를 확인한다.
 		 */
 		var $main = $("main",$frame);
-		if ($main.length == 0) return Minitalk.ui.printError("MISSING_DOM","aside");
+		if ($main.length == 0) return Minitalk.ui.printError("MISSING_DOM","main");
 		
 		/**
 		 * 푸터 영역에 툴바 및 입력폼 요소를 추가한다.
