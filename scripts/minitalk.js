@@ -349,6 +349,15 @@ if (isMinitalkIncluded === undefined) {
 	};
 	
 	/**
+	 * 미니톡 위젯이 삽입된 페이지를 이용하기 위한 스타일시트를 추가한다.
+	 */
+	var common = document.createElement("link");
+	common.setAttribute("href",MinitalkComponent.getUrl() + "/styles/common.css");
+	common.setAttribute("rel","stylesheet");
+	common.setAttribute("type","text/css");
+	document.head.appendChild(common);
+	
+	/**
 	 * 부모창의 클릭이벤트를 이용하여 특수한 DOM 객체를 초기화한다.
 	 */
 	document.addEventListener("click",function(e) {

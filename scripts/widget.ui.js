@@ -213,6 +213,13 @@ Minitalk.ui = {
 		});
 		
 		/**
+		 * 창이동 이벤트 처리
+		 */
+		$(window).on("beforeunload",function() {
+			Minitalk.ui.closeWindow(true);
+		});
+		
+		/**
 		 * 웹폰트 로드가 완료되면, UI 를 재정의한다.
 		 */
 		document.fonts.ready.then(function () {
@@ -1355,7 +1362,6 @@ Minitalk.ui = {
 			}
 		} else {
 			var $cover = $("<div>").attr("data-role","cover");
-			$cover.data("closable",closable);
 			$("div[data-role=frame]").append($cover);
 			
 			if ($("div[data-role=minitalk-window]",parent.document.body).length > 0) {
@@ -1363,9 +1369,7 @@ Minitalk.ui = {
 			}
 			
 			var $background = $("<div>").attr("data-role","minitalk-window");
-			$background.css("position","fixed").css("margin",0).css("padding",0).css("left",0).css("top",0).css("zIndex",100000).css("width","100%").css("height","100%").css("background","rgba(0,0,0,0.6) url("+Minitalk.getUrl()+"/images/loading.gif) no-repeat 50% 50%");
-			
-			var $target = $("<iframe>").css("position","fixed").css("width",width + "px").css("height","100px").css("background","#fff").attr("frameborder",0).attr("scrolling","auto").css("opacity",0);
+			var $target = $("<iframe>").css("width",width + "px").css("height","100px").css("background","#fff").attr("frameborder",0).attr("scrolling","auto").css("opacity",0);
 			$target.data("width",width);
 			$background.append($target);
 			$background.on("click",function() {
@@ -1375,6 +1379,9 @@ Minitalk.ui = {
 			
 			var dom = $target.get(0).contentWindow.document;
 		}
+		
+		$target.data("closable",closable);
+		$("div[data-role=frame]").data("window",$target);
 		
 		if (dom !== null) {
 			dom.removeChild(dom.documentElement);
@@ -1393,6 +1400,11 @@ Minitalk.ui = {
 			dom.close();
 			
 			var $dom = $(dom);
+			$dom.on("keydown",function(e) {
+				if (e.keyCode == 27) {
+					Minitalk.fireEvent("esc");
+				}
+			});
 			$dom.data("target",$target);
 			$dom.ready(function() {
 				$("link",$dom).on("load",function() {
@@ -1434,16 +1446,25 @@ Minitalk.ui = {
 	 * @param boolean forceClosed 강제닫기여부 (기본값 true)
 	 */
 	closeWindow:function(forceClosed) {
-		var forceClosed = forceClosed === false ? false : true;
-		
-		if (forceClosed === true || $("div[data-role=cover]",$("div[data-role=frame]")).data("closable") === true) {
-			if ($("div[data-role=minitalk-window]",parent.document.body).length > 0) {
-				$("div[data-role=minitalk-window]",parent.document.body).remove();
+		if ($("div[data-role=frame]").data("window")) {
+			var $window = $("div[data-role=frame]").data("window");
+			var forceClosed = forceClosed === false ? false : true;
+			
+			if (forceClosed === true || $window.data("closable") === true) {
+				if ($window.is("iframe") == true) {
+					if ($("div[data-role=minitalk-window]",parent.document.body).length > 0) {
+						$("div[data-role=minitalk-window]",parent.document.body).remove();
+					}
+				
+					if ($("div[data-role=cover]",$("div[data-role=frame]")).length > 0) {
+						$("div[data-role=cover]",$("div[data-role=frame]")).remove();
+					}
+				} else {
+					$window.get(0).close();
+				}
 			}
-		
-			if ($("div[data-role=cover]",$("div[data-role=frame]")).length > 0) {
-				$("div[data-role=cover]",$("div[data-role=frame]")).remove();
-			}
+			
+			$("div[data-role=frame]").data("window",null);
 		}
 	},
 	/**
