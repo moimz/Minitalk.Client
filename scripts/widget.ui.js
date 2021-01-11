@@ -10,6 +10,7 @@
  * @modified 2020. 6. 16.
  */
 Minitalk.ui = {
+	domReady:false,
 	resizeTimer:null,
 	/**
 	 * 미니톡 채팅위젯 UI를 초기화한다.
@@ -50,8 +51,14 @@ Minitalk.ui = {
 		/**
 		 * 위젯 프레임을 정의하고, html DOM 요소를 추가한다.
 		 */
-		var $frame = $("<div>").attr("data-role","frame");
+		var $frame = $("<div>").attr("data-role","frame").attr("data-version","7");
 		$frame.append(html);
+		
+		/**
+		 * 헤더 DOM 객체를 확인한다.
+		 */
+		var $header = $("header",$frame);
+		if ($header.length == 0) return Minitalk.ui.printError("MISSING_DOM","header");
 		
 		/**
 		 * 탭바 DOM 객체를 확인하고, 탭바 요소에 탭바 및 탭 목록 요소를 추가한다.
@@ -99,6 +106,12 @@ Minitalk.ui = {
 		 * 위젯 DOM 을 body 에 추가한다.
 		 */
 		$("body").append($frame);
+		
+		/**
+		 * 미니톡 UI DOM 출력완료 이벤트를 발생시킨다.
+		 */
+		Minitalk.ui.domReady = true;
+		Minitalk.fireEvent("ready",[$frame]);
 		
 		/**
 		 * UI 초기화함수 실행
