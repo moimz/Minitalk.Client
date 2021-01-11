@@ -187,7 +187,7 @@ Minitalk.ui = {
 		 */
 		$(document).on("keydown",function(e) {
 			if (e.keyCode == 27) {
-				Minitalk.freEvent("esc");
+				Minitalk.fireEvent("esc");
 			}
 		});
 		
