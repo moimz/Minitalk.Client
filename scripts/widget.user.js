@@ -57,10 +57,10 @@ Minitalk.user = {
 				Minitalk.user.usersSort.sort();
 				var position = $.inArray("["+(user.opper ? sortUserCode[user.opper] : "")+user.nickname+"]",Minitalk.user.usersSort);
 
-				if ($("aside[data-role=users] > label[data-role=user]").length < position) {
-					$("aside[data-role=users]").append(Minitalk.user.getTag(user,true));
+				if ($("section[data-role=users] > label[data-role=user]").length < position) {
+					$("section[data-role=users]").append(Minitalk.user.getTag(user,true));
 				} else {
-					$($("aside[data-role=users] > label[data-role=user]")[position]).after(Minitalk.user.getTag(user,true));
+					$($("section[data-role=users] > label[data-role=user]")[position]).after(Minitalk.user.getTag(user,true));
 				}
 			}
 		}
@@ -88,7 +88,7 @@ Minitalk.user = {
 			if (Minitalk.user.checkLimit(Minitalk.viewUserLimit,user.opper) == true) {
 				Minitalk.user.usersSort.splice($.inArray("["+(user.opper ? sortUserCode[user.opper] : "")+user.nickname+"]",Minitalk.user.usersSort),1);
 				delete Minitalk.user.users[user.nickname];
-				$("aside[data-role=users]").find("[code='"+user.nickname+"']").remove();
+				$("section[data-role=users]").find("[code='"+user.nickname+"']").remove();
 			}
 		}
 		
@@ -106,8 +106,8 @@ Minitalk.user = {
 			Minitalk.storage("me",Minitalk.user.me);
 			
 			if (Minitalk.user.isVisibleUsers == true) {
-				$("aside[data-role=users] > label[data-role=user]")[0].remove();
-				$("aside[data-role=users]").prepend(Minitalk.user.getTag(Minitalk.user.me,true));
+				$("section[data-role=users] > label[data-role=user]")[0].remove();
+				$("section[data-role=users]").prepend(Minitalk.user.getTag(Minitalk.user.me,true));
 			}
 			
 			Minitalk.ui.initTools();
@@ -130,7 +130,7 @@ Minitalk.user = {
 			if (Minitalk.user.users[before.nickname] != undefined) {
 				delete Minitalk.user.users[before.nickname];
 			}
-			$("aside[data-role=users]").find("[code='"+before.nickname+"']").remove();
+			$("section[data-role=users]").find("[code='"+before.nickname+"']").remove();
 			
 			if (Minitalk.user.checkLimit(Minitalk.viewUserLimit,after.opper) == true) {
 				Minitalk.user.usersSort.push("["+(after.opper ? sortUserCode[after.opper] : "")+after.nickname+"]");
@@ -142,10 +142,10 @@ Minitalk.user = {
 				if (after.nickname == Minitalk.user.me.nickname) {
 					user.css("display","none");
 				}
-				if ($("aside[data-role=users] > label[data-role=user]").length < position) {
-					$("aside[data-role=users]").append(user);
+				if ($("section[data-role=users] > label[data-role=user]").length < position) {
+					$("section[data-role=users]").append(user);
 				} else {
-					$($("aside[data-role=users] > label[data-role=user]")[position]).after(user);
+					$($("section[data-role=users] > label[data-role=user]")[position]).after(user);
 				}
 			}
 		}

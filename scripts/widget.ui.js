@@ -10,14 +10,71 @@
  * @modified 2020. 12. 7.
  */
 Minitalk.ui = {
-	tools:[],
+	domReady:false,
 	resizeTimer:null,
 	isFixedScroll:false,
 	/**
 	 * 미니톡 채팅위젯 UI 를 초기화한다.
 	 */
-	init:function() {
-		var $frame = $("div[data-role=frame]");
+	init:function(html) {
+		if (html === undefined) {
+			/**
+			 * 미니톡 채팅위젯을 구성하기 위한 필수요소 DOM 을 정의한다.
+			 */
+			var html = [
+				/**
+				 * 위젯헤더
+				 */
+				'<header>',
+					'<h1>connecting...</h1>', // 위젯타이틀
+					'<label data-role="count"></label>', // 접속자수,
+					'<button type="button" data-action="users"></button>', // 접속자보기 버튼
+					'<button type="button" data-action="configs"></button>', // 설정버튼
+				'</header>',
+				
+				/**
+				 * 메인영역
+				 */
+				'<main></main>',
+				
+				/**
+				 * 위젯푸터
+				 */
+				'<footer></footer>'
+			];
+			
+			html = html.join("");
+		}
+		
+		/**
+		 * 위젯 프레임을 정의하고, html DOM 요소를 추가한다.
+		 */
+		var $frame = $("<div>").attr("data-role","frame").attr("data-version","6");
+		$frame.append(html);
+		
+		/**
+		 * 헤더 DOM 객체를 확인한다.
+		 */
+		var $header = $("header",$frame);
+		if ($header.length == 0) return Minitalk.ui.printError("MISSING_DOM","header");
+		
+		/**
+		 * 메인 DOM 객체를 확인하고 채팅영역 및 유저목록영역을 추가한다.
+		 */
+		var $main = $("main",$frame);
+		if ($main.length == 0) return Minitalk.ui.printError("MISSING_DOM","aside");
+		$main.append('<section data-role="chat"></section>');
+		$main.append('<section data-role="users"></section>');
+		
+		/**
+		 * 푸터 영역에 툴바 및 입력폼 요소를 추가한다.
+		 */
+		var $footer = $("footer",$frame);
+		if ($footer.length == 0) return Minitalk.ui.printError("MISSING_DOM","footer");
+		$footer.append('<ul data-role="tools"></ul>');
+		$footer.append('<ul data-role="lists"></ul>');
+		$footer.append('<div data-role="layers"></div>');
+		$footer.append('<div data-role="input"><input class="inputText" type="text" /><button type="button"><i class="icon"></i><span>' + Minitalk.getText("button/send") + '</button></div>');
 		
 		/**
 		 * 알림영역을 추가한다.
@@ -30,6 +87,16 @@ Minitalk.ui = {
 		$frame.append('<audio data-type="call"><source src="' + Minitalk.getUrl() + '/sounds/call.mp3" type="audio/mpeg"></audio>');
 		$frame.append('<audio data-type="message"><source src="' + Minitalk.getUrl() + '/sounds/message.mp3" type="audio/mpeg"></audio>');
 		$frame.append('<audio data-type="query"><source src="' + Minitalk.getUrl() + '/sounds/query.mp3" type="audio/mpeg"></audio>');
+		
+		/**
+		 * 위젯 DOM 을 body 에 추가한다.
+		 */
+		$("body").append($frame);
+		
+		/**
+		 * 미니톡 UI DOM 을 저장하고 DOM 준비 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("ready",[$frame]);
 		
 		/**
 		 * UI 초기화함수 실행
@@ -182,6 +249,20 @@ Minitalk.ui = {
 				});
 			}
 		});
+	},
+	/**
+	 * 미니톡 채널설정에 따른 UI설정을 초기화한다.
+	 *
+	 * @param object channel 채널정보
+	 */
+	initChannel:function() {
+		var $frame = $("div[data-role=frame]");
+		var channel = Minitalk.socket.channel;
+		if (channel == null) return;
+		
+		$("body > div[data-role=loading]").remove();
+		
+		Minitalk.fireEvent("initChannel",[channel]);
 	},
 	/**
 	 * 툴바를 초기화한다.
@@ -972,7 +1053,7 @@ Minitalk.ui = {
 		var $header = $("header");
 		var $button = $("button[data-action=users]",$header);
 		
-		$("aside[data-role=users]").empty();
+		$("section[data-role=users]").empty();
 		if (is_visible == true) {
 			Minitalk.socket.send("users",Minitalk.viewUserLimit);
 			$main.addClass("users");
@@ -1005,8 +1086,8 @@ Minitalk.ui = {
 		}
 		Minitalk.user.usersSort.sort();
 		
-		$("aside[data-role=users]").html("");
-		$("aside[data-role=users]").append(Minitalk.user.getTag(Minitalk.user.me,true));
+		$("section[data-role=users]").html("");
+		$("section[data-role=users]").append(Minitalk.user.getTag(Minitalk.user.me,true));
 		
 		for (var i=0, loop=Minitalk.user.usersSort.length;i<loop;i++) {
 			var nickname = Minitalk.user.usersSort[i].replace(/^\[(#|\*|\+|\-)?(.*?)\]$/,"$2");
@@ -1016,7 +1097,7 @@ Minitalk.ui = {
 				user.css("display","none");
 			}
 			
-			$("aside[data-role=users]").append(user);
+			$("section[data-role=users]").append(user);
 		}
 	},
 	/**
