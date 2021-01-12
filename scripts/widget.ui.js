@@ -1409,10 +1409,10 @@ Minitalk.ui = {
 			$dom.ready(function() {
 				$("link",$dom).on("load",function() {
 					var width = $dom.data("target").data("width");
-					var height = $("body",$dom).prop("scrollHeight");
+					var height = $("div[data-role=window]",$dom).prop("scrollHeight") + $("div[data-role=window]",$dom).outerHeight(true) - $("div[data-role=window]",$dom).outerHeight();
 					
 					if ($dom.data("target").is("iframe") == true) {
-						if (screen.availHeight < height) height = $(parent.window).height() - 50;
+						if ($(parent.window).height() - 50 < height) height = $(parent.window).height() - 50;
 						$target.height(height);
 						$target.css("left","calc(50% - " + Math.ceil(width / 2) + "px)");
 						$target.css("top","calc(50% - " + Math.ceil(height / 2) + "px)");
