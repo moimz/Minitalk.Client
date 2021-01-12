@@ -614,11 +614,11 @@ Minitalk.ui = {
 				case "mute" :
 					if (Minitalk.setting("mute") == true) {
 						Minitalk.setting("mute",false);
-						Minitalk.ui.printMessage("system",Minitalk.getText("action/play_sound"));
+						Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/play_sound"));
 						$tool.removeClass("on");
 					} else {
 						Minitalk.setting("mute",true);
-						Minitalk.ui.printMessage("system",Minitalk.getText("action/mute_sound"));
+						Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/mute_sound"));
 						$tool.addClass("on");
 					}
 					break;
@@ -628,7 +628,7 @@ Minitalk.ui = {
 						if (window.Notification !== undefined) {
 							if (Notification.permission == "granted") {
 								Minitalk.setting("push",true);
-								Minitalk.ui.printMessage("system",Minitalk.getText("action/use_push"));
+								Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/use_push"));
 								$tool.addClass("on");
 							} else if (Notification.permission != "granted") {
 								Notification.requestPermission(function(permission) {
@@ -638,31 +638,31 @@ Minitalk.ui = {
 									
 									if (permission == "granted") {
 										Minitalk.setting("push",true);
-										Minitalk.ui.printMessage("system",Minitalk.getText("action/use_push"));
+										Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/use_push"));
 										$tool.addClass("on");
 									} else {
-										Minitalk.ui.printMessage("error",Minitalk.getErrorText("DISABLED_PUSH"));
+										Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("DISABLED_PUSH"));
 									}
 								});
 							}
 						} else {
-							Minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_SUPPORTED_BROWSER"));
+							Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("NOT_SUPPORTED_BROWSER"));
 						}
 					} else {
 						Minitalk.setting("push",false);
 						$tool.removeClass("on");
-						Minitalk.ui.printMessage("system",Minitalk.getText("action/stop_push"));
+						Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/stop_push"));
 					}
 					break;
 					
 				case "scroll" :
 					if (Minitalk.ui.isFixedScroll == true) {
-						Minitalk.ui.printMessage("system",Minitalk.getText("action/use_auto_scroll"));
+						Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/use_auto_scroll"));
 						Minitalk.ui.isFixedScroll = false;
 						Minitalk.ui.autoScroll();
 						$tool.removeClass("on");
 					} else {
-						Minitalk.ui.printMessage("system",Minitalk.getText("action/use_fixed_scroll"));
+						Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/use_fixed_scroll"));
 						Minitalk.ui.isFixedScroll = true;
 						$tool.addClass("on");
 					}
@@ -673,7 +673,7 @@ Minitalk.ui = {
 						Minitalk.socket.send("clearlog",null);
 					} else {
 						$("section[data-role=chat]").html("");
-						Minitalk.ui.printMessage("system",Minitalk.getText("action/clear_log_self"));
+						Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/clear_log_self"));
 						Minitalk.storage("logList",[]);
 					}
 					break;
@@ -716,7 +716,7 @@ Minitalk.ui = {
 	 * @param string type 메시지종류
 	 * @param string message 메시지
 	 */
-	printMessage:function(type,message) {
+	printSystemMessage:function(type,message) {
 		var item = $("<div>").addClass(type);
 		item.html(message);
 		$("section[data-role=chat]").append(item);
@@ -954,7 +954,7 @@ Minitalk.ui = {
 		
 		if (Minitalk.user.isAutoHideUsers == false && count > 200 && Minitalk.user.isVisibleUsers == true) {
 			Minitalk.user.isAutoHideUsers = true;
-			Minitalk.ui.printMessage("system",Minitalk.getText("action/autoHideUsers"));
+			Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/autoHideUsers"));
 			Minitalk.ui.toggleUsers(false);
 		}
 	},
@@ -1029,7 +1029,7 @@ Minitalk.ui = {
 		if (message.length == 0) return;
 		
 		if (Minitalk.socket.getPermission("chat") == false) {
-			Minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_ALLOWED_CHATTING"));
+			Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("NOT_ALLOWED_CHATTING"));
 			return;
 		}
 		
@@ -1099,7 +1099,7 @@ Minitalk.ui = {
 				default :
 					var result = Minitalk.fireEvent("command",[command,commands]);
 					if (result === undefined) { // 플러그인 등에서 명령어를 처리하지 못하였을 경우
-						Minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_FOUND_COMMAND"));
+						Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("NOT_FOUND_COMMAND"));
 						return;
 					} else if (result !== true) { // 플러그인에서 명령어 처리시 오류가 발생한 경우
 						return;
@@ -1114,7 +1114,7 @@ Minitalk.ui = {
 				var baned = Minitalk.storage("baned");
 				var check = baned[Minitalk.channel] ? baned[Minitalk.channel] : 0;
 				if (check > new Date().getTime()) {
-					Minitalk.ui.printMessage("system",Minitalk.getText("action/banedtime").replace("{SECOND}","<b><u>"+Math.ceil((check - new Date().getTime()) / 1000)+"</u></b>"));
+					Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/banedtime").replace("{SECOND}","<b><u>"+Math.ceil((check - new Date().getTime()) / 1000)+"</u></b>"));
 					return false;
 				}
 			}
@@ -1266,12 +1266,12 @@ Minitalk.ui = {
 	openPrivateChannel:function(mode,data) {
 		if (mode == "create") {
 			if (window[Minitalk.user.getUuid()] === undefined) {
-				Minitalk.ui.printMessage("system",Minitalk.getText("action/create_private_channel"));
+				Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/create_private_channel"));
 				return Minitalk.ui.createPrivateChannel(data);
 			}
 		} else if (mode == "join") {
 			if (window[data.code] === undefined) {
-				Minitalk.ui.printMessage("system",Minitalk.getText("action/join_private_channel").replace("{NICKNAME}","<b><u>"+data.from.nickname+"</u></b>"));
+				Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/join_private_channel").replace("{NICKNAME}","<b><u>"+data.from.nickname+"</u></b>"));
 				return Minitalk.ui.createPrivateChannel(data);
 			}
 		}
@@ -1310,7 +1310,7 @@ Minitalk.ui = {
 			
 			return true;
 		} else {
-			Minitalk.ui.printMessage("error",Minitalk.getErrorText("DISABLED_POPUP"));
+			Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("DISABLED_POPUP"));
 			formObject.remove();
 			
 			return false;
@@ -1343,7 +1343,7 @@ Minitalk.ui = {
 			
 			return true;
 		} else {
-			Minitalk.ui.printMessage("error",Minitalk.getErrorText("DISABLED_POPUP"));
+			Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("DISABLED_POPUP"));
 			formObject.remove();
 			
 			return false;
@@ -1359,7 +1359,7 @@ Minitalk.ui = {
 			if (result.success == true) {
 				Minitalk.socket.send("oppercode",result.oppercode);
 			} else {
-				Minitalk.ui.printMessage("error",Minitalk.getErrorText("INVALID_PASSWORD"));
+				Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("INVALID_PASSWORD"));
 			}
 		});
 	},

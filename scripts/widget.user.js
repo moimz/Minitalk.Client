@@ -44,7 +44,7 @@ Minitalk.user = {
 		
 		if (Minitalk.viewUserNotification == true) {
 			if (Minitalk.user.checkLimit(Minitalk.viewUserNotificationLimit,user.opper) == true) {
-				Minitalk.ui.printMessage("system",Minitalk.getText("action/join").replace("{NICKNAME}","<b><u>"+user.nickname+"</u></b>"));
+				Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/join").replace("{NICKNAME}","<b><u>"+user.nickname+"</u></b>"));
 			}
 		}
 		
@@ -78,7 +78,7 @@ Minitalk.user = {
 		
 		if (Minitalk.viewUserNotification == true) {
 			if (Minitalk.user.checkLimit(Minitalk.viewUserNotificationLimit,user.opper) == true) {
-				Minitalk.ui.printMessage("system",Minitalk.getText("action/leave").replace("{NICKNAME}","<b><u>"+user.nickname+"</u></b>"));
+				Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/leave").replace("{NICKNAME}","<b><u>"+user.nickname+"</u></b>"));
 			}
 		}
 		
@@ -114,11 +114,11 @@ Minitalk.user = {
 		}
 		
 		if (before.nickname != after.nickname) {
-			Minitalk.ui.printMessage("system",Minitalk.getText("action/update_nickname").replace("{BEFORE}","<b><u>"+before.nickname+"</u></b>").replace("{AFTER}","<b><u>"+after.nickname+"</u></b>"));
+			Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/update_nickname").replace("{BEFORE}","<b><u>"+before.nickname+"</u></b>").replace("{AFTER}","<b><u>"+after.nickname+"</u></b>"));
 		}
 		
 		if (before.status != after.status) {
-			Minitalk.ui.printMessage("system",Minitalk.getText("action/update_status").replace("{NICKNAME}","<b><u>"+after.nickname+"</u></b>").replace("{STATUS}","<b><u>"+Minitalk.getText("status/"+after.status)+"</u></b>"));
+			Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/update_status").replace("{NICKNAME}","<b><u>"+after.nickname+"</u></b>").replace("{STATUS}","<b><u>"+Minitalk.getText("status/"+after.status)+"</u></b>"));
 		}
 		
 		var sortUserCode = {"ADMIN":"#","POWERUSER":"*","MEMBER":"+","NICKGUEST":"-"};
@@ -535,7 +535,7 @@ Minitalk.user = {
 	 */
 	call:function(from,to) {
 		if (from.nickname == Minitalk.user.me.nickname) {
-			Minitalk.ui.printMessage("system",Minitalk.getText("action/call").replace("{NICKNAME}","<b><u>"+to.nickname+"</u></b>"));
+			Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/call").replace("{NICKNAME}","<b><u>"+to.nickname+"</u></b>"));
 		} else {
 			if (Minitalk.fireEvent("beforeCall",[from,to]) === false) return;
 			
@@ -553,7 +553,7 @@ Minitalk.user = {
 	 */
 	invite:function(from,to,code) {
 		if (from.nickname == Minitalk.user.me.nickname) {
-			Minitalk.ui.printMessage("system",Minitalk.getText("action/invite").replace("{NICKNAME}","<b><u>"+to.nickname+"</u></b>"));
+			Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/invite").replace("{NICKNAME}","<b><u>"+to.nickname+"</u></b>"));
 		} else {
 			if (Minitalk.fireEvent("beforeInvite",[from,code,to]) === false) return;
 			
