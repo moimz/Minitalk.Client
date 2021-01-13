@@ -242,7 +242,7 @@ Minitalk.protocol = {
 			Minitalk.ui.printChatMessage(logs[i],"log");
 		}
 		
-		$("section[data-tab=chat]").append($("<div>").attr("data-role","line").append($("<div>").html("NEW MESSAGE START")));
+		$("section[data-role=chat]").append($("<div>").attr("data-role","line").append($("<div>").html("NEW MESSAGE START")));
 		Minitalk.ui.autoScroll();
 		
 		Minitalk.socket.joined = true;
