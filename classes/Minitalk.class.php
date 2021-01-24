@@ -312,6 +312,19 @@ class Minitalk {
 	}
 	
 	/**
+	 * 모든 첨부파일이 저장되는 절대경로를 반환한다.
+	 *
+	 * @return string $attachment_path
+	 * @see /modules/ModuleAttachment.class.php
+	 * @tode 첨부파일 저장되는 경로를 변경할 수 있는 설정값 추가
+	 */
+	function getAttachmentPath() {
+		global $_CONFIGS;
+		if (isset($_CONFIGS->attachment) == true && isset($_CONFIGS->attachment->path) == true) return $_CONFIGS->attachment->path;
+		return __MINITALK_PATH__.'/attachments';
+	}
+	
+	/**
 	 * 미니톡 클라이언트 관리자 로그인정보를 가져온다.
 	 *
 	 * @return object $logged
@@ -654,6 +667,64 @@ class Minitalk {
 		$results->channel->token = Encoder(json_encode(array('channel'=>$channel->channel,'ip'=>GetClientIp())));
 		
 		return $results;
+	}
+	
+	/**
+	 * 특정경로에 있는 파일의 MIME 값을 읽어온다.
+	 *
+	 * @param string $path 파일절대경로
+	 * @return string $mime 파일 MIME
+	 */
+	function getFileMime($path) {
+		if (is_file($path) == true) {
+			$finfo = finfo_open(FILEINFO_MIME_TYPE);
+			$mime = finfo_file($finfo,$path);
+			finfo_close($finfo);
+
+			return $mime;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * 파일의 MIME 값을 이용하여 파일종류를 정리한다.
+	 *
+	 * @param string $mime 파일 MIME
+	 * @return string $type 파일종류
+	 */
+	function getFileType($mime) {
+		$type = 'file';
+		if ($mime == 'image/svg+xml') {
+			$type = 'svg';
+		} elseif ($mime == 'image/x-icon') {
+			$type = 'icon';
+		} elseif (preg_match('/application\/vnd.openxmlformats\-officedocument/',$mime) == true || $mime == 'application/CDFV2-corrupt' || $mime == 'application/pdf') {
+			$type = 'document';
+		} elseif (preg_match('/text\//',$mime) == true) {
+			$type = 'text';
+		} elseif (preg_match('/^image\/(jpeg|png|gif)/',$mime) == true) {
+			$type = 'image';
+		} elseif (preg_match('/^video/',$mime) == true) {
+			$type = 'video';
+		} elseif (preg_match('/^audio/',$mime) == true) {
+			$type = 'audio';
+		} elseif (preg_match('/application\/(zip|gzip|x\-rar\-compressed|x\-gzip)/',$mime) == true) {
+			$type = 'archive';
+		}
+
+		return $type;
+	}
+	
+	/**
+	 * 파일의 확장자만 가져온다.
+	 *
+	 * @param string $filename 파일명
+	 * @param string $filepath 파일절대경로 (파일절대경로가 존재할 경우, 실제 파일의 확장자를 가져온다.)
+	 * @return string $extension 파일 확장자
+	 */
+	function getFileExtension($filename,$filepath='') {
+		return strtolower(pathinfo($filename,PATHINFO_EXTENSION));
 	}
 	
 	/**
