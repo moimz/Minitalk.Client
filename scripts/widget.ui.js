@@ -222,7 +222,7 @@ Minitalk.ui = {
 		/**
 		 * 웹폰트 로드가 완료되면, UI 를 재정의한다.
 		 */
-		document.fonts.ready.then(function () {
+		document.fonts.ready.then(function() {
 			Minitalk.ui.initFrame();
 		});
 	},
