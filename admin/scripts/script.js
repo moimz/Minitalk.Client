@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 7. 15.
+ * @modified 2021. 1. 24.
  */
 var Admin = {
 	/**
@@ -1162,8 +1162,6 @@ var Minitalk = {
 				}
 			}
 		}
-		
-		console.log(code);
 		
 		return replacement == null ? code : replacement;
 	},
