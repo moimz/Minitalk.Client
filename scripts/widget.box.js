@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 7. 8.
+ * @modified 2021. 1. 24.
  */
 Minitalk.box = {
 	connection:null,
@@ -211,6 +211,7 @@ Minitalk.box = {
 			dom.write('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">');
 			dom.write('<title>MiniTalk Widget</title>');
 			dom.write('<script src="'+MinitalkComponent.getUrl()+'/scripts/box.js.php?channel='+Minitalk.channel+'&templet='+Minitalk.templet+'"></script>');
+			dom.write('<link rel="stylesheet" href="'+MinitalkComponent.getUrl()+'/styles/common.css" type="text/css">');
 			dom.write('<link rel="stylesheet" href="'+MinitalkComponent.getUrl()+'/styles/box.css.php?channel='+Minitalk.channel+'&templet='+Minitalk.templet+'&type='+box.type+'" type="text/css">');
 			dom.write('<script>var box = '+JSON.stringify(box)+';</script>');
 			dom.write('</head>');
