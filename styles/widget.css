@@ -156,7 +156,7 @@ div[data-role=frame] > footer > ul[data-role] > li > button[data-tool=file] > i.
  * 툴바 레이어 기본속성을 정의한다.
  */
 div[data-role=frame] > footer > div[data-role=layers] {position:absolute; left:0; bottom:100%; z-index:10; width:90%;}
-div[data-role=frame] > footer > div[data-role=layers] > div[data-tool] {background:#fff; width:calc(100% - 5px); max-width:300px; margin-left:5px; border:1px solid #d8d8d9; background:#f6f6f6; border-radius:3px; position:relative;}
+div[data-role=frame] > footer > div[data-role=layers] > div[data-tool] {background:#fff; width:calc(100% - 5px); max-width:300px; border:1px solid #d8d8d9; background:#f6f6f6; border-radius:3px; position:relative;}
 div[data-role=frame] > footer > div[data-role=layers] > div[data-tool=color] > ul {list-style:none; width:100%; font-size:0; box-sizing:border-box; padding:1px;}
 div[data-role=frame] > footer > div[data-role=layers] > div[data-tool=color] > ul > li {display:inline-block; vertical-align:middle; width:10%; height:20px; padding:1px; box-sizing:border-box;}
 div[data-role=frame] > footer > div[data-role=layers] > div[data-tool=color] > ul > li:hover {background:#10b8c3;}
@@ -202,9 +202,9 @@ section[data-role] > div[data-role=content] > label > input[type=checkbox]:after
 section[data-role] > div[data-role=content] > label > input[type=checkbox]:checked:after {font-family:moimz; content:"\EB10"; text-align:center; line-height:12px; border-color:#2196F3; background:#2196F3; color:#fff;} 
 section[data-role] > div[data-role=content] > label > p {color:#666; font-size:12px; padding-top:5px;}
 section[data-role] > div[data-role=content] > hr {margin:10px 0px; border:0; border-top:1px solid #ccc;}
-section[data-role] > div[data-role=button] {width:100%; height:34px; position:fixed; left:0; bottom:1px; background:#fff;}
+section[data-role] > div[data-role=button] {width:100%; height:34px; position:absolute; left:0; bottom:0; background:#fff;}
 section[data-role] > div[data-role=button] > ul {display:block; list-style:none; width:100%; height:34px;}
-section[data-role] > div[data-role=button] > ul > li {display:inline-block; width:50%; height:30px; vertical-align:middle;}
+section[data-role] > div[data-role=button] > ul > li {display:inline-block; width:50%; height:34px; vertical-align:middle;}
 section[data-role] > div[data-role=button] > ul > li > button {width:100%; height:34px; border:0; background:#F5F5F5; color:#666; font-size:12px; border-top:1px solid #d8d8d9; line-height:33px; cursor:pointer;}
 section[data-role] > div[data-role=button] > ul > li > button[data-action=confirm] {background:#2196F3; color:#fff; border-top-color:#2196F3;}
 
@@ -227,9 +227,9 @@ div[data-role=window] section[data-role] > div[data-role=content] > label > inpu
 div[data-role=window] section[data-role] > div[data-role=content] > label > input[type=checkbox]:checked:after {font-family:moimz; content:"\EB10"; text-align:center; line-height:12px; border-color:#2196F3; background:#2196F3; color:#fff;} 
 div[data-role=window] section[data-role] > div[data-role=content] > label > p {color:#666; font-size:12px; padding-top:5px;}
 div[data-role=window] section[data-role] > div[data-role=content] > hr {margin:10px 0px; border:0; border-top:1px solid #ccc;}
-div[data-role=window] section[data-role] > div[data-role=button] {width:100%; height:34px; position:fixed; left:0; bottom:0px; background:#fff;}
+div[data-role=window] section[data-role] > div[data-role=button] {display:block; width:100%; height:34px; position:fixed; left:0; bottom:0px;}
 div[data-role=window] section[data-role] > div[data-role=button] > ul {display:block; list-style:none; width:100%; height:34px;}
-div[data-role=window] section[data-role] > div[data-role=button] > ul > li {display:inline-block; width:50%; height:30px; vertical-align:middle;}
+div[data-role=window] section[data-role] > div[data-role=button] > ul > li {display:inline-block; width:50%; height:34px; vertical-align:middle;}
 div[data-role=window] section[data-role] > div[data-role=button] > ul > li > button {width:100%; height:34px; border:0; background:#F5F5F5; color:#666; font-size:12px; border-top:1px solid #d8d8d9; line-height:33px; cursor:pointer;}
 div[data-role=window] section[data-role] > div[data-role=button] > ul > li > button[data-action=confirm] {background:#2196F3; color:#fff; border-top-color:#2196F3;}
 
@@ -248,16 +248,16 @@ div[data-role=error] > div > section.textonly {padding-bottom:15px;}
 
 
 /**
- * 채팅섹션
+ * 채팅섹션 내부 요소 기본속성을 정의한다.
  */
 section[data-role=chat] > div[data-role=message] {user-select:auto; -webkit-user-select:auto; -moz-user-select:auto; -ms-user-select:auto;}
-section[data-role=chat] > div[data-role=message] > div.box > div > div[data-role=file] > a {display:block;}
-section[data-role=chat] > div[data-role=message] > div.box > div > div[data-role=file] > a > div[data-role=image] > div {width:100%; height:0; overflow:hidden; background-image:no-repeat; background-size:cover; background-position:50% 50%;}
-section[data-role=chat] > div[data-role=message] > div.box > div > div[data-role=website] > a {display:block;}
-section[data-role=chat] > div[data-role=message] > div.box > div > div[data-role=website] > div[data-role=video] > div {position:relative; width:100%; height:0; overflow:hidden;}
-section[data-role=chat] > div[data-role=message] > div.box > div > div[data-role=website] > div[data-role=video] > div > div {position:absolute; top:0; left:0; border:0; width:100%; height:100%;}
-section[data-role=chat] > div[data-role=message] > div.box > div > div[data-role=website] > div[data-role=video] > div > div > iframe {width:100%; height:100%; border:0;}
-section[data-role=chat] > div[data-role=message] > div.box > div > div[data-role=website] > a > div[data-role=image] > div {width:100%; height:0; overflow:hidden; background-image:no-repeat; background-size:cover; background-position:50% 50%;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=file] > a {display:block;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=file] > a > div[data-role=image] > div {width:100%; height:0; overflow:hidden; background-image:no-repeat; background-size:cover; background-position:50% 50%;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > a {display:block;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > div[data-role=video] > div {position:relative; width:100%; height:0; overflow:hidden;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > div[data-role=video] > div > div {position:absolute; top:0; left:0; border:0; width:100%; height:100%;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > div[data-role=video] > div > div > iframe {width:100%; height:100%; border:0;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > a > div[data-role=image] > div {width:100%; height:0; overflow:hidden; background-image:no-repeat; background-size:cover; background-position:50% 50%;}
 
 
 /**
@@ -265,7 +265,7 @@ section[data-role=chat] > div[data-role=message] > div.box > div > div[data-role
  */
 *[data-role=photo] {cursor:pointer !important;}
 *[data-role=nickname] {cursor:pointer !important;}
-i[data-role=file] {display:block; background-size:contain; background-repeat:no-repeat; background-position:50% 50%;}
+i[data-role=file] {display:block; background-image:url(../images/file/etc.png); background-size:contain; background-repeat:no-repeat; background-position:50% 50%;}
 i[data-role=file][data-type=document] {background-image:url(../images/file/document.png);}
 i[data-role=file][data-type=image] {background-image:url(../images/file/image.png);}
 i[data-role=file][data-type=video] {background-image:url(../images/file/video.png);}
