@@ -11,12 +11,146 @@
 	"requirements":{
 	},
 	"directories":{
+		"attachments":"0707",
 		"configs":"0707"
 	},
 	"language":"ko",
 	"configs":["key","db"],
 	"preset":"Minitalk",
 	"databases":{
+		"admin_table":{
+			"columns":{
+				"idx":{
+					"type":"int",
+					"length":11,
+					"comment":"고유값"
+				},
+				"user_id":{
+					"type":"varchar",
+					"length":20,
+					"comment":"관리자 아이디"
+				},
+				"password":{
+					"type":"char",
+					"length":65,
+					"comment":"관리자 패스워드"
+				},
+				"nickname":{
+					"type":"varchar",
+					"length":20,
+					"comment":"관리자 닉네임"
+				},
+				"language":{
+					"type":"char",
+					"length":2,
+					"comment":"관리자 언어셋"
+				},
+				"permission":{
+					"type":"text",
+					"comment":"관리자 권한"
+				},
+				"latest_login":{
+					"type":"int",
+					"length":11,
+					"comment":"마지막 접속시각"
+				}
+			},
+			"indexes":{
+				"idx":"primary_key",
+				"user_id":"unique",
+				"nickname":"unique"
+			},
+			"auto_increment":"idx",
+			"comment":"미니톡 클라이언트 관리자 테이블"
+		},
+		"attachment_table":{
+			"columns":{
+				"hash":{
+					"type":"char",
+					"length":32,
+					"comment":"파일해시"
+				},
+				"channel":{
+					"type":"varchar",
+					"length":32,
+					"comment":"채널명"
+				},
+				"name":{
+					"type":"varchar",
+					"length":100,
+					"comment":"파일명"
+				},
+				"path":{
+					"type":"varchar",
+					"length":200,
+					"comment":"파일경로"
+				},
+				"size":{
+					"type":"bigint",
+					"length":20,
+					"comment":"파일용량"
+				},
+				"type":{
+					"type":"varchar",
+					"length":20,
+					"comment":"파일종류"
+				},
+				"mime":{
+					"type":"varchar",
+					"length":50,
+					"comment":"파일MIME"
+				},
+				"width":{
+					"type":"int",
+					"length":11,
+					"default":0,
+					"comment":"이미지가로크기"
+				},
+				"height":{
+					"type":"int",
+					"length":11,
+					"default":0,
+					"comment":"이미지세로크기"
+				},
+				"nickname":{
+					"type":"varchar",
+					"length":20,
+					"comment":"업로드유저명"
+				},
+				"ip":{
+					"type":"varchar",
+					"length":15,
+					"comment":"업로드아이피"
+				},
+				"download":{
+					"type":"int",
+					"length":11,
+					"default":0,
+					"comment":"다운로드수"
+				},
+				"status":{
+					"type":"enum",
+					"length":"'DRAFT','PUBLISHED'",
+					"default":"DRAFT",
+					"comment":"상태"
+				},
+				"reg_date":{
+					"type":"int",
+					"length":11,
+					"comment":"업로드일시"
+				},
+				"exp_date":{
+					"type":"int",
+					"length":11,
+					"default":0,
+					"comment":"만료일시"
+				}
+			},
+			"indexes":{
+				"hash":"primary_key"
+			},
+			"comment":"미니톡 첨부파일 테이블"
+		},
 		"broadcast_table":{
 			"columns":{
 				"id":{
@@ -64,31 +198,6 @@
 				"reg_date":"index"
 			},
 			"comment":"미니톡 브로드캐스트 테이블"
-		},
-		"category_table":{
-			"columns":{
-				"idx":{
-					"type":"int",
-					"length":11,
-					"comment":"고유값"
-				},
-				"parent":{
-					"type":"int",
-					"length":11,
-					"default":0,
-					"comment":"1차카테고리"
-				},
-				"category":{
-					"type":"varchar",
-					"length":100,
-					"comment":"카테고리명"
-				}
-			},
-			"indexes":{
-				"idx":"primary_key"
-			},
-			"auto_increment":"idx",
-			"comment":"미니톡 카테고리 테이블"
 		},
 		"category_table":{
 			"columns":{
@@ -158,47 +267,70 @@
 					"is_null":true,
 					"comment":"서버접속정보"
 				},
-				"is_nickname":{
+				"allow_nickname_edit":{
 					"type":"enum",
 					"length":"'TRUE','FALSE'",
 					"default":"TRUE",
-					"comment":"닉네임변경가능여부"
+					"comment":"닉네임변경 가능여부"
 				},
-				"is_broadcast":{
+				"send_limit":{
+					"type":"int",
+					"length":11,
+					"default":0,
+					"comment":"데이터전송 권한"
+				},
+				"file_limit":{
+					"type":"int",
+					"length":11,
+					"default":0,
+					"comment":"파일전송 권한"
+				},
+				"font_limit":{
+					"type":"int",
+					"length":11,
+					"default":0,
+					"comment":"폰트옵션 권한"
+				},
+				"user_limit":{
+					"type":"int",
+					"length":11,
+					"default":0,
+					"comment":"유저목록에 보일 최소권한"
+				},
+				"box_limit":{
+					"type":"int",
+					"length":11,
+					"default":1,
+					"comment":"개인박스개설 권한"
+				},
+				"use_history":{
 					"type":"enum",
 					"length":"'TRUE','FALSE'",
 					"default":"TRUE",
-					"comment":"브로드캐스트수신여부"
-				},
-				"grade_font":{
-					"type":"enum",
-					"length":"'ALL','ADMIN','POWERUSER','MEMBER'",
-					"default":"ALL",
-					"comment":"글꼴설정권한"
-				},
-				"grade_chat":{
-					"type":"enum",
-					"length":"'ALL','ADMIN','POWERUSER','MEMBER'",
-					"default":"ALL",
-					"comment":"채팅가능권한"
-				},
-				"notice":{
-					"type":"varchar",
-					"length":255,
-					"is_null":true,
-					"comment":"공지메시지"
+					"comment":"이전대화보기여부"
 				},
 				"password":{
 					"type":"varchar",
 					"length":30,
 					"is_null":true,
 					"comment":"채널패스워드"
+				},
+				"guest_name":{
+					"type":"varchar",
+					"length":10,
+					"default":"Guest",
+					"comment":"손님닉네임"
+				},
+				"extras":{
+					"type":"longtext",
+					"is_null":true,
+					"comment":"추가설정변수"
 				}
 			},
 			"indexes":{
 				"channel":"primary_key",
-				"category1":"1차카테고리",
-				"category2":"2차카테고리"
+				"category1":"index",
+				"category2":"index"
 			},
 			"comment":"미니톡 채널 테이블"
 		},
@@ -238,7 +370,7 @@
 			"columns":{
 				"id":{
 					"type":"char",
-					"length":32,
+					"length":36,
 					"comment":"고유값"
 				},
 				"room":{
@@ -246,9 +378,18 @@
 					"length":65,
 					"comment":"대화방고유값"
 				},
+				"type":{
+					"type":"varchar",
+					"length":20,
+					"comment":"대화종류"
+				},
 				"message":{
 					"type":"text",
 					"comment":"대화내용"
+				},
+				"data":{
+					"type":"text",
+					"comment":"대화부가정보"
 				},
 				"nickname":{
 					"type":"varchar",
@@ -258,6 +399,20 @@
 				"user":{
 					"type":"text",
 					"comment":"유저정보"
+				},
+				"uuid":{
+					"type":"char",
+					"length":36,
+					"comment":"유저고유값"
+				},
+				"to":{
+					"type":"text",
+					"comment":"수신자정보"
+				},
+				"target":{
+					"type":"char",
+					"length":36,
+					"comment":"수신지고유값"
 				},
 				"time":{
 					"type":"bigint",
@@ -273,6 +428,7 @@
 			"indexes":{
 				"id":"primary_key",
 				"room":"index",
+				"uuid,target,room":"index",
 				"time":"index"
 			},
 			"comment":"미니톡 채팅로그 테이블"
