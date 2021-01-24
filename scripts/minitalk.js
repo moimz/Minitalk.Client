@@ -17,12 +17,29 @@ if (isMinitalkIncluded === undefined) {
 	 */
 	var MinitalkComponent = {
 		minitalks:{},
+		inits:{},
 		set:function(minitalk) {
 			this.minitalks[minitalk.id] = minitalk;
+			
+			/**
+			 * 초기설정값을 복제하여 저장한다.
+			 */
+			this.inits[minitalk.id] = {};
+			for (var key in minitalk) {
+				if (typeof minitalk[key] != "function") {
+					this.inits[minitalk.id][key] = minitalk[key];
+				}
+			}
 		},
-		get:function(id) {
-			if (this.minitalks[id] !== undefined) return this.clone(this.minitalks[id]);
-			return null;
+		get:function(id,isBox) {
+			var isBox = isBox === true ? true : false;
+			if (isBox === false) {
+				if (this.minitalks[id] !== undefined) return this.minitalks[id];
+				return null;
+			} else {
+				if (this.inits[id] !== undefined) return this.inits[id];
+				return null;
+			}
 		},
 		is:function(id) {
 			if (this.minitalks[id] !== undefined) return true;
@@ -43,15 +60,6 @@ if (isMinitalkIncluded === undefined) {
 			var domain = url[2];
 			
 			return protocol+"//"+domain;
-		},
-		clone:function(object) {
-			var clone = {};
-			for (var attr in object) {
-				if (object.hasOwnProperty(attr) == true) {
-					clone[attr] = object[attr];
-				}
-			}
-			return clone;
 		},
 		getLoaderHtml:function(background) {
 			var background = background ? background : "#fff url("+MinitalkComponent.getUrl()+"/images/loading.gif) no-repeat 50% 50%;";
@@ -90,6 +98,21 @@ if (isMinitalkIncluded === undefined) {
 				s[1] += new Array(prec - s[1].length + 1).join('0');
 			}
 			return s.join(dec);
+		},
+		/**
+		 * MinitalkComponent 객체를 복사한다.
+		 */
+		clone:function() {
+			var target = {};
+			for (var key in this) {
+				if (key == "minitalks") {
+					target[key] = {};
+				} else {
+					target[key] = this[key];
+				}
+			}
+			
+			return target;
 		}
 	};
 	
