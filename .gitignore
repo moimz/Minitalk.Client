@@ -4,6 +4,9 @@
 /configs/*
 !/configs/index.php
 !/configs/init.config.php
+/emoticons/*
+!/emoticons/index.php
+!/emoticons/default
 /plugins/*
 !/plugins/index.php
 /templets/*
