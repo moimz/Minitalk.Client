@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 1.2.0
- * @modified 2020. 12. 4.
+ * @modified 2021. 1. 24.
  */
 REQUIRE_ONCE str_replace(DIRECTORY_SEPARATOR.'install','',__DIR__).'/configs/init.config.php';
 
@@ -123,6 +123,12 @@ $acceptLanguage = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'],0,2);
 					<div data-role="input">
 						<label data-language="admin_password"></label>
 						<input type="text" name="admin_password" class="inputControl">
+						<div class="helpBlock"></div>
+					</div>
+					
+					<div data-role="input">
+						<label data-language="admin_nickname"></label>
+						<input type="text" name="admin_nickname" class="inputControl">
 						<div class="helpBlock"></div>
 					</div>
 				</form>
