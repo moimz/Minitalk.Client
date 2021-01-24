@@ -113,6 +113,7 @@ if ($action == 'install') {
 	}
 	$admin_id = Request('admin_id') ? Request('admin_id') : $errors['admin_id'] = 'admin_id';
 	$admin_password = Request('admin_password') ? Request('admin_password') : $errors['admin_password'] = 'admin_password';
+	$admin_nickname = Request('admin_nickname') ? Request('admin_nickname') : $errors['admin_nickname'] = 'admin_nickname';
 	
 	if ($_CONFIGS->presets->key == true) {
 		$db = $_CONFIGS->db;
@@ -147,10 +148,24 @@ if ($action == 'install') {
 		else $keyFile = true;
 		if ($_CONFIGS->presets->db == false) $dbFile = @file_put_contents(__MINITALK_PATH__.'/configs/db.config.php','<?php /*'.PHP_EOL.Encoder(json_encode($db),$key).PHP_EOL.'*/ ?>');
 		else $dbFile = true;
-		$adminFile = @file_put_contents(__MINITALK_PATH__.'/configs/admin.config.php','<?php /*'.PHP_EOL.Encoder(json_encode(array('user_id'=>$admin_id,'password'=>$admin_password)),$key).PHP_EOL.'*/ ?>');
 		
-		if ($keyFile !== false && $dbFile !== false && $adminFile !== false) {
-			if (CreateDatabase($dbConnect,$package->databases) == true) {
+		$attachments = isset($_CONFIGS->attachment) == true && is_object($_CONFIGS->attachment) == true && isset($_CONFIGS->attachment->path) == true ? $_CONFIGS->attachment->path : __MINITALK_PATH__.'/attachments';
+		
+		if (is_dir($attachments.'/temp') == false) {
+			mkdir($attachments.'/temp',0707);
+		}
+		
+		if ($keyFile !== false && $dbFile !== false) {
+			if (CreateDatabase($dbConnect,$package->databases) === true) {
+				$mHash = new Hash();
+				$admin_password = $mHash->password_hash($admin_password);
+				
+				if ($dbConnect->select('admin_table')->where('idx',1)->has() == true) {
+					$dbConnect->update('admin_table',array('user_id'=>$admin_id,'password'=>$admin_password,'nickname'=>$admin_nickname,'language'=>$language,'permission'=>'*','latest_login'=>time()))->where('idx',1)->execute();
+				} else {
+					$dbConnect->insert('admin_table',array('user_id'=>$admin_id,'password'=>$admin_password,'nickname'=>$admin_nickname,'language'=>$language,'permission'=>'*','latest_login'=>time()))->execute();
+				}
+				
 				$results->success = true;
 			} else {
 				$results->message = 'table';
