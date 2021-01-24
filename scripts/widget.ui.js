@@ -271,6 +271,12 @@ Minitalk.ui = {
 				if ($.inArray(tab,["chat","users","files","boxes","configs"]) === false) continue;
 				
 				/**
+				 * 사용하지 않는 탭인 경우 해당 탭을 숨긴다.
+				 */
+				if (Minitalk.socket.channel.use_users == false && tab == "users") continue;
+				if (Minitalk.socket.channel.use_boxes == false && tab == "boxes") continue;
+				
+				/**
 				 * 박스인 경우 박스탭을 숨긴다.
 				 */
 				if (Minitalk.box.isBox() == true && tab == "boxes") continue;
