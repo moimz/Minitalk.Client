@@ -163,27 +163,27 @@ if (isMinitalkIncluded === undefined) {
 			 * 미니톡 채팅위젯을 iframe 으로 위젯설정에 정의되어 있는 위치에 표시한다.
 			 */
 			document.write('<iframe id="'+this.id+'" style="width:'+this.width+'; height:'+this.height+';" frameborder="0" data-channel="'+this.channel+'"></iframe>');
-			this.frame = document.getElementById(this.id).contentWindow;
-			MinitalkComponent.set(this);
+			var frame = document.getElementById(this.id).contentWindow;
+			MinitalkComponent.set(this,opt);
 			
 			/**
 			 * 미니톡 채팅위젯의 DOM 객체를 정의한다.
 			 */
-			this.frame.document.removeChild(this.frame.document.documentElement);
+			frame.document.removeChild(frame.document.documentElement);
 			
-			this.frame.document.open();
-			this.frame.document.write('<!DOCTYPE HTML>');
-			this.frame.document.write('<html data-id="'+this.id+'">');
-			this.frame.document.write('<head>');
-			this.frame.document.write('<meta charset="utf-8">');
-			this.frame.document.write('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">');
-			this.frame.document.write('<title>MiniTalk Widget</title>');
-			this.frame.document.write('<script src="'+MinitalkComponent.getUrl()+'/scripts/widget.js.php"></script>');
-			this.frame.document.write('<link rel="stylesheet" href="'+MinitalkComponent.getUrl()+'/styles/widget.css.php" type="text/css">');
-			this.frame.document.write('</head>');
-			this.frame.document.write('<body data-error="'+code+'">'+MinitalkComponent.getLoaderHtml(this.background)+'</body>');
-			this.frame.document.write('</html>');
-			this.frame.document.close();
+			frame.document.open();
+			frame.document.write('<!DOCTYPE HTML>');
+			frame.document.write('<html data-id="'+this.id+'">');
+			frame.document.write('<head>');
+			frame.document.write('<meta charset="utf-8">');
+			frame.document.write('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">');
+			frame.document.write('<title>MiniTalk Widget</title>');
+			frame.document.write('<script src="'+MinitalkComponent.getUrl()+'/scripts/widget.js.php"></script>');
+			frame.document.write('<link rel="stylesheet" href="'+MinitalkComponent.getUrl()+'/styles/widget.css.php" type="text/css">');
+			frame.document.write('</head>');
+			frame.document.write('<body data-error="'+code+'">'+MinitalkComponent.getLoaderHtml(this.background)+'</body>');
+			frame.document.write('</html>');
+			frame.document.close();
 		};
 		
 		/**
@@ -231,7 +231,7 @@ if (isMinitalkIncluded === undefined) {
 			 * Internet Explorer 8.0 버전 이하일 경우 에러메시지 출력
 			 */
 			this.printError("REQUIRED_IE9_OR_HIGHER");
-		} else if (this.channel != "example" && document.querySelector("iframe[data-channel='"+this.channel+"']") !== null) {
+		} else if (document.querySelector("iframe[data-channel='"+this.channel+"']") !== null) {
 			/**
 			 * 같은 이름의 채널이 페이지상에 존재할 경우 에러메시지 출력
 			 */
@@ -241,27 +241,27 @@ if (isMinitalkIncluded === undefined) {
 			 * 미니톡 채팅위젯을 iframe 으로 위젯설정에 정의되어 있는 위치에 표시한다.
 			 */
 			document.write('<iframe id="'+this.id+'" style="width:'+this.width+'; height:'+this.height+';" frameborder="0" data-channel="'+this.channel+'"></iframe>');
-			this.frame = document.getElementById(this.id).contentWindow;
+			var frame = document.getElementById(this.id).contentWindow;
 			MinitalkComponent.set(this);
 			
 			/**
 			 * 미니톡 채팅위젯의 DOM 객체를 정의한다.
 			 */
-			this.frame.document.removeChild(this.frame.document.documentElement);
+			frame.document.removeChild(frame.document.documentElement);
 			
-			this.frame.document.open();
-			this.frame.document.write('<!DOCTYPE HTML>');
-			this.frame.document.write('<html data-id="'+this.id+'">');
-			this.frame.document.write('<head>');
-			this.frame.document.write('<meta charset="utf-8">');
-			this.frame.document.write('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">');
-			this.frame.document.write('<title>MiniTalk Widget</title>');
-			this.frame.document.write('<script src="'+MinitalkComponent.getUrl()+'/scripts/widget.js.php?channel='+this.channel+'&templet='+this.templet+'"></script>');
-			this.frame.document.write('<link rel="stylesheet" href="'+MinitalkComponent.getUrl()+'/styles/widget.css.php?channel='+this.channel+'&templet='+this.templet+'" type="text/css">');
-			this.frame.document.write('</head>');
-			this.frame.document.write('<body>'+MinitalkComponent.getLoaderHtml(this.background)+'</body>');
-			this.frame.document.write('</html>');
-			this.frame.document.close();
+			frame.document.open();
+			frame.document.write('<!DOCTYPE HTML>');
+			frame.document.write('<html data-id="'+this.id+'">');
+			frame.document.write('<head>');
+			frame.document.write('<meta charset="utf-8">');
+			frame.document.write('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">');
+			frame.document.write('<title>MiniTalk Widget</title>');
+			frame.document.write('<script src="'+MinitalkComponent.getUrl()+'/scripts/widget.js.php?channel='+this.channel+'&templet='+this.templet+'"></script>');
+			frame.document.write('<link rel="stylesheet" href="'+MinitalkComponent.getUrl()+'/styles/widget.css.php?channel='+this.channel+'&templet='+this.templet+'" type="text/css">');
+			frame.document.write('</head>');
+			frame.document.write('<body>'+MinitalkComponent.getLoaderHtml(this.background)+'</body>');
+			frame.document.write('</html>');
+			frame.document.close();
 		}
 	};
 	
