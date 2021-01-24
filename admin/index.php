@@ -9,7 +9,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
  * @version 6.4.0
- * @modified 2020. 12. 4.
+ * @modified 2021. 1. 24.
  */
 REQUIRE '../configs/init.config.php';
 if ($_CONFIGS->installed === false) {
@@ -62,7 +62,7 @@ if ($logged === null) {
 	<h1>Minitalk <small>Administrator</small></h1>
 	
 	<ul>
-		<?php foreach ($MINITALK->getText('admin/menu') as $menu=>$title) { if (in_array($menu,array('history','broadcast')) == true && $hasServer == false) continue; ?>
+		<?php foreach ($MINITALK->getText('admin/menu') as $menu=>$title) { if (in_array($menu,array('log','broadcast')) == true && $hasServer == false) continue; ?>
 		<li<?php echo $menu == 'server' ? ' class="selected"' : ''; ?>><button data-tab="<?php echo $menu; ?>"><i class="xi <?php echo $menuIcons[$menu]; ?>"></i><?php echo $title; ?></button></li>
 		<?php } ?>
 	</ul>
@@ -698,22 +698,12 @@ Ext.onReady(function () {
 								}
 							}
 						},{
-							header:Admin.getText("channel/columns/grade_font"),
-							dataIndex:"grade_font",
-							width:90,
+							text:Admin.getText("channel/columns/send_limit"),
+							dataIndex:"send_limit",
+							width:140,
 							align:"center",
 							renderer:function(value) {
-								var colors = {ADMIN:"red",POWERUSER:"orange",MEMBER:"green",ALL:"blue"};
-								return '<span style="color:' + colors[value] + '">' + Admin.getText("grade/" + value) + '</span>';
-							}
-						},{
-							header:Admin.getText("channel/columns/grade_chat"),
-							dataIndex:"grade_chat",
-							width:90,
-							align:"center",
-							renderer:function(value) {
-								var colors = {ADMIN:"red",POWERUSER:"orange",MEMBER:"green",ALL:"blue"};
-								return '<span style="color:' + colors[value] + '">' + Admin.getText("grade/" + value) + '</span>';
+								return Minitalk.getText("level/"+value);
 							}
 						},{
 							text:Admin.getText("channel/columns/user"),
@@ -728,18 +718,35 @@ Ext.onReady(function () {
 								return sHTML;
 							}
 						},{
-							header:Admin.getText("channel/columns/options"),
-							width:260,
+							text:Admin.getText("channel/columns/options"),
+							dataIndex:"options",
+							width:300,
 							renderer:function(value,p,record) {
-								var sHTML = '';
-								var colors = {TRUE:"blue",FALSE:"red"};
-								sHTML+= '<span style="color:' + colors[record.data.is_nickname] + ';">' + Admin.getText("channel/is_nickname/" + record.data.is_nickname) + '</span>';
-								sHTML+= ' / ';
+								var sHTML = "";
+								if (record.data.allow_nickname_edit == true) {
+									sHTML+= '<i class="xi xi-check-boxout"></i>';
+								} else {
+									sHTML+= '<i class="xi xi-layout-full"></i>';
+								}
+								sHTML+= ' '+Admin.getText("channel/form/allow_nickname_edit");
 								
-								sHTML+= '<span style="color:' + colors[record.data.is_broadcast] + ';">' + Admin.getText("channel/is_broadcast/" + record.data.is_broadcast) + '</span>';
-								sHTML+= ' / ';
+								sHTML+= "&nbsp;&nbsp;&nbsp;";
+								if (record.data.use_user_tab == true) {
+									sHTML+= '<i class="xi xi-check-boxout"></i>';
+								} else {
+									sHTML+= '<i class="xi xi-layout-full"></i>';
+								}
+								sHTML+= ' '+Admin.getText("channel/form/use_user_tab");
+								sHTML+= '(' + record.data.user_limit + '<i class="fa fa-caret-up"></i>)';
 								
-								sHTML+= '<span style="color:' + colors[record.data.is_notice] + ';">' + Admin.getText("channel/is_notice/" + record.data.is_notice) + '</span>';
+								sHTML+= "&nbsp;&nbsp;&nbsp;";
+								if (record.data.use_box_tab == true) {
+									sHTML+= '<i class="xi xi-check-boxout"></i>';
+								} else {
+									sHTML+= '<i class="xi xi-layout-full"></i>';
+								}
+								sHTML+= ' '+Admin.getText("channel/form/use_box_tab");
+								sHTML+= '(' + record.data.box_limit + '<i class="fa fa-caret-up"></i>)';
 								
 								return sHTML;
 							}
@@ -762,7 +769,7 @@ Ext.onReady(function () {
 							itemdblclick:function(grid,record) {
 								Admin.channel.add(record.data.channel);
 							},
-							itemcontextmenu:function(grid,record,item,index,e) {
+							itemcontextmenu:function(grid,record,row,index,e) {
 								var menu = new Ext.menu.Menu();
 								
 								menu.addTitle(record.data.title);
@@ -1057,12 +1064,23 @@ Ext.onReady(function () {
 											$channel.html("#" + item.room);
 											$item.append($channel);
 											
-											var $user = $("<b>");
-											$user.html(item.nickname);
-											$item.append($user);
+											if (item.to == null) {
+												var $user = $("<b>");
+												$user.html(item.nickname);
+												$item.append($user);
+											} else {
+												var $user = $("<b>").css("color","#ff00ff");
+												$user.html(item.nickname + ' <i class="mi mi-right"></i> ' + item.to.nickname);
+												$item.append($user);
+											}
 											
 											var $message = $("<span>");
-											$message.html(" : " + item.message);
+											if (item.to !== null) $message.css("color","#ff00ff");
+											if (item.type == "message") {
+												$message.html(' : ' + item.message);
+											} else if (item.type == "file") {
+												$message.html(' : <i class="mi mi-download"></i> <a href="' + item.data.download + '">' + item.message + ' (' + Minitalk.getFileSize(item.data.size) + ')</a>');
+											}
 											$item.append($message);
 											
 											var $ip = $("<label>");
@@ -1279,7 +1297,6 @@ Ext.onReady(function () {
 	});
 });
 </script>
-
+<?php } ?>
 </body>
 </html>
-<?php } ?>
