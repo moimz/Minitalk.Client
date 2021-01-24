@@ -93,7 +93,7 @@ Minitalk.protocol = {
 		 * 채팅로그를 불러온다.
 		 */
 		if (Minitalk.logCount > 0) {
-			Minitalk.socket.send("logs",{count:Minitalk.logCount,time:Minitalk.log().latest});
+			Minitalk.socket.send("logs",{count:Minitalk.logCount,time:Minitalk.logs().latest});
 		} else {
 			Minitalk.socket.joined = true;
 			
@@ -101,6 +101,11 @@ Minitalk.protocol = {
 			 * 이벤트를 발생시킨다.
 			 */
 			Minitalk.fireEvent("connect",[data.channel,data.me,data.count]);
+			
+			/**
+			 * 채팅위젯의 UI를 활성화한다.
+			 */
+			Minitalk.ui.enable();
 		}
 		
 		/**
@@ -216,7 +221,6 @@ Minitalk.protocol = {
 	 * 유저정보가 변경되었을 경우
 	 */
 	update:function(data) {
-		console.log("update",data);
 		var before = data.before;
 		var after = data.after;
 		
@@ -234,15 +238,18 @@ Minitalk.protocol = {
 	 */
 	logs:function(data) {
 		for (var i=0, loop=data.length;i<loop;i++) {
-			Minitalk.log(data[i]);
+			Minitalk.logs(data[i]);
 		}
 		
-		var logs = Minitalk.log().messages;
+		var logs = Minitalk.logs().messages;
 		for (var i=0, loop=logs.length;i<loop;i++) {
-			Minitalk.ui.printChatMessage(logs[i],"log");
+			Minitalk.ui.printMessage(logs[i],"log");
 		}
 		
-		$("section[data-role=chat]").append($("<div>").attr("data-role","line").append($("<div>").html("NEW MESSAGE START")));
+		if (logs.length > 0) {
+			var $main = $("main",$("div[data-role=frame]"));
+			$("section[data-role=chat]",$main).append($("<div>").attr("data-role","line").append($("<div>").html("NEW MESSAGE START")));
+		}
 		Minitalk.ui.autoScroll();
 		
 		Minitalk.socket.joined = true;
@@ -251,6 +258,11 @@ Minitalk.protocol = {
 		 * 이벤트를 발생시킨다.
 		 */
 		Minitalk.fireEvent("connect",[Minitalk.socket.channel,Minitalk.user.me,Minitalk.user.count]);
+		
+		/**
+		 * 채팅위젯의 UI를 활성화한다.
+		 */
+		Minitalk.ui.enable();
 	},
 	/**
 	 * 메시지를 수신하였을 경우
@@ -288,7 +300,7 @@ Minitalk.protocol = {
 		/**
 		 * 수신된 메시지를 로컬 로그저장소에 저장한다.
 		 */
-		Minitalk.log(data);
+		Minitalk.logs(data);
 	},
 	/**
 	 * 누군가가 호출하였을 경우
