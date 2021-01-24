@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.0
- * @modified 2020. 12. 4.
+ * @modified 2021. 1. 24.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -22,8 +22,8 @@ $limit = Request('limit');
 
 $time = strtotime($date);
 $start_time = $time * 1000;
-$end_time = mktime(24,0,0,date('m',$time),date('t',$time),date('Y',$time)) * 1000;
-$history = $this->db()->select($this->table->history)->where('time',$start_time,'>=')->where('time',$end_time,'<');
+$end_time = $start_time + 86400000;
+$history = $this->db()->select($this->table->history)->where('time',$start_time,'>=')->where('time',$end_time,'<')->where('type',array('message','file'),'IN');
 
 if ($channel) $history->where('room',$channel);
 if ($nickname) $history->where('(nickname LIKE ? or ip LIKE ?)',array('%'.$nickname.'%','%'.$nickname.'%'));
@@ -33,6 +33,8 @@ $total = $history->copy()->count();
 $history = $history->limit($start,$limit)->orderBy('time','asc')->get();
 for ($i=0, $loop=count($history);$i<$loop;$i++) {
 	$history[$i]->user = json_decode($history[$i]->user);
+	$history[$i]->data = json_decode($history[$i]->data);
+	$history[$i]->to = json_decode($history[$i]->to);
 }
 $results->success = true;
 $results->lists = $history;
