@@ -40,8 +40,7 @@ Minitalk.protocol = {
 		 * 나의정보를 저장한다.
 		 */
 		Minitalk.user.me = data.me;
-		Minitalk.storage("me",data.me);
-		Minitalk.session("authorization",data.authorization);
+		Minitalk.storage("authorization",data.authorization);
 		
 		/**
 		 * 서버접속오류 알림이 있는 경우 제거한다.
