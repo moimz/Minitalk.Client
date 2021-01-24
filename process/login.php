@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.0
- * @modified 2020. 12. 4.
+ * @modified 2021. 1. 24.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -17,14 +17,12 @@ $user_id = Request('user_id') ? Request('user_id') : $errors['user_id'] = $this-
 $password = Request('password') ? Request('password') : $errors['password'] = $this->getErrorText('REQUIRED');
 
 if (count($errors) == 0) {
-	$user_id = Request('user_id');
-	$password = Request('password');
-	
-	$adminFile = explode("\n",file_get_contents($this->getPath().'/configs/admin.config.php'));
-	$adminInfo = json_decode(Decoder($adminFile[1]));
-	if ($adminInfo->user_id == $user_id && $adminInfo->password == $password) {
+	$mHash = new Hash();
+	$check = $this->db()->select($this->table->admin)->where('user_id',$user_id)->getOne();
+	if ($check != null && $mHash->password_validate($password,$check->password) == true) {
 		$results->success = true;
-		$loginString = Encoder(json_encode(array('ip'=>GetClientIp(),'time'=>time())));
+		$loginString = Encoder(json_encode(array('idx'=>$check->idx,'ip'=>GetClientIp(),'time'=>time())));
+		$this->db()->update($this->table->admin,array('latest_login'=>time()))->where('idx',$check->idx)->execute();
 		$_SESSION['MINITALK_LOGGED'] = $loginString;
 		if (Request('auto_login') == 'TRUE') {
 			setcookie('MINITALK_LOGGED',$loginString,time() + 86400 * 60,'/');
