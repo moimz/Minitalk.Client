@@ -102,13 +102,17 @@ if (isMinitalkIncluded === undefined) {
 		/**
 		 * MinitalkComponent 객체를 복사한다.
 		 */
-		clone:function() {
+		clone:function(source) {
+			if (source === undefined) source = this;
+			
 			var target = {};
-			for (var key in this) {
+			for (var key in source) {
 				if (key == "minitalks") {
 					target[key] = {};
+				} else if (typeof source[key] == "object") {
+					target[key] = this.clone(source[key]);
 				} else {
-					target[key] = this[key];
+					target[key] = source[key];
 				}
 			}
 			
