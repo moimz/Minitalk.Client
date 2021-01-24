@@ -109,9 +109,13 @@ Minitalk.protocol = {
 		}
 		
 		/**
-		 * 채팅위젯의 UI를 활성화한다.
+		 * 박스에 참여한 경우, 기본채널의 박스목록을 갱신한다.
 		 */
-		Minitalk.ui.enable();
+		if (Minitalk.box.isBox() == true) {
+			try {
+				opener.Minitalk.ui.createBoxes();
+			} catch (e) {}
+		}
 	},
 	/**
 	 * 채팅서버에 접속을 실패하였을 경우
