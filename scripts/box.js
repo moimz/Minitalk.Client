@@ -58,4 +58,18 @@ $(document).ready(function() {
 	 * 소켓서버에 접속한다.
 	 */
 	Minitalk.socket.connect();
+	
+	/**
+	 * 박스가 종료될 때, 박스관련 변수들을 초기화하고, 박스목록을 갱신한다.
+	 */
+	$(window).on("beforeunload",function() {
+		try {
+			window.sessionStorage.removeItem("minitalk-" + Minitalk.version + "-" + Minitalk.box.connection.id);
+			window.localStorage.removeItem("minitalk-" + Minitalk.version + "-" + Minitalk.box.connection.id);
+			window.sessionStorage.removeItem("minitalk-" + Minitalk.version + "-" + Minitalk.box.connection.id + "-extras");
+			window.localStorage.removeItem("minitalk-" + Minitalk.version + "-" + Minitalk.box.connection.id + "-extras");
+			opener.Minitalk.ui.createBoxes();
+		} catch (e) {
+		}
+	});
 });
