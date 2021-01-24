@@ -111,8 +111,9 @@ if (isMinitalkIncluded === undefined) {
 		 *
 		 * @public boolean viewUserNotification 다른 접속자의 접속안내 메시지를 보일지 설정한다. (기본값 : true, true : 접속안내메시지 보임, false : 접속안내메시지 숨김)
 		 * @public int viewUserNotificationLimit 접속안내 메시지 및 유저목록에서 보일 유저의 최소레벨 (기본값 : 0)
+		 * @public boolean viewConnectMessage 서버접속 메시지를 보일지 설정한다. (기본값 : true)
 		 *
-		 * @public int logCount 이전 대화내역을 몇개까지 보일지 설정한다. (기본값 : 15, 최대 : 30, 0 일 경우 이전 대화내역을 사용하지 않는다.)
+		 * @public int logCount 이전 대화내역을 몇개까지 보일지 설정한다. (기본값 : 15, 최대 : 50, 0 일 경우 이전 대화내역을 사용하지 않는다.)
 		 * @public string dateFormat 미니톡 채팅위젯내에서 표시되는 날짜/시각의 표시형태
 		 *
 		 * @public string tabType 탭바 형식을 정의한다.  (기본값 : auto, auto : 채팅위젯 가로크기(400px 기준)에 따라 가로/세로 자동변환, horizontal : 가로형태, vertical : 세로형태)
@@ -138,6 +139,7 @@ if (isMinitalkIncluded === undefined) {
 		
 		this.viewUserNotification = opt.viewUserNotification === false ? false : true;
 		this.viewUserNotificationLimit = opt.viewUserNotificationLimit ? opt.viewUserNotificationLimit : 0;
+		this.viewConnectMessage = opt.viewConnectMessage === false ? false : true;
 		
 		this.logCount = opt.logCount !== undefined ? opt.logCount : 15;
 		this.dateFormat = opt.dateFormat ? opt.dateFormat : "A HH:mm";
