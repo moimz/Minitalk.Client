@@ -7,9 +7,9 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 7. 7.
+ * @modified 2021. 1. 24.
  */
-var MinitalkComponent = parent.MinitalkComponent.clone(parent.MinitalkComponent);
+var MinitalkComponent = parent.MinitalkComponent;
 var Minitalk = MinitalkComponent.get($("html").attr("data-id"));
 
 /**
