@@ -117,8 +117,6 @@ Minitalk.ui = {
 		 * UI 초기화함수 실행
 		 */
 		Minitalk.ui.initEvents();
-		Minitalk.ui.initFrame();
-		Minitalk.ui.initSection();
 		Minitalk.ui.disable();
 	},
 	/**
@@ -380,6 +378,8 @@ Minitalk.ui = {
 	initSection:function() {
 		var firstTab = null;
 		var $main = $("main");
+		if ($("section",$main).length > 0) return;
+		
 		for (var index in Minitalk.tabs) {
 			var tab = Minitalk.tabs[index];
 			
@@ -616,6 +616,9 @@ Minitalk.ui = {
 		var $frame = $("div[data-role=frame]");
 		var channel = Minitalk.socket.channel;
 		if (channel == null) return;
+		
+		Minitalk.ui.initFrame();
+		Minitalk.ui.initSection();
 		
 		$("body > div[data-role=loading]").remove();
 		
