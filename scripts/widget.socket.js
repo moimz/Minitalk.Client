@@ -165,10 +165,16 @@ Minitalk.socket = {
 	/**
 	 * 메시지를 전송한다.
 	 *
+	 * @param string type 메시지 유형 (message, file, ...)
 	 * @param string message 전송할 메시지
+	 * @param object data 메시지에 추가적으로 첨부할 데이터
 	 * @param boolean isPrint 메시지를 출력할지 여부
 	 */
-	sendMessage:function(message,isPrint) {
+	sendMessage:function(type,message,data,isPrint) {
+		var data = data !== undefined && typeof data == "object" ? data : null;
+		var isPrint = isPrint === false ? false : true;
+		var message = message ? $.trim(message) : "";
+		
 		/**
 		 * 메시지의 고유 ID를 할당한다.
 		 */
@@ -177,7 +183,7 @@ Minitalk.socket = {
 		/**
 		 * 폰트권한이 있고 폰트설정이 있다면 메시지 데이터에 포함하여 전송한다.
 		 */
-		if (Minitalk.socket.getPermission("font") == true) {
+		if (type == "message" && Minitalk.socket.getPermission("font") == true) {
 			if (Minitalk.fonts("bold") == true) message = "[B]" + message + "[/B]";
 			if (Minitalk.fonts("italic") == true) message = "[I]" + message + "[/I]";
 			if (Minitalk.fonts("underline") == true) message = "[U]" + message + "[/U]";
@@ -187,16 +193,59 @@ Minitalk.socket = {
 		/**
 		 * 서버로 메시지를 전송한다.
 		 */
-		Minitalk.socket.send("message",{id:uuid,type:"message",message:message});
+		Minitalk.socket.send("message",{id:uuid,type:type,message:message,data:data,to:null});
 		
-		var isPrint = isPrint === false ? false : true;
 		if (isPrint == true) {
 			/**
 			 * 메시지를 화면에 출력한다.
 			 */
-			Minitalk.ui.printChatMessage({id:uuid,type:"message",message:Minitalk.ui.encodeMessage(message),user:Minitalk.user.me});
-			Minitalk.ui.disable(true);
+			Minitalk.ui.printMessage({id:uuid,type:type,message:Minitalk.ui.encodeMessage(message),data:data,uuid:Minitalk.socket.uuid,to:null,user:Minitalk.user.me});
 		}
+		
+		Minitalk.ui.disable(true);
+	},
+	/**
+	 * 귓속말을 전송한다.
+	 *
+	 * @param string to 메시지를 받는사람
+	 * @param string type 메시지 유형 (message, file, ...)
+	 * @param string message 전송할 메시지
+	 * @param object data 메시지에 추가적으로 첨부할 데이터
+	 * @param boolean isPrint 메시지를 출력할지 여부
+	 */
+	sendWhisper:function(to,type,message,data,isPrint) {
+		var data = data !== undefined && typeof data == "object" ? data : null;
+		var isPrint = isPrint === false ? false : true;
+		var message = message ? $.trim(message) : "";
+		
+		/**
+		 * 메시지의 고유 ID를 할당한다.
+		 */
+		var uuid = uuidv4();
+		
+		/**
+		 * 폰트권한이 있고 폰트설정이 있다면 메시지 데이터에 포함하여 전송한다.
+		 */
+		if (type == "message" && Minitalk.socket.getPermission("font") == true) {
+			if (Minitalk.fonts("bold") == true) message = "[B]" + message + "[/B]";
+			if (Minitalk.fonts("italic") == true) message = "[I]" + message + "[/I]";
+			if (Minitalk.fonts("underline") == true) message = "[U]" + message + "[/U]";
+			if (Minitalk.fonts("color") !== null) message = "[COLOR=" + Minitalk.fonts("color") + "]" + message + "[/COLOR]";
+		}
+		
+		/**
+		 * 서버로 메시지를 전송한다.
+		 */
+		Minitalk.socket.send("message",{id:uuid,type:type,message:message,data:data,to:to});
+		
+		if (isPrint == true) {
+			/**
+			 * 메시지를 화면에 출력한다.
+			 */
+			Minitalk.ui.printMessage({id:uuid,type:type,message:Minitalk.ui.encodeMessage(message),data:data,uuid:Minitalk.socket.uuid,to:to,user:Minitalk.user.me});
+		}
+		
+		Minitalk.ui.disable(true);
 	},
 	/**
 	 * 데이터를 전송한다.
