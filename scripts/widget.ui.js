@@ -2302,6 +2302,11 @@ Minitalk.ui = {
 		$balloon.html(message);
 		
 		/**
+		 * 브라우저 푸시메시지를 표시한다.
+		 */
+		if (code != "connecting") Minitalk.ui.push(message);
+		
+		/**
 		 * 콜백함수가 있거나, 자동닫기가 활성화되어있거나, 닫을 수 있는 알림인 경우 닫기버튼을 추가한다.
 		 */
 		var closable = closable === false && autoHide === false ? false : true;
@@ -2501,6 +2506,19 @@ Minitalk.ui = {
 			promise.then(function() {
 			}).catch(function(e) {
 			});
+		}
+	},
+	/**
+	 * 브라우저 알림을 전송한다.
+	 *
+	 * @param string message 표시할 메시지
+	 */
+	push:function(message) {
+		if (Minitalk.configs("push") !== true) return;
+		
+		message = message.replace(/<\/?[a-zA-Z]+(.*?)>/g,'');
+		if (window.Notification !== undefined && Notification.permission == "granted") {
+			var notification = new Notification("Minitalk",{body:message,icon:Minitalk.getUrl()+"/images/minitalk.png"});
 		}
 	},
 	/**
