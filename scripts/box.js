@@ -12,6 +12,11 @@
 var MinitalkComponent = opener.MinitalkComponent.clone();
 var Minitalk = MinitalkComponent.get($("html").attr("data-id"),true);
 
+/**
+ * 박스설정을 적용한다.
+ */
+Minitalk.tabs = ["chat","users","configs"];
+
 $(document).ready(function() {
 	/**
 	 * 에러가 발생했다면, 에러코드를 출력한다.
