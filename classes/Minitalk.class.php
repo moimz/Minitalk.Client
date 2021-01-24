@@ -681,17 +681,11 @@ class Minitalk {
 	}
 	
 	/**
-	 * 권한코드를 가져온다.
 	 * 아이피 차단대상자인지 확인한다.
 	 *
-	 * @param string $opper 권한
-	 * @return string $opperCode 권한코드
 	 * @param string $ip
 	 * @return boolean $isBanned
 	 */
-	function getOpperCode($opper) {
-		$value = json_encode(array('opper'=>$opper,'ip'=>GetClientIp()));
-		return Encoder($value);
 	function isBanIp($ip=null) {
 		$ip = $ip == null ? $_SERVER['REMOTE_ADDR'] : $ip;
 		return $this->db()->select($this->table->ipban)->where('ip',$ip)->has();

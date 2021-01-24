@@ -9,7 +9,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.0
- * @modified 2020. 12. 4.
+ * @modified 2021. 1. 24.
  */
 if (defined('__MINITALK_PATH__') == false) define('__MINITALK_PATH__',str_replace(DIRECTORY_SEPARATOR.'classes','',__DIR__));
 if (defined('__MINITALK_DIR__') == false) define('__MINITALK_DIR__',str_replace($_SERVER['DOCUMENT_ROOT'],'',__MINITALK_PATH__));
@@ -115,12 +115,25 @@ function GetClientIp() {
 }
 
 /**
- * 유저 권한코드를 생성한다.
+ * 유저코드를 가져온다.
  *
- * @param string $opper 권한코드 (ADMIN | POWERUSER | MEMBER)
+ * @param string $nickname 닉네임(필수)
+ * @param int $level 권한레벨 (1~9, 9 : 최고관리자 / 기본값 : 1)
+ * @param string $nickcon 닉이미지 (옵션)
+ * @param string $photo 프로필사진 (옵션)
+ * @param any[] $extras 유저 추가정보 (옵션, key-value 배열만 가능)
+ * @return string $userCode 유저코드
  */
-function MinitalkOpperCode($opper) {
-	$value = json_encode(array('opper'=>$opper,'ip'=>GetClientIp()));
-	return MinitalkEncoder($value);
+function MinitalkUserCode($nickname,$level=1,$nickcon=null,$photo=null,$extras=array()) {
+	$user = array(
+		'nickname'=>$nickname,
+		'level'=>intval($level),
+		'nickcon'=>$nickcon ? $nickcon : null,
+		'photo'=>$photo ? $photo : null,
+		'extras'=>count($extras) > 0 ? $extras : null,
+		'ip'=>GetClientIp()
+	);
+	
+	return MinitalkEncoder(json_encode($user,JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 }
 ?>

@@ -36,9 +36,8 @@ html, body {width:100%; height:100%; padding:0; margin:0;}
 		templet:"default",
 		language:"ko",
 		type:"auto",
-		nickname:"손님(<?php echo rand(10000,99999); ?>)",
-		opperCode:"<?php echo MinitalkOpperCode('MEMBER'); ?>",
-		toolType:"icontext"
+		toolType:"icontext",
+		usercode:"<?php echo MinitalkUserCode(null,0,null,null,array()); ?>"
 	});
 	</script>
 </body>
