@@ -315,7 +315,7 @@ Minitalk.protocol = {
 	 * 접속코드를 수신하였을 경우
 	 */
 	authorization:function(authorization) {
-		Minitalk.session("authorization",authorization);
+		Minitalk.storage("authorization",authorization);
 	},
 	/**
 	 * 에러코드를 수신하였을 경우
