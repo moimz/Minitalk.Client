@@ -19,6 +19,7 @@ Minitalk.socket = {
 	channel:null,
 	permission:null,
 	token:null,
+	uuid:null,
 	/**
 	 * 미니톡 채팅서버에 접속한다.
 	 *
@@ -143,7 +144,7 @@ Minitalk.socket = {
 			connection:Minitalk.socket.connection.connection,
 			channel:Minitalk.socket.connection.channel,
 			usercode:Minitalk.usercode ? Minitalk.usercode : null,
-			authorization:Minitalk.session("authorization"),
+			authorization:Minitalk.storage("authorization"),
 			box:Minitalk.box.connection
 		};
 		Minitalk.socket.send("join",join);
