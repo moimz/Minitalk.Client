@@ -32,7 +32,6 @@ $js->add(__MINITALK_PATH__.'/scripts/widget.js');
  */
 $package = json_decode(file_get_contents(__MINITALK_PATH__.'/package.json'));
 $lang = null;
-$oLang = null;
 if (is_file(__MINITALK_PATH__.'/languages/'.$language.'.json') == false) {
 	$language = $package->language;
 }
