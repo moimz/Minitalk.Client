@@ -7,10 +7,8 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 7. 8.
+ * @modified 2021. 1. 24.
  */
-var MinitalkComponent = opener.parent.MinitalkComponent.clone(opener.parent.MinitalkComponent);
-var Minitalk = MinitalkComponent.get($("html").attr("data-id"));
 
 /**
  * 미니톡 클라이언트의 언어셋을 가져온다.
