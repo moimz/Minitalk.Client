@@ -30,7 +30,6 @@ $(document).ready(function() {
 	/**
 	 * 개인박스 클래스를 초기화한다.
 	 */
-	Minitalk.user.init();
 	Minitalk.box.init();
 	
 	/**
