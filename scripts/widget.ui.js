@@ -366,6 +366,13 @@ Minitalk.ui = {
 		if (type == "horizontal") {
 			$("li",$tabs).outerWidth((100 / $("li",$tabs).length) + "%",true);
 		}
+		
+		/**
+		 * 탭이 하나만 존재하는 경우, 탭바를 숨김처리한다.
+		 */
+		if ($("> li",$tabs).length <=1) {
+			$frame.attr("data-tab-type","none");
+		}
 	},
 	/**
 	 * 설정된 탭에 따라 메인섹션을 초기화한다.
