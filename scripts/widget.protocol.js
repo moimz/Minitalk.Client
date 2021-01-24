@@ -359,8 +359,5 @@ Minitalk.protocol = {
 		 * 데이터 저장 이벤트를 전송한다.
 		 */
 		Minitalk.fireEvent("saved",[data.key,data.value]);
-	},
-	receive:function(data) {
-//		console.log(data);
 	}
 };
