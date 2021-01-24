@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 3. 23.
+ * @modified 2021. 1. 24.
  */
 REQUIRE_ONCE str_replace(DIRECTORY_SEPARATOR.'scripts'.DIRECTORY_SEPARATOR.'widget.js.php','',$_SERVER['SCRIPT_FILENAME']).'/configs/init.config.php';
 header('Content-Type: application/x-javascript; charset=utf-8');
@@ -42,6 +42,7 @@ $lang = file_get_contents(__MINITALK_PATH__.'/languages/'.$language.'.json');
 $js->add('Minitalk.version = '.$MINITALK->getVersionToInt(__MINITALK_VERSION__).';');
 $js->add('Minitalk.LANG = '.$lang.';');
 $js->add('Minitalk.language = "'.$language.'";');
+$js->add(__MINITALK_PATH__.'/scripts/common.js');
 
 $js->add(__MINITALK_PATH__.'/scripts/jquery.extend.js');
 $js->add(__MINITALK_PATH__.'/scripts/moment.js');
