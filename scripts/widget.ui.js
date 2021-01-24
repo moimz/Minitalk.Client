@@ -1560,7 +1560,9 @@ Minitalk.ui = {
 			room+= "@" + Minitalk.box.getId();
 		}
 		
-		var $chat = $("section[data-role=chat]");
+		var $frame = $("div[data-role=frame]");
+		var $main = $("main",$frame);
+		var $chat = $("section[data-role=chat]",$main);
 		var $button = $("button[data-action=history]",$chat);
 		var $messages = $("div[data-message-id]",$chat);
 		if ($messages.length > 0) {
@@ -1572,7 +1574,7 @@ Minitalk.ui = {
 		$button.status("loading");
 		
 		$.get({
-			url:Minitalk.getApiUrl("history",room) + "?time=" + time,
+			url:Minitalk.getApiUrl("history",room) + "?time=" + time + "&uuid=" + Minitalk.socket.uuid,
 			dataType:"json",
 			headers:{authorization:"TOKEN " + Minitalk.socket.channel.token},
 			success:function(result) {
@@ -1585,11 +1587,11 @@ Minitalk.ui = {
 					/**
 					 * 로컬에 저장중인 최근대화기록이 지정된 숫자보다 적은경우 로컬에 불러온 이전대화기록을 저장한다.
 					 */
-					var is_store = Minitalk.log().messages.length < Minitalk.logCount;
+					var is_store = Minitalk.logs().messages.length < Minitalk.logCount;
 					
 					for (var i=0, loop=result.history.length;i<loop;i++) {
-						if (is_store == true) Minitalk.log(result.history[i]);
-						Minitalk.ui.printChatMessage(result.history[i],"history");
+						if (is_store == true) Minitalk.logs(result.history[i]);
+						Minitalk.ui.printMessage(result.history[i],"history");
 					}
 					
 					var scroll = $button.position().top - top;
