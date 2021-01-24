@@ -230,6 +230,7 @@ Minitalk.ui = {
 	 * 브라우저 사이즈가 변경되거나, UI가 최초표시될 때 UI 요소를 초기화한다.
 	 */
 	initFrame:function() {
+		if (Minitalk.socket.channel == null) return;
 		Minitalk.ui.initTabs();
 		Minitalk.ui.initTools();
 	},
