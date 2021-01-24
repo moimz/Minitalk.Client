@@ -37,7 +37,6 @@ $(document).ready(function() {
 	/**
 	 * 채팅위젯 클래스를 초기화한다.
 	 */
-	Minitalk.user.init();
 	Minitalk.ui.init();
 	
 	/**
