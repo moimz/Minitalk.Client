@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.0
- * @modified 2020. 12. 4.
+ * @modified 2021. 1. 24.
  */
 class Minitalk {
 	/**
@@ -321,8 +321,8 @@ class Minitalk {
 		$logged = $logged != null && Decoder($logged) !== false && json_decode(Decoder($logged)) !== null ? json_decode(Decoder($logged)) : null;
 		if ($logged == null || $logged->ip != GetClientIp()) return null;
 		
-		$logged->language = 'ko';
-		$this->setLanguage('ko');
+		$logged = $this->db()->select($this->table->admin)->where('idx',$logged->idx)->getOne();
+		$this->setLanguage($logged->language);
 		
 		return $logged;
 	}
