@@ -137,67 +137,6 @@ Minitalk.protocol = {
 		}
 	},
 	/**
-	 * 접속에 패스워드가 필요한 경우, 패스워드 창을 띄운다.
-	 *
-	 * @param string error
-	 */
-	password:function(data) {
-		/**
-		 * 패스워드 입력 HTML 을 정의한다.
-		 */
-		var html = [
-			'<section data-role="password">',
-				'<h2>' + Minitalk.getText("text/password") + '</h2>',
-				'<button data-action="close"></button>',
-				'<div data-role="content">',
-					'<label>',
-						'<input type="password" name="password" placeholder="' + Minitalk.getText("text/password") + '">',
-						'<p>' + Minitalk.getErrorText(data) + '</p>',
-					'</label>',
-				'</div>',
-				'<div data-role="button">',
-					'<ul>',
-						'<li><button type="button" data-action="cancel">' + Minitalk.getText("button/cancel") + '</button></li>',
-						'<li><button type="button" data-action="confirm">' + Minitalk.getText("button/confirm") + '</button></li>',
-					'</ul>',
-				'</div>',
-			'</section>'
-		];
-		html = html.join("");
-		
-		Minitalk.ui.createWindow(html,300,function($dom) {
-			$("input[name=password]",$dom).on("keydown",function(e) {
-				if (e.keyCode == 13) {
-					var password = $("input[name=password]",$dom).val();
-					if (password.length == 0) return;
-					
-					Minitalk.box.connection.password = password;
-					Minitalk.socket.sendConnection();
-					
-					e.stopImmediatePropagation();
-					
-					Minitalk.ui.closeWindow();
-				}
-			});
-			
-			$("button[data-action]",$dom).on("click",function() {
-				var $button = $(this);
-				var action = $button.attr("data-action");
-				
-				if (action == "confirm") {
-					var password = $("input[name=password]",$dom).val();
-					if (password.length == 0) return;
-					
-					Minitalk.box.connection.password = password;
-					Minitalk.socket.sendConnection();
-					Minitalk.ui.closeWindow();
-				} else {
-					self.close();
-				}
-			});
-		},false);
-	},
-	/**
 	 * 신규접속자가 있을 경우, 접속자 정보를 수신한다.
 	 *
 	 * @param object data.user 유저객체
