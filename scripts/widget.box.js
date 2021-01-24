@@ -332,15 +332,5 @@ Minitalk.box = {
 	 */
 	addType:function(type,title,width,height) {
 		Minitalk.box.types[type] = {title:title,width:width,height:height};
-	},
-	/**
-	 * 박스에 데이터를 저장한다.
-	 *
-	 * @param string/object key 저장할 데이터명 (데이터명이 object 인 경우 데이터값 전체를 key 데이터값으로 저장한다.)
-	 * @param any value 저장할 데이터값
-	 */
-	save:function(key,value) {
-		var value = value === undefined ? null : value;
-		Minitalk.socket.send("save",{key:key,value:value});
 	}
 };
