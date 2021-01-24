@@ -275,29 +275,12 @@ Minitalk.protocol = {
 		/**
 		 * 닉네임 관련
 		 */
-		if (type == 3) {
-			switch (code) {
-				case 300 : // 중복접속에 따른 기존접속해제 대기
-					setTimeout(Minitalk.socket.sendConnection,10000);
-					break;
-					
-				case 301 : // 중복접속에 따른 기존접속해제
-					Minitalk.socket.reconnectable = false;
-					break;
-				
-				case 302 : // 권한이 낮은 사용자가 닉네임을 사용중이므로, 해당 사용자가 닉네임을 초기화할때까지 접속을 대기한다.
-					setTimeout(Minitalk.socket.sendConnection,10000);
-					break;
-					
-				case 303 : // 권한이 높은 사용자가 현재 닉네임으로 접속하여, 현재 닉네임을 초기화한다.
-					Minitalk.socket.send("update",null);
-					break;
-					
-				case 304 : // 권한이 높은 사용자가 닉네임을 사용중이므로, 현재 닉네임을 초기화한다.
-					break;
-					
-				case 305 : // 닉네임 오류
-					break;
+		if (type == 1) {
+			/**
+			 * 닉네임이 중복되었을 경우, 기존접속이 해제될때까지 대기 후 다시 재접속한다.
+			 */
+			if (code == 101) {
+				setTimeout(Minitalk.socket.sendConnection,5000);
 			}
 			
 			/**
@@ -310,27 +293,39 @@ Minitalk.protocol = {
 		 * 응답코드 관련
 		 */
 		if (type == 4) {
-			switch (code) {
-				case 404 :
-					
-					break;
-			}
-			
-			Minitalk.socket.reconnectable = false;
-		}
-		
-		/**
-		 * 서버접속해제 (서버접속을 해제하고 재접속하지 않는다.)
-		 */
-		if (type == 8) {
-			Minitalk.socket.reconnectable = false;
-			Minitalk.socket.io.disconnect();
-			
 			/**
 			 * 에러메시지를 출력한다.
 			 */
 			Minitalk.ui.printErrorCode(code);
-			return;
+		}
+		
+		/**
+		 * 박스오류
+		 */
+		if (type == 8) {
+			switch (code) {
+				case 801 :
+					Minitalk.ui.createPasswordInput(Minitalk.getText("error/code/"+code),function(password) {
+						Minitalk.box.connection.password = password;
+						Minitalk.socket.sendConnection();
+						Minitalk.ui.closeWindow();
+					});
+					break;
+					
+				case 802 :
+					Minitalk.ui.createPasswordInput(Minitalk.getText("error/code/"+code),function(password) {
+						Minitalk.box.connection.password = password;
+						Minitalk.socket.sendConnection();
+						Minitalk.ui.closeWindow();
+					});
+					break;
+					
+				default :
+					/**
+					 * 에러메시지를 출력한다.
+					 */
+					Minitalk.ui.printErrorCode(code);
+			}
 		}
 		
 		/**
@@ -338,8 +333,15 @@ Minitalk.protocol = {
 		 */
 		if (type == 9) {
 			Minitalk.socket.reconnectable = false;
-			Minitalk.ui.printErrorCode(code);
-			return;
+			if (code != 999) Minitalk.ui.printErrorCode(code);
+		}
+		
+		/**
+		 * 접속을 해제한다.
+		 */
+		if (type == 10) {
+			Minitalk.socket.reconnectable = false;
+			Minitalk.socket.io.disconnect();
 		}
 	},
 	/**
