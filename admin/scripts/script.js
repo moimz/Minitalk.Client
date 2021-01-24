@@ -257,17 +257,11 @@ var Admin = {
 			Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("server/"+type+"_confirm"),buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
 				if (button == "ok") {
 					Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/wait"));
-					$.ajax({
-						type:"POST",
-						url:Minitalk.getProcessUrl("@changeServer"),
-						data:{domains:JSON.stringify(domains),type:type},
-						dataType:"json",
-						success:function(result) {
-							if (result.success == true) {
-								Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
-									Ext.getCmp("MinitalkPanel-server").getStore().reload();
-								}});
-							}
+					$.send(Minitalk.getProcessUrl("@changeServer"),{domains:JSON.stringify(domains),type:type},function(result) {
+						if (result.success == true) {
+							Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
+								Ext.getCmp("MinitalkPanel-server").getStore().reload();
+							}});
 						}
 					});
 				}
@@ -292,7 +286,7 @@ var Admin = {
 				modal:true,
 				border:false,
 				items:[
-					new Ext.form.FormPanel({
+					new Ext.form.Panel({
 						id:"MinitalkCategoryAddForm",
 						border:false,
 						fieldDefaults:{allowBlank:false,labelWidth:80,labelAlign:"right",anchor:"100%"},
@@ -392,22 +386,16 @@ var Admin = {
 			Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("category/delete_confirm"),buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
 				if (button == "ok") {
 					Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/wait"));
-					$.ajax({
-						type:"POST",
-						url:Minitalk.getProcessUrl("@deleteCategory"),
-						data:{idxes:JSON.stringify(idxes)},
-						dataType:"json",
-						success:function(result) {
-							if (result.success == true) {
-								Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
-									Ext.getCmp("MinitalkCategory1").getStore().load(function(store) {
-										if (parent) {
-											var index = Ext.getCmp("MinitalkCategory1").getStore().findExact("idx",parent);
-											if (index > -1) Ext.getCmp("MinitalkCategory1").getSelectionModel().select(index);
-										}
-									});
-								}});
-							}
+					$.send(Minitalk.getProcessUrl("@deleteCategory"),{idxes:JSON.stringify(idxes)},function(result) {
+						if (result.success == true) {
+							Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
+								Ext.getCmp("MinitalkCategory1").getStore().load(function(store) {
+									if (parent) {
+										var index = Ext.getCmp("MinitalkCategory1").getStore().findExact("idx",parent);
+										if (index > -1) Ext.getCmp("MinitalkCategory1").getSelectionModel().select(index);
+									}
+								});
+							}});
 						}
 					});
 				}
@@ -432,7 +420,7 @@ var Admin = {
 				border:false,
 				autoScroll:true,
 				items:[
-					new Ext.form.FormPanel({
+					new Ext.form.Panel({
 						id:"MinitalkChannelAddForm",
 						border:false,
 						fieldDefaults:{allowBlank:false,labelWidth:80,labelAlign:"right",anchor:"100%"},
