@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.0
- * @modified 2020. 12. 4.
+ * @modified 2021. 1. 24.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -21,8 +21,11 @@ if ($data == null) {
 }
 
 $data->oChannel = $channel;
-$data->is_nickname = $data->is_nickname == 'TRUE';
-$data->is_broadcast = $data->is_broadcast == 'TRUE';
+$data->allow_nickname_edit = $data->allow_nickname_edit == 'TRUE';
+$data->use_user_tab = $data->user_limit > -1;
+$data->user_limit = $data->user_limit == -1 ? 0 : $data->user_limit;
+$data->use_box_tab = $data->box_limit > -1;
+$data->box_limit = $data->box_limit == -1 ? 1 : $data->box_limit;
 
 $results->success = true;
 $results->data = $data;

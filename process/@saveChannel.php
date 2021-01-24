@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.0
- * @modified 2020. 12. 4.
+ * @modified 2021. 1. 24.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -19,12 +19,14 @@ $category2 = Request('category2') ? Request('category2') : 0;
 $channel = Request('channel') ? Request('channel') : $errors['channel'] = $this->getErrorText('REQUIRED');
 $title = Request('title') ? Request('title') : $errors['title'] = $this->getErrorText('REQUIRED');
 $password = Request('password') ? Request('password') : '';
+$allow_nickname_edit = Request('allow_nickname_edit') ? 'TRUE' : 'FALSE';
 $max_user = Request('max_user') && is_numeric(Request('max_user')) == true ? Request('max_user') : $errors['max_user'] = $this->getErrorText('REQUIRED');
-$is_nickname = Request('is_nickname') ? 'TRUE' : 'FALSE';
-$is_broadcast = Request('is_broadcast') ? 'TRUE' : 'FALSE';
-$grade_font = Request('grade_font') ? Request('grade_font') : 'ALL';
-$grade_chat = Request('grade_chat') ? Request('grade_chat') : 'ALL';
-$notice = Request('notice') ? Request('notice') : '';
+$guest_name = Request('guest_name') ? Request('guest_name') : $errors['guest_name'] = $this->getErrorText('REQUIRED');
+$send_limit = Request('send_limit') ? Request('send_limit') : 0;
+$file_limit = Request('file_limit') ? Request('file_limit') : 0;
+$font_limit = Request('font_limit') ? Request('font_limit') : 0;
+$user_limit = Request('use_user_tab') ? (Request('user_limit') ? Request('user_limit') : 0) : -1;
+$box_limit = Request('use_box_tab') && Request('box_limit') ? Request('box_limit') : -1;
 
 $check = $this->db()->select($this->table->channel)->where('channel',$channel);
 if ($oChannel) $check->where('channel',$oChannel,'!=');
@@ -39,10 +41,14 @@ if (count($errors) == 0) {
 	$insert['category2'] = $category2;
 	$insert['title'] = $title;
 	$insert['password'] = $password;
+	$insert['allow_nickname_edit'] = $allow_nickname_edit;
 	$insert['max_user'] = $max_user;
-	$insert['grade_font'] = $grade_font;
-	$insert['grade_chat'] = $grade_chat;
-	$insert['notice'] = $notice;
+	$insert['guest_name'] = $guest_name;
+	$insert['send_limit'] = $send_limit;
+	$insert['file_limit'] = $file_limit;
+	$insert['font_limit'] = $font_limit;
+	$insert['user_limit'] = $user_limit;
+	$insert['box_limit'] = $box_limit;
 	
 	if ($oChannel) {
 		$this->db()->update($this->table->channel,$insert)->where('channel',$oChannel)->execute();

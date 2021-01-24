@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.0
- * @modified 2020. 12. 4.
+ * @modified 2021. 1. 24.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -30,8 +30,9 @@ for ($i=0, $loop=count($lists);$i<$loop;$i++) {
 	$lists[$i]->category1 = $this->getCategoryTitle($lists[$i]->category1);
 	$lists[$i]->category2 = $this->getCategoryTitle($lists[$i]->category2);
 	$lists[$i]->server = $this->getServer($lists[$i]->server);
-	$lists[$i]->is_notice = strlen($lists[$i]->notice) > 0 ? 'TRUE' : 'FALSE';
-	unset($lists[$i]->notice);
+	$lists[$i]->allow_nickname_edit = $lists[$i]->allow_nickname_edit == 'TRUE';
+	$lists[$i]->use_user_tab = $lists[$i]->user_limit > -1;
+	$lists[$i]->use_box_tab = $lists[$i]->box_limit > 0;
 }
 
 $results->success = true;
