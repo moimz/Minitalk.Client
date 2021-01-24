@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 7. 8.
+ * @modified 2021. 1. 24.
  */
 class Minitalk {
 	/**
@@ -660,13 +660,12 @@ class Minitalk {
 		} else {
 			$results->success = true;
 			$results->connection = $server->connection;
-			
 			$results->connection->channel = Encoder(json_encode(array('name'=>$channel->channel,'title'=>$channel->title,'send_limit'=>$channel->send_limit,'password'=>$channel->password,'max_user'=>$channel->max_user,'guest_name'=>$channel->guest_name,'allow_nickname_edit'=>$channel->allow_nickname_edit == 'TRUE','user_limit'=>$channel->user_limit,'box_limit'=>$channel->box_limit,'file_limit'=>$channel->file_limit,'font_limit'=>$channel->font_limit)));
 		}
 		
 		$results->channel = new stdClass();
-		$results->channel->use_box_tab = $channel->box_limit > -1;
-		$results->channel->use_user_tab = $channel->user_limit > -1;
+		$results->channel->use_boxes = $channel->box_limit > -1;
+		$results->channel->use_users = $channel->user_limit > -1;
 		$results->channel->use_history = $channel->use_history;
 		$results->channel->token = Encoder(json_encode(array('channel'=>$channel->channel,'ip'=>GetClientIp())));
 		
