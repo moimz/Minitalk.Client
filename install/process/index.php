@@ -156,7 +156,7 @@ if ($action == 'install') {
 		}
 		
 		if ($keyFile !== false && $dbFile !== false) {
-			if (CreateDatabase($dbConnect,$package->databases) == true) {
+			if (CreateDatabase($dbConnect,$package->databases) === true) {
 				$mHash = new Hash();
 				$admin_password = $mHash->password_hash($admin_password);
 				
