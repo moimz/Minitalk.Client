@@ -2274,7 +2274,8 @@ Minitalk.ui = {
 		$input.css("height","");
 		
 		var oHeight = $input.outerHeight();
-		var maxHeight = Math.min($input.prop("scrollHeight"),150);
+		var oBorder = $input.outerHeight() - $input.innerHeight();
+		var maxHeight = Math.min($input.prop("scrollHeight") + oBorder,150);
 		
 		if ($input.outerHeight() < maxHeight) {
 			$input.outerHeight(maxHeight);
