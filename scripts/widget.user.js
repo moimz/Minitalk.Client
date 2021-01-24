@@ -7,27 +7,12 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 7. 8.
+ * @modified 2021. 1. 24.
  */
 Minitalk.user = {
 	latestRefreshTime:0, // 접속자목록을 마지막으로 갱신한 시각
 	count:0, // 접속자수
 	me:{}, // 나의정보
-	/**
-	 * 나의정보를 초기화한다.
-	 */
-	init:function() {
-		var storeMe = Minitalk.storage("me");
-		
-		if (storeMe == null) {
-			this.me = {nickname:Minitalk.nickname,nickcon:Minitalk.nickcon,photo:Minitalk.photo,info:Minitalk.info,levelCode:Minitalk.levelCode};
-		} else {
-			this.me = storeMe;
-			if (Minitalk.nickname) this.me.nickname = Minitalk.nickname;
-			if (Minitalk.nickcon) this.me.nickcon = Minitalk.nickcon;
-			if (Minitalk.info && typeof Minitalk.info == "object") this.me.info = Minitalk.info;
-		}
-	},
 	/**
 	 * 유저참여를 처리한다.
 	 *
