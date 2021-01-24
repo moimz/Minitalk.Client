@@ -55,11 +55,11 @@ Minitalk.protocol = {
 			Minitalk.box.connection = data.box;
 			
 			Minitalk.ui.printTitle(data.box.title);
-			Minitalk.ui.notify("connecting","success",Minitalk.getText("action/connected").replace("{CHANNEL}",data.box.title));
+			if (Minitalk.viewConnectMessage == true) Minitalk.ui.notify("connecting","success",Minitalk.getText("action/connected").replace("{NICKNAME}",data.me.nickname).replace("{CHANNEL}",data.box.title));
 		} else {
 			Minitalk.box.connection = null;
 			Minitalk.ui.printTitle(data.channel.title);
-			Minitalk.ui.notify("connecting","success",Minitalk.getText("action/connected").replace("{CHANNEL}",data.channel.title));
+			if (Minitalk.viewConnectMessage == true) Minitalk.ui.notify("connecting","success",Minitalk.getText("action/connected").replace("{NICKNAME}",data.me.nickname).replace("{CHANNEL}",data.channel.title));
 		}
 		
 		/**
