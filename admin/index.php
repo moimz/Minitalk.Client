@@ -9,7 +9,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
  * @version 7.0.0
- * @modified 2020. 3. 16.
+ * @modified 2021. 1. 24.
  */
 REQUIRE '../configs/init.config.php';
 if ($_CONFIGS->installed === false) {
@@ -1064,12 +1064,23 @@ Ext.onReady(function () {
 											$channel.html("#" + item.room);
 											$item.append($channel);
 											
-											var $user = $("<b>");
-											$user.html(item.nickname);
-											$item.append($user);
+											if (item.to == null) {
+												var $user = $("<b>");
+												$user.html(item.nickname);
+												$item.append($user);
+											} else {
+												var $user = $("<b>").css("color","#ff00ff");
+												$user.html(item.nickname + ' <i class="mi mi-right"></i> ' + item.to.nickname);
+												$item.append($user);
+											}
 											
 											var $message = $("<span>");
-											$message.html(" : " + item.message);
+											if (item.to !== null) $message.css("color","#ff00ff");
+											if (item.type == "message") {
+												$message.html(' : ' + item.message);
+											} else if (item.type == "file") {
+												$message.html(' : <i class="mi mi-download"></i> <a href="' + item.data.download + '">' + item.message + ' (' + Minitalk.getFileSize(item.data.size) + ')</a>');
+											}
 											$item.append($message);
 											
 											var $ip = $("<label>");
