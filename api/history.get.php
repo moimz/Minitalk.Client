@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 9. 16.
+ * @modified 2021. 1. 24.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -18,6 +18,8 @@ if ($room == null) {
 	$data->message = 'NOT_FOUND_ROOM';
 	return;
 }
+
+$uuid = Request('uuid');
 
 /**
  * 박스인경우 박스가 개설된 채널을 구한다.
@@ -80,27 +82,32 @@ if ($server->type == 'SERVER') {
 	$data->latest = $latest;
 	$data->time = $time;
 	
+	$selector = array('id','type','message','data','user','uuid','to','time','room');
+	$selector = array_map(function($column) { return '`'.$column.'`'; },$selector);
+	
 	/**
 	 * 요청한 대화기록이 모두 데이터베이스에 있는 경우
 	 */
 	if ($latest >= $time) {
-		$history = $this->db()->select($this->table->history,'id, type, message, data, user, time')->where('room',$room)->where('time',$time,'<=')->orderBy('time','desc')->limit(30)->get();
+		$history = $this->db()->select($this->table->history,$selector)->where('room',$room)->where('(target=? or uuid=? or target=?)',array('*',$uuid,$uuid))->where('time',$time,'<=')->orderBy('time','desc')->limit(30)->get();
 		$history = array_reverse($history);
-	
+		
 		for ($i=0, $loop=count($history);$i<$loop;$i++) {
 			$history[$i]->user = json_decode($history[$i]->user);
 			$history[$i]->data = json_decode($history[$i]->data);
+			$history[$i]->to = json_decode($history[$i]->to);
 		}
 	} else {
-		$history = $this->db()->select($this->table->history,'id, type, message, data, user, time')->where('room',$room)->where('time',$time,'<=')->orderBy('time','desc')->limit(30)->get();
+		$history = $this->db()->select($this->table->history,$selector)->where('room',$room)->where('(target=? or uuid=? or target=?)',array('*',$uuid,$uuid))->where('time',$time,'<=')->orderBy('time','desc')->limit(30)->get();
 		$history = array_reverse($history);
 		
 		for ($i=0, $loop=count($history);$i<$loop;$i++) {
 			$history[$i]->user = json_decode($history[$i]->user);
 			$history[$i]->data = json_decode($history[$i]->data);
+			$history[$i]->to = json_decode($history[$i]->to);
 		}
 		
-		$api = $this->callServerApi('GET',$server->domain,'history/'.md5($server->domain).'/'.$room,array('time'=>$time,'limit'=>30));
+		$api = $this->callServerApi('GET',$server->domain,'history/'.md5($server->domain).'/'.$room,array('uuid'=>$uuid,'time'=>$time,'limit'=>30));
 		if ($api->success == true) {
 			$history = array_merge($history,$api->history);
 		}

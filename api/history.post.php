@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 9. 16.
+ * @modified 2021. 1. 24.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -26,6 +26,7 @@ foreach ($history as $message) {
 	unset($insert['client_id']);
 	
 	$insert['user'] = json_encode($message->user,JSON_UNESCAPED_UNICODE);
+	$insert['to'] = json_encode($message->to,JSON_UNESCAPED_UNICODE);
 	$insert['nickname'] = $message->user->nickname;
 	$insert['data'] = json_encode($message->data);
 	
