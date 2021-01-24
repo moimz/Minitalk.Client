@@ -9,6 +9,8 @@
  * @version 7.0.0
  * @modified 2021. 1. 24.
  */
+var MinitalkComponent = opener.MinitalkComponent.clone();
+var Minitalk = MinitalkComponent.get($("html").attr("data-id"),true);
 
 $(document).ready(function() {
 	/**
