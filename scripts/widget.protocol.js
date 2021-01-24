@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 7. 8.
+ * @modified 2021. 1. 24.
  */
 Minitalk.protocol = {
 	/**
@@ -34,6 +34,7 @@ Minitalk.protocol = {
 		Minitalk.socket.channel.title = data.channel.title;
 		Minitalk.socket.permission = data.permission;
 		Minitalk.socket.token = data.token;
+		Minitalk.socket.uuid = data.uuid;
 		
 		/**
 		 * 나의정보를 저장한다.
