@@ -271,7 +271,7 @@ Minitalk.ui = {
 				/**
 				 * 사용하지 않는 탭인 경우 해당 탭을 숨긴다.
 				 */
-				if (Minitalk.socket.channel.use_users == false && tab == "users") continue;
+				if (Minitalk.socket.channel.use_users == false && tab == "users" && Minitalk.box.isBox() === false) continue;
 				if (Minitalk.socket.channel.use_boxes == false && tab == "boxes") continue;
 				
 				/**
