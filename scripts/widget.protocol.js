@@ -268,33 +268,39 @@ Minitalk.protocol = {
 	 * 메시지를 수신하였을 경우
 	 */
 	message:function(data) {
-		if (Minitalk.socket.joined == true) {
-			Minitalk.ui.printChatMessage(data);
-		}
-		
-		var replace = data.from !== undefined ? data.from : null;
-		if (replace !== null) {
-			Minitalk.ui.enable(true);
-			delete data.from;
-		}
-		
 		/**
-		 * 수신된 메시지를 로컬 로그저장소에 저장한다.
+		 * 내가 전송한 메시지가 수신되었을 경우
 		 */
-		Minitalk.log(data);
-	},
-	/**
-	 * 귓속말을 수신하였을 경우
-	 */
-	whisper:function(data) {
-		if (Minitalk.socket.joined == true) {
-			Minitalk.ui.printChatMessage(data);
-		}
-		
-		var replace = data.from !== undefined ? data.from : null;
-		if (replace !== null) {
+		if (data.sended === true) {
 			Minitalk.ui.enable(true);
-			delete data.from;
+			
+			/**
+			 * 메시지 전송에 성공한경우 임시 메시지를 실제 데이터로 갱신하고,
+			 * 메시지 전송에 실패한 경우 해당 메시지를 제거한다.
+			 */
+			if (data.success === true) {
+				Minitalk.ui.printMessage(data);
+			} else {
+				Minitalk.ui.removeMessage(data.from);
+				return;
+			}
+		} else {
+			/**
+			 * 이벤트를 발생시킨다.
+			 */
+			if (Minitalk.fireEvent("beforeMessage",[data]) === false) return;
+			
+			/**
+			 * 메시지를 출력한다.
+			 */
+			if (Minitalk.socket.joined == true) {
+				Minitalk.ui.printMessage(data);
+			}
+			
+			/**
+			 * 이벤트를 발생시킨다.
+			 */
+			Minitalk.fireEvent("message",[data]);
 		}
 		
 		/**
