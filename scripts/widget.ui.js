@@ -1775,8 +1775,10 @@ Minitalk.ui = {
 	 * @param string message 메시지 객체
 	 * @param string type 메시지 타입 (실시간대화, 최근대화, 이전대화)
 	 */
-	printChatMessage:function(message,type) {
-		var $chat = $("section[data-role=chat]");
+	printMessage:function(message,type) {
+		var $frame = $("div[data-role=frame]");
+		var $main = $("main",$frame);
+		var $chat = $("section[data-role=chat]",$main);
 		if ($chat.length == 0) return;
 		
 		var type = type === undefined ? "realtime" : type;
@@ -1786,237 +1788,73 @@ Minitalk.ui = {
 		message.message = message.message.toString();
 		
 		/**
-		 * 채팅메시지 및 귓속말인 경우
+		 * 새로운 메시지인 경우
 		 */
-		if (message.type == "message" || message.type == "whisper") {
-			var user = message.user;
-			
-			if (message.type == "whisper") {
-				var to = message.to;
-			} else {
-				var to = null;
-			}
-			
+		if (message.from === undefined) {
 			/**
-			 * 기존 메시지가 변경된 것이 아닌 경우 새로운 대화객체를 생성한다.
+			 * 이미 해당 대화가 존재한다면, 무시한다.
 			 */
-			if (message.from === undefined) {
-				/**
-				 * 실시간 대화이거나 최근대화인 경우, 채팅영역 제일 마지막에 요소에 추가하고,
-				 * 이전대화기록의 경우에는 이전대화 불러오기 버튼의 직전요소에 추가한다.
-				 */
-				if (type === "realtime" || type == "log") {
-					var $item = $("> div[data-role]:last",$chat);
-				} else {
-					/**
-					 * 이미 해당 대화가 존재한다면, 무시한다.
-					 */
-					if ($("div[data-message-id=" + message.id + "]",$chat).length > 0) return;
-					
-					var $history = $("button[data-action=history]",$chat);
-					var $item = $history.prev();
-				}
-				
-				/**
-				 * 채팅탭 마지막객체에 메시지를 추가할 수 있다면, 해당 객체에 신규메시지를 추가하고, 그렇지 않다면 채팅메시지 객체를 신규로 생성한다.
-				 */
-				if ($item.length > 0 && $item.attr("data-role") == "message" && $item.hasClass("log") == is_log && $item.hasClass(message.type) == true && $item.data("nickname") == user.nickname && $item.data("to") == to && $item.position().top > 10) {
-					var $messageBox = $("div.box",$item);
-				} else {
-					$item = $("<div>").attr("data-role","message").addClass(message.type).data("nickname",user.nickname).data("to",to);
-					if (is_log === true) $item.addClass("log");
-				
-					var $photo = $("<div>").attr("data-role","photo");
-					$photo.data("user",user);
-					$photo.on("click",function(e) {
-						Minitalk.user.toggleMenus($(this),e);
-						e.preventDefault();
-						e.stopImmediatePropagation();
-					});
-					if (user.photo) $photo.css("backgroundImage","url("+user.photo+")");
-					$item.append($photo);
-					
-					if (message.type == "message") {
-						var $nickname = $("<div>").attr("data-role","nickname").append(Minitalk.user.getTag(user,false));
-						$item.append($nickname);
-					} else if (message.type == "whisper") {
-						if (message.to == Minitalk.user.me.nickname) {
-							var $nickname = $("<div>").attr("data-role","nickname").html(Minitalk.getText("text/whisper_from").replace("{nickname}","<b>" + user.nickname + "</b>"));
-							$("b",$nickname).replaceWith(Minitalk.user.getTag(message.user));
-						} else {
-							var $nickname = $("<div>").attr("data-role","nickname").html(Minitalk.getText("text/whisper_to").replace("{nickname}","<b>" + to + "</b>"));
-							$("b",$nickname).replaceWith(Minitalk.user.getTag(message.to));
-						}
-						$item.append($nickname);
-					}
-				
-					if (user.nickname == Minitalk.user.me.nickname) $item.addClass("me");
-				
-					var $messageBox = $("<div>").addClass("box");
-					$item.append($messageBox);
-					
-					/**
-					 * 실시간 대화이거나 최근대화인 경우, 채팅영역 제일 마지막에 요소에 추가하고,
-					 * 이전대화기록의 경우에는 이전대화 불러오기 버튼의 직전요소에 추가한다.
-					 */
-					if (type == "realtime" || type == "log") {
-						$chat.append($item);
-					} else {
-						var $history = $("button[data-action=history]",$chat);
-						if ($history.length == 0) return;
-						
-						$history.before($item);
-					}
-				}
-			}
-			
-			var $message = $("<div>").attr("data-message-id",message.id).attr("data-time",message.time);
-			var $inner = $("<div>").attr("data-role","normal");
-			$inner.append($("<span>").addClass("text").html(Minitalk.ui.decodeMessage(message.message)));
-			
-			if (message.time === undefined) {
-				$inner.append($("<span>").addClass("time").html('<i class="sending"></i>'));
-			} else if (message.fail === true) {
-				$inner.append($("<span>").addClass("time").html('<i class="fail"></i>'));
-			} else {
-				$inner.append($("<span>").addClass("time").html($("<time>").attr("datetime",message.time).html(Minitalk.ui.getTime(message.time,Minitalk.dateFormat))));
-			}
-			
-			$message.append($inner);
-			
-			/**
-			 * 추가적인 정보가 있는 경우, 부가적인 정보박스를 추가한다.
-			 */
-			if (message.data) {
-				var $box = $("<div>").attr("data-role",message.data.type);
-				if (message.data.type == "website") {
-					/**
-					 * 비디오가 있을 경우, iframe 임베드처리
-					 * @todo 공격용으로 사용될 수 있는가? 검증필요
-					 */
-					if (message.data.video != null) {
-						var $video = $("<div>").attr("data-role","video");
-						var $innervideo = $("<div>");
-						var $iframe = $("<iframe>").attr("src",message.data.video.url);//.attr("frameborder",0).css("border",0).css("width","100%").css("height","100%");
-						
-						/**
-						 * 가로 세로 크기 데이터가 있을 경우, 세로 % 를 계산하고, 그렇지 않은 경우 16:10 비율로 표시한다.
-						 */
-						if (message.data.video.width && message.data.video.height) {
-							var height = Math.round(message.data.video.height / message.data.video.width * 100);
-						} else {
-							var height = 62;
-						}
-						$innervideo.css("paddingBottom",height + "%");
-						$innervideo.append($("<div>").append($iframe));
-						$video.append($innervideo);
-						
-						$box.append($video);
-					} else {
-						/**
-						 * 웹사이트 이미지가 있는 경우, 해당 이미지 추가
-						 */
-						if (message.data.image != null) {
-							var $link = $("<a>").attr("href",message.data.url).attr("target","_blank");
-							var $image = $("<div>").attr("data-role","image");
-							var $innerimage = $("<div>").css("backgroundImage","url(" + message.data.image.url + ")");
-							/**
-							 * 가로 세로 크기 데이터가 있을 경우, 세로 % 를 계산하고, 그렇지 않은 경우 16:10 비율로 표시한다.
-							 */
-							if (message.data.image.width && message.data.image.height) {
-								var height = Math.round(message.data.image.height / message.data.image.width * 100);
-							} else {
-								var height = 62;
-							}
-							
-							/**
-							 * 세로로 긴 이미지 최대치를 지정한다.
-							 */
-							height = Math.min(height,200);
-							$innerimage.css("paddingBottom",height + "%");
-							$image.append($innerimage);
-							$link.append($image);
-							
-							var $title = $("<h4>").html(message.data.title);
-							$link.append($title);
-							
-							var $p = $("<p>").html(message.data.description);
-							$link.append($p);
-							
-							$box.append($link);
-						}
-					}
-				}
-				
-				$message.append($box);
-			}
-			
-			if (message.from === undefined) {
-				/**
-				 * 기존 메시지가 변경된 것이 아닌 경우 대화객체를 추가한다.
-				 */
-				$messageBox.append($message);
-				if (type != "history" || $item !== null) Minitalk.ui.autoScroll($item);
-			} else {
-				/**
-				 * 기존 메시지가 변경되었을 경우 기존 대화내용을 대체하고 스크롤 위치를 조절한다.
-				 */
-				var oHeight = $("div[data-message-id="+message.from+"]").outerHeight(true);
-				$("div[data-message-id="+message.from+"]").replaceWith($message);
-				var nHeight = $("div[data-message-id="+message.id+"]").outerHeight(true);
-				
-				Minitalk.ui.scrollBy(nHeight - oHeight)
-			}
-		}
-		
-		/**
-		 * 파일인 경우
-		 */
-		if (message.type == "file") {
-			var user = message.user;
+			if ($("div[data-message-id=" + message.id + "]",$chat).length > 0) return;
 			
 			/**
 			 * 실시간 대화이거나 최근대화인 경우, 채팅영역 제일 마지막에 요소에 추가하고,
 			 * 이전대화기록의 경우에는 이전대화 불러오기 버튼의 직전요소에 추가한다.
 			 */
-			if (type === "realtime" || type == "log") {
+			if (type == "realtime" || type == "log") {
 				var $item = $("> div[data-role]:last",$chat);
 			} else {
-				/**
-				 * 이미 해당 대화가 존재한다면, 무시한다.
-				 */
-				if ($("div[data-message-id=" + message.id + "]",$chat).length > 0) return;
-				
 				var $history = $("button[data-action=history]",$chat);
 				var $item = $history.prev();
 			}
 			
 			/**
+			 * 특정 수신자가 존재하는 경우
+			 */
+			if (message.to !== null) {
+				var to = typeof message.to == "string" ? message.to : message.to.nickname;
+			} else {
+				var to = "*";
+			}
+			
+			/**
 			 * 채팅탭 마지막객체에 메시지를 추가할 수 있다면, 해당 객체에 신규메시지를 추가하고, 그렇지 않다면 채팅메시지 객체를 신규로 생성한다.
 			 */
-			if ($item.length > 0 && $item.attr("data-role") == "message" && $item.hasClass("log") == is_log && $item.hasClass("message") == true && $item.data("nickname") == user.nickname && $item.data("to") == null && $item.position().top > 10) {
-				var $messageBox = $("div.box",$item);
+			if ($item.length > 0 && $item.attr("data-role") == "message" && $item.data("uuid") == message.uuid && $item.data("nickname") == message.user.nickname && $item.data("target") == message.target && $item.data("to") == to && $item.hasClass("log") == is_log) {
+				var $context = $("div[data-role=context]",$item);
 			} else {
-				$item = $("<div>").attr("data-role","message").addClass("message").data("nickname",user.nickname);
-				if (is_log === true) $item.addClass("log");
-			
+				var $item = $("<div>").attr("data-role","message").addClass(message.type);
+				
+				/**
+				 * 새 메시지 객체에 유저정보를 추가한다.
+				 */
 				var $photo = $("<div>").attr("data-role","photo");
-				$photo.data("user",user);
+				$photo.data("user",message.user);
 				$photo.on("click",function(e) {
 					Minitalk.user.toggleMenus($(this),e);
 					e.preventDefault();
 					e.stopImmediatePropagation();
 				});
-				if (user.photo) $photo.css("backgroundImage","url("+user.photo+")");
+				if (message.user.photo) $photo.css("backgroundImage","url(" + message.user.photo + ")");
 				$item.append($photo);
 				
-				var $nickname = $("<div>").attr("data-role","nickname").append(Minitalk.user.getTag(user,false));
-				$item.append($nickname);
+				if (to == "*") {
+					var $nickname = $("<div>").attr("data-role","nickname").append(Minitalk.user.getTag(message.user,false));
+					$item.append($nickname);
+				} else {
+					if (message.uuid == Minitalk.socket.uuid) {
+						var $nickname = $("<div>").attr("data-role","nickname").html(Minitalk.getText("text/whisper_to").replace("{nickname}","<b>" + to + "</b>"));
+						$("b",$nickname).replaceWith(Minitalk.user.getTag(message.to));
+					} else {
+						var $nickname = $("<div>").attr("data-role","nickname").html(Minitalk.getText("text/whisper_from").replace("{nickname}","<b>" + message.user.nickname + "</b>"));
+						$("b",$nickname).replaceWith(Minitalk.user.getTag(message.user));
+					}
+					$item.append($nickname);
+				}
 			
-				if (user.nickname == Minitalk.user.me.nickname) $item.addClass("me");
+				if (message.uuid == Minitalk.socket.uuid) $item.addClass("me");
 			
-				var $messageBox = $("<div>").addClass("box");
-				$item.append($messageBox);
+				var $context = $("<div>").attr("data-role","context");
+				$item.append($context);
 				
 				/**
 				 * 실시간 대화이거나 최근대화인 경우, 채팅영역 제일 마지막에 요소에 추가하고,
@@ -2032,50 +1870,193 @@ Minitalk.ui = {
 				}
 			}
 			
-			var $message = $("<div>").attr("data-message-id",message.id);
-			var $inner = $("<div>").attr("data-role","file");
+			$item.data("uuid",message.uuid).data("nickname",message.user.nickname).data("target",message.target).data("to",to);
+			if (is_log === true) $item.addClass("log");
+			if (to != "*") $item.addClass("whisper");
 			
-			var $link = $("<a>").attr("href",message.data.download);
-			if (message.data.type == "image") {
-				var $image = $("<div>").attr("data-role","image");
-				var $innerimage = $("<div>").css("backgroundImage","url(" + message.data.view + ")");
-				
+			/**
+			 * 메시지를 담을 객체를 정의한다.
+			 */
+			var $message = $("<div>").attr("data-message-id",message.id);
+			$context.append($message);
+		} else {
+			/**
+			 * 대체할 메시지 객체를 정의한다.
+			 */
+			var $message = $("div[data-message-id=" + message.from + "]",$chat);
+		}
+		
+		/**
+		 * 컨텐츠 객체를 정의한다.
+		 */
+		var $content = $("<div>").attr("data-message-id",message.id);
+		if (message.time) $content.attr("data-time",message.time);
+		
+		/**
+		 * 메시지 형태에 따라 메시지 내용을 출력한다.
+		 */
+		switch (message.type) {
+			/**
+			 * 일반 메시지인 경우
+			 */
+			case "message" :
 				/**
-				 * 가로 세로 크기 데이터가 있을 경우, 세로 % 를 계산하고, 그렇지 않은 경우 16:10 비율로 표시한다.
+				 * 대화내용을 담을 말풍선을 생성한다.
 				 */
-				if (message.data.width && message.data.height) {
-					var height = Math.round(message.data.height / message.data.width * 100);
+				var $balloon = $("<div>").attr("data-role","balloon");
+				$balloon.append($("<span>").addClass("text").html(Minitalk.ui.decodeMessage(message.message)));
+				
+				if (message.time === undefined) {
+					$balloon.append($("<span>").addClass("time").html('<i class="sending"></i>'));
 				} else {
-					var height = 62;
+					$balloon.append($("<span>").addClass("time").html($("<time>").attr("datetime",message.time).html(Minitalk.ui.getTime(message.time,Minitalk.dateFormat))));
 				}
 				
+				$content.append($balloon);
+				
 				/**
-				 * 세로로 긴 이미지 최대치를 지정한다.
+				 * 추가적인 정보가 있는 경우, 부가적인 정보박스를 추가한다.
 				 */
-				height = Math.min(height,200);
-				$innerimage.css("paddingBottom",height + "%");
-				$image.append($innerimage);
-				$link.append($image);
-			} else {
-				var $icon = $("<i>").attr("data-role","file").attr("data-type",message.data.type).attr("data-extension",message.data.extension);
-				var $name = $("<b>").html(message.data.name);
-				var $info = $("<p>");
-				var $size = $("<span>").addClass("size").html(MinitalkComponent.getFileSize(message.data.size));
+				if (message.data) {
+					var $data = $("<div>").attr("data-role",message.data.type);
+					if (message.data.type == "website") {
+						/**
+						 * 비디오가 있을 경우, iframe 임베드처리
+						 * @todo 공격용으로 사용될 수 있는가? 검증필요
+						 */
+						if (message.data.video != null) {
+							var $video = $("<div>").attr("data-role","video");
+							var $innervideo = $("<div>");
+							var $iframe = $("<iframe>").attr("src",message.data.video.url);//.attr("frameborder",0).css("border",0).css("width","100%").css("height","100%");
+							
+							/**
+							 * 가로 세로 크기 데이터가 있을 경우, 세로 % 를 계산하고, 그렇지 않은 경우 16:10 비율로 표시한다.
+							 */
+							if (message.data.video.width && message.data.video.height) {
+								var height = Math.round(message.data.video.height / message.data.video.width * 100);
+							} else {
+								var height = 62;
+							}
+							$innervideo.css("paddingBottom",height + "%");
+							$innervideo.append($("<div>").append($iframe));
+							$video.append($innervideo);
+							
+							$data.append($video);
+						} else {
+							/**
+							 * 웹사이트 이미지가 있는 경우, 해당 이미지 추가
+							 */
+							if (message.data.image != null) {
+								var $link = $("<a>").attr("href",message.data.url).attr("target","_blank");
+								var $image = $("<div>").attr("data-role","image");
+								var $innerimage = $("<div>").css("backgroundImage","url(" + message.data.image.url + ")");
+								/**
+								 * 가로 세로 크기 데이터가 있을 경우, 세로 % 를 계산하고, 그렇지 않은 경우 16:10 비율로 표시한다.
+								 */
+								if (message.data.image.width && message.data.image.height) {
+									var height = Math.round(message.data.image.height / message.data.image.width * 100);
+								} else {
+									var height = 62;
+								}
+								
+								/**
+								 * 세로로 긴 이미지 최대치를 지정한다.
+								 */
+								height = Math.min(height,200);
+								$innerimage.css("paddingBottom",height + "%");
+								$image.append($innerimage);
+								$link.append($image);
+								
+								var $title = $("<h4>").html(message.data.title);
+								$link.append($title);
+								
+								var $p = $("<p>").html(message.data.description);
+								$link.append($p);
+								
+								$data.append($link);
+							}
+						}
+					}
+					
+					$content.append($data);
+				}
 				
-				// @todo 파일 만료일 표시
-//				var $exp_date = $("<time>");
-				$info.append($size);
+				break;
 				
-				$link.append($icon);
-				$link.append($name);
-				$link.append($info)
-			}
+			/**
+			 * 파일인 경우
+			 */
+			case "file" :
+				var $data = $("<div>").attr("data-role","file");
+				
+				var $link = $("<a>").attr("href",message.data.download);
+				if (message.data.type == "image") {
+					var $image = $("<div>").attr("data-role","image");
+					var $background = $("<div>").css("backgroundImage","url(" + message.data.view + ")");
+					
+					/**
+					 * 가로 세로 크기 데이터가 있을 경우, 세로 % 를 계산하고, 그렇지 않은 경우 16:10 비율로 표시한다.
+					 */
+					if (message.data.width && message.data.height) {
+						var height = Math.round(message.data.height / message.data.width * 100);
+					} else {
+						var height = 62;
+					}
+					
+					/**
+					 * 세로로 긴 이미지 최대치를 지정한다.
+					 */
+					var height = Math.min(height,200);
+					$background.css("paddingBottom",height + "%");
+					$image.append($background);
+					$link.append($image);
+				} else {
+					var $icon = $("<i>").attr("data-role","file").attr("data-type",message.data.type).attr("data-extension",message.data.extension);
+					var $name = $("<b>").html(message.data.name);
+					var $info = $("<p>");
+					var $size = $("<span>").addClass("size").html(MinitalkComponent.getFileSize(message.data.size));
+					
+					// @todo 파일 만료일 표시
+					// var $exp_date = $("<time>");
+					$info.append($size);
+					
+					$link.append($icon);
+					$link.append($name);
+					$link.append($info)
+				}
+				
+				$data.append($link);
+				$content.append($data);
+				
+				break;
+				
+			/**
+			 * 플러그인 등에서 정의된 메시지종류인 경우
+			 */
+			default :
+				/**
+				 * 이벤트를 발생시켜, 플러그인에서 처리할 수 있도록 한다.
+				 */
+				Minitalk.fireEvent("printMessage",[message,$content]);
+				break;
+		}
+		
+		/**
+		 * 기존 메시지가 대치된 경우 갱신된 내용에 따라 스크롤을 조절하고, 신규 메시지인 경우 해당 메시지 위치로 스크롤 한다.
+		 */
+		if (message.from === undefined) {
+			$message.replaceWith($content);
+			if (type != "history" || $item !== null) Minitalk.ui.autoScroll($item);
+		} else {
+			/**
+			 * 메시지 객체를 컨텐츠 객체로 대치한다.
+			 */
+			var oHeight = $message.outerHeight(true);
+			$message.replaceWith($content);
 			
-			$inner.append($link);
-			$message.append($inner);
-			
-			$messageBox.append($message);
-			if ($item !== null) Minitalk.ui.autoScroll($item);
+			Minitalk.ui.scrollBy($content.outerHeight(true) - oHeight)
+		}
+	},
 		}
 	},
 	/**
@@ -2126,7 +2107,8 @@ Minitalk.ui = {
 					
 					Minitalk.ui.uploadFiles();
 				} else {
-					// @todo 파일정보전송 실패시 에러메시지 출력
+					Minitalk.ui.printErrorCode(500);
+					Minitalk.ui.enable(true);
 				}
 			});
 		} else {
@@ -2150,7 +2132,6 @@ Minitalk.ui = {
 					if (xhr.upload) {
 						xhr.upload.addEventListener("progress",function(e) {
 							if (e.lengthComputable) {
-								// @todo 여러개의 파일업로드를 동시에 진행할때, 프로그래스바를 어떻게 보이게 할 것인가?
 								Minitalk.ui.progress(file.uploaded + e.loaded,file.size);
 							}
 						},false);
@@ -2162,7 +2143,6 @@ Minitalk.ui = {
 				data:file.slice(file.uploaded,file.chunk)
 			}).done(function(result) {
 				if (result.success == true) {
-					file.failCount = 0;
 					file.uploaded = result.uploaded;
 					
 					/**
@@ -2172,7 +2152,7 @@ Minitalk.ui = {
 						/**
 						 * 파일정보를 읽은 후 채팅서버에 전송한다.
 						 */
-						Minitalk.socket.send("file",result.file);
+						Minitalk.socket.sendMessage("file",result.file.name,result.file);
 						
 						/**
 						 * 다음에 업로드해야하는 파일이 존재할 경우
@@ -2198,18 +2178,12 @@ Minitalk.ui = {
 						Minitalk.ui.uploadFiles();
 					}
 				} else {
-					if (file.failCount < 3) {
-//						file.failCount++;
-//						Attachment.upload(id);
-					} else {
-//						file.status = "FAIL";
-					}
+					Minitalk.ui.printErrorCode(500);
+					Minitalk.ui.enable(true);
 				}
 			}).fail(function() {
-				if (file.failCount < 3) {
-//					file.failCount++;
-//					Attachment.upload(id);
-				}
+				Minitalk.ui.printErrorCode(500);
+				Minitalk.ui.enable(true);
 			});
 		}
 	},
@@ -2433,20 +2407,9 @@ Minitalk.ui = {
 					if (Minitalk.fireEvent("beforeSendWhisper",[nickname,message,Minitalk.user.me]) === false) return;
 					
 					/**
-					 * 메시지의 고유 ID를 할당한다.
-					 */
-					var uuid = uuidv4();
-					
-					/**
 					 * 서버로 메시지를 전송한다.
 					 */
-					Minitalk.socket.send("whisper",{id:uuid,type:"whisper",to:nickname,message:message});
-					
-					/**
-					 * 자신의 메시지를 화면에 출력한다.
-					 */
-					Minitalk.ui.printChatMessage({id:uuid,type:"whisper",to:nickname,message:Minitalk.ui.encodeMessage(message),user:Minitalk.user.me});
-					Minitalk.ui.disable(true);
+					Minitalk.socket.sendWhisper(nickname,"message",message);
 					
 					/**
 					 * 메시지 전송후 이벤트 처리
@@ -2507,7 +2470,7 @@ Minitalk.ui = {
 			/**
 			 * 서버로 메시지를 전송한다.
 			 */
-			Minitalk.socket.sendMessage(message);
+			Minitalk.socket.sendMessage("message",message);
 			
 			/**
 			 * 메시지 전송후 이벤트 처리
