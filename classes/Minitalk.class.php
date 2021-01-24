@@ -443,10 +443,6 @@ class Minitalk {
 	function getChannel($channel) {
 		if (isset($this->channels[$channel]) == true) return $this->channels[$channel];
 		$channel = $this->db()->select($this->table->channel)->where('channel',$channel)->getOne();
-		if ($channel != null) {
-			$channel->is_nickname = $channel->is_nickname == 'TRUE';
-			$channel->is_broadcast = $channel->is_broadcast == 'TRUE';
-		}
 		
 		$this->channels[$channel->channel] = $channel;
 		return $this->channels[$channel->channel];
@@ -626,12 +622,12 @@ class Minitalk {
 		} else {
 			$results->success = true;
 			$results->connection = $server->connection;
-			
-			$results->connection->channel = Encoder(json_encode(array('name'=>$channel->channel,'title'=>$channel->title,'password'=>$channel->password,'max_user'=>$channel->max_user,'is_nickname'=>$channel->is_nickname,'is_broadcast'=>$channel->is_broadcast,'grade_chat'=>$channel->grade_chat,'grade_font'=>$channel->grade_font)));
-			$channel->file_limit = 0;
+			$results->connection->channel = Encoder(json_encode(array('name'=>$channel->channel,'title'=>$channel->title,'send_limit'=>$channel->send_limit,'password'=>$channel->password,'max_user'=>$channel->max_user,'guest_name'=>$channel->guest_name,'allow_nickname_edit'=>$channel->allow_nickname_edit == 'TRUE','user_limit'=>$channel->user_limit,'box_limit'=>$channel->box_limit,'file_limit'=>$channel->file_limit,'font_limit'=>$channel->font_limit)));
 		}
 		
 		$results->channel = new stdClass();
+		$results->channel->use_boxes = $channel->box_limit > -1;
+		$results->channel->use_users = $channel->user_limit > -1;
 		$results->channel->token = Encoder(json_encode(array('channel'=>$channel->channel,'ip'=>GetClientIp())));
 		
 		return $results;
