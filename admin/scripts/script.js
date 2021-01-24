@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.0
- * @modified 2020. 12. 4.
+ * @modified 2021. 1. 24.
  */
 var Admin = {
 	/**
@@ -504,45 +504,6 @@ var Admin = {
 										fieldLabel:Admin.getText("channel/form/title"),
 										name:"title",
 										afterBodyEl:'<div class="x-form-help">'+Admin.getText("channel/form/title_help")+'</div>'
-									})
-								]
-							}),
-							new Ext.form.FieldSet({
-								title:Admin.getText("channel/form/grade"),
-								items:[
-									new Ext.form.ComboBox({
-										fieldLabel:Admin.getText("channel/form/grade_chat"),
-										name:"grade_chat",
-										store:new Ext.data.ArrayStore({
-											fields:["display","value"],
-											data:(function() {
-												var datas = [];
-												for (var key in Admin.getText("grade")) {
-													datas.push([Admin.getText("grade/" + key),key]);
-												}
-												return datas;
-											})()
-										}),
-										displayField:"display",
-										valueField:"value",
-										value:"ALL"
-									}),
-									new Ext.form.ComboBox({
-										fieldLabel:Admin.getText("channel/form/grade_font"),
-										name:"grade_font",
-										store:new Ext.data.ArrayStore({
-											fields:["display","value"],
-											data:(function() {
-												var datas = [];
-												for (var key in Admin.getText("grade")) {
-													datas.push([Admin.getText("grade/" + key),key]);
-												}
-												return datas;
-											})()
-										}),
-										displayField:"display",
-										valueField:"value",
-										value:"ALL"
 									}),
 									new Ext.form.TextField({
 										fieldLabel:Admin.getText("channel/form/password"),
@@ -556,22 +517,37 @@ var Admin = {
 								title:Admin.getText("channel/form/option"),
 								items:[
 									new Ext.form.Checkbox({
-										fieldLabel:Admin.getText("channel/form/is_broadcast"),
-										name:"is_broadcast",
-										boxLabel:Admin.getText("channel/form/is_broadcast_help"),
-										checked:true
+										fieldLabel:Admin.getText("channel/form/allow_nickname_edit"),
+										name:"allow_nickname_edit",
+										boxLabel:Admin.getText("channel/form/allow_nickname_edit_help")
 									}),
 									new Ext.form.Checkbox({
-										fieldLabel:Admin.getText("channel/form/is_nickname"),
-										name:"is_nickname",
-										boxLabel:Admin.getText("channel/form/is_nickname_help"),
-										checked:true
+										fieldLabel:Admin.getText("channel/form/use_user_tab"),
+										name:"use_user_tab",
+										boxLabel:Admin.getText("channel/form/use_user_tab_help"),
+										checked:true,
+										listeners:{
+											change:function(form,checked) {
+												form.getForm().findField("user_limit").setDisabled(!checked);
+											}
+										}
 									}),
-									new Ext.form.TextField({
-										fieldLabel:Admin.getText("channel/form/notice"),
-										name:"notice",
-										allowBlank:true,
-										emptyText:Admin.getText("channel/form/notice_help")
+									new Ext.form.Checkbox({
+										fieldLabel:Admin.getText("channel/form/use_box_tab"),
+										name:"use_box_tab",
+										boxLabel:Admin.getText("channel/form/use_box_tab_help"),
+										checked:true,
+										listeners:{
+											change:function(form,checked) {
+												form.getForm().findField("box_limit").setDisabled(!checked);
+											}
+										}
+									}),
+									new Ext.form.Checkbox({
+										fieldLabel:Admin.getText("channel/form/use_history"),
+										name:"use_history",
+										boxLabel:Admin.getText("channel/form/use_history_help"),
+										checked:true
 									}),
 									new Ext.form.FieldContainer({
 										fieldLabel:Admin.getText("channel/form/max_user"),
@@ -590,6 +566,122 @@ var Admin = {
 												flex:1
 											})
 										]
+									}),
+									new Ext.form.FieldContainer({
+										fieldLabel:Admin.getText("channel/form/guest_name"),
+										layout:"hbox",
+										items:[
+											new Ext.form.TextField({
+												name:"guest_name",
+												value:"Guest",
+												width:100
+											}),
+											new Ext.form.DisplayField({
+												value:Admin.getText("channel/form/guest_name_help"),
+												style:{marginLeft:"5px"},
+												flex:1
+											})
+										]
+									})
+								]
+							}),
+							new Ext.form.FieldSet({
+								title:Admin.getText("channel/form/permission"),
+								items:[
+									new Ext.form.ComboBox({
+										fieldLabel:Admin.getText("channel/form/send_limit"),
+										name:"send_limit",
+										store:new Ext.data.ArrayStore({
+											fields:["display","value"],
+											data:(function() {
+												var datas = [];
+												for (var i=0;i<10;i++) {
+													datas.push([Minitalk.getText("level/"+i),i]);
+												}
+												
+												return datas;
+											})()
+										}),
+										displayField:"display",
+										valueField:"value",
+										value:0,
+										afterBodyEl:'<div class="x-form-help">'+Admin.getText("channel/form/send_limit_help")+'</div>'
+									}),
+									new Ext.form.ComboBox({
+										fieldLabel:Admin.getText("channel/form/file_limit"),
+										name:"file_limit",
+										store:new Ext.data.ArrayStore({
+											fields:["display","value"],
+											data:(function() {
+												var datas = [];
+												for (var i=0;i<10;i++) {
+													datas.push([Minitalk.getText("level/"+i),i]);
+												}
+												
+												return datas;
+											})()
+										}),
+										displayField:"display",
+										valueField:"value",
+										value:0,
+										afterBodyEl:'<div class="x-form-help">'+Admin.getText("channel/form/file_limit_help")+'</div>'
+									}),
+									new Ext.form.ComboBox({
+										fieldLabel:Admin.getText("channel/form/font_limit"),
+										name:"font_limit",
+										store:new Ext.data.ArrayStore({
+											fields:["display","value"],
+											data:(function() {
+												var datas = [];
+												for (var i=0;i<10;i++) {
+													datas.push([Minitalk.getText("level/"+i),i]);
+												}
+												
+												return datas;
+											})()
+										}),
+										displayField:"display",
+										valueField:"value",
+										value:0,
+										afterBodyEl:'<div class="x-form-help">'+Admin.getText("channel/form/font_limit_help")+'</div>'
+									}),
+									new Ext.form.ComboBox({
+										fieldLabel:Admin.getText("channel/form/user_limit"),
+										name:"user_limit",
+										store:new Ext.data.ArrayStore({
+											fields:["display","value"],
+											data:(function() {
+												var datas = [];
+												for (var i=0;i<10;i++) {
+													datas.push([Minitalk.getText("level/"+i),i]);
+												}
+												
+												return datas;
+											})()
+										}),
+										displayField:"display",
+										valueField:"value",
+										value:0,
+										afterBodyEl:'<div class="x-form-help">'+Admin.getText("channel/form/user_limit_help")+'</div>'
+									}),
+									new Ext.form.ComboBox({
+										fieldLabel:Admin.getText("channel/form/box_limit"),
+										name:"box_limit",
+										store:new Ext.data.ArrayStore({
+											fields:["display","value"],
+											data:(function() {
+												var datas = [];
+												for (var i=1;i<10;i++) {
+													datas.push([Minitalk.getText("level/"+i),i]);
+												}
+												
+												return datas;
+											})()
+										}),
+										displayField:"display",
+										valueField:"value",
+										value:1,
+										afterBodyEl:'<div class="x-form-help">'+Admin.getText("channel/form/box_limit_help")+'</div>'
 									})
 								]
 							})
