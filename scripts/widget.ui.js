@@ -2057,7 +2057,31 @@ Minitalk.ui = {
 			Minitalk.ui.scrollBy($content.outerHeight(true) - oHeight)
 		}
 	},
+	/**
+	 * 특정 메시지를 제거한다.
+	 *
+	 * @param string id 제거할 메시지
+	 */
+	removeMessage:function(id) {
+		var $frame = $("div[data-role=frame]");
+		var $main = $("main",$frame);
+		var $chat = $("section[data-role=chat]",$main);
+		if ($chat.length == 0) return;
+		
+		var $item = $("div[data-message-id="+id+"]",$main);
+		if ($item.length == 0) return;
+		
+		var $context = $item.parent();
+		$item.remove();
+		
+		if ($("div[data-message-id]",$context).length == 0) {
+			$context.parent().remove();
 		}
+		
+		/**
+		 * 로그에서 제거한다.
+		 */
+		var logs = Minitalk.logs(id,true);
 	},
 	/**
 	 * 파일을 업로드한다.
