@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 1.2.0
- * @modified 2020. 12. 4.
+ * @modified 2021. 1. 24.
  */
 REQUIRE_ONCE str_replace(DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.'process','',__DIR__).'/configs/init.config.php';
 header("Content-type: text/json; charset=utf-8",true);
