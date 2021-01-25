@@ -4,11 +4,11 @@
  *
  * 이모티콘 폴더 접근을 막기 위한 인덱스파일
  * 
- * @file /logs/index.php
+ * @file /emoticons/index.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.0
- * @modified 2020. 12. 4.
+ * @modified 2021. 1. 25.
  */
 header("HTTP/1.1 403 Forbidden");
 header('location:../');
