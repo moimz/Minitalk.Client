@@ -6,8 +6,8 @@
  * @file /scripts/extjs.extend.js
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
- * @version 3.0.0
- * @modified 2020. 12. 4.
+ * @version 1.0.0
+ * @modified 2021. 1. 25.
  */
 Ext.Ajax.setTimeout(600000);
 Ext.define("Ext.moimz.data.reader.Json",{override:"Ext.data.reader.Json",rootProperty:"lists",totalProperty:"total",messageProperty:"message"});
@@ -530,9 +530,11 @@ Ext.define("Ext.moimz.form.FileUploadField",{override:"Ext.form.FileUploadField"
 	me.invokeTriggers("afterFieldRender");
 }});
 
+
+
 /**
  * ExtJS 라이브러리 언어셋 적용
- * @todo MoimzTools 언어팩에서 처리하도록 수정
+ * iModule 언어셋에서 처리
  */
 Ext.onReady(function() {
 	if (Ext.Date) {
