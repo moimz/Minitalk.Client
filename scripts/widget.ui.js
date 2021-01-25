@@ -2274,6 +2274,7 @@ Minitalk.ui = {
 	setInputVal:function(value) {
 		var $input = $("div[data-role=input] > textarea");
 		$input.focus().val(value);
+		Minitalk.ui.updateInputHeight();
 	},
 	/**
 	 * 입력폼의 내용에 따라 입력폼의 높이를 조절한다.
