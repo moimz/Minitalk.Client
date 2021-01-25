@@ -28,7 +28,7 @@ $this->db()->update($this->table->server,array('status'=>'ONLINE','user'=>$user,
 
 $users = Request('users') ? Request('users') : array();
 foreach ($users as $room=>$user) {
-	$temp = explode('@',$room);
+	$temp = explode('#',$room);
 	$channel = $temp[0];
 	
 	$this->db()->update($this->table->channel,array('user'=>$user))->where('channel',$channel)->execute();
