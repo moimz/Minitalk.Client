@@ -10,152 +10,147 @@
  * @modified 2020. 12. 7.
  */
 Minitalk.user = {
-	menus:[],
-	usersSort:[],
+	latestRefreshTime:0, // 접속자목록을 마지막으로 갱신한 시각
+	count:0, // 접속자수
+	me:{}, // 나의정보
 	users:{},
 	isAutoHideUsers:false,
 	isVisibleUsers:false,
-	count:0, // 접속자수
-	me:{}, // 나의정보
 	/**
-	 * 나의정보를 초기화한다.
+	 * 유저참여를 처리한다.
+	 *
+	 * @param object user 접속자유저
+	 * @param int count 접속자수
+	 * @param int time 참여시각
 	 */
-	init:function() {
-		var storeMe = Minitalk.storage("me");
+	join:function(user,count,time) {
+		/**
+		 * 참여 메시지를 출력한다.
+		 */
+		if (Minitalk.socket.joined == true && Minitalk.viewUserNotification == true && Minitalk.viewUserNotificationLimit <= user.level) {
+			Minitalk.ui.printUserMessage("join",user);
+		}
 		
-		if (storeMe == null) {
-			this.me = {id:"",nickname:Minitalk.nickname,nickcon:Minitalk.nickcon,sns:Minitalk.sns,device:Minitalk.device,info:Minitalk.info,status:Minitalk.status,opper:""};
-		} else {
-			this.me = storeMe;
-			this.me.device = Minitalk.device;
-			if (Minitalk.nickname) this.me.nickname = Minitalk.nickname;
-			if (Minitalk.nickcon) this.me.nickcon = Minitalk.nickcon;
-			if (Minitalk.info && typeof Minitalk.info == "object") this.me.info = Minitalk.info;
+		/**
+		 * 채널의 접속자수를 변경한다.
+		 */
+		Minitalk.user.updateCount(count,time);
+		
+		/**
+		 * 유저목록이 활성화 된 경우, 유저를 추가한다.
+		 */
+		if (Minitalk.user.isVisibleUsers == true) {
+			Minitalk.user.appendUser(user);
+		}
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("join",[user,count,time]);
+	},
+	/**
+	 * 유저종료를 처리한다.
+	 *
+	 * @param object user 접속자유저
+	 * @param int count 접속자수
+	 * @param int time 참여시각
+	 */
+	leave:function(user,count,time) {
+		/**
+		 * 종료 메시지를 출력한다.
+		 */
+		if (Minitalk.socket.joined == true && Minitalk.viewUserNotification == true && Minitalk.viewUserNotificationLimit <= user.level) {
+			Minitalk.ui.printUserMessage("leave",user);
+		}
+		
+		/**
+		 * 채널의 접속자수를 변경한다.
+		 */
+		Minitalk.user.updateCount(count,time);
+		
+		/**
+		 * 유저목록이 활성화 된 경우, 유저를 제거한다.
+		 */
+		if (Minitalk.user.isVisibleUsers == true) {
+			Minitalk.user.removeUser(user);
+		}
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("leave",[user,count,time]);
+	},
+	/**
+	 * 유저목록에 유저를 추가한다.
+	 *
+	 * @param object user
+	 */
+	appendUser:function(user) {
+		var $frame = $("div[data-role=frame]");
+		var $main = $("main",$frame);
+		var $users = $("section[data-role=users]",$main);
+		var $lists = $("ul",$users);
+		var $item = $("li[data-nickname=" + user.nickname + "]",$lists);
+		if ($item.length == 0) {
+			var $item = $("<li>").attr("data-nickname",user.nickname);
+			$item.append(Minitalk.user.getTag(user));
+			$lists.append($item);
+			
+			Minitalk.user.sortUsers();
 		}
 	},
 	/**
-	 * 유저가 참여하였을 때
+	 * 유저목록에서 유저를 제거한다.
 	 *
-	 * @param object user 유저정보
-	 * @param int usercount 유저수
+	 * @param object user
 	 */
-	join:function(user,usercount) {
-		Minitalk.user.updateCount(usercount);
-		
-		if (Minitalk.viewUserNotification == true) {
-			if (Minitalk.user.checkLimit(Minitalk.viewUserNotificationLimit,user.opper) == true) {
-				Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/join").replace("{NICKNAME}","<b><u>"+user.nickname+"</u></b>"));
-			}
-		}
-		
-		var sortUserCode = {"ADMIN":"#","POWERUSER":"*","MEMBER":"+","NICKGUEST":"-"};
-		
-		if (Minitalk.user.isVisibleUsers == true) {
-			if (Minitalk.user.checkLimit(Minitalk.viewUserLimit,user.opper) == true) {
-				Minitalk.user.usersSort.push("["+(user.opper ? sortUserCode[user.opper] : "")+user.nickname+"]");
-				Minitalk.user.users[user.nickname] = user;
-				Minitalk.user.usersSort.sort();
-				var position = $.inArray("["+(user.opper ? sortUserCode[user.opper] : "")+user.nickname+"]",Minitalk.user.usersSort);
-
-				if ($("section[data-role=users] > label[data-role=user]").length < position) {
-					$("section[data-role=users]").append(Minitalk.user.getTag(user,true));
-				} else {
-					$($("section[data-role=users] > label[data-role=user]")[position]).after(Minitalk.user.getTag(user,true));
-				}
-			}
-		}
-		
-		Minitalk.fireEvent("join",[user,usercount]);
+	removeUser:function(user) {
+		var $frame = $("div[data-role=frame]");
+		var $main = $("main",$frame);
+		var $users = $("section[data-role=users]",$main);
+		var $lists = $("ul",$users);
+		var $item = $("li[data-nickname=" + user.nickname + "]",$lists);
+		if ($item.length == 1) $item.remove();
 	},
 	/**
-	 * 유저가 종료하였을 때
+	 * 유저목록을 갱신한다.
 	 *
-	 * @param object user 유저정보
-	 * @param int usercount 유저수
+	 * @param object[] users
 	 */
-	leave:function(user,usercount) {
-		Minitalk.user.updateCount(usercount);
+	updateUsers:function(users) {
+		var $frame = $("div[data-role=frame]");
+		var $main = $("main",$frame);
+		var $users = $("section[data-role=users]",$main);
+		$users.empty();
 		
-		if (Minitalk.viewUserNotification == true) {
-			if (Minitalk.user.checkLimit(Minitalk.viewUserNotificationLimit,user.opper) == true) {
-				Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/leave").replace("{NICKNAME}","<b><u>"+user.nickname+"</u></b>"));
-			}
+		var $lists = $("<ul>");
+		$users.append($lists);
+		
+		for (var i=0, loop=users.length;i<loop;i++) {
+			var user = users[i];
+			var $item = $("<li>").attr("data-nickname",user.nickname);
+			
+			$item.append(Minitalk.user.getTag(user));
+			$lists.append($item);
 		}
 		
-		var sortUserCode = {"ADMIN":"#","POWERUSER":"*","MEMBER":"+","NICKGUEST":"-"};
-		
-		if (Minitalk.user.isVisibleUsers == true) {
-			if (Minitalk.user.checkLimit(Minitalk.viewUserLimit,user.opper) == true) {
-				Minitalk.user.usersSort.splice($.inArray("["+(user.opper ? sortUserCode[user.opper] : "")+user.nickname+"]",Minitalk.user.usersSort),1);
-				delete Minitalk.user.users[user.nickname];
-				$("section[data-role=users]").find("[code='"+user.nickname+"']").remove();
-			}
-		}
-		
-		Minitalk.fireEvent("leave",[user,usercount]);
+		Minitalk.user.sortUsers();
 	},
 	/**
-	 * 유저정보가 변경되었을 때
-	 *
-	 * @param object before 변경 전 유저정보
-	 * @param object after 변경 후 유저정보
+	 * 유저목록을 정렬한다.
 	 */
-	change:function(before,after) {
-		if (before.nickname == Minitalk.user.me.nickname) {
-			Minitalk.user.me = after;
-			Minitalk.storage("me",Minitalk.user.me);
-			
-			if (Minitalk.user.isVisibleUsers == true) {
-				$("section[data-role=users] > label[data-role=user]")[0].remove();
-				$("section[data-role=users]").prepend(Minitalk.user.getTag(Minitalk.user.me,true));
-			}
-			
-			Minitalk.ui.initTools();
-		}
+	sortUsers:function() {
 		
-		if (before.nickname != after.nickname) {
-			Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/update_nickname").replace("{BEFORE}","<b><u>"+before.nickname+"</u></b>").replace("{AFTER}","<b><u>"+after.nickname+"</u></b>"));
-		}
-		
-		if (before.status != after.status) {
-			Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/update_status").replace("{NICKNAME}","<b><u>"+after.nickname+"</u></b>").replace("{STATUS}","<b><u>"+Minitalk.getText("status/"+after.status)+"</u></b>"));
-		}
-		
-		var sortUserCode = {"ADMIN":"#","POWERUSER":"*","MEMBER":"+","NICKGUEST":"-"};
-		
-		if (Minitalk.user.isVisibleUsers == true) {
-			if ($.inArray("["+before.opper+before.nickname+"]",Minitalk.user.usersSort) >= 0) {
-				Minitalk.user.usersSort.splice($.inArray("["+(before.opper ? sortUserCode[before.opper] : "")+before.nickname+"]",Minitalk.user.usersSort),1);
-			}
-			if (Minitalk.user.users[before.nickname] != undefined) {
-				delete Minitalk.user.users[before.nickname];
-			}
-			$("section[data-role=users]").find("[code='"+before.nickname+"']").remove();
-			
-			if (Minitalk.user.checkLimit(Minitalk.viewUserLimit,after.opper) == true) {
-				Minitalk.user.usersSort.push("["+(after.opper ? sortUserCode[after.opper] : "")+after.nickname+"]");
-				Minitalk.user.users[after.nickname] = after;
-				Minitalk.user.usersSort.sort();
-				var position = $.inArray("["+(after.opper ? sortUserCode[after.opper] : "")+after.nickname+"]",Minitalk.user.usersSort);
-				var user = Minitalk.user.getTag(after,true);
-				
-				if (after.nickname == Minitalk.user.me.nickname) {
-					user.css("display","none");
-				}
-				if ($("section[data-role=users] > label[data-role=user]").length < position) {
-					$("section[data-role=users]").append(user);
-				} else {
-					$($("section[data-role=users] > label[data-role=user]")[position]).after(user);
-				}
-			}
-		}
 	},
 	/**
 	 * 접속자수를 업데이트한다.
 	 *
 	 * @param int usercount
 	 */
-	updateCount:function(usercount) {
+	updateCount:function(usercount,time) {
+		// 마지막 접속자수 갱신시간보다 과거일 경우 접속자수를 변경하지 않는다.
+		if (time !== undefined && Minitalk.user.latestRefreshTime > time) return;
+		Minitalk.user.latestRefreshTime = time;
 		Minitalk.user.count = usercount;
 		
 		/**
@@ -177,60 +172,42 @@ Minitalk.user = {
 		return Minitalk.user.count;
 	},
 	/**
-	 * 유저의 고유한 값을 가져온다.
-	 */
-	getUuid:function() {
-		if (Minitalk.storage("uuid") && Minitalk.storage("uuid").length == 32) {
-			return Minitalk.storage("uuid");
-		} else {
-			Minitalk.storage("uuid",Minitalk.uuid);
-			return Minitalk.storage("uuid");
-		}
-	},
-	/**
 	 * 접속자태그를 가져온다.
 	 *
 	 * @param object user 유저객체
-	 * @param boolean isUserList 접속자목록내인지 여부
 	 * @return object $user 접속자태그
 	 */
-	getTag:function(user,isUserList) {
+	getTag:function(user) {
+		if (typeof user == "string") {
+			var user = {nickname:user,nickcon:null,photo:null,level:0,extras:null};
+		}
 		var $user = $("<label>").attr("data-role","user").data("user",user);
 		
-		if (isUserList == true && Minitalk.viewStatusIcon == true) {
-			$user.css("paddingLeft",20);
-			$user.css("backgroundImage","url("+Minitalk.statusIconPath+"/"+user.device+"/"+user.status+".png)");
+		if (user.nickname == Minitalk.user.me.nickname) $user.addClass("me");
+		if (user.level == 9) $user.addClass("admin");
+		
+		var $photo = $("<i>").attr("data-role","photo");
+		if (user.photo) $photo.css("backgroundImage","url("+user.photo+")");
+		$user.append($photo);
+		
+		var $nickname = $("<span>").attr("data-role","nickname");
+		
+		if (user.nickname == Minitalk.user.me.nickname) {
+			var $me = $("<i>").addClass("me").html(Minitalk.getText("text/me"));
+			$nickname.append($me);
 		}
 		
-		$user.attr("title",user.nickname);
-		
-		var sHTML = "";
-		if (user.nickcon != "") {
-			var temp = user.nickcon.split(",");
-			for (var i=0,loop=temp.length;i<loop;i++) {
-				if (temp[i] == "{nickname}") {
-					sHTML+= user.nickname;
-				} else {
-					sHTML+= '<img src="'+temp[i]+'" class="nickname">';
-				}
-			}
-		} else {
-			sHTML+= user.nickname;
+		if (user.level == 9) {
+			var $admin = $("<i>").addClass("admin").html(Minitalk.getText("text/admin"));
+			$nickname.append($admin);
 		}
 		
-		if (isUserList == true && Minitalk.user.me.nickname == user.nickname) {
-			sHTML+= "("+Minitalk.getText("text/me")+")";
-		} else {
-			$user.attr("code",user.nickname);
-		}
+		$nickname.append(Minitalk.user.getNickname(user));
+		$user.append($nickname);
 		
-		if (user.opper == "ADMIN") {
-			sHTML+= '<img src="'+Minitalk.getTempletUrl(Minitalk.templet)+'/images/icon_admin.gif" />';
-		}
-		
-		$user.html(sHTML);
 		$user.on("click",function(e) {
 			Minitalk.user.toggleMenus($(this),e);
+			e.preventDefault();
 			e.stopImmediatePropagation();
 		});
 		
@@ -259,22 +236,63 @@ Minitalk.user = {
 		});
 	},
 	/**
+	 * 접속자목록을 가져온다.
+	 *
+	 * @param int page 접속자목록페이지번호
+	 * @param string keyword 검색어
+	 * @param function callback
+	 */
+	getUsers:function(callback) {
+		if (Minitalk.socket.isConnected() === false) callback({success:false,error:"NOT_CONNECTED"});
+		
+		$.get({
+			url:Minitalk.socket.connection.domain+"/users",
+			dataType:"json",
+			headers:{authorization:"TOKEN " + Minitalk.socket.token},
+			success:function(result) {
+				if (result.success == true && result.users === undefined) result.success = false;
+				callback(result);
+			},
+			error:function() {
+				callback({success:false,error:"CONNECT_ERROR"});
+			}
+		});
+	},
+	/**
+	 * 유저를 호출한다.
+	 *
+	 * @param string nickname 호출할 대상 닉네임
+	 * @param function callback
+	 */
+	call:function(nickname,callback) {
+		if (Minitalk.socket.isConnected() === false) callback({success:false,error:"NOT_CONNECTED"});
+		
+		$.get({
+			url:Minitalk.socket.connection.domain+"/call/" + nickname,
+			dataType:"json",
+			headers:{authorization:"TOKEN " + Minitalk.socket.token},
+			success:function(result) {
+				callback(result);
+			},
+			error:function() {
+				callback({success:false,error:"CONNECT_ERROR"});
+			}
+		});
+	},
+	/**
+	 * 접속자 닉네임 또는 닉이미지를 가져온다.
+	 *
+	 * @param object user 유저객체
+	 * @param boolean is_nickcon 닉 이미지를 사용할지 여부 (기본값 : true)
+	 */
+	getNickname:function(user,is_nickcon) {
+		return user.nickname;
+	},
+	/**
 	 * 유저메뉴를 추가한다.
 	 */
 	addMenu:function(usermenu) {
 		Minitalk.addUserMenuList.push(usermenu);
-	},
-	/**
-	 * 유저정보를 추가한다.
-	 */
-	addInfo:function(key,value) {
-		if (Minitalk.socket.isConnected() == true) {
-			if (!Minitalk.user.me.info || typeof Minitalk.user.me.info != "object") Minitalk.user.me.info = {};
-			Minitalk.user.me.info[key] = value;
-		} else {
-			if (!Minitalk.info || typeof Minitalk.info != "object") Minitalk.info = {};
-			Minitalk.info[key] = value;
-		}
 	},
 	/**
 	 * 유저메뉴를 토클한다.
@@ -340,13 +358,11 @@ Minitalk.user = {
 			var $name = $("li[data-role=nickname]",$menus);
 			
 			if (result.success == true && user.nickname == result.user.nickname) {
-				user.status = result.user.status;
+				user.status = "online";
 			} else {
 				user.status = "offline";
 			}
-			$("i",$name).removeClass("mi mi-loading").addClass("status").css("backgroundImage","url("+Minitalk.statusIconPath+"/"+user.device+"/"+user.status+".png)");
-			
-			var separator = true;
+			$("i",$name).removeClass("mi mi-loading").addClass("status " + user.status);
 			
 			for (var index in Minitalk.usermenus) {
 				var menu = Minitalk.usermenus[index];
@@ -368,12 +384,12 @@ Minitalk.user = {
 						/**
 						 * 기본 메뉴를 추가한다.
 						 */
-						if ($.inArray(menu,["configs","whisper","call","create","invite","banmsg","showip","banip","opper","deopper"]) === -1) continue;
+						if ($.inArray(menu,["configs","whisper","call","create","invite","showip","banip","opper","deopper"]) === -1) continue;
 						
 						/**
 						 * 관리자가 아닌 경우 관리자 메뉴를 표시하지 않는다.
 						 */
-						if ($.inArray(menu,["banmsg","showip","banip","opper","deopper"]) !== -1 && Minitalk.user.me.opper != "ADMIN") continue;
+						if ($.inArray(menu,["banmsg","showip","banip","opper","deopper"]) !== -1 && Minitalk.user.me.level < 9) continue;
 						
 						/**
 						 * 자신에게 숨겨야 하는 메뉴를 표시하지 않는다.
@@ -386,9 +402,9 @@ Minitalk.user = {
 						if ($.inArray(menu,["configs","create"]) !== -1 && Minitalk.user.me.nickname != user.nickname) continue;
 						
 						/**
-						 * 개인채널에 숨겨야하는 메뉴를 표시하지 않는다.
+						 * 개인박스에서 숨겨야하는 메뉴를 표시하지 않는다.
 						 */
-						if ($.inArray(menu,["invite","create"]) !== -1 && Minitalk.isPrivate == true) continue;
+						if ($.inArray(menu,["invite","create"]) !== -1 && Minitalk.box.isBox() == true) continue;
 						
 						separator = false;
 						
@@ -466,7 +482,7 @@ Minitalk.user = {
 		if (typeof menu == "string") {
 			switch (menu) {
 				case "configs" :
-					Minitalk.ui.toggleConfigs();
+					Minitalk.ui.createConfigs();
 					break;
 					
 				case "whisper" :
@@ -475,7 +491,14 @@ Minitalk.user = {
 					break;
 					
 				case "call" :
-					Minitalk.socket.sendCall(user.nickname);
+					var $icon = $("i",$menu).removeClass().addClass("mi mi-loading");
+					Minitalk.user.call(user.nickname,function(result) {
+						if (result.success == true) {
+							Minitalk.ui.notify("call","action",Minitalk.getText("action/call").replace("{nickname}",user.nickname));
+						}
+						
+						$menus.remove();
+					});
 					break;
 					
 				case "invite" :
@@ -486,10 +509,6 @@ Minitalk.user = {
 					Minitalk.socket.sendCreate();
 					break;
 					
-				case "banmsg" :
-					Minitalk.socket.send("banmsg",{id:user.id,nickname:user.nickname});
-					break;
-					
 				case "showip" :
 					Minitalk.socket.send("showip",{id:user.id,nickname:user.nickname});
 					break;
@@ -498,11 +517,11 @@ Minitalk.user = {
 					Minitalk.socket.send("banip",{id:user.id,nickname:user.nickname});
 					break;
 					
-				case "opper" :
+				case "op" :
 					Minitalk.socket.send("opper",{id:user.id,nickname:user.nickname});
 					break;
 					
-				case "deopper" :
+				case "deop" :
 					Minitalk.socket.send("deopper",{id:user.id,nickname:user.nickname});
 			}
 		} else {
@@ -512,62 +531,5 @@ Minitalk.user = {
 		}
 		
 		Minitalk.fireEvent("afterActiveUserMenu",[menu,$menu,e]);
-	},
-	/**
-	 * 권한 최소레벨에 해당하는지 확인한다.
-	 *
-	 * @param string limit 확인할 권한
-	 * @param string target 대상권한
-	 * @return boolean included 최소레벨을 만족하는지 여부
-	 */
-	checkLimit:function(limit,target) {
-		if (limit == "") limit = "ALL";
-		if (target == "") target = "ALL";
-		var levels = ["ALL","NICKGUEST","MEMBER","POWERUSER","ADMIN","NONE"];
-		
-		return $.inArray(limit,levels) <= $.inArray(target,levels);
-	},
-	/**
-	 * 호출을 받았을 때
-	 *
-	 * @param object from 호출한 사람
-	 * @param object to 호출을 받은 사람
-	 */
-	call:function(from,to) {
-		if (from.nickname == Minitalk.user.me.nickname) {
-			Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/call").replace("{NICKNAME}","<b><u>"+to.nickname+"</u></b>"));
-		} else {
-			if (Minitalk.fireEvent("beforeCall",[from,to]) === false) return;
-			
-			Minitalk.ui.notify("call","action",Minitalk.getText("action/called").replace("{NICKNAME}","<b><u>"+from.nickname+"</u></b>"));
-			Minitalk.ui.playSound("call");
-			Minitalk.fireEvent("call",[from,to]);
-		}
-	},
-	/**
-	 * 개인채널 초대를 받았을 때
-	 *
-	 * @param object from 초대한 사람
-	 * @param object to 초대받은 사람
-	 * @param string 개인채널코드
-	 */
-	invite:function(from,to,code) {
-		if (from.nickname == Minitalk.user.me.nickname) {
-			Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/invite").replace("{NICKNAME}","<b><u>"+to.nickname+"</u></b>"));
-		} else {
-			if (Minitalk.fireEvent("beforeInvite",[from,code,to]) === false) return;
-			
-			Minitalk.ui.notify("invite-" + code,"action",Minitalk.getText("action/invited").replace("{NICKNAME}","<b><u>"+from.nickname+"</u></b>").replace("{TIME}","<b><u>" + Minitalk.ui.getTime(moment().valueOf(),"YYYY.MM.DD HH:mm:ss") + "</u></b>"),false,false,{from:from,to:to,code:code},function($notification) {
-				if (confirm(Minitalk.getText("action/invite_confirm")) == true) {
-					return Minitalk.ui.openPrivateChannel("join",$notification.data("data"));
-				} else {
-					Minitalk.socket.send("reject",$notification.data("data"));
-				}
-				return true;
-			});
-			
-			Minitalk.ui.playSound("query");
-			Minitalk.fireEvent("invite",[from,code,to]);
-		}
 	}
 };
