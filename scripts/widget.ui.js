@@ -2276,6 +2276,7 @@ Minitalk.ui = {
 				$balloon.on("click",function() {
 					var $notification = $(this).parent();
 					callback($notification);
+					if (closable === true) Minitalk.ui.unnotify($(this).parent().attr("data-code"));
 				});
 			} else {
 				$balloon.addClass("closable");
@@ -2340,6 +2341,8 @@ Minitalk.ui = {
 	},
 	/**
 	 * 메시지를 전송한다.
+	 *
+	 * @param string message 메시지
 	 */
 	sendMessage:function(message) {
 		var message = $.trim(message);
