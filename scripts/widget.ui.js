@@ -1248,6 +1248,31 @@ Minitalk.ui = {
 			$("input[name=call]",$dom).checked(configs.whisper);
 			$("input[name=call_sound]",$dom).checked(configs.whisper);
 			
+			/**
+			 * 브라우저 푸시알림 권한을 요청한다.
+			 */
+			$("input[name=browser_notification]",$dom).on("change",function() {
+				var $browser_notification = $(this);
+				
+				if ($browser_notification.checked() === true) {
+					if (window.Notification !== undefined) {
+						if (Notification.permission != "granted") {
+							Notification.requestPermission(function(permission) {
+								if (Notification.permission !== undefined) {
+									Notification.permission = permission;
+								}
+								
+								if (permission != "granted") {
+									$browser_notification.checked(false);
+								}
+							});
+						}
+					} else {
+						Minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_SUPPORTED_BROWSER"));
+					}
+				}
+			});
+			
 			$("button[data-action]",$dom).on("click",function() {
 				var $button = $(this);
 				var action = $button.attr("data-action");
@@ -2477,7 +2502,7 @@ Minitalk.ui = {
 	 * @param string message 표시할 메시지
 	 */
 	push:function(message) {
-		if (Minitalk.configs("push") !== true) return;
+		if (Minitalk.configs("browser_notification") !== true) return;
 		
 		message = message.replace(/<\/?[a-zA-Z]+(.*?)>/g,'');
 		if (window.Notification !== undefined && Notification.permission == "granted") {
