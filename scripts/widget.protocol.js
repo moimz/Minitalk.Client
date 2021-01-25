@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.0
- * @modified 2020. 7. 8.
+ * @modified 2021. 1. 24.
  */
 Minitalk.protocol = {
 	/**
@@ -21,7 +21,13 @@ Minitalk.protocol = {
 	 *
 	 * @param object data.me 나의정보
 	 * @param object data.channel 채널정보
-	 * @param int data.usercount 채널접속자 수
+	 * @param string data.authorization 인증정보
+	 * @param object data.permission 나의권한
+	 * @param string data.token API 호출을 위한 토큰인증정보
+	 * @param string data.uuid 유저고유값
+	 * @param object data.box 참여한 박스정보
+	 * @param int data.count 채널접속자 수
+	 * @param int data.time 서버에서 접속자수를 계산한 시각
 	 */
 	connected:function(data) {
 		/**
@@ -31,25 +37,35 @@ Minitalk.protocol = {
 		Minitalk.socket.connecting = false;
 		Minitalk.socket.reconnectable = true;
 		Minitalk.socket.joined = false;
-		Minitalk.socket.permission = data.permission;
 		Minitalk.socket.channel.title = data.channel.title;
+		Minitalk.socket.permission = data.permission;
 		Minitalk.socket.token = data.token;
+		Minitalk.socket.uuid = data.uuid;
 		
 		/**
 		 * 나의정보를 저장한다.
 		 */
 		Minitalk.user.me = data.me;
-		Minitalk.storage("me",data.me);
+		Minitalk.storage("authorization",data.authorization);
+		
+		/**
+		 * 서버접속오류 알림이 있는 경우 제거한다.
+		 */
+		Minitalk.ui.unnotify("error");
+		Minitalk.ui.unnotify("disconnect");
 		
 		/**
 		 * 채널명을 출력한다.
 		 */
-		Minitalk.ui.printTitle(data.channel.title);
-		if (data.channel.room.indexOf("#") == 0 && data.channel.room.split(":").length == 3) {
-			var temp = data.channel.room.split(":");
-			if (Minitalk.showChannelConnectMessage == true) Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/connected").replace("{CHANNEL}","<b><u>"+temp[1]+"</u></b>"));
+		if (data.box !== null) {
+			Minitalk.box.connection = data.box;
+			
+			Minitalk.ui.printTitle(data.box.title);
+			if (Minitalk.viewConnectMessage == true) Minitalk.ui.notify("connecting","success",Minitalk.getText("action/connected").replace("{NICKNAME}",data.me.nickname).replace("{CHANNEL}",data.box.title));
 		} else {
-			if (Minitalk.showChannelConnectMessage == true) Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/connected").replace("{CHANNEL}","<b><u>"+data.channel.title+"</u></b>"));
+			Minitalk.box.connection = null;
+			Minitalk.ui.printTitle(data.channel.title);
+			if (Minitalk.viewConnectMessage == true) Minitalk.ui.notify("connecting","success",Minitalk.getText("action/connected").replace("{NICKNAME}",data.me.nickname).replace("{CHANNEL}",data.channel.title));
 		}
 		
 		/**
@@ -65,33 +81,89 @@ Minitalk.protocol = {
 		/**
 		 * 접속자수를 갱신한다.
 		 */
-		Minitalk.user.updateCount(data.usercount);
+		Minitalk.user.updateCount(data.count,data.time);
 		
 		/**
 		 * 접속자목록을 사용하고, 접속자수가 200명 이하라면 유저목록을 불러온다.
 		 */
-		if (Minitalk.viewUser == true && data.usercount < 200) {
-			Minitalk.ui.toggleUsers(true);
+		if (Minitalk.socket.channel.use_users == true && data.count < 200) {
+			Minitalk.ui.createUsers(true);
 		}
 		
 		/**
 		 * 이벤트를 발생시킨다.
 		 */
-		Minitalk.fireEvent("connecting",[Minitalk.socket.channel,data.me,data.usercount]);
+		Minitalk.fireEvent("connecting",[data.channel,data.me,data.count]);
 		
+		/**
+		 * 채팅로그를 불러온다.
+		 */
 		if (Minitalk.logCount > 0) {
-			/**
-			 * 이전대화기록을 가져온다.
-			 */
-			Minitalk.socket.send("logs",{limit:Minitalk.logCount,time:Minitalk.storage("lastLogTime")});
+			Minitalk.socket.send("logs",{count:Minitalk.logCount,time:Minitalk.logs().latest});
 		} else {
-			Minitalk.ui.enable();
-		
+			Minitalk.socket.joined = true;
+			
 			/**
 			 * 이벤트를 발생시킨다.
 			 */
-			Minitalk.fireEvent("connect",[Minitalk.socket.channel,data.me,data.usercount]);
+			Minitalk.fireEvent("connect",[data.channel,data.me,data.count]);
+			
+			/**
+			 * 채팅위젯의 UI를 활성화한다.
+			 */
+			Minitalk.ui.enable();
 		}
+	},
+	/**
+	 * 채팅서버에 접속을 실패하였을 경우
+	 */
+	connect_error:function() {
+		Minitalk.socket.connecting = false;
+		Minitalk.ui.notify("disconnect","error",Minitalk.getErrorText("CONNECT_ERROR"),false,false);
+		Minitalk.socket.reconnect(60);
+	},
+	/**
+	 * 서버접속이 종료되었을 경우
+	 */
+	disconnect:function() {
+		Minitalk.socket.disconnected();
+		Minitalk.ui.unnotify("connecting");
+		
+		/**
+		 * 재접속이 가능한 경우 서버접속이 종료되었음을 알려준다.
+		 */
+		if (Minitalk.socket.reconnectable === true) {
+			Minitalk.ui.notify("disconnect","error",Minitalk.getErrorText("DISCONNECTED"),false,false);
+			Minitalk.socket.reconnect(60);
+		}
+	},
+	/**
+	 * 채팅서버로 부터 이전대화기록을 받아 저장한다.
+	 *
+	 * @param object[] data 로그데이터
+	 */
+	logs:function(data) {
+		for (var i=0, loop=data.length;i<loop;i++) {
+			Minitalk.logs(data[i]);
+		}
+		
+		var logs = Minitalk.logs().messages;
+		for (var i=0, loop=logs.length;i<loop;i++) {
+			Minitalk.ui.printMessage(logs[i],"log");
+		}
+		
+		if (logs.length > 0) {
+			var $main = $("main",$("div[data-role=frame]"));
+			$("section[data-role=chat]",$main).append($("<div>").attr("data-role","line").append($("<div>").html("NEW MESSAGE START")));
+		}
+		Minitalk.ui.autoScroll();
+		
+		Minitalk.socket.joined = true;
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("connect",[Minitalk.socket.channel,Minitalk.user.me,Minitalk.user.count]);
 		
 		/**
 		 * 채팅위젯의 UI를 활성화한다.
@@ -99,236 +171,196 @@ Minitalk.protocol = {
 		Minitalk.ui.enable();
 	},
 	/**
-	 * 채팅서버에 접속을 실패하였을 경우
-	 */
-	connect_error:function() {
-		Minitalk.socket.connecting = false;
-		Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("CONNECT_ERROR"));
-		Minitalk.socket.reconnect(60);
-	},
-	/**
-	 * 서버접속이 종료되었을 경우
-	 */
-	disconnect:function() {
-		if (Minitalk.isPrivate == true && Minitalk.private.indexOf("#") == 0) {
-			self.close();
-		} else {
-			Minitalk.socket.disconnected();
-			
-			/**
-			 * 재접속이 가능한 경우 서버접속이 종료되었음을 알려준다.
-			 */
-			if (Minitalk.socket.reconnectable === true) {
-				Minitalk.socket.reconnect(60);
-			}
-		}
-	},
-	/**
-	 * 브로드캐스트 메시지를 수신하였을 경우
-	 */
-	broadcast:function(data) {
-		if (data.type == "NOTICE") {
-			Minitalk.ui.showNotice(data.message,data.url);
-		} else {
-			if (Minitalk.socket.getPermission("broadcast") === true) {
-				if (data.url) {
-					Minitalk.ui.printSystemMessage("broadcast",data.nickname+m.splitString+'<a href="'+data.url+'" target="_blank">'+data.message+'</a>');
-				} else {
-					Minitalk.ui.printSystemMessage("broadcast",data.nickname+m.splitString+data.message);
-				}
-			}
-		}
-	},
-	/**
-	 * 사용자정의 프로토콜을 수신하였을 경우
-	 */
-	protocol:function(data) {
-		if (data.protocol !== undefined && typeof Minitalk.protocols[data.protocol] == "function") {
-			Minitalk.protocols[data.protocol](Minitalk,data.data);
-		}
-	},
-	/**
 	 * 접속자목록을 불러오는 경우
 	 */
 	users:function(data) {
-		Minitalk.user.updateCount(data.usercount);
-		Minitalk.ui.printUser(data.users);
+		Minitalk.user.updateCount(data.count,data.time);
+		Minitalk.user.updateUsers(data.users);
 	},
 	/**
-	 * 이전대화를 불러오는 경우
-	 */
-	logs:function(data) {
-		for (var i=0, loop=data.length;i<loop;i++) {
-			Minitalk.log("chat",data[i]);
-		}
-	},
-	/**
-	 * 이전대화를 모두 가져온 경우
-	 */
-	logend:function(data) {
-		Minitalk.ui.printLogMessage();
-		$("section[data-role=chat]").append($("<div>").attr("data-role","line").append($("<div>").html("NEW MESSAGE START")));
-		
-		/**
-		 * 이벤트를 발생시킨다.
-		 */
-		Minitalk.fireEvent("connect",[Minitalk.socket.channel,Minitalk.user.me,Minitalk.user.count]);
-	},
-	/**
-	 * 유저가 참여하였을 때
+	 * 신규접속자가 있을 경우, 접속자 정보를 수신한다.
+	 *
+	 * @param object data.user 유저객체
+	 * @param int data.count 전체접속자수
+	 * @param int data.time 서버에서 접속자수를 계산한 시각
 	 */
 	join:function(data) {
-		Minitalk.user.join(data.user,data.usercount);
+		Minitalk.user.join(data.user,data.count,data.time);
 	},
 	/**
-	 * 유저가 종료하였을 때
+	 * 유저가 접속을 종료한 경우, 접속을 종료한 유저의 정보를 수신한다.
+	 *
+	 * @param object data.user 유저객체
+	 * @param int data.count 전체접속자수
+	 * @param int data.time 서버에서 접속자수를 계산한 시각
 	 */
 	leave:function(data) {
-		Minitalk.user.leave(data.user,data.usercount);
+		Minitalk.user.leave(data.user,data.count,data.time);
+	},
+	/**
+	 * 유저정보가 변경되었을 경우
+	 *
+	 * @param object data.before 변경전 유저정보
+	 * @param object data.after 변경후 유저정보
+	 */
+	update:function(data) {
+		var before = data.before;
+		var after = data.after;
+		
+		if (before.nickname != after.nickname) {
+			if (before.nickname == Minitalk.user.me.nickname) {
+				Minitalk.user.me = after.user;
+				Minitalk.ui.printSystemMessage("user",Minitalk.getText("action/updated_nickname").replace("{NICKNAME}",after.nickname));
+			} else {
+				Minitalk.ui.printSystemMessage("user",Minitalk.getText("action/update_nickname").replace("{before}",before.nickname).replace("{after}",after.nickname));
+			}
+		}
 	},
 	/**
 	 * 메시지를 수신하였을 때
+	 *
+	 * @param string data.id 메시지고유값
+	 * @param string data.from 원본 메시지고유값 (서버에 전송하기전 메시지 또는 수정전 메시지 고유값)
+	 * @param string data.type 메시지타입
+	 * @param string data.message 메시지내용
+	 * @param object data.data 메시지 추가정보
+	 * @param int data.time 메시지 전송시각
+	 * @param object data.to 메시지 수신자정보 (귓속말인 경우)
+	 * @param boolean data.sended 내가 보낸 메시지에 대한 응답인지 여부
+	 * @param boolean data.success 메시지 전송성공여부 (내가 보낸 메시지에 대한 응답인 경우)
 	 */
 	message:function(data) {
-		Minitalk.log("chat",{user:data.user,message:data.message,time:data.time});
-		Minitalk.ui.printChatMessage("chat",data.user,data.message,data.time);
-	},
-	/**
-	 * 나의 메시지를 수신되었을 때
-	 */
-	mymessage:function(data) {
-		Minitalk.log("chat",{user:data.user,message:data.message,time:data.time});
-	},
-	/**
-	 * 귓속말을 수신하였을 때
-	 */
-	whisper:function(data) {
-		Minitalk.log("whisper",{user:data.user,to:data.to,message:data.message,time:data.time});
-		Minitalk.ui.printWhisperMessage("whisper",data.user,data.to,data.message,data.time);
-	},
-	/**
-	 * 유저정보가 변경되었을 때
-	 */
-	change:function(data) {
-		Minitalk.user.change(data.before,data.after);
-	},
-	/**
-	 * 채널관리자로 로그인하였을 때
-	 */
-	logged:function() {
-		Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/login"));
-	},
-	/**
-	 * 아이피를 확인하였을 때
-	 */
-	showip:function(data) {
-		Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/showip").replace("{NICKNAME}","<b><u>"+data.nickname+"</u></b>").replace("{IP}","<b><u>"+data.ip+"</u></b>"));
-	},
-	/**
-	 * 아이피가 차단당했을 때
-	 */
-	banip:function(data) {
-		if (data.ip !== undefined) {
-			$.ajax({
-				type:"POST",
-				url:m.getRootPath()+"/process/banIp",
-				data:{ip:data.ip},
-				dataType:"json",
-				success:function(result) {
-					if (result.success == true) {
-					}
-				},
-				error:function() {
-				}
-			});
+		/**
+		 * 내가 전송한 메시지가 수신되었을 경우
+		 */
+		if (data.sended === true) {
+			Minitalk.ui.enable(true);
+			
+			/**
+			 * 메시지 전송에 성공한경우 임시 메시지를 실제 데이터로 갱신하고,
+			 * 메시지 전송에 실패한 경우 해당 메시지를 제거한다.
+			 */
+			if (data.success === true) {
+				Minitalk.ui.printMessage(data);
+			} else {
+				Minitalk.ui.removeMessage(data.from);
+				return;
+			}
+		} else {
+			/**
+			 * 이벤트를 발생시킨다.
+			 */
+			if (Minitalk.fireEvent("beforeMessage",[data]) === false) return;
+			
+			/**
+			 * 메시지를 출력한다.
+			 */
+			if (Minitalk.socket.joined == true) {
+				Minitalk.ui.printMessage(data);
+			}
+			
+			/**
+			 * 이벤트를 발생시킨다.
+			 */
+			Minitalk.fireEvent("message",[data]);
 		}
-		Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/banip").replace("{FROM}","<b><u>"+data.from.nickname+"</u></b>").replace("{TO}","<b><u>"+data.to.nickname+"</u></b>"));
+		
+		/**
+		 * 수신된 메시지를 로컬 로그저장소에 저장한다.
+		 */
+		Minitalk.logs(data);
 	},
 	/**
-	 * 관리자권한을 부여받았을 때
-	 */
-	opper:function(data) {
-		Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/opper").replace("{FROM}","<b><u>"+data.from.nickname+"</u></b>").replace("{TO}","<b><u>"+data.to.nickname+"</u></b>"));
-	},
-	/**
-	 * 관리자권한에서 해제되었을 떄
-	 */
-	deopper:function(data) {
-		Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/deopper").replace("{FROM}","<b><u>"+data.from.nickname+"</u></b>").replace("{TO}","<b><u>"+data.to.nickname+"</u></b>"));
-	},
-	/**
-	 * 권한코드가 변경되어, 변경된 권한코드를 수신하였을 때
-	 */
-	oppercode:function(opperCode) {
-		Minitalk.storage("opperCode",opperCode);
-	},
-	/**
-	 * 호출을 받았을 때
+	 * 누군가가 호출하였을 경우
+	 *
+	 * @param object data 호출한사람의 유저객체
 	 */
 	call:function(data) {
-		Minitalk.user.call(data.from,data.to);
+		Minitalk.ui.playSound("call");
+		Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/called").replace("{nickname}",data.nickname));
 	},
 	/**
-	 * 나의 채널이 생성되었을 때
+	 * 접속코드를 수신하였을 경우
 	 */
-	mychannel:function(data) {
-		Minitalk.ui.openPrivateChannel("create",data);
+	authorization:function(authorization) {
+		Minitalk.storage("authorization",authorization);
 	},
 	/**
-	 * 개인채널 초대를 받았을 때
-	 */
-	invite:function(data) {
-		Minitalk.user.invite(data.from,data.to,data.code);
-	},
-	/**
-	 * 개인채널 초대를 거절한다.
-	 */
-	reject:function(data) {
-		if (data.from.nickname == Minitalk.user.me.nickname) {
-			Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/invite_reject").replace("{NICKNAME}","<b><u>"+data.to.nickname+"</b></u>"));
-		} else {
-			Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/invite_rejected").replace("{NICKNAME}","<b><u>"+data.from.nickname+"</b></u>"));
-		}
-	},
-	/**
-	 * 메시지 일시차단 경고를 받았을 경우
-	 */
-	banmsg:function(data) {
-		if (data.to.nickname == Minitalk.user.me.nickname) {
-			Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/banedmsg").replace("{FROM}","<b><u>"+data.from.nickname+"</b></u>"));
-			var baned = m.storage("baned") == null || typeof m.storage("baned") != "object" ? {} : m.storage("baned");
-			baned[m.channel] = new Date().getTime() + 60000;
-			Minitalk.storage("baned",baned);
-		} else {
-			Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/banmsg").replace("{FROM}","<b><u>"+data.from.nickname+"</b></u>").replace("{TO}","<b><u>"+data.to.nickname+"</b></u>"));
-		}
-	},
-	/**
-	 * 관리자의 화면비우기가 수신되었을 때
-	 */
-	clearlog:function(data) {
-		$(".chatArea").html("");
-		Minitalk.storage("logList",[]);
-		Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/clear_log").replace("{FROM}","<b><u>"+data.from.nickname+"</b></u>"));
-	},
-	/**
-	 * 에러코드가 전송되었을 때
+	 * 에러코드를 수신하였을 경우
 	 */
 	errorcode:function(code) {
-		Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("code/"+code)+"(ErrorCode : "+code+")");
+		var type = Math.floor(code / 100);
 		
-		if (code >= 900) {
-			Minitalk.socket.reconnectable = false;
-		} else if (code >= 300) {
-			Minitalk.socket.reconnectable = false;
+		/**
+		 * 닉네임 관련
+		 */
+		if (type == 1) {
+			/**
+			 * 닉네임이 중복되었을 경우, 기존접속이 해제될때까지 대기 후 다시 재접속한다.
+			 */
+			if (code == 101) {
+				setTimeout(Minitalk.socket.sendConnection,5000);
+			}
+			
+			/**
+			 * 에러메시지를 출력한다.
+			 */
+			Minitalk.ui.printErrorCode(code);
 		}
 		
-		if (code == 300 || code == 302) {
-			setTimeout(Minitalk.socket.sendConnection,5000);
+		/**
+		 * 응답코드 관련
+		 */
+		if (type == 4) {
+			/**
+			 * 에러메시지를 출력한다.
+			 */
+			Minitalk.ui.printErrorCode(code);
 		}
 		
-		if (code == 104 || code == 105) {
+		/**
+		 * 박스오류
+		 */
+		if (type == 8) {
+			switch (code) {
+				case 801 :
+					Minitalk.ui.createPasswordInput(Minitalk.getText("error/code/"+code),function(password) {
+						Minitalk.box.connection.password = password;
+						Minitalk.socket.sendConnection();
+						Minitalk.ui.closeWindow();
+					});
+					break;
+					
+				case 802 :
+					Minitalk.ui.createPasswordInput(Minitalk.getText("error/code/"+code),function(password) {
+						Minitalk.box.connection.password = password;
+						Minitalk.socket.sendConnection();
+						Minitalk.ui.closeWindow();
+					});
+					break;
+					
+				default :
+					/**
+					 * 에러메시지를 출력한다.
+					 */
+					Minitalk.ui.printErrorCode(code);
+			}
+		}
+		
+		/**
+		 * 서버접속오류 (서버에서 접속을 해제하므로 재접속시도를 차단한다.)
+		 */
+		if (type == 9) {
 			Minitalk.socket.reconnectable = false;
+			if (code != 999) Minitalk.ui.printErrorCode(code);
+		}
+		
+		/**
+		 * 접속을 해제한다.
+		 */
+		if (type == 10) {
+			Minitalk.socket.reconnectable = false;
+			Minitalk.socket.io.disconnect();
 		}
 	}
 };
