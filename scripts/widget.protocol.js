@@ -21,7 +21,13 @@ Minitalk.protocol = {
 	 *
 	 * @param object data.me 나의정보
 	 * @param object data.channel 채널정보
-	 * @param int data.usercount 채널접속자 수
+	 * @param string data.authorization 인증정보
+	 * @param object data.permission 나의권한
+	 * @param string data.token API 호출을 위한 토큰인증정보
+	 * @param string data.uuid 유저고유값
+	 * @param object data.box 참여한 박스정보
+	 * @param int data.count 채널접속자 수
+	 * @param int data.time 서버에서 접속자수를 계산한 시각
 	 */
 	connected:function(data) {
 		/**
@@ -142,6 +148,8 @@ Minitalk.protocol = {
 	},
 	/**
 	 * 채팅서버로 부터 이전대화기록을 받아 저장한다.
+	 *
+	 * @param object[] data 로그데이터
 	 */
 	logs:function(data) {
 		for (var i=0, loop=data.length;i<loop;i++) {
@@ -193,6 +201,9 @@ Minitalk.protocol = {
 	},
 	/**
 	 * 유저정보가 변경되었을 경우
+	 *
+	 * @param object data.before 변경전 유저정보
+	 * @param object data.after 변경후 유저정보
 	 */
 	update:function(data) {
 		var before = data.before;
@@ -208,7 +219,17 @@ Minitalk.protocol = {
 		}
 	},
 	/**
-	 * 메시지를 수신하였을 경우
+	 * 메시지를 수신하였을 때
+	 *
+	 * @param string data.id 메시지고유값
+	 * @param string data.from 원본 메시지고유값 (서버에 전송하기전 메시지 또는 수정전 메시지 고유값)
+	 * @param string data.type 메시지타입
+	 * @param string data.message 메시지내용
+	 * @param object data.data 메시지 추가정보
+	 * @param int data.time 메시지 전송시각
+	 * @param object data.to 메시지 수신자정보 (귓속말인 경우)
+	 * @param boolean data.sended 내가 보낸 메시지에 대한 응답인지 여부
+	 * @param boolean data.success 메시지 전송성공여부 (내가 보낸 메시지에 대한 응답인 경우)
 	 */
 	message:function(data) {
 		/**
