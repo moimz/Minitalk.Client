@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.0
- * @modified 2020. 12. 7.
+ * @modified 2021. 1. 24.
  */
 Minitalk.socket = {
 	io:null,
@@ -19,6 +19,7 @@ Minitalk.socket = {
 	channel:null,
 	permission:null,
 	token:null,
+	uuid:null,
 	/**
 	 * 미니톡 채팅서버에 접속한다.
 	 *
@@ -41,7 +42,7 @@ Minitalk.socket = {
 				
 				Minitalk.socket.channel = result.channel;
 				Minitalk.ui.initChannel();
-				Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/connecting"));
+				Minitalk.ui.notify("connecting","action",Minitalk.getText("action/connecting"),false,false);
 				Minitalk.socket.connecting = true;
 				Minitalk.socket.io = io(result.connection.domain,{reconnection:false,path:"/minitalk",transports:["websocket"],secure:result.connection.domain.indexOf("https://") == 0});
 				Minitalk.socket.connection = result.connection;
@@ -80,7 +81,7 @@ Minitalk.socket = {
 		if (time == 0) {
 			Minitalk.socket.connect();
 		} else {
-			if (time == 60 || time == 30 || time == 10 || time <= 5) Minitalk.ui.printSystemMessage("system",Minitalk.getText("action/reconnecting").replace("{SECOND}","<b>"+time+"</b>"));
+			Minitalk.ui.notify("connecting","action",Minitalk.getText("action/reconnecting").replace("{SECOND}",time),false,false);
 			
 			/**
 			 * 동시에 서버재접속을 시도하지 않도록 1초 간격을 랜덤하게 조절한다.
@@ -95,10 +96,8 @@ Minitalk.socket = {
 		/**
 		 * 접속자수를 초기화한다.
 		 */
-		Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("DISCONNECTED"));
 		Minitalk.user.updateCount(0);
-		Minitalk.user.usersSort = [];
-		Minitalk.user.users = {};
+		Minitalk.ui.createUsers(false);
 		
 		/**
 		 * 소켓변수를 초기화한다.
@@ -110,8 +109,6 @@ Minitalk.socket = {
 		/**
 		 * 채팅위젯 UI를 비활성화한다.
 		 */
-		$(".userList").html("");
-		$("input").attr("disabled",true);
 		Minitalk.ui.disable();
 		
 		/**
@@ -147,15 +144,9 @@ Minitalk.socket = {
 		var join = {
 			connection:Minitalk.socket.connection.connection,
 			channel:Minitalk.socket.connection.channel,
-			room:Minitalk.private != null ? Minitalk.private : Minitalk.channel,
-			nickname:Minitalk.user.me.nickname,
-			nickcon:Minitalk.user.me.nickcon,
-			info:Minitalk.user.me.info,
-			device:Minitalk.user.me.device,
-			status:Minitalk.user.me.status,
-			opperCode:Minitalk.opperCode,
-			saveOpperCode:Minitalk.storage("opperCode"),
-			uuid:Minitalk.user.getUuid()
+			usercode:Minitalk.usercode ? Minitalk.usercode : null,
+			authorization:Minitalk.storage("authorization"),
+			box:Minitalk.box.connection
 		};
 		Minitalk.socket.send("join",join);
 	},
@@ -165,100 +156,96 @@ Minitalk.socket = {
 	 * @param string protocol 프로토콜
 	 * @param object data 전송할 데이터
 	 */
-	send:function(protocol,object) {
-		if (protocol != "join" && Minitalk.socket.isConnected() === false) return;
-		
-		Minitalk.socket.io.emit(protocol,object);
+	send:function(protocol,data) {
+		if (protocol != "join" && Minitalk.socket.isConnected() === false) {
+			Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("SEND_ERROR"));
+			return;
+		}
+		Minitalk.socket.io.emit(protocol,data);
 	},
 	/**
 	 * 메시지를 전송한다.
 	 *
+	 * @param string type 메시지 유형 (message, file, ...)
 	 * @param string message 전송할 메시지
+	 * @param object data 메시지에 추가적으로 첨부할 데이터
 	 * @param boolean isPrint 메시지를 출력할지 여부
 	 */
-	sendMessage:function(message,isPrint) {
+	sendMessage:function(type,message,data,isPrint) {
+		var data = data !== undefined && typeof data == "object" ? data : null;
+		var isPrint = isPrint === false ? false : true;
+		var message = message ? $.trim(message) : "";
+		
+		/**
+		 * 메시지의 고유 ID를 할당한다.
+		 */
+		var uuid = uuidv4();
+		
 		/**
 		 * 폰트권한이 있고 폰트설정이 있다면 메시지 데이터에 포함하여 전송한다.
 		 */
-		if (Minitalk.socket.getPermission("font") == true) {
+		if (type == "message" && Minitalk.socket.getPermission("font") == true) {
 			if (Minitalk.fonts("bold") == true) message = "[B]" + message + "[/B]";
 			if (Minitalk.fonts("italic") == true) message = "[I]" + message + "[/I]";
 			if (Minitalk.fonts("underline") == true) message = "[U]" + message + "[/U]";
 			if (Minitalk.fonts("color") !== null) message = "[COLOR=" + Minitalk.fonts("color") + "]" + message + "[/COLOR]";
 		}
 		
-		Minitalk.socket.send("message",message);
+		/**
+		 * 서버로 메시지를 전송한다.
+		 */
+		Minitalk.socket.send("message",{id:uuid,type:type,message:message,data:data,to:null});
 		
-		var isPrint = isPrint === false ? false : true;
 		if (isPrint == true) {
 			/**
 			 * 메시지를 화면에 출력한다.
 			 */
-			Minitalk.ui.printChatMessage("chat",Minitalk.user.me,Minitalk.ui.encodeMessage(message));
-		}
-	},
-	/**
-	 * 유저를 호출한다.
-	 *
-	 * @param string nickname 호출할 닉네임
-	 */
-	sendCall:function(nickname) {
-		if (Minitalk.fireEvent("beforeSendCall",[nickname,Minitalk.user.me]) === false) return;
-		
-		Minitalk.socket.send("call",nickname);
-		
-		Minitalk.fireEvent("sendCall",[nickname,Minitalk.user.me]);
-	},
-	/**
-	 * 유저를 개인채널에 초대한다.
-	 *
-	 * @param string nickname 초대할 닉네임
-	 */
-	sendInvite:function(nickname) {
-		if (Minitalk.fireEvent("beforeSendInvite",[nickname,Minitalk.user.me]) === false) return;
-		
-		Minitalk.socket.send("invite",nickname);
-		
-		Minitalk.fireEvent("sendInvite",[nickname,Minitalk.user.me]);
-	},
-	/**
-	 * 개인채널개설을 개설한다.
-	 */
-	sendCreate:function() {
-		if (Minitalk.fireEvent("beforeSendCreate",[Minitalk.user.me]) === false) return;
-		
-		Minitalk.socket.send("create");
-		
-		Minitalk.fireEvent("sendCreate",[nickname,Minitalk.user.me]);
-	},
-	/**
-	 * 사용자정의 프로토콜을 정의한다.
-	 *
-	 * @param name 프로토콜명
-	 * @param function callback
-	 */
-	addProtocol:function(name,callback) {
-		Minitalk.protocols[name] = callback;
-	},
-	/**
-	 * 사용자정의 프로토콜을 전송한다.
-	 *
-	 * @param string protocol 프로토콜
-	 * @param object data 전송할 데이터
-	 * @param string channel 전송할 채널
-	 * @param string nickname 전송할 닉네임
-	 */
-	sendProtocol:function(protocol,data,channel,nickname) {
-		var channel = channel !== undefined && channel.length > 0 ? channel : (Minitalk.isPrivate == true ? Minitalk.private : Minitalk.channel);
-		var nickname = nickname !== undefined && nickname.length > 0 ? nickname : null;
-		
-		if (protocol.search(/(connect|message|whisper|call|banip|showip|userinfo|users|log|change)/) >= 0) {
-			Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("RESERVED_PROTOCOL").replace("{PROTOCOL}","<b><u>"+protocol+"</u></b>"));
-			return;
+			Minitalk.ui.printMessage({id:uuid,type:type,message:Minitalk.ui.encodeMessage(message),data:data,uuid:Minitalk.socket.uuid,to:null,user:Minitalk.user.me});
 		}
 		
-		if (protocol !== undefined && typeof protocol == "string" && protocol.length > 0) {
-			Minitalk.socket.send("protocol",{protocol:protocol,data:data,channel:channel,nickname:nickname});
+		Minitalk.ui.disable(true);
+	},
+	/**
+	 * 귓속말을 전송한다.
+	 *
+	 * @param string to 메시지를 받는사람
+	 * @param string type 메시지 유형 (message, file, ...)
+	 * @param string message 전송할 메시지
+	 * @param object data 메시지에 추가적으로 첨부할 데이터
+	 * @param boolean isPrint 메시지를 출력할지 여부
+	 */
+	sendWhisper:function(to,type,message,data,isPrint) {
+		var data = data !== undefined && typeof data == "object" ? data : null;
+		var isPrint = isPrint === false ? false : true;
+		var message = message ? $.trim(message) : "";
+		
+		/**
+		 * 메시지의 고유 ID를 할당한다.
+		 */
+		var uuid = uuidv4();
+		
+		/**
+		 * 폰트권한이 있고 폰트설정이 있다면 메시지 데이터에 포함하여 전송한다.
+		 */
+		if (type == "message" && Minitalk.socket.getPermission("font") == true) {
+			if (Minitalk.fonts("bold") == true) message = "[B]" + message + "[/B]";
+			if (Minitalk.fonts("italic") == true) message = "[I]" + message + "[/I]";
+			if (Minitalk.fonts("underline") == true) message = "[U]" + message + "[/U]";
+			if (Minitalk.fonts("color") !== null) message = "[COLOR=" + Minitalk.fonts("color") + "]" + message + "[/COLOR]";
 		}
+		
+		/**
+		 * 서버로 메시지를 전송한다.
+		 */
+		Minitalk.socket.send("message",{id:uuid,type:type,message:message,data:data,to:to});
+		
+		if (isPrint == true) {
+			/**
+			 * 메시지를 화면에 출력한다.
+			 */
+			Minitalk.ui.printMessage({id:uuid,type:type,message:Minitalk.ui.encodeMessage(message),data:data,uuid:Minitalk.socket.uuid,to:to,user:Minitalk.user.me});
+		}
+		
+		Minitalk.ui.disable(true);
 	}
 };
