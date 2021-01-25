@@ -277,6 +277,7 @@ Minitalk.protocol = {
 	 */
 	call:function(data) {
 		Minitalk.ui.playSound("call");
+		Minitalk.ui.push(Minitalk.getText("action/called").replace("{nickname}",data.nickname));
 		Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/called").replace("{nickname}",data.nickname));
 	},
 	/**
