@@ -119,6 +119,6 @@ while ($plugin = @readdir($pluginsPath)) {
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 3. 23.
+ * @modified 2021. 1. 24.
  */
 <?php echo $js->minify(__MINITALK_PATH__.'/scripts'); ?>
