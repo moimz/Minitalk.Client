@@ -2488,8 +2488,9 @@ Minitalk.ui = {
 	 * 토글된 객체를 초기화한다.
 	 */
 	resetToggle:function() {
-		$("aside").removeClass("open");
-		$("footer").removeClass("open");
+		var $frame = $("div[data-role=frame]");
+		$("aside",$frame).removeClass("open");
+		$("footer",$frame).removeClass("open");
 		
 		if ($("ul[data-role=usermenus]").length > 0) {
 			$("ul[data-role=usermenus]").remove();
