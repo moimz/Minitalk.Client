@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.0
- * @modified 2020. 12. 6.
+ * @modified 2021. 1. 25.
  */
 REQUIRE_ONCE str_replace(DIRECTORY_SEPARATOR.'styles'.DIRECTORY_SEPARATOR.'widget.css.php','',$_SERVER['SCRIPT_FILENAME']).'/configs/init.config.php';
 header("Content-Type:text/css; charset=utf-8");
@@ -40,23 +40,18 @@ if ($templet !== null && is_file(__MINITALK_PATH__.'/templets/'.$templet.'/style
 }
 
 /**
- * 플러그인을 불러온다.
+ * 플러그인의 스타일시트를 불러온다.
  */
 $pluginsPath = @opendir(__MINITALK_PATH__.'/plugins');
-while ($plugin = @readdir($pluginsPath)) {
-	if ($plugin != '.' && $plugin != '..' && is_dir(__MINITALK_PATH__.'/plugins/'.$plugin) == true) {
-		if (is_file(__MINITALK_PATH__.'/plugins/'.$plugin.'/plugin.css') == true) {
-			$css->add(__MINITALK_PATH__.'/plugins/'.$plugin.'/plugin.css');
+while ($pluginName = @readdir($pluginsPath)) {
+	if ($pluginName != '.' && $pluginName != '..' && is_dir(__MINITALK_PATH__.'/plugins/'.$pluginName) == true && is_file(__MINITALK_PATH__.'/plugins/'.$pluginName.'/package.json') == true) {
+		$package = json_decode(file_get_contents(__MINITALK_PATH__.'/plugins/'.$pluginName.'/package.json'));
+		if (is_file(__MINITALK_PATH__.'/plugins/'.$pluginName.'/style.css') == true) {
+			$css->add(__MINITALK_PATH__.'/plugins/'.$pluginName.'/style.css');
 		}
 	}
 }
 @closedir($pluginsPath);
-
-if (strpos($templet,'@') === 0) {
-	if (is_dir(__MINITALK_PATH__.'/plugins/'.substr($templet,1)) == true && is_file(__MINITALK_PATH__.'/plugins/'.substr($templet,1).'/channel.css') == true) {
-		$css->add(__MINITALK_PATH__.'/plugins/'.substr($templet,1).'/channel.css');
-	}
-}
 ?>
 /**
  * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
@@ -67,6 +62,6 @@ if (strpos($templet,'@') === 0) {
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.0
- * @modified 2020. 12. 6.
+ * @modified 2021. 1. 25.
  */
 <?php echo $css->minify(__MINITALK_PATH__.'/styles'); ?>
