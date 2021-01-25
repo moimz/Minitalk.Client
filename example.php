@@ -9,14 +9,14 @@
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
  * @version 7.0.0
- * @modified 2020. 12. 4.
+ * @modified 2021. 1. 25.
  */
 REQUIRE_ONCE './classes/widget.php';
 ?>
 <!doctype html>
 <html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+<meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
 <title>Minitalk7 Client Setup Source Example</title>
 <style>
 HTML, BODY {padding:10px; margin:0px; overflow:hidden; width:100%; height:100%;}
@@ -34,7 +34,7 @@ html, body {width:100%; height:100%; padding:0; margin:0;}
 		width:"100%",
 		height:"100%",
 		templet:"default",
-		usercode:"<?php echo MinitalkUserCode(null,1,null,null,array()); ?>"
+		usercode:"<?php echo MinitalkUserCode(null,0,null,null,array()); ?>"
 	});
 	</script>
 </body>
