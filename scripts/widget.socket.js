@@ -246,46 +246,5 @@ Minitalk.socket = {
 		}
 		
 		Minitalk.ui.disable(true);
-	},
-	/**
-	 * 데이터를 전송한다.
-	 *
-	 * @param string protocol 프로토콜
-	 * @param object data 전송할 데이터
-	 */
-	sendTo:function(protocol,data) {
-		Minitalk.socket.io.emit(protocol,data);
-	},
-	/**
-	 * 호출메시지를 전송한다.
-	 *
-	 * @param string nickname 호출할 대상닉네임
-	 */
-	sendCall:function(nickname) {
-		/*
-		if (typeof m.listeners.beforeSendCall == "function") {
-			if (m.listeners.beforeSendCall(m,nickname,m.myinfo) == false) return false;
-		}
-		
-		for (var i=0, loop=m.beforeSendCall.length;i<loop;i++) {
-			if (typeof m.beforeSendCall[i] == "function") {
-				if (m.beforeSendCall[i](m,nickname,m.myinfo) == false) return false;
-			}
-		}
-		*/
-		
-		Minitalk.socket.send("call",nickname);
-		
-		/*
-		if (typeof m.listeners.onSendCall == "function") {
-			m.listeners.onSendCall(m,nickname,m.myinfo);
-		}
-		
-		for (var i=0, loop=m.onSendCall.length;i<loop;i++) {
-			if (typeof m.onSendCall[i] == "function") {
-				m.onSendCall[i](m,nickname,m.myinfo);
-			}
-		}
-		*/
 	}
 };
