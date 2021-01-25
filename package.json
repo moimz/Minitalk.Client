@@ -164,15 +164,15 @@
 					"default":"MESSAGE",
 					"comment":"종류"
 				},
-				"nickname":{
-					"type":"varchar",
-					"length":20,
-					"comment":"닉네임"
-				},
 				"message":{
 					"type":"varchar",
 					"length":255,
 					"comment":"내용"
+				},
+				"nickname":{
+					"type":"varchar",
+					"length":20,
+					"comment":"닉네임"
 				},
 				"receiver":{
 					"type":"int",
@@ -333,13 +333,13 @@
 				"ip":{
 					"type":"varchar",
 					"length":15,
-					"comment":"아이피"
+					"comment":"차단아이피"
 				},
 				"nickname":{
 					"type":"varchar",
 					"length":20,
 					"is_null":true,
-					"comment":"닉네임"
+					"comment":"차단당시닉네임"
 				},
 				"memo":{
 					"type":"varchar",
@@ -350,7 +350,6 @@
 				"reg_date":{
 					"type":"int",
 					"length":11,
-					"default":0,
 					"comment":"차단일시"
 				}
 			},
