@@ -277,11 +277,10 @@ Minitalk.user = {
 			
 			if (result.success == true && user.nickname == result.user.nickname) {
 				user.status = "online";
-				$("i",$name).removeClass("mi mi-loading").addClass("status online");
 			} else {
 				user.status = "offline";
-				$("i",$name).removeClass("mi mi-loading").addClass("status offline");
 			}
+			$("i",$name).removeClass("mi mi-loading").addClass("status " + user.status);
 			
 			for (var index in Minitalk.usermenus) {
 				var menu = Minitalk.usermenus[index];
