@@ -16,6 +16,17 @@
 Minitalk.plugins = {};
 
 /**
+ * 시간을 정해진 형태로 변환하여 가져온다.
+ *
+ * @param int timestamp 유닉스타임스탬프
+ * @param string type 포맷
+ */
+Minitalk.getTime = function(timestamp,format) {
+	var time = moment(timestamp).locale(Minitalk.language);
+	return time.format(format);
+};
+
+/**
  * 미니톡 경로를 가져온다.
  */
 Minitalk.getUrl = function() {

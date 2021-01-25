@@ -415,6 +415,7 @@ Minitalk.ui = {
 		var $footer = $("footer");
 		var $tools = $("ul[data-role=tools]",$footer);
 		var $lists = $("ul[data-role=lists]",$footer);
+		$tools.attr("data-type",Minitalk.toolType);
 		$tools.empty();
 		$lists.empty();
 		
@@ -750,10 +751,6 @@ Minitalk.ui = {
 					Minitalk.ui.initFonts();
 					break;
 					
-				case "file" :
-					$file.trigger("click");
-					break;
-					
 				case "color" :
 					var colors = ["#7F7F7F","#880015","#ED1C24","#FF7F27","#FFF200","#22B14C","#00A2E8","#3F48CC","#A349A4","#000000","#C3C3C3","#B97A57","#FFAEC9","#FFC90E","#EFE4B0","#B5E61D","#99D9EA","#7092BE","#C8BFE7"];
 					
@@ -853,7 +850,7 @@ Minitalk.ui = {
 														
 														$item.on("click",function() {
 															var code = $(this).attr("data-code");
-															var $input = $("div[data-role=input] > input");
+															var $input = $("div[data-role=input] > textarea");
 															
 															$input.focus();
 															$input.val($input.val() + "[" + code + "]");
@@ -880,6 +877,10 @@ Minitalk.ui = {
 							}
 						});
 					});
+					break;
+					
+				case "file" :
+					$file.trigger("click");
 					break;
 			}
 		} else {
@@ -1541,83 +1542,6 @@ Minitalk.ui = {
 		}
 	},
 	/**
-	 * 시간을 정해진 형태로 변환하여 가져온다.
-	 *
-	 * @param int timestamp 유닉스타임스탬프
-	 * @param string type 포맷
-	 */
-	getTime:function(timestamp,format) {
-		var time = moment(timestamp).locale(Minitalk.language);
-		return time.format(format);
-	},
-	/**
-	 * 이전대화기록을 불러온다.
-	 */
-	getHistory:function() {
-		var room = Minitalk.channel;
-		/**
-		 * 박스인 경우, 박스 아이디를 추가한다.
-		 */
-		if (Minitalk.box.isBox() == true) {
-			room+= "@" + Minitalk.box.getId();
-		}
-		
-		var $frame = $("div[data-role=frame]");
-		var $main = $("main",$frame);
-		var $chat = $("section[data-role=chat]",$main);
-		var $button = $("button[data-action=history]",$chat);
-		var $messages = $("div[data-message-id]",$chat);
-		if ($messages.length > 0) {
-			var time = $messages.eq(0).attr("data-time");
-		} else {
-			var time = 0;
-		}
-		
-		$button.status("loading");
-		
-		$.get({
-			url:Minitalk.getApiUrl("history",room) + "?time=" + time + "&uuid=" + Minitalk.socket.uuid,
-			dataType:"json",
-			headers:{authorization:"TOKEN " + Minitalk.socket.channel.token},
-			success:function(result) {
-				if (result.success == true) {
-					/**
-					 * 이전대화를 불러오고 난뒤 원래 보고 있던 위치를 구하기 위하여 현재 버튼의 위치를 기억한다.
-					 */
-					var top = $button.position().top - $chat.scrollTop();
-					
-					/**
-					 * 로컬에 저장중인 최근대화기록이 지정된 숫자보다 적은경우 로컬에 불러온 이전대화기록을 저장한다.
-					 */
-					var is_store = Minitalk.logs().messages.length < Minitalk.logCount;
-					
-					for (var i=0, loop=result.history.length;i<loop;i++) {
-						if (is_store == true) Minitalk.logs(result.history[i]);
-						Minitalk.ui.printMessage(result.history[i],"history");
-					}
-					
-					var scroll = $button.position().top - top;
-					
-					var $nButton = $button.clone(true);
-					$button.remove();
-					$chat.prepend($nButton);
-					$nButton.status("default");
-					
-					/**
-					 * 원래 보고 있던 위치로 스크롤을 이동한다.
-					 */
-					$chat.scrollTop(scroll);
-				} else {
-					$button.status("default");
-				}
-			},
-			error:function() {
-				callback({success:false,error:"CONNECT_ERROR"});
-				$button.status("default");
-			}
-		});
-	},
-	/**
 	 * 채널타이틀을 출력한다.
 	 *
 	 * @param string title
@@ -1915,7 +1839,7 @@ Minitalk.ui = {
 				if (message.time === undefined) {
 					$balloon.append($("<span>").addClass("time").html('<i class="sending"></i>'));
 				} else {
-					$balloon.append($("<span>").addClass("time").html($("<time>").attr("datetime",message.time).html(Minitalk.ui.getTime(message.time,Minitalk.dateFormat))));
+					$balloon.append($("<span>").addClass("time").html($("<time>").attr("datetime",message.time).html(Minitalk.getTime(message.time,Minitalk.dateFormat))));
 				}
 				
 				$content.append($balloon);
@@ -2574,5 +2498,73 @@ Minitalk.ui = {
 				Minitalk.ui.closeToolLayer($(this).attr("data-tool"));
 			});
 		}
+	},
+	/**
+	 * 이전대화기록을 불러온다.
+	 */
+	getHistory:function() {
+		var room = Minitalk.channel;
+		
+		/**
+		 * 박스인 경우, 박스 아이디를 추가한다.
+		 */
+		if (Minitalk.box.isBox() == true) {
+			room+= "@" + Minitalk.box.getId();
+		}
+		
+		var $frame = $("div[data-role=frame]");
+		var $main = $("main",$frame);
+		var $chat = $("section[data-role=chat]",$main);
+		var $button = $("button[data-action=history]",$chat);
+		var $messages = $("div[data-message-id]",$chat);
+		if ($messages.length > 0) {
+			var time = $messages.eq(0).attr("data-time");
+		} else {
+			var time = 0;
+		}
+		
+		$button.status("loading");
+		
+		$.get({
+			url:Minitalk.getApiUrl("history",room) + "?time=" + time + "&uuid=" + Minitalk.socket.uuid,
+			dataType:"json",
+			headers:{authorization:"TOKEN " + Minitalk.socket.channel.token},
+			success:function(result) {
+				if (result.success == true) {
+					/**
+					 * 이전대화를 불러오고 난뒤 원래 보고 있던 위치를 구하기 위하여 현재 버튼의 위치를 기억한다.
+					 */
+					var top = $button.position().top - $chat.scrollTop();
+					
+					/**
+					 * 로컬에 저장중인 최근대화기록이 지정된 숫자보다 적은경우 로컬에 불러온 이전대화기록을 저장한다.
+					 */
+					var is_store = Minitalk.logs().messages.length < Minitalk.logCount;
+					
+					for (var i=0, loop=result.history.length;i<loop;i++) {
+						if (is_store == true) Minitalk.logs(result.history[i]);
+						Minitalk.ui.printMessage(result.history[i],"history");
+					}
+					
+					var scroll = $button.position().top - top;
+					
+					var $nButton = $button.clone(true);
+					$button.remove();
+					$chat.prepend($nButton);
+					$nButton.status("default");
+					
+					/**
+					 * 원래 보고 있던 위치로 스크롤을 이동한다.
+					 */
+					$chat.scrollTop(scroll);
+				} else {
+					$button.status("default");
+				}
+			},
+			error:function() {
+				callback({success:false,error:"CONNECT_ERROR"});
+				$button.status("default");
+			}
+		});
 	}
 };
