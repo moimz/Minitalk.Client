@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2021. 1. 24.
+ * @modified 2021. 1. 25.
  */
 REQUIRE_ONCE str_replace(DIRECTORY_SEPARATOR.'scripts'.DIRECTORY_SEPARATOR.'box.js.php','',$_SERVER['SCRIPT_FILENAME']).'/configs/init.config.php';
 header('Content-Type: application/x-javascript; charset=utf-8');
@@ -119,6 +119,6 @@ while ($plugin = @readdir($pluginsPath)) {
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 7. 8.
+ * @modified 2021. 1. 25.
  */
 <?php echo $js->minify(__MINITALK_PATH__.'/scripts'); ?>
