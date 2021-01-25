@@ -809,24 +809,10 @@ Minitalk.ui = {
 			html = html.join("");
 			
 			/**
-			 * 채팅위젯의 가로크기가 298px 이하인 경우, 새로운 윈도우에 설정탭을 출력한다.
+			 * 환경설정탭 DOM 을 추가한다.
 			 */
-			if ($frame.width() < 298) {
-				/**
-				 * 환경설정탭 DOM 을 추가한다.
-				 */
-				html = '<section data-role="configs">' + html + '</section>';
-				Minitalk.ui.createWindow(html,400,Minitalk.ui.createConfigs);
-				
-				// 새로운 윈도우를 생성한뒤, 이전에 선택한 탭으로 복귀한다.
-				setTimeout(Minitalk.ui.activeTab,100,$frame.attr("data-previous-tab"));
-			} else {
-				var $section = $("section[data-role=configs]");
-				$section.empty();
-				$section.append(html);
-				
-				Minitalk.ui.createConfigs($section);
-			}
+			html = '<section data-role="configs">' + html + '</section>';
+			Minitalk.ui.createWindow(html,400,Minitalk.ui.createConfigs);
 		} else {
 			var configs = Minitalk.configs();
 			$("input[name=active_scroll]",$dom).checked(configs.active_scroll);
@@ -836,6 +822,31 @@ Minitalk.ui = {
 			$("input[name=whisper_sound]",$dom).checked(configs.whisper);
 			$("input[name=call]",$dom).checked(configs.whisper);
 			$("input[name=call_sound]",$dom).checked(configs.whisper);
+			
+			/**
+			 * 브라우저 푸시알림 권한을 요청한다.
+			 */
+			$("input[name=browser_notification]",$dom).on("change",function() {
+				var $browser_notification = $(this);
+				
+				if ($browser_notification.checked() === true) {
+					if (window.Notification !== undefined) {
+						if (Notification.permission != "granted") {
+							Notification.requestPermission(function(permission) {
+								if (Notification.permission !== undefined) {
+									Notification.permission = permission;
+								}
+								
+								if (permission != "granted") {
+									$browser_notification.checked(false);
+								}
+							});
+						}
+					} else {
+						Minitalk.ui.printMessage("error",Minitalk.getErrorText("NOT_SUPPORTED_BROWSER"));
+					}
+				}
+			});
 			
 			$("button[data-action]",$dom).on("click",function() {
 				var $button = $(this);
@@ -2072,7 +2083,7 @@ Minitalk.ui = {
 	 * @param string message 표시할 메시지
 	 */
 	push:function(message) {
-		if (Minitalk.configs("push") !== true) return;
+		if (Minitalk.configs("browser_notification") !== true) return;
 		
 		message = message.replace(/<\/?[a-zA-Z]+(.*?)>/g,'');
 		if (window.Notification !== undefined && Notification.permission == "granted") {
