@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 9. 16.
+ * @modified 2021. 1. 25.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -56,6 +56,7 @@ $messages = $messages->limit(0,$count)->orderBy('time','asc')->get();
 for ($i=0, $loop=count($messages);$i<$loop;$i++) {
 	$messages[$i]->user = json_decode($messages[$i]->user);
 	$messages[$i]->data = json_decode($messages[$i]->data);
+	$messages[$i]->to = json_decode($messages[$i]->to);
 	$messages[$i]->time = $messages[$i]->time / 1000;
 }
 
