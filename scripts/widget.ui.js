@@ -1269,60 +1269,6 @@ Minitalk.ui = {
 		}
 	},
 	/**
-	 * 패스워드 입력 윈도우를 생성한다.
-	 */
-	createPasswordInput:function(message,callback) {
-		var html = [
-			'<section data-role="password">',
-				'<h2>' + Minitalk.getText("text/password") + '</h2>',
-				'<button data-action="close"></button>',
-				'<div data-role="content">',
-					'<label>',
-						'<input type="password" name="password" placeholder="' + Minitalk.getText("text/password") + '">',
-						'<p>' + message + '</p>',
-					'</label>',
-				'</div>',
-				'<div data-role="button">',
-					'<ul>',
-						'<li><button type="button" data-action="cancel">' + Minitalk.getText("button/cancel") + '</button></li>',
-						'<li><button type="button" data-action="confirm">' + Minitalk.getText("button/confirm") + '</button></li>',
-					'</ul>',
-				'</div>',
-			'</section>'
-		];
-		
-		html = html.join("");
-	
-		Minitalk.ui.createWindow(html,300,function($dom) {
-			$("input[name=password]",$dom).on("keydown",function(e) {
-				if (e.keyCode == 13) {
-					var password = $("input[name=password]",$dom).val();
-					if (password.length == 0) return;
-					
-					callback(password);
-					e.stopImmediatePropagation();
-					Minitalk.ui.closeWindow();
-				}
-			});
-			
-			$("button[data-action]",$dom).on("click",function() {
-				var $button = $(this);
-				var action = $button.attr("data-action");
-				
-				if (action == "confirm") {
-					var password = $("input[name=password]",$dom).val();
-					if (password.length == 0) return;
-					
-					callback(password);
-					e.stopImmediatePropagation();
-					Minitalk.ui.closeWindow();
-				} else {
-					self.close();
-				}
-			});
-		},false);
-	},
-	/**
 	 * 툴바 레이어를 생성한다.
 	 *
 	 * @param string tool 툴버튼코드
@@ -1399,6 +1345,60 @@ Minitalk.ui = {
 			var $more = $("button[data-tool=more]",$tools);
 			$more.removeClass("on");
 		}
+	},
+	/**
+	 * 패스워드 입력 윈도우를 생성한다.
+	 */
+	createPasswordInput:function(message,callback) {
+		var html = [
+			'<section data-role="password">',
+				'<h2>' + Minitalk.getText("text/password") + '</h2>',
+				'<button data-action="close"></button>',
+				'<div data-role="content">',
+					'<label>',
+						'<input type="password" name="password" placeholder="' + Minitalk.getText("text/password") + '">',
+						'<p>' + message + '</p>',
+					'</label>',
+				'</div>',
+				'<div data-role="button">',
+					'<ul>',
+						'<li><button type="button" data-action="cancel">' + Minitalk.getText("button/cancel") + '</button></li>',
+						'<li><button type="button" data-action="confirm">' + Minitalk.getText("button/confirm") + '</button></li>',
+					'</ul>',
+				'</div>',
+			'</section>'
+		];
+		
+		html = html.join("");
+	
+		Minitalk.ui.createWindow(html,300,function($dom) {
+			$("input[name=password]",$dom).on("keydown",function(e) {
+				if (e.keyCode == 13) {
+					var password = $("input[name=password]",$dom).val();
+					if (password.length == 0) return;
+					
+					callback(password);
+					e.stopImmediatePropagation();
+					Minitalk.ui.closeWindow();
+				}
+			});
+			
+			$("button[data-action]",$dom).on("click",function() {
+				var $button = $(this);
+				var action = $button.attr("data-action");
+				
+				if (action == "confirm") {
+					var password = $("input[name=password]",$dom).val();
+					if (password.length == 0) return;
+					
+					callback(password);
+					e.stopImmediatePropagation();
+					Minitalk.ui.closeWindow();
+				} else {
+					self.close();
+				}
+			});
+		},false);
 	},
 	/**
 	 * 새로운 윈도우를 생성한다.
