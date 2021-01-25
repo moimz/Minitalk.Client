@@ -33,6 +33,28 @@ if ($mode == 'view' && $file->type == 'image') {
 	 * @todo 이미지 가로크기가 1000 픽셀 이상인 경우, 썸네일을 생성한다.
 	 */
 	if (false && $file->width > 1400) {
+		/*
+		if (is_file($this->IM->getAttachmentPath().'/'.$file->path.'.view') == true) {
+			if ($file->type == 'image') header('Content-Type: '.$file->mime);
+			else header('Content-Type: image/jpeg');
+			header('Content-Length: '.filesize($this->IM->getAttachmentPath().'/'.$file->path.'.view'));
+			
+			session_write_close();
+			readfile($this->IM->getAttachmentPath().'/'.$file->path.'.view');
+			exit;
+		} else {
+			if ($this->createThumbnail($this->IM->getAttachmentPath().'/'.$file->path,$this->IM->getAttachmentPath().'/'.$file->path.'.view',1400,0,false) == false) {
+				header("HTTP/1.1 404 Not Found");
+				exit;
+			}
+			header('Content-Type: '.$file->mime);
+			header('Content-Length: '.filesize($this->IM->getAttachmentPath().'/'.$file->path.'.view'));
+			
+			session_write_close();
+			readfile($this->IM->getAttachmentPath().'/'.$file->path.'.view');
+			exit;
+		}
+		*/
 	} else {
 		header('Content-Type: '.$file->mime);
 		readfile($this->getAttachmentPath().'/'.$file->path);
