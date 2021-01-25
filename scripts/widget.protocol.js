@@ -343,23 +343,5 @@ Minitalk.protocol = {
 			Minitalk.socket.reconnectable = false;
 			Minitalk.socket.io.disconnect();
 		}
-	},
-	/**
-	 * 박스데이터 저장에 성공한 경우
-	 */
-	saved:function(data) {
-		if (Minitalk.box === null) return;
-		if (data.key == "*") {
-			Minitalk.box.connection.data = data.value;
-		} else if (Minitalk.box.connection.data == null) {
-			Minitalk.box.connection.data = {};
-		} else {
-			Minitalk.box.connection.data[data.key] = data.value;
-		}
-		
-		/**
-		 * 데이터 저장 이벤트를 전송한다.
-		 */
-		Minitalk.fireEvent("saved",[data.key,data.value]);
 	}
 };
