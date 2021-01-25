@@ -1724,7 +1724,9 @@ Minitalk.ui = {
 	 * @param string message 메시지
 	 */
 	printSystemMessage:function(type,message) {
-		var $chat = $("section[data-role=chat]");
+		var $frame = $("div[data-role=frame]");
+		var $main = $("main",$frame);
+		var $chat = $("section[data-role=chat]",$main);
 		if ($chat.length == 0) return;
 		
 		var $item = $("<div>").attr("data-role","item").addClass("system").addClass(type).html(message);
@@ -1738,7 +1740,9 @@ Minitalk.ui = {
 	 * @param object user 접속자객체
 	 */
 	printUserMessage:function(event,user) {
-		var $chat = $("section[data-role=chat]");
+		var $frame = $("div[data-role=frame]");
+		var $main = $("main",$frame);
+		var $chat = $("section[data-role=chat]",$main);
 		if ($chat.length == 0) return;
 		
 		var $item = $("<div>").attr("data-role","user").addClass(event);
@@ -2239,7 +2243,9 @@ Minitalk.ui = {
 	 * @param object $item 이동할 위치의 DOM객체
 	 */
 	autoScroll:function($item) {
-		var $chat = $("section[data-role=chat]");
+		var $frame = $("div[data-role=frame]");
+		var $main = $("main",$frame);
+		var $chat = $("section[data-role=chat]",$main);
 		if ($chat.length == 0) return;
 		
 		var $item = $item ? $item : $("div[data-role]:last",$chat);
@@ -2253,7 +2259,9 @@ Minitalk.ui = {
 	 * @param int scroll 스크롤할 픽셀
 	 */
 	scrollBy:function(scroll) {
-		var $chat = $("section[data-role=chat]");
+		var $frame = $("div[data-role=frame]");
+		var $main = $("main",$frame);
+		var $chat = $("section[data-role=chat]",$main);
 		if ($chat.length == 0) return;
 		
 		$chat.scrollTop($chat.scrollTop() + scroll);
