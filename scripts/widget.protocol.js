@@ -141,6 +141,37 @@ Minitalk.protocol = {
 		}
 	},
 	/**
+	 * 채팅서버로 부터 이전대화기록을 받아 저장한다.
+	 */
+	logs:function(data) {
+		for (var i=0, loop=data.length;i<loop;i++) {
+			Minitalk.logs(data[i]);
+		}
+		
+		var logs = Minitalk.logs().messages;
+		for (var i=0, loop=logs.length;i<loop;i++) {
+			Minitalk.ui.printMessage(logs[i],"log");
+		}
+		
+		if (logs.length > 0) {
+			var $main = $("main",$("div[data-role=frame]"));
+			$("section[data-role=chat]",$main).append($("<div>").attr("data-role","line").append($("<div>").html("NEW MESSAGE START")));
+		}
+		Minitalk.ui.autoScroll();
+		
+		Minitalk.socket.joined = true;
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("connect",[Minitalk.socket.channel,Minitalk.user.me,Minitalk.user.count]);
+		
+		/**
+		 * 채팅위젯의 UI를 활성화한다.
+		 */
+		Minitalk.ui.enable();
+	},
+	/**
 	 * 신규접속자가 있을 경우, 접속자 정보를 수신한다.
 	 *
 	 * @param object data.user 유저객체
@@ -175,37 +206,6 @@ Minitalk.protocol = {
 				Minitalk.ui.printSystemMessage("user",Minitalk.getText("action/update_nickname").replace("{before}",before.nickname).replace("{after}",after.nickname));
 			}
 		}
-	},
-	/**
-	 * 채팅서버로 부터 이전대화기록을 받아 저장한다.
-	 */
-	logs:function(data) {
-		for (var i=0, loop=data.length;i<loop;i++) {
-			Minitalk.logs(data[i]);
-		}
-		
-		var logs = Minitalk.logs().messages;
-		for (var i=0, loop=logs.length;i<loop;i++) {
-			Minitalk.ui.printMessage(logs[i],"log");
-		}
-		
-		if (logs.length > 0) {
-			var $main = $("main",$("div[data-role=frame]"));
-			$("section[data-role=chat]",$main).append($("<div>").attr("data-role","line").append($("<div>").html("NEW MESSAGE START")));
-		}
-		Minitalk.ui.autoScroll();
-		
-		Minitalk.socket.joined = true;
-		
-		/**
-		 * 이벤트를 발생시킨다.
-		 */
-		Minitalk.fireEvent("connect",[Minitalk.socket.channel,Minitalk.user.me,Minitalk.user.count]);
-		
-		/**
-		 * 채팅위젯의 UI를 활성화한다.
-		 */
-		Minitalk.ui.enable();
 	},
 	/**
 	 * 메시지를 수신하였을 경우
