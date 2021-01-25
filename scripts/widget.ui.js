@@ -35,7 +35,7 @@ Minitalk.ui = {
 				'<aside></aside>',
 				
 				/**
-				 * 활성화된 탭이 표시되는 영역
+				 * 메인영역
 				 */
 				'<main></main>',
 				
@@ -374,13 +374,14 @@ Minitalk.ui = {
 		}
 	},
 	/**
-	 * 설정된 탭에 따라 메인섹션을 초기화한다.
+	 * 메인섹션을 구성한다.
 	 */
 	initSection:function() {
-		var firstTab = null;
-		var $main = $("main");
+		var $frame = $("div[data-role=frame]");
+		var $main = $("main",$frame);
 		if ($("section",$main).length > 0) return;
 		
+		var firstTab = null;
 		for (var index in Minitalk.tabs) {
 			var tab = Minitalk.tabs[index];
 			
