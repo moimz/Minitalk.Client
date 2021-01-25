@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
  * @version 7.0.0
- * @modified 2020. 12. 4.
+ * @modified 2021. 1. 25.
  */
 REQUIRE '../configs/init.config.php';
 if ($_CONFIGS->installed === false) {
@@ -60,7 +60,7 @@ if ($logged === null) {
 		height:"100%",
 		type:"auto",
 		templet:"default",
-		usercode:"<?php echo $MINITALK->getUserCode('ADMIN',9); ?>"
+		usercode:"<?php echo $MINITALK->getUserCode($logged->nickname,9); ?>"
 	});
 	</script>
 <?php } ?>
