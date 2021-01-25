@@ -231,6 +231,7 @@ Minitalk.ui = {
 		if (Minitalk.socket.channel == null) return;
 		Minitalk.ui.initTabs();
 		Minitalk.ui.initTools();
+		Minitalk.ui.autoScroll();
 	},
 	/**
 	 * 탭바를 출력한다.
