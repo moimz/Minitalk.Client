@@ -8,13 +8,12 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.0
- * @modified 2020. 8. 23.
+ * @modified 2021. 1. 25.
  */
 if (defined('__MINITALK__') == false) exit;
 
 $emoticons = array();
 $emoticonsPath = @opendir(__MINITALK_PATH__.'/emoticons');
-
 while ($emoticonName = @readdir($emoticonsPath)) {
 	if ($emoticonName != '.' && $emoticonName != '..' && is_dir(__MINITALK_PATH__.'/emoticons/'.$emoticonName) == true && is_file(__MINITALK_PATH__.'/emoticons/'.$emoticonName.'/package.json') == true) {
 		$package = json_decode(file_get_contents(__MINITALK_PATH__.'/emoticons/'.$emoticonName.'/package.json'));
