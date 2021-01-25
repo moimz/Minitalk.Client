@@ -25,11 +25,10 @@ foreach ($history as $message) {
 	$insert = (array)$message;
 	unset($insert['client_id']);
 	
-	$insert['id'] = md5(json_encode($message->user).$message->time);
 	$insert['user'] = json_encode($message->user,JSON_UNESCAPED_UNICODE);
+	$insert['to'] = json_encode($message->to,JSON_UNESCAPED_UNICODE);
 	$insert['nickname'] = $message->user->nickname;
-	
-	$data->insert = $insert;
+	$insert['data'] = json_encode($message->data);
 	
 	$this->db()->replace($this->table->history,$insert)->execute();
 }
