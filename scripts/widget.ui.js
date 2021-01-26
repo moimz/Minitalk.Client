@@ -2289,7 +2289,7 @@ Minitalk.ui = {
 		/**
 		 * 브라우저 푸시메시지를 표시한다.
 		 */
-		if (code != "connecting") Minitalk.ui.push(message);
+		if (code != "connecting" || code != "disconnect") Minitalk.ui.push(message);
 		
 		/**
 		 * 콜백함수가 있거나, 자동닫기가 활성화되어있거나, 닫을 수 있는 알림인 경우 닫기버튼을 추가한다.
