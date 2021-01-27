@@ -467,17 +467,17 @@ Minitalk.user = {
 						/**
 						 * 기본 메뉴를 추가한다.
 						 */
-						if ($.inArray(menu,["configs","whisper","call","create","invite","showip","banip","opper","deopper"]) === -1) continue;
+						if ($.inArray(menu,["configs","create","whisper","call","invite","showip","banip","op","deop"]) === -1) continue;
 						
 						/**
 						 * 관리자가 아닌 경우 관리자 메뉴를 표시하지 않는다.
 						 */
-						if ($.inArray(menu,["banmsg","showip","banip","opper","deopper"]) !== -1 && Minitalk.user.me.level < 9) continue;
+						if ($.inArray(menu,["banmsg","showip","banip","op","deop"]) !== -1 && Minitalk.user.me.level < 9) continue;
 						
 						/**
 						 * 자신에게 숨겨야 하는 메뉴를 표시하지 않는다.
 						 */
-						if ($.inArray(menu,["whisper","call","invite"]) !== -1 && Minitalk.user.me.nickname == user.nickname) continue;
+						if ($.inArray(menu,["whisper","call","invite","banip"]) !== -1 && Minitalk.user.me.nickname == user.nickname) continue;
 						
 						/**
 						 * 자신에게만 보여야하는 메뉴를 표시하지 않는다.
@@ -487,7 +487,7 @@ Minitalk.user = {
 						/**
 						 * 개인박스에서 숨겨야하는 메뉴를 표시하지 않는다.
 						 */
-						if ($.inArray(menu,["invite","create"]) !== -1 && Minitalk.box.isBox() == true) continue;
+						if ($.inArray(menu,["banip","op","deop"]) !== -1 && Minitalk.box.isBox() == true) continue;
 						
 						separator = false;
 						
