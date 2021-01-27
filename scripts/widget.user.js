@@ -140,7 +140,33 @@ Minitalk.user = {
 	 * 유저목록을 정렬한다.
 	 */
 	sortUsers:function() {
+		var $frame = $("div[data-role=frame]");
+		var $main = $("main",$frame);
+		var $users = $("section[data-role=users]",$main);
+		var $lists = $("ul",$users);
+		var $items = $("li",$lists);
 		
+		[].sort.call($items,function(left,right) {
+			var $left = $("label[data-role=user]",$(left));
+			var leftUser = $left.data("user");
+			var $right = $("label[data-role=user]",$(right));
+			var rightUser = $right.data("user");
+			
+			/**
+			 * 유저목록에서 나를 항상 처음에 출력한다.
+			 */
+			if ($left.hasClass("me") == true) return -1;
+			if ($right.hasClass("me") == true) return 1;
+			
+			/**
+			 * 권한이 더 높거나 닉네임 순서대로 유저목록을 정렬한다.
+			 */
+			return leftUser.level < rightUser.level || (leftUser.level == rightUser.level && leftUser.nickname > rightUser.nickname) ? 1 : -1;
+		});
+		
+		$items.each(function(){
+			$lists.append(this);
+		});
 	},
 	/**
 	 * 접속자수를 업데이트한다.
