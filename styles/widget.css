@@ -303,6 +303,22 @@ ul[data-role=usermenus] > li > button:hover {background:#fff; color:#222;}
 ul[data-role=usermenus] > li > button > i {width:16px; height:20px; margin:4px 4px 4px 0px; display:inline-block; vertical-align:middle; font-size:12px; text-align:center; background-size:16px 16px; background-repeat:no-repeat; background-position:50% 50%; line-height:20px;}
 ul[data-role=usermenus] > li > button > i.icon {font-family:moimz;}
 ul[data-role=usermenus] > li > button > span {display:inline-block; width:calc(100% - 20px); height:28px; line-height:28px; font-size:12px; vertical-align:middle;}
+ul[data-role=usermenus] > li.separator {margin-top:2px; border-top:1px solid #d8d8d9; background:#fff; height:1px; margin-bottom:2px;}
+
+
+/**
+ * 유저메뉴 기본메뉴 아이콘을 정의한다.
+ */
+ul[data-role=usermenus] > li > button[data-menu] > i.icon {font-family:moimz; font-style:normal;}
+ul[data-role=usermenus] > li > button[data-menu=configs] > i.icon:before {content:"\ec36";}
+ul[data-role=usermenus] > li > button[data-menu=whisper] > i.icon:before {content:"\ef10";}
+ul[data-role=usermenus] > li > button[data-menu=call] > i.icon:before {content:"\ef02";}
+ul[data-role=usermenus] > li > button[data-menu=invite] > i.icon:before {content:"\ec03";}
+ul[data-role=usermenus] > li > button[data-menu=create] > i.icon:before {content:"\ec34";}
+ul[data-role=usermenus] > li > button[data-menu=showip] > i.icon:before {content:"\ea02"; font-size:13px;}
+ul[data-role=usermenus] > li > button[data-menu=banip] > i.icon:before {content:"\ea05";}
+ul[data-role=usermenus] > li > button[data-menu=op] > i.icon:before {content:"\eb00";}
+ul[data-role=usermenus] > li > button[data-menu=deop] > i.icon:before {content:"\eb01";}
 
 
 /**

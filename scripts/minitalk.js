@@ -175,7 +175,7 @@ if (isMinitalkIncluded === undefined) {
 		this.tabType = opt.tabType ? opt.tabType : "auto";
 		this.toolType = opt.toolType ? opt.toolType : "icon";
 		this.tools = opt.tools ? opt.tools : ["bold","underline","italic","color","-","emoticon","file"];
-		this.usermenus = opt.usermenus ? opt.usermenus : ["configs","whisper","call","-","showip","banip"];
+		this.usermenus = opt.usermenus ? opt.usermenus : ["configs","create","-","whisper","call","invite","-","showip","banip","op","deop"];
 		
 		this.background = opt.background ? opt.background : null;
 		
