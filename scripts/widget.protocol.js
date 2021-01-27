@@ -273,6 +273,38 @@ Minitalk.protocol = {
 		Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/called").replace("{nickname}",data.nickname));
 	},
 	/**
+	 * 채널관리자로 로그인한 경우
+	 *
+	 * @param int data.level 변경된 레벨정보
+	 * @param string data.authorization 변경된 인증정보
+	 */
+	login:function(data) {
+		Minitalk.user.me.level = 9;
+		Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/login"));
+		Minitalk.storage("authorization",data.authorization);
+		
+		/**
+		 * 유저목록을 갱신한다.
+		 */
+		Minitalk.user.reload();
+	},
+	/**
+	 * 채널관리자에서 로그아웃한 경우
+	 *
+	 * @param int data.level 변경된 레벨정보
+	 * @param string data.authorization 변경된 인증정보
+	 */
+	logout:function(data) {
+		Minitalk.user.me.level = data.level;
+		Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/logout"));
+		Minitalk.storage("authorization",data.authorization);
+		
+		/**
+		 * 유저목록을 갱신한다.
+		 */
+		Minitalk.user.reload();
+	},
+	/**
 	 * 접속코드를 수신하였을 경우
 	 */
 	authorization:function(authorization) {
@@ -280,6 +312,8 @@ Minitalk.protocol = {
 	},
 	/**
 	 * 에러코드를 수신하였을 경우
+	 *
+	 * @param int code 에러코드
 	 */
 	errorcode:function(code) {
 		var type = Math.floor(code / 100);
