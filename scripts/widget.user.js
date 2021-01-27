@@ -193,8 +193,12 @@ Minitalk.user = {
 				if (result.success == true && result.user === undefined) result.success = false;
 				callback(result);
 			},
-			error:function() {
-				callback({success:false,error:"CONNECT_ERROR"});
+			error:function(result) {
+				if (result.status == 403 || result.status == 404) {
+					Minitalk.ui.printErrorCode(result.status);
+				} else {
+					callback({success:false,error:"CONNECT_ERROR"});
+				}
 			}
 		});
 	},
@@ -226,8 +230,12 @@ Minitalk.user = {
 				if (result.success == true && result.users === undefined) result.success = false;
 				callback(result);
 			},
-			error:function() {
-				callback({success:false,error:"CONNECT_ERROR"});
+			error:function(result) {
+				if (result.status == 403 || result.status == 404) {
+					Minitalk.ui.printErrorCode(result.status);
+				} else {
+					callback({success:false,error:"CONNECT_ERROR"});
+				}
 			}
 		});
 	},
@@ -255,8 +263,12 @@ Minitalk.user = {
 			success:function(result) {
 				callback(result);
 			},
-			error:function() {
-				callback({success:false,error:"CONNECT_ERROR"});
+			error:function(result) {
+				if (result.status == 403 || result.status == 404) {
+					Minitalk.ui.printErrorCode(result.status);
+				} else {
+					callback({success:false,error:"CONNECT_ERROR"});
+				}
 			}
 		});
 	},
