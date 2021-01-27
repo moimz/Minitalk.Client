@@ -231,7 +231,7 @@ Minitalk.ui = {
 		if (Minitalk.socket.channel == null) return;
 		Minitalk.ui.initTabs();
 		Minitalk.ui.initTools();
-		Minitalk.ui.autoScroll();
+		Minitalk.ui.autoScroll(true);
 	},
 	/**
 	 * 탭바를 출력한다.
@@ -1670,7 +1670,7 @@ Minitalk.ui = {
 	/**
 	 * 시스템 메시지를 출력한다.
 	 *
-	 * @param string type 메시지타입 (system, error, notice)
+	 * @param string type 메시지타입 (system, error, notice, plugin)
 	 * @param string message 메시지
 	 */
 	printSystemMessage:function(type,message) {
