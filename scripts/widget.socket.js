@@ -157,6 +157,9 @@ Minitalk.socket = {
 	 * @param object data 전송할 데이터
 	 */
 	send:function(protocol,data) {
+		/**
+		 * 접속 프로토콜을 제외한 나머지 프로토콜의 경우 접속상태에서만 전송한다.
+		 */
 		if (protocol != "join" && Minitalk.socket.isConnected() === false) {
 			Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("SEND_ERROR"));
 			return;
@@ -165,7 +168,7 @@ Minitalk.socket = {
 		/**
 		 * 특수프로토콜을 제외한 나머지 프로토콜을 전송하려고 하는 경우 전송권한이 있는지 확인한다.
 		 */
-		if ($.inArray(protocol,["join","logs","users"]) === -1 && Minitalk.socket.getPermission("send") === false) {
+		if ($.inArray(protocol,["join","logs","users","login"]) === -1 && Minitalk.socket.getPermission("send") === false) {
 			Minitalk.ui.printErrorCode(403);
 			return;
 		}
