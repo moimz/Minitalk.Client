@@ -6,7 +6,6 @@
 		"password":"패스워드",
 		"whisper_to":"{nickname}님에게 귓속말",
 		"whisper_from":"{nickname}님의 귓속말",
-		"guest":"손님",
 		"document":"미니톡 매뉴얼 보기"
 	},
 	"level":{
@@ -46,13 +45,6 @@
 		"call":"{nickname}님을 호출하였습니다.",
 		"called":"{nickname}님이 호출하였습니다."
 	},
-	"tab":{
-		"chat":"채팅",
-		"users":"접속자",
-		"boxes":"개인박스",
-		"configs":"환경설정",
-		"more":"더보기"
-	},
 	"tool":{
 		"bold":"굵게",
 		"underline":"밑줄",
@@ -76,8 +68,7 @@
 		"search":"검색",
 		"refresh":"새로고침",
 		"box":"박스생성하기",
-		"close":"닫기",
-		"history":"이전대화보기"
+		"close":"닫기"
 	},
 	"user":{
 		"keyword":"닉네임 검색"
@@ -255,8 +246,6 @@
 				"use_user_tab_help":"유저목록 및 유저검색기능을 사용합니다.",
 				"use_box_tab":"개인박스",
 				"use_box_tab_help":"유저가 개인박스(토크박스/플러그인박스)를 개설할 수 있습니다.",
-				"use_history":"이전대화보기",
-				"use_history_help":"채널참여이전에 이루어진 이전대화를 볼 수 있도록 허용합니다.",
 				"max_user":"최대접속자",
 				"max_user_help":"(최대 2,000명까지 설정가능)",
 				"guest_name":"손님닉네임",
