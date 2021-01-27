@@ -136,7 +136,7 @@ if (isMinitalkIncluded === undefined) {
 		 * @public int/string width 미니톡 채팅위젯 가로크기 (기본값 : 200, 픽셀 또는 % 단위)
 		 * @public int/string height 미니톡 채팅위젯 세로크기 (기본값 : 600, 픽셀 또는 % 단위)
 		 *
-		 * @public boolean viewUserNotification 다른 접속자의 접속안내 메시지를 보일지 설정한다. (기본값 : true, true : 접속안내메시지 보임, false : 접속안내메시지 숨김)
+		 * @public type[] viewUserNotification 유저 메시지를 보일지 설정한다. (기본값 : ["join","leave","update"])
 		 * @public int viewUserNotificationLimit 접속안내 메시지 및 유저목록에서 보일 유저의 최소레벨 (기본값 : 0)
 		 * @public boolean viewConnectMessage 서버접속 메시지를 보일지 설정한다. (기본값 : true)
 		 *
@@ -164,7 +164,7 @@ if (isMinitalkIncluded === undefined) {
 		this.width = opt.width.toString().indexOf("%") < 0 ? opt.width+"px" : opt.width;
 		this.height = opt.height.toString().indexOf("%") < 0 ? opt.height+"px" : opt.height;
 		
-		this.viewUserNotification = opt.viewUserNotification === false ? false : true;
+		this.viewUserNotification = opt.viewUserNotification !== undefined && typeof opt.viewUserNotification == "object" ? opt.viewUserNotification : ["join","leave","update"];
 		this.viewUserNotificationLimit = opt.viewUserNotificationLimit ? opt.viewUserNotificationLimit : 0;
 		this.viewConnectMessage = opt.viewConnectMessage === false ? false : true;
 		
