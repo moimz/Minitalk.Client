@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.0
- * @modified 2020. 12. 4.
+ * @modified 2021. 1. 27.
  */
 if (defined('__MINITALK__') == false) exit;
 
