@@ -1186,30 +1186,39 @@ Minitalk.ui = {
 		$errorbox.append($("<h2>").html(Minitalk.getText("text/error")));
 		$errorbox.append($("<p>").html(Minitalk.getText("error/"+code)));
 		
-		if (code == "NOT_FOUND_ONLINE_SERVER") {
-			var $button = $("<button>").html(Minitalk.getText("action/reconnect"));
-			$button.on("click",function() {
-				$("div[data-role=error]").remove();
-				Minitalk.socket.connect();
-			});
-		} else {
-			var $button = $("<button>").html(Minitalk.getText("button/confirm"));
-			
-			if (typeof callback == "function") {
-				$button.on("click",function() {
-					callback();
-				});
-			} else if (typeof callback == "undefined") {
+		switch (code) {
+			case "NOT_FOUND_ONLINE_SERVER" :
+				var $button = $("<button>").html(Minitalk.getText("action/reconnect"));
 				$button.on("click",function() {
 					$("div[data-role=error]").remove();
+					Minitalk.socket.connect();
 				});
-			} else {
+				break;
+				
+			case "BANNED_IP" :
+				var $button = null;
 				$errorbox.addClass("textonly");
-				if (typeof callback == "string") {
-					$("p",$errorbox).append("<br>" + callback);
+				break;
+				
+			default :
+				var $button = $("<button>").html(Minitalk.getText("button/confirm"));
+			
+				if (typeof callback == "function") {
+					$button.on("click",function() {
+						callback();
+					});
+				} else if (typeof callback == "undefined") {
+					$button.on("click",function() {
+						$("div[data-role=error]").remove();
+					});
+				} else {
+					$errorbox.addClass("textonly");
+					if (typeof callback == "string") {
+						$("p",$errorbox).append("<br>" + callback);
+					}
+					$button = null;
 				}
-				$button = null;
-			}
+				break;
 		}
 		
 		if ($button !== null) $errorbox.append($button);

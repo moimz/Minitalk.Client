@@ -8,9 +8,18 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.0
- * @modified 2020. 12. 4.
+ * @modified 2021. 1. 27.
  */
 if (defined('__MINITALK__') == false) exit;
+
+/**
+ * 아이피 차단자인지 확인한다.
+ */
+if ($this->db()->select($this->table->banip)->where('ip',GetClientIp())->has() == true) {
+	$results->success = false;
+	$results->error = 'BANNED_IP';
+	return;
+}
 
 $channel = Request('channel');
 $results = $this->getServerConnection($channel);
