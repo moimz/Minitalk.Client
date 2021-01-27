@@ -282,10 +282,12 @@ Minitalk.protocol = {
 	 * 채널관리자로 로그인한 경우
 	 *
 	 * @param int data.level 변경된 레벨정보
+	 * @param object data.permission 변경된 권한정보
 	 * @param string data.authorization 변경된 인증정보
 	 */
 	login:function(data) {
 		Minitalk.user.me.level = 9;
+		Minitalk.socket.permission = data.permission;
 		Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/login"));
 		Minitalk.storage("authorization",data.authorization);
 		
@@ -298,10 +300,12 @@ Minitalk.protocol = {
 	 * 채널관리자에서 로그아웃한 경우
 	 *
 	 * @param int data.level 변경된 레벨정보
+	 * @param object data.permission 변경된 권한정보
 	 * @param string data.authorization 변경된 인증정보
 	 */
 	logout:function(data) {
 		Minitalk.user.me.level = data.level;
+		Minitalk.socket.permission = data.permission;
 		Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/logout"));
 		Minitalk.storage("authorization",data.authorization);
 		
