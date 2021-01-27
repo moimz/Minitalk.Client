@@ -240,6 +240,14 @@ Minitalk.user = {
 	call:function(nickname,callback) {
 		if (Minitalk.socket.isConnected() === false) callback({success:false,error:"NOT_CONNECTED"});
 		
+		/**
+		 * 권한이 있는지 확인한다.
+		 */
+		if (Minitalk.socket.getPermission("send") === false) {
+			Minitalk.ui.printErrorCode(403);
+			return;
+		}
+		
 		$.get({
 			url:Minitalk.socket.connection.domain+"/call/" + nickname,
 			dataType:"json",
