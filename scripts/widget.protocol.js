@@ -315,6 +315,38 @@ Minitalk.protocol = {
 		Minitalk.storage("authorization",authorization);
 	},
 	/**
+	 * 아이피를 확인한다.
+	 *
+	 * @param object data.user 대상유저 정보
+	 * @param string data.ip 아이피정보
+	 */
+	showip:function(data) {
+		Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/showip").replace("{NICKNAME}",data.user.nickname).replace("{IP}",data.ip));
+	},
+	/**
+	 * 아이피를 차단한다.
+	 *
+	 * @param object data.user 대상유저 정보
+	 * @param string data.ip 아이피정보
+	 * @param string data.bancode 밴코드
+	 */
+	banip:function(data) {
+		$.send(Minitalk.getProcessUrl("banIp"),{bancode:data.bancode},function(result) {
+			if (result.success == true) {
+				Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/banip").replace("{NICKNAME}",data.user.nickname).replace("{IP}",data.ip));
+			}
+		});
+	},
+	/**
+	 * 아이피가 차단되었을 경우
+	 *
+	 * @param object data.from 차단한유저
+	 * @param object data.to 차단된유저
+	 */
+	banned:function(data) {
+		Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/banned").replace("{FROM}",data.from.nickname).replace("{TO}",data.to.nickname));
+	},
+	/**
 	 * 에러코드를 수신하였을 경우
 	 *
 	 * @param int code 에러코드

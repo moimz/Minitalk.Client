@@ -12,9 +12,9 @@
  */
 if (defined('__MINITALK__') == false) exit;
 
-$ip = Param('ip') ? json_decode(Decoder(Param('ip'))) : null;
-if ($ip !== null) {
-	$this->db()->replace($this->table->banip,array('ip'=>$ip->ip,'nickname'=>$ip->to,'memo'=>'From '.$ip->from,'reg_date'=>time()))->execute();
+$bancode = Param('bancode') ? json_decode(Decoder(Param('bancode'))) : null;
+if ($bancode !== null) {
+	$this->db()->replace($this->table->banip,array('ip'=>$bancode->ip,'nickname'=>$bancode->to,'memo'=>'From '.$bancode->from,'reg_date'=>time()))->execute();
 }
 
 $results->success = true;

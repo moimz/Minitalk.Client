@@ -480,6 +480,22 @@ Minitalk.user = {
 						$menus.remove();
 					});
 					break;
+				
+				case "showip" :
+					Minitalk.socket.send("showip",user.nickname);
+					break;
+					
+				case "banip" :
+					Minitalk.socket.send("banip",user.nickname);
+					break;
+					
+				case "op" :
+					Minitalk.socket.send("op",user.nickname);
+					break;
+					
+				case "deop" :
+					Minitalk.socket.send("deop",user.nickname);
+					break;
 			}
 		} else {
 			if (typeof menu.handler == "function") {
