@@ -27,8 +27,8 @@ Minitalk.user = {
 		/**
 		 * 참여 메시지를 출력한다.
 		 */
-		if (Minitalk.socket.joined == true && Minitalk.viewUserNotification == true && Minitalk.viewUserNotificationLimit <= user.level) {
-			Minitalk.ui.printUserMessage("join",user);
+		if (Minitalk.socket.joined == true) {
+			Minitalk.ui.printUserMessage("join",user,Minitalk.getText("action/join").replace("{NICKNAME}",user.nickname));
 		}
 		
 		/**
@@ -59,8 +59,8 @@ Minitalk.user = {
 		/**
 		 * 종료 메시지를 출력한다.
 		 */
-		if (Minitalk.socket.joined == true && Minitalk.viewUserNotification == true && Minitalk.viewUserNotificationLimit <= user.level) {
-			Minitalk.ui.printUserMessage("leave",user);
+		if (Minitalk.socket.joined == true) {
+			Minitalk.ui.printUserMessage(user,Minitalk.getText("action/leave").replace("{NICKNAME}",user.nickname));
 		}
 		
 		/**

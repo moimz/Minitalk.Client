@@ -1268,18 +1268,21 @@ Minitalk.ui = {
 		Minitalk.ui.autoScroll($item);
 	},
 	/**
-	 * 접속자 이벤트 메시지를 출력한다.
+	 * 유저 이벤트 메시지를 출력한다.
 	 *
-	 * @param string event 이벤트명
-	 * @param object user 접속자객체
+	 * @param string type 메시지타입 (join, leave, update)
+	 * @param string user 유저객체
+	 * @param object message 메시지
 	 */
 	printUserMessage:function(event,user) {
+		if ($.inArray(type,Minitalk.viewUserNotification) === -1 || Minitalk.viewUserNotificationLimit > user.level) return;
+		
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
 		var $chat = $("section[data-role=chat]",$main);
 		if ($chat.length == 0) return;
 		
-		var $item = $("<div>").attr("data-role","user").addClass(event);
+		var $item = $("<div>").attr("data-role","user").addClass(type);
 		
 		var $photo = $("<div>").attr("data-role","photo");
 		$photo.data("user",user);
@@ -1299,7 +1302,7 @@ Minitalk.ui = {
 		
 		var $message = $("<div>");
 		var $inner = $("<div>");
-		$inner.append($("<span>").addClass("text").html(Minitalk.getText("action/" + event).replace("{NICKNAME}",Minitalk.user.getNickname(user,false))));
+		$inner.append($("<span>").addClass("text").html(message));
 		
 		$message.append($inner);
 		$messageBox.append($message);
