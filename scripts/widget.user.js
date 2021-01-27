@@ -605,19 +605,20 @@ Minitalk.user = {
 					break;
 					
 				case "showip" :
-					Minitalk.socket.send("showip",{id:user.id,nickname:user.nickname});
+					Minitalk.socket.send("showip",user.nickname);
 					break;
 					
 				case "banip" :
-					Minitalk.socket.send("banip",{id:user.id,nickname:user.nickname});
+					Minitalk.socket.send("banip",user.nickname);
 					break;
 					
 				case "op" :
-					Minitalk.socket.send("opper",{id:user.id,nickname:user.nickname});
+					Minitalk.socket.send("op",user.nickname);
 					break;
 					
 				case "deop" :
-					Minitalk.socket.send("deopper",{id:user.id,nickname:user.nickname});
+					Minitalk.socket.send("deop",user.nickname);
+					break;
 			}
 		} else {
 			if (typeof menu.handler == "function") {
