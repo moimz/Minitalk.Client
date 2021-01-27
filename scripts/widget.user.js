@@ -64,6 +64,48 @@ Minitalk.user = {
 		Minitalk.fireEvent("leave",[user,count,time]);
 	},
 	/**
+	 * 유저정보를 변경한다.
+	 *
+	 * @param object before 변경전 유저정보
+	 * @param object after 변경후 유저정보
+	 */
+	update:function(before,after) {
+		/**
+		 * 관리자권한을 획득한 경우
+		 */
+		if (before.level != 9 && after.level == 9) {
+			Minitalk.ui.printUserMessage(after,Minitalk.getText("action/updated_op").replace("{NICKNAME}",after.nickname));
+		}
+		
+		/**
+		 * 닉네임이 변경된 경우
+		 */
+		if (before.nickname != after.nickname) {
+			Minitalk.ui.printUserMessage(after,Minitalk.getText("action/updated_nickname").replace("{BEFORE}",before.nickname).replace("{AFTER}",after.nickname));
+		}
+		
+		/**
+		 * 유저목록을 새로고침한다.
+		 */
+		Minitalk.user.reload();
+	},
+	/**
+	 * 유저목록을 새로고침한다.
+	 */
+	reload:function() {
+		/**
+		 * 유저탭이 활성화 되어 있지 않은 경우 새로고침하지 않는다.
+		 */
+		var $frame = $("div[data-role=frame]");
+		if ($frame.attr("data-current-tab") != "users") return;
+		
+		var $main = $("main");
+		var $section = $("section[data-role=users]",$main);
+		var $refresh = $("button[data-action=refresh]",$section);
+		
+		Minitalk.ui.createUsers($refresh);
+	},
+	/**
 	 * 접속자수를 업데이트한다.
 	 *
 	 * @param int usercount
