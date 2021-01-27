@@ -204,17 +204,7 @@ Minitalk.protocol = {
 	 * @param object data.after 변경후 유저정보
 	 */
 	update:function(data) {
-		var before = data.before;
-		var after = data.after;
-		
-		if (before.nickname != after.nickname) {
-			if (before.nickname == Minitalk.user.me.nickname) {
-				Minitalk.user.me = after.user;
-				Minitalk.ui.printSystemMessage("user",Minitalk.getText("action/updated_nickname").replace("{NICKNAME}",after.nickname));
-			} else {
-				Minitalk.ui.printSystemMessage("user",Minitalk.getText("action/update_nickname").replace("{before}",before.nickname).replace("{after}",after.nickname));
-			}
-		}
+		Minitalk.user.update(data.before,data.after);
 	},
 	/**
 	 * 메시지를 수신하였을 때

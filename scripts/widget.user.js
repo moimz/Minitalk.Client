@@ -81,6 +81,55 @@ Minitalk.user = {
 		Minitalk.fireEvent("leave",[user,count,time]);
 	},
 	/**
+	 * 유저정보를 변경한다.
+	 *
+	 * @param object before 변경전 유저정보
+	 * @param object after 변경후 유저정보
+	 */
+	update:function(before,after) {
+		/**
+		 * 관리자권한을 획득한 경우
+		 */
+		if (before.level != 9 && after.level == 9) {
+			Minitalk.ui.printUserMessage(after,Minitalk.getText("action/updated_op").replace("{NICKNAME}",after.nickname));
+		}
+		
+		/**
+		 * 닉네임이 변경된 경우
+		 */
+		if (before.nickname != after.nickname) {
+			Minitalk.ui.printUserMessage(after,Minitalk.getText("action/updated_nickname").replace("{BEFORE}",before.nickname).replace("{AFTER}",after.nickname));
+		}
+		
+		/**
+		 * 유저목록이 활성화되어 있는 경우, 유저목록의 정보를 갱신한다.
+		 */
+		if (Minitalk.user.isVisibleUsers === true) {
+			var $frame = $("div[data-role=frame]");
+			var $main = $("main",$frame);
+			var $section = $("section[data-role=users]",$main);
+			var $users = $("ul",$section);
+			var $item = $("li[data-nickname=" + before.nickname + "]",$users);
+			if ($item.length == 1) {
+				$item.attr("data-nickname",after.nickname);
+				$item.empty();
+				$item.append(Minitalk.user.getTag(after));
+				Minitalk.user.sortUsers();
+			}
+		}
+	},
+	/**
+	 * 유저목록을 새로고침한다.
+	 */
+	reload:function() {
+		/**
+		 * 유저탭이 활성화 되어 있지 않은 경우 새로고침하지 않는다.
+		 */
+		if (Minitalk.user.isVisibleUsers === false) return;
+		
+		Minitalk.ui.createUsers(true);
+	},
+	/**
 	 * 유저목록에 유저를 추가한다.
 	 *
 	 * @param object user
