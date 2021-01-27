@@ -1274,7 +1274,7 @@ Minitalk.ui = {
 	 * @param string user 유저객체
 	 * @param object message 메시지
 	 */
-	printUserMessage:function(event,user) {
+	printUserMessage:function(type,user,message) {
 		if ($.inArray(type,Minitalk.viewUserNotification) === -1 || Minitalk.viewUserNotificationLimit > user.level) return;
 		
 		var $frame = $("div[data-role=frame]");
