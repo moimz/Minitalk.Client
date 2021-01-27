@@ -260,6 +260,14 @@ Minitalk.protocol = {
 			}
 			
 			/**
+			 * 귓속말을 수신하였을 경우 알림음과 브라우저 알림을 전송한다.
+			 */
+			if (data.to !== null && data.to.nickname == Minitalk.user.me.nickname) {
+				Minitalk.ui.playSound("message");
+				Minitalk.ui.push(data.user.nickname + " : " + data.message);
+			}
+			
+			/**
 			 * 이벤트를 발생시킨다.
 			 */
 			Minitalk.fireEvent("message",[data]);
