@@ -45,6 +45,13 @@
 		"call":"{nickname}님을 호출하였습니다.",
 		"called":"{nickname}님이 호출하였습니다."
 	},
+	"tab":{
+		"chat":"채팅",
+		"users":"접속자",
+		"boxes":"개인박스",
+		"configs":"환경설정",
+		"more":"더보기"
+	},
 	"tool":{
 		"bold":"굵게",
 		"underline":"밑줄",
