@@ -2475,6 +2475,7 @@ Minitalk.ui = {
 		}
 		
 		Minitalk.ui.setInputVal("");
+		Minitalk.ui.autoScroll(true);
 	},
 	/**
 	 * 사운드를 재생한다.
