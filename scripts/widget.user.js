@@ -60,7 +60,7 @@ Minitalk.user = {
 		 * 종료 메시지를 출력한다.
 		 */
 		if (Minitalk.socket.joined == true) {
-			Minitalk.ui.printUserMessage(user,Minitalk.getText("action/leave").replace("{NICKNAME}",user.nickname));
+			Minitalk.ui.printUserMessage("leave",user,Minitalk.getText("action/leave").replace("{NICKNAME}",user.nickname));
 		}
 		
 		/**
@@ -91,14 +91,14 @@ Minitalk.user = {
 		 * 관리자권한을 획득한 경우
 		 */
 		if (before.level != 9 && after.level == 9) {
-			Minitalk.ui.printUserMessage(after,Minitalk.getText("action/updated_op").replace("{NICKNAME}",after.nickname));
+			Minitalk.ui.printUserMessage("update",after,Minitalk.getText("action/updated_op").replace("{NICKNAME}",after.nickname));
 		}
 		
 		/**
 		 * 닉네임이 변경된 경우
 		 */
 		if (before.nickname != after.nickname) {
-			Minitalk.ui.printUserMessage(after,Minitalk.getText("action/updated_nickname").replace("{BEFORE}",before.nickname).replace("{AFTER}",after.nickname));
+			Minitalk.ui.printUserMessage("update",after,Minitalk.getText("action/updated_nickname").replace("{BEFORE}",before.nickname).replace("{AFTER}",after.nickname));
 		}
 		
 		/**
