@@ -290,7 +290,8 @@ Minitalk.ui = {
 				/**
 				 * 권한에 따라 툴바 버튼을 추가한다.
 				 */
-				if (Minitalk.socket.getPermission("font") !== true && $.inArray(tool,["bold","italic","underline","color"]) > -1) continue;
+				if ($.inArray(tool,["bold","italic","underline","color"]) > -1 && Minitalk.socket.getPermission("font") !== true) continue;
+				if ($.inArray(tool,["file"]) > -1 && Minitalk.socket.getPermission("file") == false) continue;
 				
 				/**
 				 * 구분자일 경우
