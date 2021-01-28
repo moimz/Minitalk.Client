@@ -385,9 +385,33 @@ Minitalk.user = {
 	},
 	/**
 	 * 유저메뉴를 추가한다.
+	 *
+	 * @param string/menu 메뉴
+	 * @param int/string position 위치
 	 */
-	addMenu:function(usermenu) {
-		Minitalk.addUserMenuList.push(usermenu);
+	appendMenu:function(menu,position) {
+		if (position === undefined || position === null) {
+			Minitalk.usermenus.push(menu);
+		} else if (typeof position == "string") {
+			var index = null;
+			for (var i=0, loop=Minitalk.usermenus.length;i<loop;i++) {
+				if (typeof Minitalk.usermenus[i] == "string" && Minitalk.usermenus[i] == position) {
+					index = i + 1;
+					break;
+				}
+				
+				if (typeof Minitalk.usermenus[i] == "object" && Minitalk.usermenus[i].name == position) {
+					index = i + 1;
+					break;
+				}
+			}
+			
+			if (index === null) Minitalk.user.appendMenu(menu);
+			else Minitalk.user.appendMenu(menu,index);
+			return;
+		} else if (typeof position == "number") {
+			Minitalk.usermenus.splice(position,0,menu);
+		}
 	},
 	/**
 	 * 유저메뉴를 토클한다.
