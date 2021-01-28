@@ -275,5 +275,37 @@ Minitalk.socket = {
 		}
 		
 		Minitalk.ui.disable(true);
+	},
+	/**
+	 * 사용자정의 프로토콜을 정의한다.
+	 *
+	 * @param string protocol 프로토콜명
+	 * @param function handler 프로토콜 핸들러
+	 */
+	setProtocol:function(protocol,handler) {
+		if (Minitalk.protocols[protocol] !== undefined) {
+			Minitalk.ui.printError(Minitalk.getErrorText("DUPLICATED_PROTOCOL").replace("{PROTOCOL}",protocol));
+			return;
+		}
+		
+		Minitalk.protocols[protocol] = handler;
+	},
+	/**
+	 * 사용자정의 프로토콜을 전송한다.
+	 *
+	 * @param string protocol 프로토콜명
+	 * @param object data 전송할 데이터
+	 * @param string to 전송할 대상닉네임 ( * 입력시 전체유저에게 전송, 기본값 전체유저)
+	 */
+	sendProtocol:function(protocol,data,to) {
+		if (Minitalk.protocols[protocol] === undefined) {
+			Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("UNDEFINED_PROTOCOL").replace("{PROTOCOL}",protocol));
+			return;
+		}
+		
+		var data = data ? data : null;
+		var to = to ? to : "*";
+		
+		Minitalk.socket.send("protocol",{protocol:protocol,data:data,to:to});
 	}
 };
