@@ -209,7 +209,7 @@ section[data-role=chat] > div[data-role=message] > div[data-role=context] > div 
  * 특수요소별 기본속성을 정의힌다.
  */
 *[data-role=photo] {cursor:pointer !important;}
-*[data-role=nickname] {cursor:pointer !important;}
+*[data-role=nickname] > label {cursor:pointer !important;}
 i[data-role=file] {display:block; background-image:url(../images/file/etc.png); background-size:contain; background-repeat:no-repeat; background-position:50% 50%;}
 i[data-role=file][data-type=document] {background-image:url(../images/file/document.png);}
 i[data-role=file][data-type=image] {background-image:url(../images/file/image.png);}
