@@ -324,8 +324,6 @@ Minitalk.user = {
 			e.stopImmediatePropagation();
 		});
 		
-		var separator = true;
-		
 		var $menus = $("<ul>").attr("data-role","usermenus");
 		$menus.data("user",user);
 		
@@ -358,8 +356,6 @@ Minitalk.user = {
 		
 		$menus.height($menus.height());
 		
-		var separator = true;
-		
 		Minitalk.user.getUser(user.nickname,function(result) {
 			var $menus = $("ul[data-role=usermenus]");
 			if ($menus.length == 0) return;
@@ -373,6 +369,8 @@ Minitalk.user = {
 				user.status = "offline";
 			}
 			$("i",$name).removeClass("mi mi-loading").addClass("status " + user.status);
+			
+			var separator = true;
 			
 			for (var index in Minitalk.usermenus) {
 				var menu = Minitalk.usermenus[index];
