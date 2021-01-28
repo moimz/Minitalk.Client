@@ -1183,7 +1183,10 @@ Minitalk.ui = {
 		var $error = $("<div>").attr("data-role","error");
 		var $errorbox = $("<section>");
 		$errorbox.append($("<h2>").html(Minitalk.getText("text/error")));
-		$errorbox.append($("<p>").html(Minitalk.getText("error/"+code)));
+		
+		var message = Minitalk.getText("error/"+code);
+		if (message == "error/"+code) message = code;
+		$errorbox.append($("<p>").html(message));
 		
 		switch (code) {
 			case "NOT_FOUND_ONLINE_SERVER" :
