@@ -273,17 +273,42 @@ Minitalk.protocol = {
 		Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/called").replace("{nickname}",data.nickname));
 	},
 	/**
+	 * 인증코드를 수신하였을 경우
+	 *
+	 * @param string authorization 인증코드
+	 */
+	authorization:function(authorization) {
+		Minitalk.ui.printSystemMessage("system",authorization);
+		Minitalk.storage("authorization",authorization);
+		
+		/**
+		 * 서버에 인증코드를 전송하여 권한변경요청을 한다.
+		 */
+		Minitalk.socket.send("authorization",authorization);
+	},
+	/**
+	 * 권한을 수신하였을 경우
+	 *
+	 * @param object permission
+	 */
+	permission:function(permission) {
+		Minitalk.socket.permission = permission;
+	},
+	/**
 	 * 채널관리자로 로그인한 경우
 	 *
-	 * @param int data.level 변경된 레벨정보
-	 * @param object data.permission 변경된 권한정보
+	 * @param int data.level 변경된 레벨
 	 * @param string data.authorization 변경된 인증정보
 	 */
 	login:function(data) {
-		Minitalk.user.me.level = 9;
-		Minitalk.socket.permission = data.permission;
+		Minitalk.user.me.level = data.level;
 		Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/login"));
 		Minitalk.storage("authorization",data.authorization);
+		
+		/**
+		 * 서버에 인증코드를 전송하여 권한변경요청을 한다.
+		 */
+		Minitalk.socket.send("authorization",data.authorization);
 		
 		/**
 		 * 유저목록을 갱신한다.
@@ -293,26 +318,23 @@ Minitalk.protocol = {
 	/**
 	 * 채널관리자에서 로그아웃한 경우
 	 *
-	 * @param int data.level 변경된 레벨정보
-	 * @param object data.permission 변경된 권한정보
+	 * @param int data.level 변경된 레벨
 	 * @param string data.authorization 변경된 인증정보
 	 */
 	logout:function(data) {
 		Minitalk.user.me.level = data.level;
-		Minitalk.socket.permission = data.permission;
 		Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/logout"));
 		Minitalk.storage("authorization",data.authorization);
+		
+		/**
+		 * 서버에 인증코드를 전송하여 권한변경요청을 한다.
+		 */
+		Minitalk.socket.send("authorization",data.authorization);
 		
 		/**
 		 * 유저목록을 갱신한다.
 		 */
 		Minitalk.user.reload();
-	},
-	/**
-	 * 접속코드를 수신하였을 경우
-	 */
-	authorization:function(authorization) {
-		Minitalk.storage("authorization",authorization);
 	},
 	/**
 	 * 아이피를 확인한다.

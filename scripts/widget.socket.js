@@ -167,7 +167,7 @@ Minitalk.socket = {
 		/**
 		 * 특수프로토콜을 제외한 나머지 프로토콜을 전송하려고 하는 경우 전송권한이 있는지 확인한다.
 		 */
-		if ($.inArray(protocol,["join","logs","users","login"]) === -1 && Minitalk.socket.getPermission("send") === false) {
+		if ($.inArray(protocol,["join","logs","users","login","authorization","permission"]) === -1 && Minitalk.socket.getPermission("send") === false) {
 			Minitalk.ui.printErrorCode(403);
 			return;
 		}
