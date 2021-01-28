@@ -278,7 +278,6 @@ Minitalk.protocol = {
 	 * @param string authorization 인증코드
 	 */
 	authorization:function(authorization) {
-		Minitalk.ui.printSystemMessage("system",authorization);
 		Minitalk.storage("authorization",authorization);
 		
 		/**
@@ -367,6 +366,40 @@ Minitalk.protocol = {
 	 */
 	banned:function(data) {
 		Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/banned").replace("{FROM}",data.from.nickname).replace("{TO}",data.to.nickname));
+	},
+	/**
+	 * 관리자권한을 부여했을 경우
+	 *
+	 * @param object data.from 관리자권한을 부여한 유저
+	 * @param object data.to 관리자권한을 받은 유저
+	 */
+	op:function(data) {
+		Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/op").replace("{FROM}",data.from.nickname).replace("{TO}",data.to.nickname));
+		Minitalk.user.update(data.to,data.to);
+		
+		/**
+		 * 본인인 경우
+		 */
+		if (data.to.nickname == Minitalk.user.me.nickname) {
+			Minitalk.user.me.level = data.to.level;
+		}
+	},
+	/**
+	 * 관리자권한을 부여했을 경우
+	 *
+	 * @param object data.from 관리자권한을 부여한 유저
+	 * @param object data.to 관리자권한을 받은 유저
+	 */
+	deop:function(data) {
+		Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/deop").replace("{FROM}",data.from.nickname).replace("{TO}",data.to.nickname));
+		Minitalk.user.update(data.to,data.to);
+		
+		/**
+		 * 본인인 경우
+		 */
+		if (data.to.nickname == Minitalk.user.me.nickname) {
+			Minitalk.user.me.level = data.to.level;
+		}
 	},
 	/**
 	 * 에러코드를 수신하였을 경우
