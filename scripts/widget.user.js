@@ -525,6 +525,11 @@ Minitalk.user = {
 						 */
 						if ($.inArray(menu,["banip","op","deop"]) !== -1 && Minitalk.box.isBox() == true) continue;
 						
+						/**
+						 * 박스생성권한이 없을경우 숨겨야하는 메뉴를 표시하지 않는다.
+						 */
+						if ($.inArray(menu,["create","invite"]) !== -1 && Minitalk.socket.getPermission("box") == false) continue;
+						
 						separator = false;
 						
 						var $menu = $("<li>");
@@ -604,6 +609,10 @@ Minitalk.user = {
 					Minitalk.ui.createConfigs();
 					break;
 					
+				case "create" :
+					Minitalk.box.create();
+					break;
+					
 				case "whisper" :
 					Minitalk.ui.setInputVal("/w " + user.nickname + " ");
 					$menus.remove();
@@ -613,7 +622,7 @@ Minitalk.user = {
 					var $icon = $("i",$menu).removeClass().addClass("mi mi-loading");
 					Minitalk.user.call(user.nickname,function(result) {
 						if (result.success == true) {
-							Minitalk.ui.notify("call","action",Minitalk.getText("action/call").replace("{nickname}",user.nickname));
+							Minitalk.ui.notify("call","action",Minitalk.getText("action/call").replace("{NICKNAME}",user.nickname));
 						}
 						
 						$menus.remove();
@@ -621,11 +630,7 @@ Minitalk.user = {
 					break;
 					
 				case "invite" :
-					Minitalk.socket.sendInvite(user.nickname);
-					break;
-					
-				case "create" :
-					Minitalk.socket.sendCreate();
+					Minitalk.box.invite(user.nickname);
 					break;
 					
 				case "showip" :
