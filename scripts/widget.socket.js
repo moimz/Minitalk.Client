@@ -305,7 +305,6 @@ Minitalk.socket = {
 		var data = data ? data : null;
 		var to = to ? to : "*";
 		
-		console.log("protocol",{protocol:protocol,data:data,to:to});
 		Minitalk.socket.send("protocol",{protocol:protocol,data:data,to:to});
 	}
 };
