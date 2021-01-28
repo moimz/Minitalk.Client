@@ -290,6 +290,7 @@ label[data-role=user] > span > i.admin {float:right; color:#666; font-size:12px;
 label[data-role=user] > span > i.admin:before {content:"(";}
 label[data-role=user] > span > i.admin:after {content:")";}
 
+
 /**
  * 유저메뉴 기본속성을 정의한다.
  */
