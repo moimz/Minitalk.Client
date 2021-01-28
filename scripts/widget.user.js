@@ -435,8 +435,6 @@ Minitalk.user = {
 			e.stopImmediatePropagation();
 		});
 		
-		var separator = true;
-		
 		var $menus = $("<ul>").attr("data-role","usermenus");
 		$menus.data("user",user);
 		
@@ -482,6 +480,8 @@ Minitalk.user = {
 				user.status = "offline";
 			}
 			$("i",$name).removeClass("mi mi-loading").addClass("status " + user.status);
+			
+			var separator = true;
 			
 			for (var index in Minitalk.usermenus) {
 				var menu = Minitalk.usermenus[index];
