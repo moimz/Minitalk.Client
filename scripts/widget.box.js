@@ -104,6 +104,8 @@ Minitalk.box = {
 						return;
 					}
 					
+					$button.status("loading");
+					
 					var title = $.trim($("input[name=title]",$dom).val());
 					var type = $.trim($("select[name=type]",$dom).val());
 					var password = $.trim($("input[name=password]",$dom).val());

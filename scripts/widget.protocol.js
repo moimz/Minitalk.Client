@@ -277,8 +277,8 @@ Minitalk.protocol = {
 	 */
 	call:function(data) {
 		Minitalk.ui.playSound("call");
-		Minitalk.ui.push(Minitalk.getText("action/called").replace("{nickname}",data.nickname));
-		Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/called").replace("{nickname}",data.nickname));
+		Minitalk.ui.push(Minitalk.getText("action/called").replace("{NICKNAME}",data.nickname));
+		Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/called").replace("{NICKNAME}",data.nickname));
 	},
 	/**
 	 * 인증코드를 수신하였을 경우
