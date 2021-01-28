@@ -12,6 +12,9 @@
 Minitalk.box = {
 	connection:null,
 	types:{talk:{title:Minitalk.getText("box/talk"),width:400,height:600}},
+	/**
+	 * 박스에 접속하였을 경우 박스를 초기화한다.
+	 */
 	init:function() {
 		Minitalk.box.connection = box;
 		
@@ -151,14 +154,6 @@ Minitalk.box = {
 	 */
 	getType:function() {
 		return Minitalk.box.isBox() === true ? Minitalk.box.connection.type : null;
-	},
-	/**
-	 * 현재 접속중인 박스데이터 가져온다.
-	 *
-	 * @return object data
-	 */
-	getData:function() {
-		return Minitalk.box.isBox() === true ? Minitalk.box.connection.data : null;
 	},
 	/**
 	 * 박스에 참여한다.
