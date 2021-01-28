@@ -517,7 +517,11 @@ Minitalk.user = {
 						$menus.remove();
 					});
 					break;
-				
+					
+				case "invite" :
+					Minitalk.box.invite(user.nickname);
+					break;
+					
 				case "showip" :
 					Minitalk.socket.send("showip",user.nickname);
 					break;

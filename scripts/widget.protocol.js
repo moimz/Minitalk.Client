@@ -273,12 +273,21 @@ Minitalk.protocol = {
 	/**
 	 * 누군가가 호출하였을 경우
 	 *
-	 * @param object data 호출한사람의 유저객체
+	 * @param object from 호출한사람의 유저객체
 	 */
-	call:function(data) {
+	call:function(from) {
 		Minitalk.ui.playSound("call");
-		Minitalk.ui.push(Minitalk.getText("action/called").replace("{NICKNAME}",data.nickname));
-		Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/called").replace("{NICKNAME}",data.nickname));
+		Minitalk.ui.push(Minitalk.getText("action/called").replace("{NICKNAME}",from.nickname));
+		Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/called").replace("{NICKNAME}",from.nickname));
+	},
+	/**
+	 * 개인박스에 초대받았을 경우
+	 *
+	 * @param object data.box 박스정보
+	 * @param object data.from 초대한 유저객체
+	 */
+	invited:function(data) {
+		Minitalk.box.invited(data.box,data.from);
 	},
 	/**
 	 * 인증코드를 수신하였을 경우
@@ -476,6 +485,12 @@ Minitalk.protocol = {
 						Minitalk.socket.sendConnection();
 						Minitalk.ui.closeWindow();
 					});
+					break;
+					
+				case 899 :
+					Minitalk.socket.reconnectable = false;
+					Minitalk.ui.printErrorCode(code);
+					Minitalk.socket.disconnect();
 					break;
 					
 				default :

@@ -240,6 +240,141 @@ Minitalk.box = {
 		}
 	},
 	/**
+	 * 나의 박스에 초대한다.
+	 *
+	 * @param string nickname 초대할 유저닉네임
+	 * @param string id 박스아이디
+	 */
+	invite:function(nickname) {
+		if (Minitalk.socket.isConnected() === false) callback({success:false,error:"NOT_CONNECTED"});
+	
+		$.get({
+			url:Minitalk.socket.connection.domain+"/myboxes",
+			dataType:"json",
+			headers:{authorization:"TOKEN " + Minitalk.socket.token},
+			success:function(result) {
+				if (result.success == true) {
+					if (result.boxes.length == 0) {
+						Minitalk.ui.printError("NOT_FOUND_MYBOX");
+						return;
+					}
+					
+					/**
+					 * 박스 초대 HTML 을 정의한다.
+					 */
+					var html = [
+						'<section data-role="invite">',
+							'<h2>' + Minitalk.getText("box/invite") + '</h2>',
+							'<button data-action="close"></button>',
+							'<div data-role="content">',
+								'<label>',
+									'<input type="text" name="nickname" placeholder="' + Minitalk.getText("box/invite_nickname") + '" value="' + nickname + '">',
+									'<p>' + Minitalk.getText("box/invite_nickname_help") + '</p>',
+								'</label>',
+								'<label data-role="select">',
+									'<select name="id"></select>',
+									'<p>' + Minitalk.getText("box/invite_id_help") + '</p>',
+								'</label>',
+								'<hr>',
+								'<label class="checkbox">',
+									'<input type="checkbox" name="password" value="TRUE">' + Minitalk.getText("box/invite_password"),
+									'<p>' + Minitalk.getText("box/invite_password_help") + '</p>',
+								'</label>',
+							'</div>',
+							'<div data-role="button">',
+								'<ul>',
+									'<li><button type="button" data-action="cancel">' + Minitalk.getText("button/cancel") + '</button></li>',
+									'<li><button type="button" data-action="confirm">' + Minitalk.getText("button/confirm") + '</button></li>',
+								'</ul>',
+							'</div>',
+						'</section>'
+					];
+					html = html.join("");
+					
+					Minitalk.ui.createWindow(html,400,function($dom) {
+						for (var i=0, loop=result.boxes.length;i<loop;i++) {
+							$("select[name=id]",$dom).append($("<option>").attr("value",result.boxes[i].id).data("box",result.boxes[i]).html(result.boxes[i].title));
+						}
+						
+						$("button[data-action]",$dom).on("click",function() {
+							var $button = $(this);
+							var action = $button.attr("data-action");
+							
+							if (action == "confirm") {
+								if (Minitalk.socket.isConnected() === false) {
+									Minitalk.ui.printError("NOT_CONNECTED");
+									return;
+								}
+								
+								$button.status("loading");
+								
+								var id = $("select[name=id]",$dom).val();
+								var nickname = $.trim($("input[name=nickname]",$dom).val());
+								var box = $("select[name=id] > option:selected",$dom).data("box");
+								box.password = $("input[name=password]",$dom).checked() == true ? box.password : null;
+								
+								if (Minitalk.fireEvent("beforeInvite",[box,nickname,Minitalk.user.me]) === false) return;
+								
+								$.post({
+									url:Minitalk.socket.connection.domain+"/invite/" + id,
+									dataType:"json",
+									headers:{authorization:"TOKEN " + Minitalk.socket.token},
+									data:{nickname:nickname,box:JSON.stringify(box)},
+									success:function(result) {
+										if (result.success == true) {
+											Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/invite").replace("{NICKNAME}",nickname).replace("{BOX}",box.title));
+											Minitalk.ui.closeWindow(true);
+											
+											Minitalk.fireEvent("invite",[box,nickname,Minitalk.user.me]);
+										}
+									},
+									error:function(result) {
+										if (result.status == 403 || result.status == 404) {
+											Minitalk.ui.printError(Minitalk.getErrorCode(result.status));
+										} else {
+											Minitalk.ui.printError("CONNECT_ERROR");
+										}
+									}
+								});
+							} else {
+								Minitalk.ui.closeWindow();
+							}
+						});
+					});
+				}
+			},
+			error:function(result) {
+				if (result.status == 403 || result.status == 404) {
+					Minitalk.ui.printErrorCode(result.status);
+				} else {
+					callback({success:false,error:"CONNECT_ERROR"});
+				}
+			}
+		});
+	},
+	/**
+	 * 개인박스에 초대받았을 경우
+	 *
+	 * @param object box 박스정보
+	 * @param object from 초대자정보
+	 */
+	invited:function(box,from) {
+		if (Minitalk.fireEvent("beforeInvited",[box,from,Minitalk.user.me]) === false) return;
+		
+		Minitalk.ui.notify("invite-" + box.id,"action",Minitalk.getText("action/invited").replace("{FROM}",from.nickname).replace("{BOX}",box.title),false,false,box,function($notification) {
+			var box = $notification.data("data");
+			
+			if (confirm(Minitalk.getText("action/invited_confirm")) == true) {
+				Minitalk.box.join(box);
+			}
+			
+			Minitalk.ui.unnotify("invite-" + box.id,0);
+		});
+		
+		Minitalk.ui.playSound("query");
+		Minitalk.fireEvent("invited",[box,from,Minitalk.user.me]);
+	},
+	/**
 	 * 박스목록을 가져온다.
 	 *
 	 * @param int page 박스목록페이지번호
