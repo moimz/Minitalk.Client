@@ -409,6 +409,8 @@ Minitalk.protocol = {
 	},
 	/**
 	 * 에러코드를 수신하였을 경우
+	 *
+	 * @param int code 에러코드
 	 */
 	errorcode:function(code) {
 		var type = Math.floor(code / 100);

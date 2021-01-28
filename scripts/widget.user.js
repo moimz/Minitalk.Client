@@ -315,6 +315,15 @@ Minitalk.user = {
 		});
 	},
 	/**
+	 * 접속자 닉네임 또는 닉이미지를 가져온다.
+	 *
+	 * @param object user 유저객체
+	 * @param boolean is_nickcon 닉 이미지를 사용할지 여부 (기본값 : true)
+	 */
+	getNickname:function(user,is_nickcon) {
+		return user.nickname;
+	},
+	/**
 	 * 접속자목록을 가져온다.
 	 *
 	 * @param int page 접속자목록페이지번호
@@ -373,15 +382,6 @@ Minitalk.user = {
 				}
 			}
 		});
-	},
-	/**
-	 * 접속자 닉네임 또는 닉이미지를 가져온다.
-	 *
-	 * @param object user 유저객체
-	 * @param boolean is_nickcon 닉 이미지를 사용할지 여부 (기본값 : true)
-	 */
-	getNickname:function(user,is_nickcon) {
-		return user.nickname;
 	},
 	/**
 	 * 유저메뉴를 추가한다.
