@@ -410,6 +410,19 @@ Minitalk.protocol = {
 		}
 	},
 	/**
+	 * 사용자정의 프로토콜을 수신한다.
+	 *
+	 * @param data.protocol 프로토콜명
+	 * @param data.data 데이터
+	 * @param data.to 수신자
+	 * @param data.from 송신자
+	 */
+	protocol:function(data) {
+		if (Minitalk.protocols[data.protocol] !== undefined && typeof Minitalk.protocols[data.protocol] == "function") {
+			Minitalk.protocols[data.protocol](Minitalk,data.data,data.to,data.from);
+		}
+	},
+	/**
 	 * 에러코드를 수신하였을 경우
 	 *
 	 * @param int code 에러코드
