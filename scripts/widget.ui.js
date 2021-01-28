@@ -1679,7 +1679,7 @@ Minitalk.ui = {
 	/**
 	 * 시스템 메시지를 출력한다.
 	 *
-	 * @param string type 메시지타입 (system, error, notice, plugin)
+	 * @param string type 메시지타입 (system, error, notice, info, plugin)
 	 * @param string message 메시지
 	 */
 	printSystemMessage:function(type,message) {
@@ -2490,7 +2490,6 @@ Minitalk.ui = {
 	 * 사운드를 재생한다.
 	 *
 	 * @param string sound 사운드파일명
-	 * @todo 브라우저 정책에 따른 수정필요
 	 */
 	playSound:function(sound) {
 		if (Minitalk.configs("mute") === true) return;
