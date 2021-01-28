@@ -367,7 +367,7 @@ Minitalk.user = {
 			return;
 		}
 		
-		$.get({
+		$.post({
 			url:Minitalk.socket.connection.domain+"/call/" + nickname,
 			dataType:"json",
 			headers:{authorization:"TOKEN " + Minitalk.socket.token},
