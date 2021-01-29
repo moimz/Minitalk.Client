@@ -16,7 +16,9 @@ Minitalk.ui = {
 	 * 미니톡 채팅위젯 UI를 초기화한다.
 	 */
 	init:function(html) {
-		if (html === undefined) {
+		html = html ? html : null;
+		
+		if (html === null) {
 			/**
 			 * 미니톡 채팅위젯을 구성하기 위한 필수요소 DOM 을 정의한다.
 			 */
@@ -205,7 +207,7 @@ Minitalk.ui = {
 		/**
 		 * ESC 기본이벤트 처리
 		 */
-		$(document).on("esc",function() {
+		$(window).on("esc",function() {
 			Minitalk.ui.resetToggle();
 			Minitalk.ui.closeWindow(false);
 		});
