@@ -109,7 +109,7 @@ if (isMinitalkIncluded === undefined) {
 			for (var key in source) {
 				if (key == "minitalks") {
 					target[key] = {};
-				} else if (typeof source[key] == "object") {
+				} else if (typeof source[key] == "object" && source[key] !== null) {
 					target[key] = this.clone(source[key]);
 				} else {
 					target[key] = source[key];
