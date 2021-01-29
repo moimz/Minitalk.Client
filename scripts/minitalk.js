@@ -24,12 +24,7 @@ if (isMinitalkIncluded === undefined) {
 			/**
 			 * 초기설정값을 복제하여 저장한다.
 			 */
-			this.inits[minitalk.id] = {};
-			for (var key in minitalk) {
-				if (typeof minitalk[key] != "function") {
-					this.inits[minitalk.id][key] = minitalk[key];
-				}
-			}
+			this.inits[minitalk.id] = this.clone(minitalk);
 		},
 		get:function(id,isBox) {
 			var isBox = isBox === true ? true : false;
