@@ -1685,8 +1685,11 @@ Minitalk.ui = {
 					
 					Minitalk.ui.uploadFiles();
 				} else {
-					Minitalk.ui.printErrorCode(500);
-					Minitalk.ui.enable(true);
+					if (result.message) {
+						Minitalk.ui.printSystemMessage("error",result.message);
+					} else {
+						Minitalk.ui.printErrorCode(500);
+					}
 				}
 			});
 		} else {

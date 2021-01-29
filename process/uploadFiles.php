@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.0
- * @modified 2021. 1. 25.
+ * @modified 2021. 1. 29.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -113,17 +113,42 @@ if ($code != null) {
 		$results->success = false;
 		$results->message = $this->getErrorText('INVALID_HTTP_CONTENT_RANGE');
 	}
-	
-//	$results->success = true;
 } elseif ($drafts != null) {
 	$channel = Request('channel');
+	$channel = $this->getChannel($channel);
+	if ($channel == null) {
+		$results->success = false;
+		$results->message = $this->getErrorText('NOT_FOUND_CHANNEL');
+		return;
+	}
+	
 	$user = json_decode(Request('user'));
+	for ($i=0, $loop=count($drafts);$i<$loop;$i++) {
+		if ($channel->file_maxsize > 0 && $channel->file_maxsize * 1024 * 1024 < $drafts[$i]->size) {
+			$results->success = false;
+			$results->message = str_replace('{MAXSIZE}',$channel->file_maxsize,$this->getErrorText('NOT_ALLOWED_FILE_SIZE'));
+			return;
+		}
+	}
+	
 	for ($i=0, $loop=count($drafts);$i<$loop;$i++) {
 		$this->db()->setLockMethod('WRITE')->lock($this->table->attachment);
 		while (true) {
 			$hash = md5(json_encode($drafts[$i]).time().rand(10000,99999));
 			if ($this->db()->select($this->table->attachment)->where('hash',$hash)->has() === false) {
-				$insert = array('hash'=>$hash,'channel'=>$channel,'name'=>$drafts[$i]->name,'path'=>'temp/'.$hash,'size'=>$drafts[$i]->size,'type'=>'','mime'=>'','nickname'=>$user->nickname,'ip'=>GetClientIp(),'reg_date'=>time(),'exp_date'=>0);
+				$insert = array(
+					'hash'=>$hash,
+					'channel'=>$channel->channel,
+					'name'=>$drafts[$i]->name,
+					'path'=>'temp/'.$hash,
+					'size'=>$drafts[$i]->size,
+					'type'=>'',
+					'mime'=>'',
+					'nickname'=>$user->nickname,
+					'ip'=>GetClientIp(),
+					'reg_date'=>time(),
+					'exp_date'=>($channel->file_lifetime > 0 ? time() + $channel->file_lifetime * 60 * 60 * 24 : 0)
+				);
 				$this->db()->insert($this->table->attachment,$insert)->execute();
 				break;
 			}
