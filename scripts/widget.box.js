@@ -11,7 +11,7 @@
  */
 Minitalk.box = {
 	connection:null,
-	types:{talk:{title:Minitalk.getText("box/talk"),width:400,height:600}},
+	types:{talk:{title:Minitalk.getText("box/talk"),width:400,height:600,html:null}},
 	/**
 	 * 박스에 접속하였을 경우 박스를 초기화한다.
 	 */
@@ -21,20 +21,9 @@ Minitalk.box = {
 		$("body").html(MinitalkComponent.getLoaderHtml());
 		
 		/**
-		 * 기본 토크박스인 경우, 미니톡 기본 UI 요소를 구성하고, 플러그인 박스인 경우 해당 플러그인에서 UI 를 처리하도록 한다.
+		 * 박스 HTML 을 참고하여 UI 를 초기화한다.
 		 */
-		if (Minitalk.box.connection.type == "talk") {
-			Minitalk.ui.init();
-		} else {
-			var plugin = Minitalk.plugins[Minitalk.box.connection.type];
-			if (plugin === undefined) {
-				
-				return;
-			}
-			
-			var html = plugin.getBoxHtml();
-			Minitalk.ui.init(html);
-		}
+		Minitalk.ui.init(box.html);
 		
 		/**
 		 * 로딩 레이어를 제거한다.
@@ -125,6 +114,7 @@ Minitalk.box = {
 					box.type = type;
 					box.password = password.length == 0 ? null : password;
 					box.closemode = closemode;
+					box.html = Minitalk.box.types[type].html;
 					
 					Minitalk.box.open(box);
 				}
@@ -167,6 +157,7 @@ Minitalk.box = {
 		if (type == null) return;
 		
 		box.mode = "join";
+		box.html = type.html;
 		Minitalk.box.open(box);
 	},
 	/**
@@ -373,5 +364,17 @@ Minitalk.box = {
 		
 		Minitalk.ui.playSound("query");
 		Minitalk.fireEvent("invited",[box,from,Minitalk.user.me]);
+	},
+	/**
+	 * 박스의 형태를 추가한다.
+	 *
+	 * @param string type 타입
+	 * @param string title 타입명
+	 * @param int width 박스가로크기
+	 * @param int height 박스세로크기
+	 */
+	addType:function(type,title,width,height,html) {
+		html = html ? html : null;
+		Minitalk.box.types[type] = {title:title,width:width,height:height,html:html};
 	}
 };
