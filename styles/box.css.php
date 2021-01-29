@@ -36,10 +36,6 @@ if ($language == 'ko') {
 
 $css->add(__MINITALK_PATH__.'/styles/widget.css');
 
-if ($type == 'talk' && $templet !== null && is_file(__MINITALK_PATH__.'/templets/'.$templet.'/style.css') == true) {
-	$css->add(__MINITALK_PATH__.'/templets/'.$templet.'/style.css');
-}
-
 /**
  * 플러그인의 스타일시트를 불러온다.
  */
@@ -55,12 +51,12 @@ while ($pluginName = @readdir($pluginsPath)) {
 @closedir($pluginsPath);
 
 /**
- * 박스 DOM 객체의 스타일을 정의한 스타일시트가 있다면 불러온다.
+ * 박스 DOM 객체의 스타일을 정의한 스타일시트가 있다면 불러오고 없다면, 기본 템플릿의 스타일시트를 불러온다.
  */
-if ($type != 'talk') {
-	if (is_file(__MINITALK_PATH__.'/plugins/'.$type.'/box.css') == true) {
-		$css->add(__MINITALK_PATH__.'/plugins/'.$type.'/box.css');
-	}
+if (is_file(__MINITALK_PATH__.'/plugins/'.$type.'/box.css') == true) {
+	$css->add(__MINITALK_PATH__.'/plugins/'.$type.'/box.css');
+} elseif ($templet !== null && is_file(__MINITALK_PATH__.'/templets/'.$templet.'/style.css') == true) {
+	$css->add(__MINITALK_PATH__.'/templets/'.$templet.'/style.css');
 }
 ?>
 /**

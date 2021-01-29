@@ -51,10 +51,24 @@ Minitalk.ui = {
 		}
 		
 		/**
-		 * 위젯 프레임을 정의하고, html DOM 요소를 추가한다.
+		 * HTML 에 $frame 이 정의되어 있다면, 해당 $frame 을 사용하고, 정의되어 있지 않은 경우 위젯 프레임을 정의하고, html DOM 요소를 추가한다.
 		 */
-		var $frame = $("<div>").attr("data-role","frame").attr("data-version","7");
-		$frame.append(html);
+		if ($("div[data-role=frame]",$(html)).length == 0) {
+			var $frame = $("<div>").attr("data-role","frame");
+			$frame.append(html);
+			
+			/**
+			 * 위젯 DOM 을 body 에 추가한다.
+			 */
+			$("body").append($frame);
+		} else {
+			/**
+			 * HTML 을 body 에 추가한다.
+			 */
+			$("body").append(html);
+			var $frame = $("div[data-role=frame]");
+		}
+		$frame.attr("data-version","7");
 		
 		/**
 		 * 헤더 DOM 객체를 확인한다.
@@ -103,11 +117,6 @@ Minitalk.ui = {
 		$frame.append('<audio data-type="call"><source src="' + Minitalk.getUrl() + '/sounds/call.mp3" type="audio/mpeg"></audio>');
 		$frame.append('<audio data-type="message"><source src="' + Minitalk.getUrl() + '/sounds/message.mp3" type="audio/mpeg"></audio>');
 		$frame.append('<audio data-type="query"><source src="' + Minitalk.getUrl() + '/sounds/query.mp3" type="audio/mpeg"></audio>');
-		
-		/**
-		 * 위젯 DOM 을 body 에 추가한다.
-		 */
-		$("body").append($frame);
 		
 		/**
 		 * 미니톡 UI DOM 출력완료 이벤트를 발생시킨다.
