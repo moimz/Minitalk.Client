@@ -105,7 +105,7 @@ if (isMinitalkIncluded === undefined) {
 		clone:function(source) {
 			if (source === undefined) source = this;
 			
-			var target = {};
+			var target = Array.isArray(source) == true ? [] : {};
 			for (var key in source) {
 				if (key == "minitalks") {
 					target[key] = {};
