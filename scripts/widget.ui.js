@@ -2091,6 +2091,7 @@ Minitalk.ui = {
 				
 				drafts.push(draft);
 			}
+			
 			$.send(Minitalk.getProcessUrl("uploadFiles"),{channel:Minitalk.channel,drafts:JSON.stringify(drafts),user:JSON.stringify(Minitalk.user.me)},function(result) {
 				if (result.success == true) {
 					$file.data("drafts",result.drafts);
@@ -2102,7 +2103,11 @@ Minitalk.ui = {
 					
 					Minitalk.ui.uploadFiles();
 				} else {
-					Minitalk.ui.printErrorCode(500);
+					if (result.message) {
+						Minitalk.ui.printSystemMessage("error",result.message);
+					} else {
+						Minitalk.ui.printErrorCode(500);
+					}
 					Minitalk.ui.enable(true);
 				}
 			});
