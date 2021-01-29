@@ -803,6 +803,50 @@ class Minitalk {
 	}
 	
 	/**
+	 * 첨부파일 관련 에러메시지를 출력한다.
+	 *
+	 * @param string $mode 파일모드
+	 */
+	function printFileError($mode) {
+		if ($mode == 'view') {
+			header('Content-Type: image/png');
+			readfile(__MINITALK_PATH__.'/images/noimage.png');
+			exit;
+		} else {
+			$languages = GetDefaultLanguages();
+			foreach ($languages as $language) {
+				if (is_file(__MINITALK_PATH__.'/languages/'.$language.'.json') == true) break;
+			}
+			$this->setLanguage($language);
+			
+			$html = array(
+				'<!DOCTYPE HTML>',
+				'<html>',
+				'<head>',
+				'	<meta charset="utf-8">',
+					'<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">',
+					'<title>ERROR</title>',
+					'<link rel="stylesheet" href="'.__MINITALK_DIR__.'/styles/error.css" type="text/css">',
+					'<link rel="stylesheet" href="'.__MINITALK_DIR__.'/styles/font.css.php?language=ko&font=moimz,OpenSans,NanumSquare&default=NanumSquare&v=1569068468" type="text/css">',
+				'</head>',
+				'<body>',
+				'	<section class="errorbox">',
+				'		<div>',
+				'			<div>',
+				'				<h1><i class="mi mi-attention-o"></i> ERROR</h1>',
+				'				<p>'.$this->getErrorText('FILE_EXPIRED').'</p>',
+				'			</div>',
+				'		</div>',
+				'	</section>',
+				'</body>',
+				'</html>',
+			);
+			
+			exit(implode(PHP_EOL,$html));
+		}
+	}
+	
+	/**
 	 * 미니톡 클라이언트에서 처리해야하는 요청이 들어왔을 경우 처리하여 결과를 반환한다.
 	 * 소스코드 관리를 편하게 하기 위해 각 요쳥별로 별도의 PHP 파일로 관리한다.
 	 * 작업코드가 '@' 로 시작할 경우 미니톡 클라이언트 관리자를 위한 작업으로 관리자 권한이 필요하다.
