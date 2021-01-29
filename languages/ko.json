@@ -196,6 +196,7 @@
 			"category":"카테고리",
 			"channel":"채널",
 			"history":"대화기록",
+			"attachment":"파일",
 			"banip":"차단IP",
 			"broadcast":"브로드캐스트"
 		},
@@ -325,6 +326,24 @@
 			"channel":"채널명",
 			"nickname":"닉네임/아이피",
 			"keyword":"대화내용"
+		},
+		"attachment":{
+			"grid_help":"더블클릭 : 파일다운로드 / 마우스우클릭 : 상세메뉴",
+			"delete_selected":"선택된 파일삭제",
+			"delete":"파일삭제",
+			"delete_expired":"만료된 파일삭제",
+			"delete_confirm":"선택된 파일을 삭제하시겠습니까?",
+			"delete_expired_confirm":"만료일이 지난 파일을 전체 삭제하시겠습니까?",
+			"columns":{
+				"name":"파일명",
+				"channel":"첨부된 채널",
+				"nickname":"유저닉네임",
+				"ip":"아이피",
+				"size":"파일크기",
+				"path":"실제경로",
+				"reg_date":"첨부일시",
+				"exp_date":"만료일시"
+			}
 		},
 		"banip":{
 			"add":"차단IP추가",
