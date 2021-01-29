@@ -789,6 +789,50 @@ var Admin = {
 		}
 	},
 	/**
+	 * 파일
+	 */
+	attachment:{
+		delete:function() {
+			var selected = Ext.getCmp("MinitalkPanel-attachment").getSelectionModel().getSelection();
+			if (selected.length == 0) {
+				Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("NOT_SELECTED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+				return;
+			}
+			
+			var hashes = [];
+			for (var i=0, loop=selected.length;i<loop;i++) {
+				hashes.push(selected[i].get("hash"));
+			}
+			
+			Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("attachment/delete_confirm"),buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
+				if (button == "ok") {
+					Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/wait"));
+					$.send(Minitalk.getProcessUrl("@deleteAttachment"),{hashes:JSON.stringify(hashes)},function(result) {
+						if (result.success == true) {
+							Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
+								Ext.getCmp("MinitalkPanel-attachment").getStore().reload();
+							}});
+						}
+					});
+				}
+			}});
+		},
+		expired:function() {
+			Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("attachment/delete_expired_confirm"),buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
+				if (button == "ok") {
+					Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/wait"));
+					$.send(Minitalk.getProcessUrl("@deleteAttachment"),{mode:"expired"},function(result) {
+						if (result.success == true) {
+							Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
+								Ext.getCmp("MinitalkPanel-attachment").getStore().reload();
+							}});
+						}
+					});
+				}
+			}});
+		}
+	},
+	/**
 	 * 차단IP
 	 */
 	banip:{
