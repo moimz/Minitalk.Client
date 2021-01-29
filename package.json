@@ -285,6 +285,18 @@
 					"default":0,
 					"comment":"파일전송 권한"
 				},
+				"file_maxsize":{
+					"type":"int",
+					"length":11,
+					"default":20,
+					"comment":"파일용량제한(MB)"
+				},
+				"file_lifetime":{
+					"type":"int",
+					"length":11,
+					"default":7,
+					"comment":"파일만료(일)"
+				},
 				"font_limit":{
 					"type":"int",
 					"length":11,

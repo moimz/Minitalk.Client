@@ -443,7 +443,6 @@ Minitalk.ui = {
 				if ($.inArray(tool,["bold","italic","underline","color"]) > -1 && Minitalk.socket.getPermission("font") !== true) continue;
 				if ($.inArray(tool,["file"]) > -1 && Minitalk.socket.getPermission("file") == false) continue;
 				
-				console.log("file",Minitalk.socket.getPermission("file"));
 				/**
 				 * 구분자일 경우
 				 */
