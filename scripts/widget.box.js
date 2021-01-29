@@ -11,7 +11,7 @@
  */
 Minitalk.box = {
 	connection:null,
-	types:{talk:{title:Minitalk.getText("box/talk"),width:400,height:600}},
+	types:{talk:{title:Minitalk.getText("box/talk"),width:400,height:600,html:null}},
 	/**
 	 * 박스에 접속하였을 경우 박스를 초기화한다.
 	 */
