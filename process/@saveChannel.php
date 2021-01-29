@@ -28,7 +28,7 @@ $file_maxsize = Request('file_maxsize') ? Request('file_maxsize') : 0;
 $file_lifetime = Request('file_lifetime') ? Request('file_lifetime') : 0;
 $font_limit = Request('font_limit') ? Request('font_limit') : 0;
 $user_limit = Request('use_user_tab') ? (Request('user_limit') ? Request('user_limit') : 0) : -1;
-$box_limit = Request('use_box_tab') && Request('box_limit') ? Request('box_limit') : -1;
+$box_limit = Request('use_box_tab') ? Request('box_limit') : -1;
 
 $check = $this->db()->select($this->table->channel)->where('channel',$channel);
 if ($oChannel) $check->where('channel',$oChannel,'!=');
