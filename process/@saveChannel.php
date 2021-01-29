@@ -24,6 +24,8 @@ $max_user = Request('max_user') && is_numeric(Request('max_user')) == true ? Req
 $guest_name = Request('guest_name') ? Request('guest_name') : $errors['guest_name'] = $this->getErrorText('REQUIRED');
 $send_limit = Request('send_limit') ? Request('send_limit') : 0;
 $file_limit = Request('file_limit') ? Request('file_limit') : 0;
+$file_maxsize = Request('file_maxsize') ? Request('file_maxsize') : 0;
+$file_lifetime = Request('file_lifetime') ? Request('file_lifetime') : 0;
 $font_limit = Request('font_limit') ? Request('font_limit') : 0;
 $user_limit = Request('use_user_tab') ? (Request('user_limit') ? Request('user_limit') : 0) : -1;
 $box_limit = Request('use_box_tab') && Request('box_limit') ? Request('box_limit') : -1;
@@ -46,6 +48,8 @@ if (count($errors) == 0) {
 	$insert['guest_name'] = $guest_name;
 	$insert['send_limit'] = $send_limit;
 	$insert['file_limit'] = $file_limit;
+	$insert['file_maxsize'] = $file_maxsize;
+	$insert['file_lifetime'] = $file_lifetime;
 	$insert['font_limit'] = $font_limit;
 	$insert['user_limit'] = $user_limit;
 	$insert['box_limit'] = $box_limit;

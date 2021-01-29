@@ -576,6 +576,40 @@ var Admin = {
 												flex:1
 											})
 										]
+									}),
+									new Ext.form.FieldContainer({
+										fieldLabel:Admin.getText("channel/form/file_maxsize"),
+										layout:"hbox",
+										items:[
+											new Ext.form.NumberField({
+												name:"file_maxsize",
+												value:20,
+												width:100
+											}),
+											new Ext.form.DisplayField({
+												value:Admin.getText("channel/form/file_maxsize_unit"),
+												style:{marginLeft:"5px"},
+												flex:1
+											})
+										],
+										afterBodyEl:'<div class="x-form-help">' + Admin.getText("channel/form/file_maxsize_help") + '</div>'
+									}),
+									new Ext.form.FieldContainer({
+										fieldLabel:Admin.getText("channel/form/file_lifetime"),
+										layout:"hbox",
+										items:[
+											new Ext.form.NumberField({
+												name:"file_lifetime",
+												value:20,
+												width:100
+											}),
+											new Ext.form.DisplayField({
+												value:Admin.getText("channel/form/file_lifetime_unit"),
+												style:{marginLeft:"5px"},
+												flex:1
+											})
+										],
+										afterBodyEl:'<div class="x-form-help">' + Admin.getText("channel/form/file_lifetime_help") + '</div>'
 									})
 								]
 							}),
@@ -665,7 +699,7 @@ var Admin = {
 											fields:["display","value"],
 											data:(function() {
 												var datas = [];
-												for (var i=1;i<10;i++) {
+												for (var i=0;i<10;i++) {
 													datas.push([Minitalk.getText("level/"+i),i]);
 												}
 												
