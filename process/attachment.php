@@ -21,9 +21,8 @@ if (count($extras) != 3) {
 $mode = $extras[0];
 $hash = $extras[1];
 $file = $this->db()->select($this->table->attachment)->where('hash',$hash)->getOne();
-if ($file == null || is_file($this->getAttachmentPath().'/'.$file->path) == false) {
-	header("HTTP/1.1 404 Not Found");
-	exit;
+if ($file == null || ($file->exp_date > 0 && $file->exp_date < time()) || is_file($this->getAttachmentPath().'/'.$file->path) == false) {
+	$this->printFileError($mode);
 }
 
 session_write_close();

@@ -1543,7 +1543,7 @@ Minitalk.ui = {
 			case "file" :
 				var $data = $("<div>").attr("data-role","file");
 				
-				var $link = $("<a>").attr("href",message.data.download);
+				var $link = $("<a>").attr("href",message.data.download).attr("target","_blank");
 				if (message.data.type == "image") {
 					var $image = $("<div>").attr("data-role","image");
 					var $background = $("<div>").css("backgroundImage","url(" + message.data.view + ")");

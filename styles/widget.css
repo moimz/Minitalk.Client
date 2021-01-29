@@ -197,7 +197,7 @@ div[data-role=error] > div > section.textonly {padding-bottom:15px;}
  */
 section[data-role=chat] > div[data-role=message] {user-select:auto; -webkit-user-select:auto; -moz-user-select:auto; -ms-user-select:auto;}
 section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=file] > a {display:block;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=file] > a > div[data-role=image] > div {width:100%; height:0; overflow:hidden; background-image:no-repeat; background-size:cover; background-position:50% 50%;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=file] > a > div[data-role=image] > div {width:100%; height:0; overflow:hidden; background-image:no-repeat; background-size:cover; background-position:50% 50%; background-color:#f8f8f8;}
 section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > a {display:block;}
 section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > div[data-role=video] > div {position:relative; width:100%; height:0; overflow:hidden;}
 section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > div[data-role=video] > div > div {position:absolute; top:0; left:0; border:0; width:100%; height:100%;}
