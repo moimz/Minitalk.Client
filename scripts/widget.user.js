@@ -194,11 +194,7 @@ Minitalk.user = {
 				callback(result);
 			},
 			error:function(result) {
-				if (result.status == 403 || result.status == 404) {
-					Minitalk.ui.printErrorCode(result.status);
-				} else {
-					callback({success:false,error:"CONNECT_ERROR"});
-				}
+				callback({success:false,error:"CONNECT_ERROR"});
 			}
 		});
 	},
