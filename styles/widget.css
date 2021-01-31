@@ -160,23 +160,8 @@ section[data-role] > div[data-role=button] > ul > li > button[data-action=confir
 div[data-role=window] {width:100%; height:calc(100% - 74px); overflow-y:auto; margin:40px 0px 34px 0px; box-sizing:border-box;}
 div[data-role=window] section[data-role] > h2 {display:block;}
 div[data-role=window] section[data-role] > button[data-action=close] {display:block;}
-
 div[data-role=window] section[data-role] > div[data-role=content] {padding:10px; height:auto; box-sizing:border-box;}
-div[data-role=window] section[data-role] > div[data-role=content] > h4 {font-size:14px; margin:5px 0px; height:20px; line-height:20px;}
-div[data-role=window] section[data-role] > div[data-role=content] > label {display:block; min-height:18px; line-height:18px; font-size:12px; margin:5px 0px;}
-div[data-role=window] section[data-role] > div[data-role=content] > label.checkbox {cursor:pointer; padding-left:20px;}
-div[data-role=window] section[data-role] > div[data-role=content] > label > input {display:block; width:100%; height:30px; box-sizing:border-box; border:1px solid #ccc; padding:5px; line-height:18px; font-size:12px;}
-div[data-role=window] section[data-role] > div[data-role=content] > label > select {display:block; width:100%; height:30px; box-sizing:border-box; border:1px solid #ccc; padding:5px; line-height:18px; font-size:12px;}
-div[data-role=window] section[data-role] > div[data-role=content] > label > input[type=checkbox] {width:14px; height:14px; position:relative; vertical-align:middle; margin:2px 0px 2px -18px; float:left; font-size:12px; border:0;}
-div[data-role=window] section[data-role] > div[data-role=content] > label > input[type=checkbox]:after {width:14px; height:14px; display:block; content:" "; position:absolute; top:0; left:0; box-sizing:border-box; border:1px solid #ccc; z-index:10; background:#fff;}
-div[data-role=window] section[data-role] > div[data-role=content] > label > input[type=checkbox]:checked:after {font-family:moimz; content:"\EB10"; text-align:center; line-height:12px; border-color:#2196F3; background:#2196F3; color:#fff;} 
-div[data-role=window] section[data-role] > div[data-role=content] > label > p {color:#666; font-size:12px; padding-top:5px;}
-div[data-role=window] section[data-role] > div[data-role=content] > hr {margin:10px 0px; border:0; border-top:1px solid #ccc;}
-div[data-role=window] section[data-role] > div[data-role=button] {display:block; width:100%; height:34px; position:fixed; left:0; bottom:0px;}
-div[data-role=window] section[data-role] > div[data-role=button] > ul {display:block; list-style:none; width:100%; height:34px;}
-div[data-role=window] section[data-role] > div[data-role=button] > ul > li {display:inline-block; width:50%; height:34px; vertical-align:middle;}
-div[data-role=window] section[data-role] > div[data-role=button] > ul > li > button {width:100%; height:34px; border:0; background:#F5F5F5; color:#666; font-size:12px; border-top:1px solid #d8d8d9; line-height:33px; cursor:pointer;}
-div[data-role=window] section[data-role] > div[data-role=button] > ul > li > button[data-action=confirm] {background:#2196F3; color:#fff; border-top-color:#2196F3;}
+div[data-role=window] section[data-role] > div[data-role=button] {position:fixed; left:0; bottom:0px;}
 
 
 /**
