@@ -277,7 +277,7 @@ Minitalk.user = {
 			$nickname.append($admin);
 		}
 		
-		$nickname.append(Minitalk.user.getNickname(user));
+		$nickname.append(Minitalk.user.getNickname(user,true));
 		$user.append($nickname);
 		
 		$user.on("click",function(e) {
@@ -314,10 +314,21 @@ Minitalk.user = {
 	 * 접속자 닉네임 또는 닉이미지를 가져온다.
 	 *
 	 * @param object user 유저객체
-	 * @param boolean is_nickcon 닉 이미지를 사용할지 여부 (기본값 : true)
+	 * @param boolean is_nickcon 닉 이미지를 사용할지 여부 (기본값 : false)
 	 */
 	getNickname:function(user,is_nickcon) {
-		return user.nickname;
+		var is_nickcon = is_nickcon === true ? true : false;
+		
+		if (is_nickcon === true && user.nickcon != null) {
+			var nickcon = user.nickcon.split(",");
+			for (var i=0, loop=nickcon.length;i<loop;i++) {
+				if (nickcon[i] == "{NICKNAME}") nickcon[i] = user.nickname;
+				else nickcon[i] = '<img src="' + nickcon[i] + '" alt="' + user.nickname + '" title="' + user.nickname + '">';
+			}
+			return nickcon.join("");
+		} else {
+			return user.nickname;
+		}
 	},
 	/**
 	 * 접속자목록을 가져온다.
