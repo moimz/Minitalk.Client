@@ -267,7 +267,9 @@ i[data-role=file][data-extension^=pdf] {background-image:url(../images/file/pdf.
 /**
  * 유저닉네임 기본속성을 정의한다.
  */
-label[data-role=user] {display:inline-block; max-width:100%; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; vertical-align:middle;}
+label[data-role=user] {display:inline-block; max-width:100%; height:20px; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; vertical-align:middle;}
+label[data-role=user] > span {display:inline-block; height:20px; line-height:20px;}
+label[data-role=user] > span > img {vertical-align:middle; display:inline-block; max-width:100px; max-height:20px; margin-right:5px;}
 label[data-role=user] > span > i.me {float:right; color:#666; font-size:12px; font-weight:normal; font-style:normal;}
 label[data-role=user] > span > i.me:before {content:"(";}
 label[data-role=user] > span > i.me:after {content:")";}
