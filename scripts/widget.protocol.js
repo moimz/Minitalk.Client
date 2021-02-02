@@ -430,6 +430,20 @@ Minitalk.protocol = {
 		}
 	},
 	/**
+	 * 브로드캐스트 메시지를 수신하였을 경우
+	 *
+	 * @param string data.message 메시지
+	 * @param string data.url 링크주소
+	 */
+	broadcast:function(data) {
+		var url = data.url ? data.url : "";
+		Minitalk.ui.notify("broadcast","warning",data.message,true,false,{url:url},function($notification) {
+			if ($notification.data("data").url) {
+				window.open($notification.data("data").url);
+			}
+		});
+	},
+	/**
 	 * 에러코드를 수신하였을 경우
 	 *
 	 * @param int code 에러코드
