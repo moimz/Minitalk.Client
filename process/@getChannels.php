@@ -17,8 +17,8 @@ $category2 = Request('category2') ? Request('category2') : 0;
 $keyword = Request('keyword') ? Request('keyword') : '';
 $start = Request('start');
 $limit = Request('limit');
-$sort = Request('sort');
-$dir = Request('dir');
+$sort = Request('sort') ? Request('sort') : 'channel';
+$dir = Request('dir') ? Request('dir') : 'asc';
 
 $lists = $this->db()->select($this->table->channel);
 if ($category1) $lists->where('category1',$category1);
@@ -33,6 +33,7 @@ for ($i=0, $loop=count($lists);$i<$loop;$i++) {
 	$lists[$i]->allow_nickname_edit = $lists[$i]->allow_nickname_edit == 'TRUE';
 	$lists[$i]->use_user_tab = $lists[$i]->user_limit > -1;
 	$lists[$i]->use_box_tab = $lists[$i]->box_limit > -1;
+	$lists[$i]->title_channel = $lists[$i]->title.'(#'.$lists[$i]->channel.')';
 }
 
 $results->success = true;
