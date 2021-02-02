@@ -2501,9 +2501,13 @@ Minitalk.ui = {
 			 * 메시지 전송후 이벤트 처리
 			 */
 			Minitalk.fireEvent("sendMessage",[message,Minitalk.user.me]);
+			
+			/**
+			 * 인풋폼 초기화
+			 */
+			Minitalk.ui.setInputVal("");
 		}
 		
-		Minitalk.ui.setInputVal("");
 		Minitalk.ui.autoScroll(true);
 	},
 	/**
