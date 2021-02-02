@@ -2484,6 +2484,8 @@ Minitalk.ui = {
 					} else if (result !== true) { // 플러그인에서 명령어 처리시 오류가 발생한 경우
 						return;
 					}
+					
+					Minitalk.ui.setInputVal("");
 					break;
 			}
 		} else {
