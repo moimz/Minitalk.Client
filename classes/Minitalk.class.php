@@ -847,6 +847,47 @@ class Minitalk {
 	}
 	
 	/**
+	 * 서버에 브로드캐스트 메시지를 전송한다.
+	 *
+	 * @param string $message 전송할 메시지
+	 * @param string $url 링크주소 (옵션)
+	 */
+	function sendBroadcast($message,$url='') {
+		$receiver = 0;
+		$servers = $this->db()->select($this->table->server)->where('type','SERVER')->get();
+		foreach ($servers as $server) {
+			$api = $this->callServerApi('POST',$server->domain,'broadcast/'.md5($server->domain),array('message'=>$message,'url'=>$url));
+			if ($api->success == true) {
+				$receiver+= $api->receiver;
+			}
+		}
+	
+		return $receiver;
+	}
+	
+	/**
+	 * 서버에 일반 메시지를 전송한다.
+	 *
+	 * @param string $channel 메시지를 전송할 채널
+	 * @param string $type 메시지타입
+	 * @param string $message 메시지
+	 * @param user $user 유저객체 array('nickname'=>'','nickcon'=>'','photo'=>'','extras'=>null,'level'=>0)
+	 * @param object $data 추가 데이터
+	 * @return object $message 전송한 메시지객체
+	 */
+	function sendMessage($channel,$type,$message,$user=array(),$data=null) {
+		$channel = $this->getChannel($channel);
+		$server = $this->getServer($channel->server);
+		
+		if ($server == null) return null;
+		if ($server->type == 'SERVER') {
+			$api = $this->callServerApi('POST',$server->domain,'message/'.md5($server->domain).'/'.$channel->channel,array('type'=>$type,'message'=>$message,'user'=>json_encode($user),'data'=>json_encode($data)));
+		}
+		
+		return $api;
+	}
+	
+	/**
 	 * 미니톡 클라이언트에서 처리해야하는 요청이 들어왔을 경우 처리하여 결과를 반환한다.
 	 * 소스코드 관리를 편하게 하기 위해 각 요쳥별로 별도의 PHP 파일로 관리한다.
 	 * 작업코드가 '@' 로 시작할 경우 미니톡 클라이언트 관리자를 위한 작업으로 관리자 권한이 필요하다.

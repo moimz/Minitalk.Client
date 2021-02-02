@@ -23,6 +23,9 @@ if ($keyword) $lists->where('message','%'.$keyword.'%','LIKE');
 $total = $lists->copy()->count();
 $lists = $lists->limit($start,$limit)->orderBy($sort,$dir)->get();
 for ($i=0, $loop=count($lists);$i<$loop;$i++) {
+	if ($lists[$i]->type == 'MESSAGE') {
+		$lists[$i]->message = json_decode($lists[$i]->message);
+	}
 }
 
 $results->success = true;
