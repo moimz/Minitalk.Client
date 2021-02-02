@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.0
- * @modified 2020. 12. 4.
+ * @modified 2021. 2. 2.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -29,7 +29,7 @@ $this->db()->update($this->table->server,array('status'=>'ONLINE','user'=>$user,
 $users = Request('users') ? Request('users') : array();
 foreach ($users as $room=>$user) {
 	$temp = explode('#',$room);
-	$channel = $temp[0];
+	$channel = $temp[1];
 	
 	$this->db()->update($this->table->channel,array('user'=>$user))->where('channel',$channel)->execute();
 }
