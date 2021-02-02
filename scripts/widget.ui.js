@@ -2453,11 +2453,20 @@ Minitalk.ui = {
 				case "login" :
 					if (Minitalk.user.me.level == 9) {
 						Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("ALREADY_LOGGED"));
+						
+						/**
+						 * 입력폼 초기화
+						 */
 						Minitalk.ui.setInputVal("");
 						return;
 					}
 					
 					Minitalk.socket.send("login",commands.join(" "));
+					
+					/**
+					 * 입력폼 초기화
+					 */
+					Minitalk.ui.setInputVal("");
 					break;
 					
 				/**
@@ -2466,11 +2475,20 @@ Minitalk.ui = {
 				case "logout" :
 					if (Minitalk.user.me.level != 9) {
 						Minitalk.ui.printSystemMessage("error",Minitalk.getErrorText("FORBIDDEN"));
+						
+						/**
+						 * 입력폼 초기화
+						 */
 						Minitalk.ui.setInputVal("");
 						return;
 					}
 					
 					Minitalk.socket.send("logout");
+					
+					/**
+					 * 입력폼 초기화
+					 */
+					Minitalk.ui.setInputVal("");
 					break;
 					
 				/**
@@ -2485,6 +2503,9 @@ Minitalk.ui = {
 						return;
 					}
 					
+					/**
+					 * 입력폼 초기화
+					 */
 					Minitalk.ui.setInputVal("");
 					break;
 			}
@@ -2505,7 +2526,7 @@ Minitalk.ui = {
 			Minitalk.fireEvent("sendMessage",[message,Minitalk.user.me]);
 			
 			/**
-			 * 인풋폼 초기화
+			 * 입력폼 초기화
 			 */
 			Minitalk.ui.setInputVal("");
 		}
