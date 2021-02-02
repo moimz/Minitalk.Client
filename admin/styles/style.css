@@ -29,3 +29,5 @@ header > aside > button {float:right; background:#B71C1C; color:#fff; height:32p
 footer {background:#343f4d; height:25px; line-height:25px; color:#aeb3b8; text-align:right; font-size:10px; font-family:OpenSans; padding-right:10px;}
 
 a {text-decoration:none; color:#2196F3;}
+
+i.message.photo {width:18px; height:18px; margin:-1px 5px 0px 0px; display:inline-block; vertical-align:middle; border:1px solid #ccc; background-image:url(../../images/nophoto.png); background-size:cover; background-position:50% 50%; box-sizing:border-box; border-radius:50%;}
