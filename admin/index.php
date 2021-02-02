@@ -1363,10 +1363,26 @@ Ext.onReady(function () {
 								return Admin.getText("broadcast/type/"+value);
 							}
 						},{
+							header:Admin.getText("broadcast/columns/channel"),
+							dataIndex:"channel",
+							width:100
+						},{
 							header:Admin.getText("broadcast/columns/message"),
 							dataIndex:"message",
 							minWidth:100,
-							flex:1
+							flex:1,
+							renderer:function(value,p,record) {
+								if (record.data.type == "NOTICE") return value;
+								
+								var sHTML = "";
+								if (value.user.photo) {
+									sHTML+= '<i class="message photo" style="background-image:url(' + value.user.photo + ');"></i>';
+								} else {
+									sHTML+= '<i class="message photo"></i>';
+								}
+								sHTML+= "<b>" + value.user.nickname + "</b> : " + value.message;
+								return sHTML;
+							}
 						},{
 							header:Admin.getText("broadcast/columns/url"),
 							dataIndex:"url",
@@ -1376,13 +1392,18 @@ Ext.onReady(function () {
 							dataIndex:"receiver",
 							width:100,
 							align:"right",
-							renderer:function(value) {
-								return Ext.util.Format.number(value,"0,000");
+							renderer:function(value,p,record) {
+								if (record.data.type == "NOTICE") return Ext.util.Format.number(value,"0,000");
+								return "UNKNOWN";
 							}
 						},{
 							header:Admin.getText("broadcast/columns/reg_date"),
 							dataIndex:"reg_date",
-							width:140
+							width:160,
+							align:"center",
+							renderer:function(value) {
+								return moment(value * 1000).locale($("html").attr("lang")).format("YYYY.MM.DD(dd) HH:mm:ss");
+							}
 						}],
 						selModel:new Ext.selection.CheckboxModel(),
 						bbar:new Ext.PagingToolbar({

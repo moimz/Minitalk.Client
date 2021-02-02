@@ -997,47 +997,107 @@ var Admin = {
 								}),
 								displayField:"display",
 								valueField:"value",
-								value:data ? data.type : "NOTICE",
+								value:"",
 								listeners:{
-									select:function(form,value) {
+									change:function(form,value) {
 										if (value == "NOTICE") {
-											Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("nickname").disable();
+											Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("channel").hide();
+											Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("channel").disable();
+											Ext.getCmp("MinitalkBroadcastSendUser").hide();
+											Ext.getCmp("MinitalkBroadcastSendUser").disable();
+											Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("url").show();
+											Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("url").enable();
 										} else {
-											Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("nickname").enable();
+											Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("channel").show();
+											Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("channel").enable();
+											Ext.getCmp("MinitalkBroadcastSendUser").show();
+											Ext.getCmp("MinitalkBroadcastSendUser").enable();
+											Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("url").hide();
+											Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("url").disable();
 										}
+										
+										setTimeout(function() { Ext.getCmp("MinitalkBroadcastSendWindow").center(); },100);
 									}
 								}
+							}),
+							new Ext.form.ComboBox({
+								fieldLabel:Admin.getText("broadcast/form/channel"),
+								name:"channel",
+								store:new Ext.data.JsonStore({
+									proxy:{
+										type:"ajax",
+										url:Minitalk.getProcessUrl("@getChannels"),
+										reader:{type:"json"}
+									},
+									remoteSort:false,
+									pageSize:50,
+									sorters:[{property:"channel",direction:"ASC"}],
+									fields:["channel","title_channel"]
+								}),
+								queryMode:"remote",
+								queryParam:"keyword",
+								editable:true,
+								anyMatch:true,
+								minChars:1,
+								triggerAction:"all",
+								displayField:"title_channel",
+								valueField:"channel",
+								afterBodyEl:'<div class="x-form-help">' + Admin.getText("broadcast/form/channel_help") + '</div>'
+							}),
+							new Ext.form.FieldContainer({
+								id:"MinitalkBroadcastSendUser",
+								fieldLabel:Admin.getText("broadcast/form/user"),
+								layout:{type:"vbox",align:"stretch"},
+								margin:"0 0 0 0",
+								items:[
+									new Ext.form.TextField({
+										name:"nickname",
+										emptyText:Admin.getText("broadcast/form/nickname")
+									}),
+									new Ext.form.TextField({
+										name:"nickcon",
+										emptyText:Admin.getText("broadcast/form/nickcon"),
+										allowBlank:true
+									}),
+									new Ext.form.TextField({
+										name:"photo",
+										emptyText:Admin.getText("broadcast/form/photo"),
+										allowBlank:true
+									}),
+									new Ext.form.ComboBox({
+										name:"level",
+										store:new Ext.data.ArrayStore({
+											fields:["display","value"],
+											data:(function() {
+												var datas = [];
+												for (var i=0;i<10;i++) {
+													datas.push([Minitalk.getText("level/"+i),i]);
+												}
+												
+												return datas;
+											})()
+										}),
+										displayField:"display",
+										valueField:"value",
+										value:0,
+										afterBodyEl:'<div class="x-form-help">' + Admin.getText("broadcast/form/user_help") + '</div>'
+									})
+								]
 							}),
 							new Ext.form.TextField({
 								fieldLabel:Admin.getText("broadcast/form/message"),
 								name:"message",
-								value:data ? data.message : null,
 								allowBlank:false
 							}),
 							new Ext.form.TextField({
 								fieldLabel:Admin.getText("broadcast/form/url"),
 								name:"url",
-								value:data ? data.url : null,
+								allowBlank:true,
 								emptyText:Admin.getText("broadcast/form/url_help"),
 								validator:function(value) {
-									if (value.search(/^http(s)?:\/\//) == 0) return true;
+									if (value.length == 0 || value.search(/^http(s)?:\/\//) == 0) return true;
 									else return Admin.getText("broadcast/form/url_error");
 								}
-							}),
-							new Ext.form.FieldContainer({
-								fieldLabel:Admin.getText("broadcast/form/nickname"),
-								layout:"hbox",
-								items:[
-									new Ext.form.TextField({
-										name:"nickname",
-										width:120,
-										value:data && data.type == "MESSAGE" ? data.nickname : "admin",
-										disabled:data && data.type == "MESSAGE" ? false : true
-									}),
-									new Ext.form.DisplayField({
-										value:"&nbsp;(" + Admin.getText("broadcast/form/nickname_help")+")"
-									})
-								]
 							})
 						]
 					})
@@ -1052,7 +1112,7 @@ var Admin = {
 								waitTitle:Admin.getText("action/wait"),
 								waitMsg:Admin.getText("action/saving"),
 								success:function(form,action) {
-									Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("broadcast/send_confirm").replace("{receiver}",action.result.receiver),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function(button) {
+									Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("broadcast/send_confirm"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function(button) {
 										Ext.getCmp("MinitalkPanel-broadcast").getStore().loadPage(1);
 										Ext.getCmp("MinitalkBroadcastSendWindow").close();
 									}});
@@ -1077,7 +1137,29 @@ var Admin = {
 							Ext.getCmp("MinitalkBroadcastSendWindow").close();
 						}
 					})
-				]
+				],
+				listeners:{
+					show:function() {
+						if (data) {
+							Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("type").setValue(data.type);
+							
+							if (data.type == "NOTICE") {
+								Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("message").setValue(data.message);
+								Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("url").setValue(data.url);
+							} else {
+								Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("channel").setValue(data.channel);
+								Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("message").setValue(data.message.message);
+								Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("nickname").setValue(data.message.user.nickname);
+								Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("nickcon").setValue(data.message.user.nickcon);
+								Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("photo").setValue(data.message.user.photo);
+								Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("level").setValue(data.message.user.level);
+							}
+						} else {
+							Ext.getCmp("MinitalkBroadcastSendForm").getForm().findField("type").setValue("NOTICE");
+						}
+						Ext.getCmp("MinitalkBroadcastSendWindow").center();
+					}
+				}
 			}).show();
 		},
 		/**
