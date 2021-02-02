@@ -164,15 +164,15 @@
 					"default":"MESSAGE",
 					"comment":"종류"
 				},
-				"message":{
+				"channel":{
 					"type":"varchar",
-					"length":255,
-					"comment":"내용"
+					"length":32,
+					"default":"*",
+					"comment":"채널명"
 				},
-				"nickname":{
-					"type":"varchar",
-					"length":20,
-					"comment":"닉네임"
+				"message":{
+					"type":"text",
+					"comment":"내용"
 				},
 				"receiver":{
 					"type":"int",
