@@ -1226,6 +1226,10 @@ Ext.onReady(function () {
 											$channel.html("#" + item.room);
 											$item.append($channel);
 											
+											var $photo = $("<i>").addClass("message photo");
+											if (item.user.photo) $photo.css("backgroundImage","url(" + item.user.photo + ");");
+											$item.append($photo);
+											
 											if (item.to == null) {
 												var $user = $("<b>");
 												$user.html(item.nickname);
