@@ -255,7 +255,7 @@ if (isMinitalkIncluded === undefined) {
 			 * Internet Explorer 8.0 버전 이하일 경우 에러메시지 출력
 			 */
 			this.printError("REQUIRED_IE9_OR_HIGHER");
-		} else if (document.querySelector("iframe[data-channel='"+this.channel+"']") !== null) {
+		} else if (this.channel != "example" && document.querySelector("iframe[data-channel='"+this.channel+"']") !== null) {
 			/**
 			 * 같은 이름의 채널이 페이지상에 존재할 경우 에러메시지 출력
 			 */
