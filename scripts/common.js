@@ -152,7 +152,7 @@ Minitalk.getErrorText = function(code) {
  * @return boolean/any 데이터저장성공여부, 저장되어 있는 데이터
  */
 Minitalk.session = function(name,value) {
-	var key = "minitalk-" + Minitalk.version;
+	var key = "minitalk-" + Minitalk.id + "-" + Minitalk.version;
 	
 	switch (name) {
 		/**
@@ -213,7 +213,7 @@ Minitalk.session = function(name,value) {
  * @return boolean/any 데이터저장성공여부, 저장되어 있는 데이터
  */
 Minitalk.storage = function(name,value) {
-	var key = "minitalk-" + Minitalk.version;
+	var key = "minitalk-" + Minitalk.id + "-" + Minitalk.version;
 	
 	switch (name) {
 		/**
