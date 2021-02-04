@@ -53,6 +53,7 @@ Minitalk.protocol = {
 		 */
 		Minitalk.ui.unnotify("error");
 		Minitalk.ui.unnotify("disconnect");
+		Minitalk.ui.unnotify("connecting");
 		
 		/**
 		 * 채널명을 출력한다.
