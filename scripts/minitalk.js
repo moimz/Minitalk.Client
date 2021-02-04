@@ -164,7 +164,7 @@ if (isMinitalkIncluded === undefined) {
 		this.viewConnectMessage = opt.viewConnectMessage === false ? false : true;
 		
 		this.logCount = opt.logCount !== undefined ? opt.logCount : 15;
-		this.dateFormat = opt.dateFormat ? opt.dateFormat : "A HH:mm";
+		this.dateFormat = opt.dateFormat !== undefined ? opt.dateFormat : "A HH:mm";
 		
 		this.tabs = opt.tabs ? opt.tabs : ["users","boxes","configs"];
 		this.tabType = opt.tabType ? opt.tabType : "auto";
