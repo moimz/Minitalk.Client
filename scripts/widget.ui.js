@@ -1891,7 +1891,7 @@ Minitalk.ui = {
 				if (message.time === undefined) {
 					$balloon.append($("<span>").addClass("time").html('<i class="sending"></i>'));
 				} else {
-					$balloon.append($("<span>").addClass("time").html($("<time>").attr("datetime",message.time).html(Minitalk.getTime(message.time,Minitalk.dateFormat))));
+					if (Minitalk.dateFormat) $balloon.append($("<span>").addClass("time").html($("<time>").attr("datetime",message.time).html(Minitalk.getTime(message.time,Minitalk.dateFormat))));
 				}
 				
 				$content.append($balloon);
