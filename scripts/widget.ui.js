@@ -16,6 +16,11 @@ Minitalk.ui = {
 	 * 미니톡 채팅위젯 UI를 초기화한다.
 	 */
 	init:function(html) {
+		/**
+		 * 언어코드를 적용한다.
+		 */
+		$("html").attr("lang",Minitalk.language);
+		
 		html = html ? html : null;
 		
 		if (html === null) {

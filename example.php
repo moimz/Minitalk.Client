@@ -14,7 +14,7 @@
 REQUIRE_ONCE './classes/widget.php';
 ?>
 <!doctype html>
-<html lang="en">
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
 <title>Minitalk7 Client Setup Source Example</title>
