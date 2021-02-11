@@ -171,7 +171,12 @@ Minitalk.session = function(name,value) {
 		 */
 		default :
 			if (Minitalk.box.isBox() === true) {
-				key+= "-" + Minitalk.box.connection.id;
+				if (name.indexOf("@") === 0) {
+					key+= "-" + Minitalk.channel;
+					name = name.replace(/^@/,"");
+				} else {
+					key+= "-" + Minitalk.box.connection.id;
+				}
 			} else {
 				key+= "-" + Minitalk.channel;
 			}
@@ -240,7 +245,12 @@ Minitalk.storage = function(name,value) {
 		 */
 		default :
 			if (Minitalk.box.isBox() === true) {
-				key+= "-" + Minitalk.box.connection.id;
+				if (name.indexOf("@") === 0) {
+					key+= "-" + Minitalk.channel;
+					name = name.replace(/^@/,"");
+				} else {
+					key+= "-" + Minitalk.box.connection.id;
+				}
 			} else {
 				key+= "-" + Minitalk.channel;
 			}
