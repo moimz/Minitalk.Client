@@ -1129,7 +1129,7 @@ Minitalk.ui = {
 					}
 				});
 				
-				setTimeout(function($dom) { $("link",$dom).attr("rel","stylesheet"); },100,$dom);
+				setTimeout(function($dom) { $("link",$dom).attr("rel","stylesheet"); },500,$dom);
 			});
 		}
 	},
