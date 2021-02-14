@@ -2434,7 +2434,7 @@ Minitalk.ui = {
 					/**
 					 * 메시지 전송전 이벤트 처리
 					 */
-					if (Minitalk.fireEvent("beforeSendWhisper",[nickname,message,Minitalk.user.me]) === false) return;
+					if (Minitalk.fireEvent("beforeSendWhisper",[nickname,message,Minitalk.user.me,nickname]) === false) return;
 					
 					/**
 					 * 서버로 메시지를 전송한다.
@@ -2444,7 +2444,7 @@ Minitalk.ui = {
 					/**
 					 * 메시지 전송후 이벤트 처리
 					 */
-					Minitalk.fireEvent("sendWhisper",[nickname,message,Minitalk.user.me])
+					Minitalk.fireEvent("sendWhisper",[nickname,message,Minitalk.user.me,nickname])
 					
 					/**
 					 * 직전의 귓속말 보낸 사람의 닉네임을 유지한다.
