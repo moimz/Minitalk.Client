@@ -1500,7 +1500,7 @@ Minitalk.ui = {
 						if (message.data.video != null) {
 							var $video = $("<div>").attr("data-role","video");
 							var $innervideo = $("<div>");
-							var $iframe = $("<iframe>").attr("src",message.data.video.url);//.attr("frameborder",0).css("border",0).css("width","100%").css("height","100%");
+							var $iframe = $("<iframe>").attr("src",message.data.video.url);
 							
 							/**
 							 * 가로 세로 크기 데이터가 있을 경우, 세로 % 를 계산하고, 그렇지 않은 경우 16:10 비율로 표시한다.
@@ -1554,6 +1554,11 @@ Minitalk.ui = {
 					$content.append($data);
 				}
 				
+				/**
+				 * 이벤트를 발생시킨다.
+				 */
+				Minitalk.fireEvent("printMessage",[message,$content]);
+				
 				break;
 				
 			/**
@@ -1600,6 +1605,11 @@ Minitalk.ui = {
 				
 				$data.append($link);
 				$content.append($data);
+				
+				/**
+				 * 이벤트를 발생시킨다.
+				 */
+				Minitalk.fireEvent("printMessage",[message,$content]);
 				
 				break;
 				
