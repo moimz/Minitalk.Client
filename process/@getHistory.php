@@ -33,8 +33,16 @@ $total = $history->copy()->count();
 $history = $history->limit($start,$limit)->orderBy('time','asc')->get();
 for ($i=0, $loop=count($history);$i<$loop;$i++) {
 	$history[$i]->user = json_decode($history[$i]->user);
+	$history[$i]->user->uuid = $history[$i]->uuid;
 	$history[$i]->data = json_decode($history[$i]->data);
 	$history[$i]->to = json_decode($history[$i]->to);
+	
+	if ($history[$i]->target != '*') {
+		$history[$i]->to->uuid = $history[$i]->target;
+	}
+	
+	unset($history[$i]->uuid);
+	unset($history[$i]->target);
 }
 $results->success = true;
 $results->lists = $history;

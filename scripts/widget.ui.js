@@ -1806,7 +1806,7 @@ Minitalk.ui = {
 			/**
 			 * 채팅탭 마지막객체에 메시지를 추가할 수 있다면, 해당 객체에 신규메시지를 추가하고, 그렇지 않다면 채팅메시지 객체를 신규로 생성한다.
 			 */
-			if ($item.length > 0 && $item.attr("data-role") == "message" && $item.data("uuid") == message.uuid && $item.data("nickname") == message.user.nickname && $item.data("target") == message.target && $item.data("to") == to && $item.hasClass("log") == is_log) {
+			if ($item.length > 0 && $item.attr("data-role") == "message" && $item.data("uuid") == message.user.uuid && $item.data("nickname") == message.user.nickname && $item.data("target") == message.target && $item.data("to") == to && $item.hasClass("log") == is_log) {
 				var $context = $("div[data-role=context]",$item);
 			} else {
 				var $item = $("<div>").attr("data-role","message").addClass(message.type);
@@ -1828,7 +1828,7 @@ Minitalk.ui = {
 					var $nickname = $("<div>").attr("data-role","nickname").append(Minitalk.user.getTag(message.user,false));
 					$item.append($nickname);
 				} else {
-					if (message.uuid == Minitalk.socket.uuid) {
+					if (message.user.uuid == Minitalk.socket.uuid) {
 						var $nickname = $("<div>").attr("data-role","nickname").html(Minitalk.getText("text/whisper_to").replace("{nickname}","<b>" + to + "</b>"));
 						$("b",$nickname).replaceWith(Minitalk.user.getTag(message.to));
 					} else {
@@ -1837,8 +1837,8 @@ Minitalk.ui = {
 					}
 					$item.append($nickname);
 				}
-			
-				if (message.uuid == Minitalk.socket.uuid) $item.addClass("me");
+				
+				if (message.user.uuid == Minitalk.socket.uuid) $item.addClass("me");
 			
 				var $context = $("<div>").attr("data-role","context");
 				$item.append($context);
@@ -1857,7 +1857,7 @@ Minitalk.ui = {
 				}
 			}
 			
-			$item.data("uuid",message.uuid).data("nickname",message.user.nickname).data("target",message.target).data("to",to);
+			$item.data("uuid",message.user.uuid).data("nickname",message.user.nickname).data("target",message.target).data("to",to);
 			if (is_log === true) $item.addClass("log");
 			if (to != "*") $item.addClass("whisper");
 			
