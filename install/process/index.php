@@ -10,7 +10,7 @@
  * @version 1.2.0
  * @modified 2021. 1. 24.
  */
-REQUIRE_ONCE str_replace(DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.'process','',__DIR__).'/configs/init.config.php';
+REQUIRE_ONCE str_replace('/install/process','',str_replace(DIRECTORY_SEPARATOR,'/',__DIR__)).'/configs/init.config.php';
 header("Content-type: text/json; charset=utf-8",true);
 
 set_time_limit(0);
@@ -69,7 +69,7 @@ if ($action == 'directory') {
 	if ($directory == 'attachments' && isset($_CONFIGS->attachment) == true && is_object($_CONFIGS->attachment) == true && isset($_CONFIGS->attachment->path) == true) {
 		$path = $_CONFIGS->attachment->path;
 	}
-	$path = strpos($path,'/') === 0 ? $path : __MINITALK_PATH__.DIRECTORY_SEPARATOR.$path;
+	$path = strpos($path,'/') === 0 ? $path : __MINITALK_PATH__.'/'.$path;
 	
 	$results->success = true;
 	$results->path = $path;
@@ -82,14 +82,14 @@ if ($action == 'config') {
 	$config = Request('config');
 	$results->success = true;
 	$results->config = $config;
-	$results->not_exists = !is_file(__MINITALK_PATH__.DIRECTORY_SEPARATOR.'configs'.DIRECTORY_SEPARATOR.$config.'.config.php');
+	$results->not_exists = !is_file(__MINITALK_PATH__.'/configs/'.$config.'.config.php');
 }
 
 if ($action == 'preset') {
 	$preset = Request('preset');
 	$results->success = true;
 	$results->preset = $preset;
-	$results->not_exists = !is_file(__MINITALK_PATH__.DIRECTORY_SEPARATOR.$preset.'.preset.php');
+	$results->not_exists = !is_file(__MINITALK_PATH__.'/'.$preset.'.preset.php');
 	$results->configs = new stdClass();
 	$results->configs->key = $_CONFIGS->presets->key;
 	$results->configs->db = $_CONFIGS->presets->db;
@@ -105,7 +105,7 @@ if ($action == 'install') {
 	if ($_CONFIGS->presets->key == true) {
 		if (Request('key') != $_CONFIGS->key) $errors['key'] = 'key_preset';
 	} elseif (is_file(__MINITALK_PATH__.'/configs/key.config.php') == true) {
-		$keyFile = explode("\n",file_get_contents(__MINITALK_PATH__.'/configs/key.config.php'));
+		$keyFile = explode(PHP_EOL,file_get_contents(__MINITALK_PATH__.'/configs/key.config.php'));
 		$key = $keyFile[1];
 		if (Request('key') != $key) $errors['key'] = 'key_exists';
 	} else {
@@ -118,7 +118,7 @@ if ($action == 'install') {
 	if ($_CONFIGS->presets->key == true) {
 		$db = $_CONFIGS->db;
 	} elseif (is_file(__MINITALK_PATH__.'/configs/db.config.php') == true) {
-		$dbFile = explode("\n",file_get_contents(__MINITALK_PATH__.'/configs/db.config.php'));
+		$dbFile = explode(PHP_EOL,file_get_contents(__MINITALK_PATH__.'/configs/db.config.php'));
 		$db = json_decode(Decoder($dbFile[1],$key));
 	} else {
 		$db = new stdClass();

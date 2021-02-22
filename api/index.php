@@ -13,7 +13,7 @@
 header('Cache-Control:no-store, no-cache, must-revalidate, max-age=0');
 header('Cache-Control:post-check=0, pre-check=0', false);
 header('Pragma:no-cache');
-REQUIRE_ONCE str_replace(DIRECTORY_SEPARATOR.'api','',__DIR__).'/configs/init.config.php';
+REQUIRE_ONCE str_replace('/api','',str_replace(DIRECTORY_SEPARATOR,'/',__DIR__)).'/configs/init.config.php';
 
 $MINITALK = new Minitalk();
 

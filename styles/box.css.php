@@ -10,7 +10,7 @@
  * @version 7.0.0
  * @modified 2020. 7. 8.
  */
-REQUIRE_ONCE str_replace(DIRECTORY_SEPARATOR.'styles'.DIRECTORY_SEPARATOR.'box.css.php','',$_SERVER['SCRIPT_FILENAME']).'/configs/init.config.php';
+REQUIRE_ONCE str_replace('/styles/box.css.php','',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['SCRIPT_FILENAME'])).'/configs/init.config.php';
 header("Content-Type:text/css; charset=utf-8");
 
 $channel = isset($_GET['channel']) == true ? $_GET['channel'] : null;

@@ -10,7 +10,7 @@
  * @version 7.0.0
  * @modified 2021. 1. 25.
  */
-REQUIRE_ONCE str_replace(DIRECTORY_SEPARATOR.'scripts'.DIRECTORY_SEPARATOR.'box.js.php','',$_SERVER['SCRIPT_FILENAME']).'/configs/init.config.php';
+REQUIRE_ONCE str_replace('/scripts/box.js.php','',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['SCRIPT_FILENAME'])).'/configs/init.config.php';
 header('Content-Type: application/x-javascript; charset=utf-8');
 
 $channel = isset($_GET['channel']) == true ? $_GET['channel'] : null;

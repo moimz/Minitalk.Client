@@ -10,7 +10,7 @@
  * @version 1.2.0
  * @modified 2019. 9. 22.
  */
-REQUIRE_ONCE str_replace(DIRECTORY_SEPARATOR.'install','',__DIR__).'/configs/init.config.php';
+REQUIRE_ONCE str_replace('/install','',str_replace(DIRECTORY_SEPARATOR,'/',__DIR__)).'/configs/init.config.php';
 
 $package = json_decode(file_get_contents(__MINITALK_PATH__.'/package.json'));
 $language = Request('language') ? Request('language') : 'en';
@@ -62,8 +62,8 @@ $acceptLanguage = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'],0,2);
 					<?php foreach ($package->requirements as $requirement=>$version) { ?>
 					<li data-requirement="<?php echo $requirement; ?>" data-version="<?php echo $version; ?>"></li>
 					<?php } ?>
-					<?php foreach ($package->directories as $directory=>$permission) { if (preg_match('/^@/',$directory) == true && is_dir(__IM_PATH__.DIRECTORY_SEPARATOR.str_replace('@','',$directory)) == false) continue; ?>
-					<li data-directory="<?php echo str_replace('@','',$directory); ?>" data-permission="<?php echo $permission; ?>"></li>
+					<?php foreach ($package->directories as $directory=>$permission) { ?>
+					<li data-directory="<?php echo $directory; ?>" data-permission="<?php echo $permission; ?>"></li>
 					<?php } ?>
 					<?php foreach ($package->configs as $config) { ?>
 					<li data-config="<?php echo $config; ?>"></li>

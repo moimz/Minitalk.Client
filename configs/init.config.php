@@ -24,8 +24,8 @@
 define('__MINITALK__',true);
 define('__MINITALK_VERSION__','7.0.0');
 define('__MINITALK_DB_PREFIX__','minitalk_');
-if (defined('__MINITALK_PATH__') == false) define('__MINITALK_PATH__',str_replace(DIRECTORY_SEPARATOR.'configs','',__DIR__));
-if (defined('__MINITALK_DIR__') == false) define('__MINITALK_DIR__',str_replace($_SERVER['DOCUMENT_ROOT'],'',__MINITALK_PATH__));
+if (defined('__MINITALK_PATH__') == false) define('__MINITALK_PATH__',str_replace('/configs','',str_replace(DIRECTORY_SEPARATOR,'/',__DIR__)));
+if (defined('__MINITALK_DIR__') == false) define('__MINITALK_DIR__',str_replace(str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['DOCUMENT_ROOT']),'',__MINITALK_PATH__));
 
 /**
  * 미니톡 클라이언트에서 공통적으로 사용하는 기본 함수셋을 불러온다.
