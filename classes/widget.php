@@ -11,8 +11,8 @@
  * @version 6.4.0
  * @modified 2021. 1. 24.
  */
-if (defined('__MINITALK_PATH__') == false) define('__MINITALK_PATH__',str_replace(DIRECTORY_SEPARATOR.'classes','',__DIR__));
-if (defined('__MINITALK_DIR__') == false) define('__MINITALK_DIR__',str_replace($_SERVER['DOCUMENT_ROOT'],'',__MINITALK_PATH__));
+if (defined('__MINITALK_PATH__') == false) define('__MINITALK_PATH__',str_replace('/classes','',str_replace(DIRECTORY_SEPARATOR,'/',__DIR__)));
+if (defined('__MINITALK_DIR__') == false) define('__MINITALK_DIR__',str_replace(str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['DOCUMENT_ROOT']),'',__MINITALK_PATH__));
 
 /**
  * 파일에서 특정라인을 읽어온다.

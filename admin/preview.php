@@ -45,7 +45,7 @@ if ($channel == null) {
 <script src="../scripts/language.js.php?language=<?php echo $logged == null ? 'en' : $logged->language; ?>"></script>
 <link rel="shortcut icon" type="image/x-icon" href="//www.moimz.com/modules/moimz/images/Minitalk.ico">
 </head>
-<body<?php echo $logged === null ? ' class="login"' : ' style="background:#fff !important;"'; ?>>
+<body<?php echo $logged === null ? ' class="login"' : ' style="background:#fff !important; overflow:hidden;"'; ?>>
 <?php
 if ($logged === null) {
 	INCLUDE './login.php';

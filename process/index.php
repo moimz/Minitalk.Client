@@ -10,7 +10,7 @@
  * @version 6.4.0
  * @modified 2020. 12. 4.
  */
-REQUIRE_ONCE str_replace(DIRECTORY_SEPARATOR.'process','',__DIR__).'/configs/init.config.php';
+REQUIRE_ONCE str_replace('/process','',str_replace(DIRECTORY_SEPARATOR,'/',__DIR__)).'/configs/init.config.php';
 
 set_time_limit(0);
 @ini_set('memory_limit',-1);
