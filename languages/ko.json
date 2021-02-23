@@ -270,6 +270,7 @@
 			"delete":"채널삭제",
 			"unknown":"채팅서버를 할당받지 않음",
 			"grid_help":"항목 더블클릭 : 상세정보 / 항목 우클릭 : 메뉴",
+			"delete_confirm":"선택한 채널을 삭제하시겠습니까?",
 			"form":{
 				"default":"채널기본설정",
 				"category":"카테고리",

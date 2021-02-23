@@ -757,7 +757,6 @@ var Admin = {
 								waitTitle:Admin.getText("action/wait"),
 								waitMsg:Admin.getText("action/loading"),
 								success:function(form,action) {
-									
 								},
 								failure:function(form,action) {
 									if (action.result && action.result.message) {
@@ -786,6 +785,34 @@ var Admin = {
 				modal:true,
 				html:'<iframe src="./preview.php?channel='+channel.channel+'" frameborder="0" style="width:100%; height:100%;" scrolling="0"></iframe>'
 			}).show();
+		},
+		/**
+		 * 채널을 삭제한다.
+		 */
+		delete:function() {
+			var selected = Ext.getCmp("MinitalkPanel-channel").getSelectionModel().getSelection();
+			if (selected.length == 0) {
+				Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("NOT_SELECTED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+				return;
+			}
+			
+			var channels = [];
+			for (var i=0, loop=selected.length;i<loop;i++) {
+				channels.push(selected[i].get("channel"));
+			}
+			
+			Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("channel/delete_confirm"),buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
+				if (button == "ok") {
+					Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/wait"));
+					$.send(Minitalk.getProcessUrl("@deleteChannel"),{channels:JSON.stringify(channels)},function(result) {
+						if (result.success == true) {
+							Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
+								Ext.getCmp("MinitalkPanel-channel").getStore().reload();
+							}});
+						}
+					});
+				}
+			}});
 		}
 	},
 	/**
