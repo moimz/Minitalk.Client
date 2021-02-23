@@ -635,6 +635,13 @@ Ext.onReady(function () {
 								handler:function() {
 									Admin.channel.add();
 								}
+							}),
+							new Ext.Button({
+								iconCls:"mi mi-trash",
+								text:Admin.getText("channel/delete"),
+								handler:function() {
+									Admin.channel.delete();
+								}
 							})
 						],
 						store:new Ext.data.JsonStore({
@@ -804,7 +811,7 @@ Ext.onReady(function () {
 									text:Admin.getText("channel/delete"),
 									iconCls:"mi mi-trash",
 									handler:function() {
-										Admin.channel.delete(record.data.parent);
+										Admin.channel.delete();
 									}
 								});
 								
