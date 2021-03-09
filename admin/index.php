@@ -97,7 +97,6 @@ Ext.onReady(function () {
 				id:"MinitalkTabPanel",
 				border:false,
 				region:"center",
-				activeTab:0,
 				items:[
 					new Ext.grid.Panel({
 						id:"MinitalkPanel-server",
