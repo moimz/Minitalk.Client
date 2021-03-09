@@ -269,143 +269,412 @@ var Admin = {
 		}
 	},
 	/**
-	 * 카테고리관리
-	 */
-	category:{
-		/**
-		 * 카테고리를 추가한다.
-		 *
-		 * @param int idx 카테고리고유값
-		 * @param int parent 부모카테고리고유값
-		 */
-		add:function(idx,parent) {
-			new Ext.Window({
-				id:"MinitalkCategoryAddWindow",
-				title:idx ? Admin.getText("category/modify") : Admin.getText("category/add"),
-				width:400,
-				modal:true,
-				border:false,
-				items:[
-					new Ext.form.Panel({
-						id:"MinitalkCategoryAddForm",
-						border:false,
-						fieldDefaults:{allowBlank:false,labelWidth:80,labelAlign:"right",anchor:"100%"},
-						bodyPadding:"10 10 5 10",
-						items:[
-							new Ext.form.Hidden({
-								name:"idx"
-							}),
-							new Ext.form.Hidden({
-								name:"parent",
-								value:parent ? parent : 0
-							}),
-							new Ext.form.TextField({
-								fieldLabel:Admin.getText("category/form/category"),
-								name:"category"
-							})
-						]
-					})
-				],
-				buttons:[
-					new Ext.Button({
-						text:Admin.getText("button/confirm"),
-						handler:function() {
-							Ext.getCmp("MinitalkCategoryAddForm").getForm().submit({
-								url:Minitalk.getProcessUrl("@saveCategory"),
-								submitEmptyText:false,
-								waitTitle:Admin.getText("action/wait"),
-								waitMsg:Admin.getText("action/saving"),
-								success:function(form,action) {
-									Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/saved"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function(button) {
-										Ext.getCmp("MinitalkCategory1").getStore().load(function(store) {
-											if (parent) {
-												var index = Ext.getCmp("MinitalkCategory1").getStore().findExact("idx",parent);
-												if (index > -1) Ext.getCmp("MinitalkCategory1").getSelectionModel().select(index);
-											}
-										});
-										Ext.getCmp("MinitalkCategoryAddWindow").close();
-									}});
-								},
-								failure:function(form,action) {
-									if (action.result && action.result.message) {
-										Ext.Msg.show({title:Admin.getText("alert/error"),msg:action.result.message,buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
-									} else {
-										Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_SAVE_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
-									}
-								}
-							});
-						}
-					}),
-					new Ext.Button({
-						text:Admin.getText("button/cancel"),
-						handler:function() {
-							Ext.getCmp("MinitalkCategoryAddWindow").close();
-						}
-					})
-				],
-				listeners:{
-					show:function() {
-						if (idx) {
-							Ext.getCmp("MinitalkCategoryAddForm").getForm().load({
-								url:Minitalk.getProcessUrl("@getCategory"),
-								params:{idx:idx},
-								waitTitle:Admin.getText("action/wait"),
-								waitMsg:Admin.getText("action/loading"),
-								success:function(form,action) {
-									
-								},
-								failure:function(form,action) {
-									if (action.result && action.result.message) {
-										Ext.Msg.show({title:Admin.getText("alert/error"),msg:action.result.message,buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
-									} else {
-										Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
-									}
-									Ext.getCmp("MinitalkCategoryAddWindow").close();
-								}
-							});
-						}
-					}
-				}
-			}).show();
-		},
-		/**
-		 * 카테고리를 삭제한다.
-		 */
-		delete:function(parent) {
-			var selected = Ext.getCmp(parent ? "MinitalkCategory2" : "MinitalkCategory1").getSelectionModel().getSelection();
-			if (selected.length == 0) {
-				Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("NOT_SELECTED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
-				return;
-			}
-			
-			var idxes = [];
-			for (var i=0, loop=selected.length;i<loop;i++) {
-				idxes.push(selected[i].get("idx"));
-			}
-			
-			Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("category/delete_confirm"),buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
-				if (button == "ok") {
-					Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/wait"));
-					$.send(Minitalk.getProcessUrl("@deleteCategory"),{idxes:JSON.stringify(idxes)},function(result) {
-						if (result.success == true) {
-							Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
-								Ext.getCmp("MinitalkCategory1").getStore().load(function(store) {
-									if (parent) {
-										var index = Ext.getCmp("MinitalkCategory1").getStore().findExact("idx",parent);
-										if (index > -1) Ext.getCmp("MinitalkCategory1").getSelectionModel().select(index);
-									}
-								});
-							}});
-						}
-					});
-				}
-			}});
-		}
-	},
-	/**
 	 * 채널관리
 	 */
 	channel:{
+		/**
+		 * 카테고리관리
+		 */
+		category:{
+			/**
+			 * 카테고리관리 패널
+			 */
+			panel:function() {
+				new Ext.Window({
+					id:"MinitalkCategoryWindow",
+					title:Admin.getText("channel/category/panel"),
+					width:900,
+					height:500,
+					modal:true,
+					border:false,
+					layout:"fit",
+					items:[
+						new Ext.Panel({
+							border:false,
+							layout:{type:"hbox",align:"stretch"},
+							items:[
+								new Ext.grid.GridPanel({
+									id:"MinitalkCategory1",
+									border:true,
+									margin:"-1 0 -1 -1",
+									flex:5,
+									tbar:[
+										new Ext.Button({
+											iconCls:"mi mi-plus",
+											text:Admin.getText("channel/category/add_category1"),
+											handler:function() {
+												Admin.channel.category.add();
+											}
+										}),
+										new Ext.Button({
+											iconCls:"mi mi-trash",
+											text:Admin.getText("channel/category/delete"),
+											handler:function() {
+												Admin.channel.category.delete();
+											}
+										})
+									],
+									store:new Ext.data.JsonStore({
+										proxy:{
+											type:"ajax",
+											simpleSortMode:true,
+											url:Minitalk.getProcessUrl("@getCategories"),
+											extraParams:{parent:0},
+											reader:{type:"json"},
+										},
+										remoteSort:false,
+										sorters:[{property:"category",direction:"ASC"}],
+										autoLoad:true,
+										pageSize:0,
+										fields:["idx","category",{name:"children",type:"int"},{name:"channel",type:"int"},{name:"user",type:"int"}]
+									}),
+									columns:[{
+										header:Admin.getText("channel/category/columns/category"),
+										dataIndex:"category",
+										flex:1
+									},{
+										header:Admin.getText("channel/category/columns/children"),
+										dataIndex:"children",
+										width:90,
+										align:"right",
+										summaryType:"sum",
+										renderer:function(value) {
+											return Ext.util.Format.number(value,"0,000");
+										}
+									},{
+										header:Admin.getText("channel/category/columns/channel"),
+										dataIndex:"channel",
+										width:70,
+										align:"right",
+										summaryType:"sum",
+										renderer:function(value) {
+											return Ext.util.Format.number(value,"0,000");
+										}
+									},{
+										header:Admin.getText("channel/category/columns/user"),
+										dataIndex:"user",
+										width:80,
+										align:"right",
+										summaryType:"sum",
+										renderer:function(value) {
+											return Ext.util.Format.number(value,"0,000");
+										}
+									}],
+									selModel:new Ext.selection.CheckboxModel(),
+									features:[{ftype:"summary"}],
+									bbar:[
+										new Ext.Button({
+											iconCls:"x-tbar-loading",
+											handler:function() {
+												Ext.getCmp("MinitalkCategory1").getStore().reload();
+											}
+										}),
+										"->",
+										{xtype:"tbtext",text:Admin.getText("channel/category/grid_help")}
+									],
+									listeners:{
+										itemdblclick:function(grid,record) {
+											Admin.channel.category.add(record.data.idx);
+										},
+										selectionchange:function(grid,selected) {
+											var parent = selected.length == 1 ? selected[0].data.idx : 0;
+											if (parent == 0) {
+												Ext.getCmp("MinitalkCategory2").getStore().removeAll();
+												Ext.getCmp("MinitalkCategory2").disable();
+											} else {
+												Ext.getCmp("MinitalkCategory2").getStore().getProxy().setExtraParam("parent",parent);
+												Ext.getCmp("MinitalkCategory2").getStore().reload();
+											}
+										},
+										itemcontextmenu:function(grid,record,item,index,e) {
+											var menu = new Ext.menu.Menu();
+											
+											menu.addTitle(record.data.category);
+											
+											menu.add({
+												text:Admin.getText("channel/category/modify"),
+												iconCls:"xi xi-form",
+												handler:function() {
+													Admin.channel.category.add(record.data.idx);
+												}
+											});
+											
+											menu.add({
+												text:Admin.getText("channel/category/delete"),
+												iconCls:"mi mi-trash",
+												handler:function() {
+													Admin.channel.category.delete();
+												}
+											});
+											
+											e.stopEvent();
+											menu.showAt(e.getXY());
+										}
+									}
+								}),
+								new Ext.grid.GridPanel({
+									id:"MinitalkCategory2",
+									border:true,
+									margin:"-1 -1 -1 0",
+									disabled:true,
+									flex:4,
+									tbar:[
+										new Ext.Button({
+											iconCls:"mi mi-plus",
+											text:Admin.getText("channel/category/add_category2"),
+											handler:function() {
+												var parent = Ext.getCmp("MinitalkCategory2").getStore().getProxy().extraParams.parent;
+												Admin.channel.category.add(null,parent);
+											}
+										}),
+										new Ext.Button({
+											iconCls:"mi mi-trash",
+											text:Admin.getText("channel/category/delete"),
+											handler:function() {
+												var parent = Ext.getCmp("MinitalkCategory2").getStore().getProxy().extraParams.parent;
+												Admin.channel.category.delete(parent);
+											}
+										})
+									],
+									store:new Ext.data.JsonStore({
+										proxy:{
+											type:"ajax",
+											simpleSortMode:true,
+											url:Minitalk.getProcessUrl("@getCategories"),
+											extraParams:{parent:0},
+											reader:{type:"json"}
+										},
+										remoteSort:false,
+										sorters:[{property:"category",direction:"ASC"}],
+										autoLoad:false,
+										pageSize:50,
+										fields:["idx","category",{name:"channel",type:"int"},{name:"user",type:"int"}],
+										listeners:{
+											load:function(store) {
+												var title = Ext.getCmp("MinitalkCategory1").getSelectionModel().getSelection().shift().get("category");
+												Ext.getCmp("MinitalkCategory2Help").setText(Admin.getText("channel/category/grid_help"));
+												Ext.getCmp("MinitalkCategory2").enable();
+											}
+										}
+									}),
+									columns:[{
+										header:Admin.getText("channel/category/columns/category"),
+										dataIndex:"category",
+										flex:1
+									},{
+										header:Admin.getText("channel/category/columns/channel"),
+										dataIndex:"channel",
+										width:70,
+										align:"right",
+										summaryType:"sum",
+										renderer:function(value) {
+											return Ext.util.Format.number(value,"0,000");
+										}
+									},{
+										header:Admin.getText("channel/category/columns/user"),
+										dataIndex:"user",
+										width:80,
+										align:"right",
+										summaryType:"sum",
+										renderer:function(value) {
+											return Ext.util.Format.number(value,"0,000");
+										}
+									}],
+									selModel:new Ext.selection.CheckboxModel(),
+									features:[{ftype:"summary"}],
+									bbar:[
+										new Ext.Button({
+											iconCls:"x-tbar-loading",
+											handler:function() {
+												Ext.getCmp("MinitalkCategory2").getStore().reload();
+											}
+										}),
+										"->",
+										{id:"MinitalkCategory2Help",xtype:"tbtext",text:Admin.getText("channel/category/select_first")}
+									],
+									listeners:{
+										itemdblclick:function(grid,record) {
+											Admin.channel.category.add(record.data.idx,record.data.parent);
+										},
+										itemcontextmenu:function(grid,record,item,index,e) {
+											var menu = new Ext.menu.Menu();
+											
+											menu.addTitle(record.data.category);
+											
+											menu.add({
+												text:Admin.getText("channel/category/modify"),
+												iconCls:"xi xi-form",
+												handler:function() {
+													Admin.channel.category.add(record.data.idx,record.data.parent);
+												}
+											});
+											
+											menu.add({
+												text:Admin.getText("channel/category/delete"),
+												iconCls:"mi mi-trash",
+												handler:function() {
+													Admin.channel.category.delete(record.data.parent);
+												}
+											});
+											
+											e.stopEvent();
+											menu.showAt(e.getXY());
+										},
+										disable:function() {
+											Ext.getCmp("MinitalkCategory2Help").setText(Admin.getText("channel/category/select_first"));
+										}
+									}
+								})
+							]
+						})
+					]
+				}).show();
+			},
+			/**
+			 * 카테고리를 추가한다.
+			 *
+			 * @param int idx 카테고리고유값
+			 * @param int parent 부모카테고리고유값
+			 */
+			add:function(idx,parent) {
+				new Ext.Window({
+					id:"MinitalkCategoryAddWindow",
+					title:idx ? Admin.getText("channel/category/modify") : (parent ? Admin.getText("channel/category/add_category2") : Admin.getText("channel/category/add_category1")),
+					width:400,
+					modal:true,
+					border:false,
+					items:[
+						new Ext.form.Panel({
+							id:"MinitalkCategoryAddForm",
+							border:false,
+							fieldDefaults:{allowBlank:false,labelWidth:80,labelAlign:"right",anchor:"100%"},
+							bodyPadding:"10 10 5 10",
+							items:[
+								new Ext.form.Hidden({
+									name:"idx"
+								}),
+								new Ext.form.Hidden({
+									name:"parent",
+									value:parent ? parent : 0
+								}),
+								new Ext.form.TextField({
+									fieldLabel:Admin.getText("channel/category/form/category"),
+									name:"category"
+								})
+							]
+						})
+					],
+					buttons:[
+						new Ext.Button({
+							text:Admin.getText("button/confirm"),
+							handler:function() {
+								Ext.getCmp("MinitalkCategoryAddForm").getForm().submit({
+									url:Minitalk.getProcessUrl("@saveCategory"),
+									submitEmptyText:false,
+									waitTitle:Admin.getText("action/wait"),
+									waitMsg:Admin.getText("action/saving"),
+									success:function(form,action) {
+										Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/saved"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function(button) {
+											Ext.getCmp("MinitalkCategory1").getStore().load(function(store) {
+												if (parent) {
+													var index = Ext.getCmp("MinitalkCategory1").getStore().findExact("idx",parent);
+													if (index > -1) Ext.getCmp("MinitalkCategory1").getSelectionModel().select(index);
+													
+													if (Ext.getCmp("MinitalkChannelCategory1").getValue() == parent) {
+														Ext.getCmp("MinitalkChannelCategory2").getStore().reload();
+													}
+												} else {
+													Ext.getCmp("MinitalkChannelCategory1").getStore().reload();
+												}
+											});
+											Ext.getCmp("MinitalkCategoryAddWindow").close();
+										}});
+									},
+									failure:function(form,action) {
+										if (action.result && action.result.message) {
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:action.result.message,buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+										} else {
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_SAVE_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+										}
+									}
+								});
+							}
+						}),
+						new Ext.Button({
+							text:Admin.getText("button/cancel"),
+							handler:function() {
+								Ext.getCmp("MinitalkCategoryAddWindow").close();
+							}
+						})
+					],
+					listeners:{
+						show:function() {
+							if (idx) {
+								Ext.getCmp("MinitalkCategoryAddForm").getForm().load({
+									url:Minitalk.getProcessUrl("@getCategory"),
+									params:{idx:idx},
+									waitTitle:Admin.getText("action/wait"),
+									waitMsg:Admin.getText("action/loading"),
+									success:function(form,action) {
+									},
+									failure:function(form,action) {
+										if (action.result && action.result.message) {
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:action.result.message,buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+										} else {
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+										}
+										Ext.getCmp("MinitalkCategoryAddWindow").close();
+									}
+								});
+							}
+						}
+					}
+				}).show();
+			},
+			/**
+			 * 카테고리를 삭제한다.
+			 */
+			delete:function(parent) {
+				var selected = Ext.getCmp(parent ? "MinitalkCategory2" : "MinitalkCategory1").getSelectionModel().getSelection();
+				if (selected.length == 0) {
+					Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("NOT_SELECTED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+					return;
+				}
+				
+				var idxes = [];
+				for (var i=0, loop=selected.length;i<loop;i++) {
+					idxes.push(selected[i].get("idx"));
+				}
+				
+				Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("channel/category/delete_confirm"),buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
+					if (button == "ok") {
+						Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/wait"));
+						$.send(Minitalk.getProcessUrl("@deleteCategory"),{idxes:JSON.stringify(idxes)},function(result) {
+							if (result.success == true) {
+								Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
+									Ext.getCmp("MinitalkCategory1").getStore().load(function(store) {
+										if (parent) {
+											var index = Ext.getCmp("MinitalkCategory1").getStore().findExact("idx",parent);
+											if (index > -1) Ext.getCmp("MinitalkCategory1").getSelectionModel().select(index);
+											
+											if (Ext.getCmp("MinitalkChannelCategory1").getValue() == parent) {
+												Ext.getCmp("MinitalkChannelCategory2").setValue("");
+												Ext.getCmp("MinitalkChannelCategory2").getStore().reload();
+											}
+										} else {
+											Ext.getCmp("MinitalkChannelCategory1").setValue("");
+											Ext.getCmp("MinitalkChannelCategory1").getStore().reload();
+											Ext.getCmp("MinitalkChannelCategory2").setValue("");
+											Ext.getCmp("MinitalkChannelCategory2").getStore().reload();
+										}
+									});
+								}});
+							}
+						});
+					}
+				}});
+			}
+		},
 		/**
 		 * 채널을 추가한다.
 		 *
