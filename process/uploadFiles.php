@@ -132,6 +132,9 @@ if ($code != null) {
 	}
 	
 	for ($i=0, $loop=count($drafts);$i<$loop;$i++) {
+		$mNormalizer = new UnicodeNormalizer();
+		$drafts[$i]->name = $mNormalizer->normalize($drafts[$i]->name);
+		
 		$this->db()->setLockMethod('WRITE')->lock($this->table->attachment);
 		while (true) {
 			$hash = md5(json_encode($drafts[$i]).time().rand(10000,99999));
