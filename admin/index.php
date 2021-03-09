@@ -378,7 +378,7 @@ Ext.onReady(function () {
 							}),
 							"-",
 							Admin.searchField("MinitalkChannelKeyword",200,Admin.getText("channel/columns/channel") + " / " + Admin.getText("channel/columns/title"),function(keyword) {
-								Ext.getCmp("MinitalkPanel-channel").getStore().getProxy().setExtraParam("keyword",Ext.getCmp("MinitalkChannelKeyword").getValue());
+								Ext.getCmp("MinitalkPanel-channel").getStore().getProxy().setExtraParam("keyword",keyword);
 								Ext.getCmp("MinitalkPanel-channel").getStore().loadPage(1);
 							}),
 							"-",
@@ -585,8 +585,8 @@ Ext.onReady(function () {
 								title:Admin.getText("resource/attachment/title"),
 								tbar:[
 									Admin.searchField("MinitalkAttachmentKeyword",200,Admin.getText("resource/attachment/columns/name") + " / " + Admin.getText("resource/attachment/columns/nickname"),function(keyword) {
-										Ext.getCmp("MinitalkPanel-attachment").getStore().getProxy().setExtraParam("keyword",Ext.getCmp("MinitalkAttachmentKeyword").getValue());
-										Ext.getCmp("MinitalkPanel-attachment").getStore().loadPage(1);
+										Ext.getCmp("MinitalkAttachment").getStore().getProxy().setExtraParam("keyword",keyword);
+										Ext.getCmp("MinitalkAttachment").getStore().loadPage(1);
 									}),
 									"-",
 									new Ext.Button({
@@ -841,7 +841,7 @@ Ext.onReady(function () {
 						id:"MinitalkPanel-banip",
 						tbar:[
 							Admin.searchField("MinitalkIpKeyword",200,Admin.getText("banip/columns/ip") + " / " + Admin.getText("banip/columns/nickname"),function(keyword) {
-								Ext.getCmp("MinitalkPanel-banip").getStore().getProxy().setExtraParam("keyword",Ext.getCmp("MinitalkIpKeyword").getValue());
+								Ext.getCmp("MinitalkPanel-banip").getStore().getProxy().setExtraParam("keyword",keyword);
 								Ext.getCmp("MinitalkPanel-banip").getStore().loadPage(1);
 							}),
 							"-",
@@ -1137,7 +1137,7 @@ Ext.onReady(function () {
 						id:"MinitalkPanel-broadcast",
 						tbar:[
 							Admin.searchField("MinitalkBroadcastKeyword",200,Admin.getText("broadcast/columns/message"),function(keyword) {
-								Ext.getCmp("MinitalkPanel-broadcast").getStore().getProxy().setExtraParam("keyword",Ext.getCmp("MinitalkBroadcastKeyword").getValue());
+								Ext.getCmp("MinitalkPanel-broadcast").getStore().getProxy().setExtraParam("keyword",keyword);
 								Ext.getCmp("MinitalkPanel-broadcast").getStore().loadPage(1);
 							}),
 							"-",
