@@ -37,7 +37,6 @@ $hasServer = is_dir(__MINITALK_PATH__.'/server') == true;
 <script src="../scripts/jquery.js?t=<?php echo filemtime('../scripts/jquery.js'); ?>"></script>
 <script src="../scripts/jquery.extend.js?t=<?php echo filemtime('../scripts/jquery.extend.js'); ?>"></script>
 <script src="../scripts/moment.js?t=<?php echo filemtime('../scripts/moment.js'); ?>"></script>
-<link rel="stylesheet" href="<?php echo $fontStyle; ?>" type="text/css">
 <?php if ($logged !== null) { ?>
 <link rel="stylesheet" href="./styles/style.css?t=<?php echo filemtime('./styles/style.css'); ?>" type="text/css">
 <link rel="stylesheet" href="../styles/extjs.css?t=<?php echo filemtime('../styles/extjs.css'); ?>" type="text/css">
@@ -47,6 +46,7 @@ $hasServer = is_dir(__MINITALK_PATH__.'/server') == true;
 <?php } else { ?>
 <link rel="stylesheet" href="./styles/login.css?t=<?php echo filemtime('./styles/login.css'); ?>" type="text/css">
 <?php } ?>
+<link rel="stylesheet" href="<?php echo $fontStyle; ?>" type="text/css">
 <script src="./scripts/script.js?t=<?php echo filemtime('./scripts/script.js'); ?>"></script>
 <script src="../scripts/language.js.php?language=<?php echo $logged == null ? 'en' : $logged->language; ?>"></script>
 <link rel="shortcut icon" type="image/x-icon" href="//www.moimz.com/modules/moimz/images/Minitalk.ico">
@@ -56,7 +56,7 @@ $hasServer = is_dir(__MINITALK_PATH__.'/server') == true;
 if ($logged === null) {
 	INCLUDE './login.php';
 } else {
-	$menuIcons = array('server'=>'xi-cloud-network','channel'=>'xi-chat','history'=>'xi-time-back','attachment'=>'xi-archive','banip'=>'xi-slash-circle','broadcast'=>'xi-signal','admin'=>'xi-crown');
+	$menuIcons = array('server'=>'xi-cloud-network','channel'=>'xi-chat','history'=>'xi-time-back','resource'=>'xi-archive','banip'=>'xi-slash-circle','broadcast'=>'xi-signal','admin'=>'xi-crown');
 ?>
 <header id="MinitalkHeader">
 	<h1>Minitalk <small>Administrator</small></h1>
@@ -377,26 +377,9 @@ Ext.onReady(function () {
 								}
 							}),
 							"-",
-							new Ext.form.TextField({
-								id:"MinitalkChannelKeyword",
-								width:150,
-								emptyText:Admin.getText("channel/columns/channel") + " / " + Admin.getText("channel/columns/title"),
-								enableKeyEvents:true,
-								listeners:{
-									keypress:function(form,e) {
-										if (e.keyCode == 13) {
-											Ext.getCmp("MinitalkChannelSearchButton").handler();
-										}
-									}
-								}
-							}),
-							new Ext.Button({
-								id:"MinitalkChannelSearchButton",
-								iconCls:"mi mi-search",
-								handler:function() {
-									Ext.getCmp("MinitalkPanel-channel").getStore().getProxy().setExtraParam("keyword",Ext.getCmp("MinitalkChannelKeyword").getValue());
-									Ext.getCmp("MinitalkPanel-channel").getStore().loadPage(1);
-								}
+							Admin.searchField("MinitalkChannelKeyword",200,Admin.getText("channel/columns/channel") + " / " + Admin.getText("channel/columns/title"),function(keyword) {
+								Ext.getCmp("MinitalkPanel-channel").getStore().getProxy().setExtraParam("keyword",keyword);
+								Ext.getCmp("MinitalkPanel-channel").getStore().loadPage(1);
 							}),
 							"-",
 							new Ext.Button({
@@ -590,191 +573,276 @@ Ext.onReady(function () {
 							}
 						}
 					}),
-					new Ext.grid.Panel({
-						id:"MinitalkPanel-attachment",
-						tbar:[
-							new Ext.form.TextField({
-								id:"MinitalkAttachmentKeyword",
-								width:150,
-								emptyText:Admin.getText("attachment/columns/name") + " / " + Admin.getText("attachment/columns/nickname"),
-								enableKeyEvents:true,
-								listeners:{
-									keypress:function(form,e) {
-										if (e.keyCode == 13) {
-											Ext.getCmp("MinitalkAttachmentButton").handler();
+					new Ext.TabPanel({
+						id:"MinitalkPanel-resource",
+						tabPosition:"bottom",
+						activeTab:0,
+						items:[
+							new Ext.grid.Panel({
+								id:"MinitalkAttachment",
+								border:false,
+								iconCls:"xi xi-upload",
+								title:Admin.getText("resource/attachment/title"),
+								tbar:[
+									Admin.searchField("MinitalkAttachmentKeyword",200,Admin.getText("resource/attachment/columns/name") + " / " + Admin.getText("resource/attachment/columns/nickname"),function(keyword) {
+										Ext.getCmp("MinitalkAttachment").getStore().getProxy().setExtraParam("keyword",keyword);
+										Ext.getCmp("MinitalkAttachment").getStore().loadPage(1);
+									}),
+									"-",
+									new Ext.Button({
+										iconCls:"mi mi-trash",
+										text:Admin.getText("resource/attachment/delete_selected"),
+										handler:function() {
+											Admin.resource.attachment.delete();
 										}
+									}),
+									"->",
+									new Ext.Button({
+										iconCls:"mi mi-calendar",
+										text:Admin.getText("resource/attachment/delete_expired"),
+										handler:function() {
+											Admin.resource.attachment.expired();
+										}
+									})
+								],
+								store:new Ext.data.JsonStore({
+									proxy:{
+										type:"ajax",
+										simpleSortMode:true,
+										url:Minitalk.getProcessUrl("@getAttachments"),
+										reader:{type:"json"}
+									},
+									remoteSort:true,
+									sorters:[{property:"reg_date",direction:"DESC"}],
+									autoLoad:true,
+									pageSize:50,
+									fields:["hash","icon","name","channel","nickname","ip","path",{"name":"size","type":"int"},{"name":"reg_date","type":"int"},{"name":"exp_date","type":"int"}],
+									listeners:{
+										load:function(store,records,success,e) {
+											if (success == false) {
+												if (e.getError()) {
+													Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+												} else {
+													Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+												}
+											}
+										}
+									}
+								}),
+								columns:[{
+									text:Admin.getText("resource/attachment/columns/name"),
+									dataIndex:"name",
+									width:200,
+									sortable:true,
+									renderer:function(value,p,record) {
+										return '<i class="icon" style="background-image:url(' + record.data.icon + '); background-size:contain; background-repeat:no-repeat; background-position:50% 50%; margin-right:8px;"></i>' + value;
+									}
+								},{
+									text:Admin.getText("resource/attachment/columns/channel"),
+									dataIndex:"channel",
+									width:120,
+									sortable:true,
+									renderer:function(value) {
+										return "#" + value;
+									}
+								},{
+									text:Admin.getText("resource/attachment/columns/nickname"),
+									dataIndex:"nickname",
+									width:120,
+									sortable:true
+								},{
+									text:Admin.getText("resource/attachment/columns/ip"),
+									dataIndex:"ip",
+									width:120,
+									sortable:true,
+									align:"center"
+								},{
+									text:Admin.getText("resource/attachment/columns/size"),
+									dataIndex:"size",
+									width:100,
+									sortable:true,
+									align:"right",
+									renderer:function(value) {
+										return Minitalk.getFileSize(value);
+									}
+								},{
+									text:Admin.getText("resource/attachment/columns/path"),
+									dataIndex:"path",
+									minWidth:200,
+									flex:1,
+									sortable:true
+								},{
+									text:Admin.getText("resource/attachment/columns/reg_date"),
+									dataIndex:"reg_date",
+									width:145,
+									sortable:true,
+									align:"center",
+									renderer:function(value) {
+										return moment(value * 1000).locale($("html").attr("lang")).format("YYYY.MM.DD(dd) HH:mm");
+									}
+								},{
+									text:Admin.getText("resource/attachment/columns/exp_date"),
+									dataIndex:"exp_date",
+									width:145,
+									sortable:true,
+									align:"center",
+									renderer:function(value,p) {
+										if (value * 1000 < moment().valueOf()) p.style = "color:#999;";
+										if (value == 0) return "";
+										
+										return moment(value * 1000).locale($("html").attr("lang")).format("YYYY.MM.DD(dd) HH:mm");
+									}
+								}],
+								selModel:new Ext.selection.CheckboxModel(),
+								bbar:new Ext.PagingToolbar({
+									store:null,
+									displayInfo:false,
+									items:[
+										"->",
+										{xtype:"tbtext",text:Admin.getText("resource/attachment/grid_help")}
+									],
+									listeners:{
+										beforerender:function(tool) {
+											tool.bindStore(tool.ownerCt.getStore());
+										}
+									}
+								}),
+								listeners:{
+									itemdblclick:function(grid,record) {
+										downloadFrame.location.href = record.data.download;
+									},
+									itemcontextmenu:function(grid,record,item,index,e) {
+										var menu = new Ext.menu.Menu();
+										
+										menu.addTitle(record.data.name);
+										
+										menu.add({
+											text:Admin.getText("resource/attachment/delete"),
+											iconCls:"mi mi-trash",
+											handler:function() {
+												Admin.resource.attachment.delete();
+											}
+										});
+										
+										e.stopEvent();
+										menu.showAt(e.getXY());
 									}
 								}
 							}),
-							new Ext.Button({
-								id:"MinitalkAttachmentButton",
-								iconCls:"mi mi-search",
-								handler:function() {
-									Ext.getCmp("MinitalkPanel-attachment").getStore().getProxy().setExtraParam("keyword",Ext.getCmp("MinitalkAttachmentKeyword").getValue());
-									Ext.getCmp("MinitalkPanel-attachment").getStore().loadPage(1);
-								}
-							}),
-							"-",
-							new Ext.Button({
-								iconCls:"mi mi-trash",
-								text:Admin.getText("attachment/delete_selected"),
-								handler:function() {
-									Admin.attachment.delete();
-								}
-							}),
-							"->",
-							new Ext.Button({
-								iconCls:"mi mi-calendar",
-								text:Admin.getText("attachment/delete_expired"),
-								handler:function() {
-									Admin.attachment.expired();
+							new Ext.grid.Panel({
+								id:"MinitalkComponent",
+								border:false,
+								iconCls:"mi mi-minitalk",
+								title:Admin.getText("resource/component/title"),
+								tbar:[
+									Admin.searchField("MinitalkComponentKeyword",200,Admin.getText("resource/attachment/columns/name"),function(keyword) {
+										if (keyword.length > 0) {
+											Ext.getCmp("MinitalkComponent").getStore().filter(function(record) {
+												return (record.data.title != null && record.data.title.toString().indexOf(keyword) > -1) || (record.data.id != null && record.data.id.toString().indexOf(keyword) > -1);
+											});
+										} else {
+											Ext.getCmp("MinitalkComponent").getStore().clearFilter();
+										}
+									})
+								],
+								store:new Ext.data.JsonStore({
+									proxy:{
+										type:"ajax",
+										simpleSortMode:true,
+										url:Minitalk.getProcessUrl("@getComponents"),
+										reader:{type:"json"}
+									},
+									remoteSort:true,
+									sorters:[{property:"title",direction:"ASC"}],
+									autoLoad:true,
+									pageSize:0,
+									groupField:"type",
+									groupDir:"ASC",
+									fields:["title","version"],
+									listeners:{
+										load:function(store,records,success,e) {
+											if (success == false) {
+												if (e.getError()) {
+													Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+												} else {
+													Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+												}
+											}
+										}
+									}
+								}),
+								columns:[{
+									text:Admin.getText("resource/component/columns/title"),
+									width:180,
+									dataIndex:"title",
+									renderer:function(value,p,record) {
+										return '<i class="icon '+record.data.icon+'"></i>'+value;
+									},
+									summaryType:"count",
+									summaryRenderer:function(value) {
+										return value + "EA";
+									}
+								},{
+									text:Admin.getText("resource/component/columns/version"),
+									width:60,
+									dataIndex:"version",
+									align:"center"
+								},{
+									text:Admin.getText("resource/component/columns/id"),
+									width:250,
+									dataIndex:"id"
+								},{
+									text:Admin.getText("resource/component/columns/description"),
+									minWidth:200,
+									flex:1,
+									dataIndex:"description"
+								},{
+									text:Admin.getText("resource/component/columns/author"),
+									width:180,
+									dataIndex:"author",
+									renderer:function(value,p,record) {
+										var sHTML = value;
+										if (record.data.email) sHTML+= '(<a href=mailto:"' + record.data.email + '">' + record.data.email + '</a>)';
+										
+										return sHTML;
+									}
+								},{
+									text:Admin.getText("resource/component/columns/path"),
+									width:250,
+									dataIndex:"path"
+								}],
+								selModel:new Ext.selection.CheckboxModel(),
+								features:[{
+									ftype:"groupingsummary",
+									groupHeaderTpl:'<tpl>{[values.children[0].data.type_name]}</tpl>',
+									hideGroupedHeader:false,
+									enableGroupingMenu:false
+								}],
+								bbar:[
+									new Ext.Button({
+										iconCls:"x-tbar-loading",
+										handler:function() {
+											Ext.getCmp("MinitalkComponent").getStore().reload();
+										}
+									}),
+									"->",
+									{xtype:"tbtext",text:Admin.getText("resource/attachment/grid_help")}
+								],
+								listeners:{
+									itemdblclick:function(grid,record) {
+									},
+									itemcontextmenu:function(grid,record,item,index,e) {
+									}
 								}
 							})
-						],
-						store:new Ext.data.JsonStore({
-							proxy:{
-								type:"ajax",
-								simpleSortMode:true,
-								url:Minitalk.getProcessUrl("@getAttachments"),
-								reader:{type:"json"}
-							},
-							remoteSort:true,
-							sorters:[{property:"reg_date",direction:"DESC"}],
-							autoLoad:true,
-							pageSize:50,
-							fields:["hash","icon","name","channel","nickname","ip","path",{"name":"size","type":"int"},{"name":"reg_date","type":"int"},{"name":"exp_date","type":"int"}],
-							listeners:{
-								load:function(store,records,success,e) {
-									if (success == false) {
-										if (e.getError()) {
-											Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
-										} else {
-											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
-										}
-									}
-								}
-							}
-						}),
-						columns:[{
-							text:Admin.getText("attachment/columns/name"),
-							dataIndex:"name",
-							width:200,
-							sortable:true,
-							renderer:function(value,p,record) {
-								return '<i class="icon" style="background-image:url(' + record.data.icon + '); background-size:contain; background-repeat:no-repeat; background-position:50% 50%; margin-right:8px;"></i>' + value;
-							}
-						},{
-							text:Admin.getText("attachment/columns/channel"),
-							dataIndex:"channel",
-							width:120,
-							sortable:true,
-							renderer:function(value) {
-								return "#" + value;
-							}
-						},{
-							text:Admin.getText("attachment/columns/nickname"),
-							dataIndex:"nickname",
-							width:120,
-							sortable:true
-						},{
-							text:Admin.getText("attachment/columns/ip"),
-							dataIndex:"ip",
-							width:120,
-							sortable:true,
-							align:"center"
-						},{
-							text:Admin.getText("attachment/columns/size"),
-							dataIndex:"size",
-							width:100,
-							sortable:true,
-							align:"right",
-							renderer:function(value) {
-								return Minitalk.getFileSize(value);
-							}
-						},{
-							text:Admin.getText("attachment/columns/path"),
-							dataIndex:"path",
-							minWidth:200,
-							flex:1,
-							sortable:true
-						},{
-							text:Admin.getText("attachment/columns/reg_date"),
-							dataIndex:"reg_date",
-							width:145,
-							sortable:true,
-							align:"center",
-							renderer:function(value) {
-								return moment(value * 1000).locale($("html").attr("lang")).format("YYYY.MM.DD(dd) HH:mm");
-							}
-						},{
-							text:Admin.getText("attachment/columns/exp_date"),
-							dataIndex:"exp_date",
-							width:145,
-							sortable:true,
-							align:"center",
-							renderer:function(value,p) {
-								if (value * 1000 < moment().valueOf()) p.style = "color:#999;";
-								if (value == 0) return "";
-								
-								return moment(value * 1000).locale($("html").attr("lang")).format("YYYY.MM.DD(dd) HH:mm");
-							}
-						}],
-						selModel:new Ext.selection.CheckboxModel(),
-						bbar:[
-							new Ext.Button({
-								iconCls:"x-tbar-loading",
-								handler:function() {
-									Ext.getCmp("MinitalkPanel-attachment").getStore().reload();
-								}
-							}),
-							"->",
-							{xtype:"tbtext",text:Admin.getText("attachment/grid_help")}
-						],
-						listeners:{
-							itemdblclick:function(grid,record) {
-								window.open(record.data.download);
-							},
-							itemcontextmenu:function(grid,record,item,index,e) {
-								var menu = new Ext.menu.Menu();
-								
-								menu.addTitle(record.data.domain);
-								
-								menu.add({
-									text:Admin.getText("attachment/delete"),
-									iconCls:"mi mi-trash",
-									handler:function() {
-										Admin.attachment.delete();
-									}
-								});
-								
-								e.stopEvent();
-								menu.showAt(e.getXY());
-							}
-						}
+						]
 					}),
 					new Ext.grid.Panel({
 						id:"MinitalkPanel-banip",
 						tbar:[
-							new Ext.form.TextField({
-								id:"MinitalkIpKeyword",
-								width:200,
-								emptyText:Admin.getText("banip/columns/ip") + " / " + Admin.getText("banip/columns/nickname"),
-								enableKeyEvents:true,
-								listeners:{
-									keypress:function(form,e) {
-										if (e.keyCode == 13) {
-											Ext.getCmp("MinitalkIpSearchButton").handler();
-										}
-									}
-								}
-							}),
-							new Ext.Button({
-								id:"MinitalkIpSearchButton",
-								iconCls:"mi mi-search",
-								handler:function() {
-									Ext.getCmp("MinitalkPanel-banip").getStore().getProxy().setExtraParam("keyword",Ext.getCmp("MinitalkIpKeyword").getValue());
-									Ext.getCmp("MinitalkPanel-banip").getStore().loadPage(1);
-								}
+							Admin.searchField("MinitalkIpKeyword",200,Admin.getText("banip/columns/ip") + " / " + Admin.getText("banip/columns/nickname"),function(keyword) {
+								Ext.getCmp("MinitalkPanel-banip").getStore().getProxy().setExtraParam("keyword",keyword);
+								Ext.getCmp("MinitalkPanel-banip").getStore().loadPage(1);
 							}),
 							"-",
 							new Ext.Button({
@@ -1068,26 +1136,9 @@ Ext.onReady(function () {
 					new Ext.grid.Panel({
 						id:"MinitalkPanel-broadcast",
 						tbar:[
-							new Ext.form.TextField({
-								id:"MinitalkBroadcastKeyword",
-								width:200,
-								emptyText:Admin.getText("broadcast/columns/message"),
-								enableKeyEvents:true,
-								listeners:{
-									keypress:function(form,e) {
-										if (e.keyCode == 13) {
-											Ext.getCmp("MinitalkBroadcastSearchButton").handler();
-										}
-									}
-								}
-							}),
-							new Ext.Button({
-								id:"MinitalkBroadcastSearchButton",
-								iconCls:"mi mi-search",
-								handler:function() {
-									Ext.getCmp("MinitalkPanel-broadcast").getStore().getProxy().setExtraParam("keyword",Ext.getCmp("MinitalkBroadcastKeyword").getValue());
-									Ext.getCmp("MinitalkPanel-broadcast").getStore().loadPage(1);
-								}
+							Admin.searchField("MinitalkBroadcastKeyword",200,Admin.getText("broadcast/columns/message"),function(keyword) {
+								Ext.getCmp("MinitalkPanel-broadcast").getStore().getProxy().setExtraParam("keyword",keyword);
+								Ext.getCmp("MinitalkPanel-broadcast").getStore().loadPage(1);
 							}),
 							"-",
 							new Ext.Button({
@@ -1317,6 +1368,7 @@ $(document).on("click",function() {
 	$("#MinitalkHeader ul[data-role=menu] > li[data-role=more]").removeClass("on");
 });
 </script>
+<iframe name="downloadFrame" style="display:none;"></iframe>
 <?php } ?>
 </body>
 </html>
