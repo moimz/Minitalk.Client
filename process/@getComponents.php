@@ -31,13 +31,13 @@ $item->path = __MINITALK_PATH__;
 
 $lists[] = $item;
 
-define('__MINITALK_PATH2__','/var/projects/Minitalk/commons');
+define('__MINITALK_PATH__','/var/projects/Minitalk/commons');
 
 // 플러그인
-$pluginsPath = @opendir(__MINITALK_PATH2__.'/plugins');
+$pluginsPath = @opendir(__MINITALK_PATH__.'/plugins');
 while ($plugin = @readdir($pluginsPath)) {
-	if ($plugin != '.' && $plugin != '..' && is_dir(__MINITALK_PATH2__.'/plugins/'.$plugin) == true && is_file(__MINITALK_PATH2__.'/plugins/'.$plugin.'/package.json') == true) {
-		$package = json_decode(file_get_contents(__MINITALK_PATH2__.'/plugins/'.$plugin.'/package.json'));
+	if ($plugin != '.' && $plugin != '..' && is_dir(__MINITALK_PATH__.'/plugins/'.$plugin) == true && is_file(__MINITALK_PATH__.'/plugins/'.$plugin.'/package.json') == true) {
+		$package = json_decode(file_get_contents(__MINITALK_PATH__.'/plugins/'.$plugin.'/package.json'));
 		
 		$item = new stdClass();
 		$item->type = '10';
@@ -73,10 +73,10 @@ while ($plugin = @readdir($pluginsPath)) {
 }
 
 // 템플릿
-$templetsPath = @opendir(__MINITALK_PATH2__.'/templets');
+$templetsPath = @opendir(__MINITALK_PATH__.'/templets');
 while ($templet = @readdir($templetsPath)) {
-	if ($templet != '.' && $templet != '..' && is_dir(__MINITALK_PATH2__.'/templets/'.$templet) == true && is_file(__MINITALK_PATH2__.'/templets/'.$templet.'/package.json') == true) {
-		$package = json_decode(file_get_contents(__MINITALK_PATH2__.'/templets/'.$templet.'/package.json'));
+	if ($templet != '.' && $templet != '..' && is_dir(__MINITALK_PATH__.'/templets/'.$templet) == true && is_file(__MINITALK_PATH__.'/templets/'.$templet.'/package.json') == true) {
+		$package = json_decode(file_get_contents(__MINITALK_PATH__.'/templets/'.$templet.'/package.json'));
 		
 		$item = new stdClass();
 		$item->type = '20';
