@@ -53,6 +53,11 @@ var Admin = {
 			}
 		});
 	},
+	/**
+	 * 메뉴를 전환한다.
+	 *
+	 * @param object $tab 탭버튼
+	 */
 	show:function($tab) {
 		var panel = $tab.attr("href").split("/").pop();
 		if (Ext.getCmp("MinitalkPanel-"+panel)) {
@@ -60,6 +65,43 @@ var Admin = {
 		}
 		
 		return false;
+	},
+	/**
+	 * 검색필드를 추가한다.
+	 *
+	 * @param int width 넓이
+	 * @param string placeHolder placeHolder
+	 * @param function 검색함수
+	 */
+	searchField:function(id,width,placeHolder,handler) {
+		return new Ext.form.FieldContainer({
+			width:width == "flex" ? null : width,
+			flex:width == "flex" ? 1 : null,
+			layout:"hbox",
+			items:[
+				new Ext.form.TextField({
+					id:id,
+					flex:1,
+					enableKeyEvents:true,
+					emptyText:placeHolder,
+					listeners:{
+						keypress:function(form,e) {
+							if (e.keyCode == 13) {
+								handler(form.getValue());
+								e.preventDefault();
+							}
+						}
+					}
+				}),
+				new Ext.Button({
+					iconCls:"mi mi-search",
+					handler:function(button) {
+						var keyword = button.ownerCt.items.items[0].getValue();
+						handler(keyword);
+					}
+				})
+			]
+		});
 	},
 	/**
 	 * 서버관리패널
@@ -1091,47 +1133,52 @@ var Admin = {
 		}
 	},
 	/**
-	 * 파일
+	 * 리소스
 	 */
-	attachment:{
-		delete:function() {
-			var selected = Ext.getCmp("MinitalkPanel-attachment").getSelectionModel().getSelection();
-			if (selected.length == 0) {
-				Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("NOT_SELECTED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
-				return;
-			}
-			
-			var hashes = [];
-			for (var i=0, loop=selected.length;i<loop;i++) {
-				hashes.push(selected[i].get("hash"));
-			}
-			
-			Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("attachment/delete_confirm"),buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
-				if (button == "ok") {
-					Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/wait"));
-					$.send(Minitalk.getProcessUrl("@deleteAttachment"),{hashes:JSON.stringify(hashes)},function(result) {
-						if (result.success == true) {
-							Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
-								Ext.getCmp("MinitalkPanel-attachment").getStore().reload();
-							}});
-						}
-					});
+	resource:{
+		/**
+		 * 파일
+		 */
+		attachment:{
+			delete:function() {
+				var selected = Ext.getCmp("MinitalkAttachment").getSelectionModel().getSelection();
+				if (selected.length == 0) {
+					Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("NOT_SELECTED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+					return;
 				}
-			}});
-		},
-		expired:function() {
-			Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("attachment/delete_expired_confirm"),buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
-				if (button == "ok") {
-					Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/wait"));
-					$.send(Minitalk.getProcessUrl("@deleteAttachment"),{mode:"expired"},function(result) {
-						if (result.success == true) {
-							Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
-								Ext.getCmp("MinitalkPanel-attachment").getStore().reload();
-							}});
-						}
-					});
+				
+				var hashes = [];
+				for (var i=0, loop=selected.length;i<loop;i++) {
+					hashes.push(selected[i].get("hash"));
 				}
-			}});
+				
+				Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("resource/attachment/delete_confirm"),buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
+					if (button == "ok") {
+						Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/wait"));
+						$.send(Minitalk.getProcessUrl("@deleteAttachment"),{hashes:JSON.stringify(hashes)},function(result) {
+							if (result.success == true) {
+								Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
+									Ext.getCmp("MinitalkAttachment").getStore().reload();
+								}});
+							}
+						});
+					}
+				}});
+			},
+			expired:function() {
+				Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("resource/attachment/delete_expired_confirm"),buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
+					if (button == "ok") {
+						Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/wait"));
+						$.send(Minitalk.getProcessUrl("@deleteAttachment"),{mode:"expired"},function(result) {
+							if (result.success == true) {
+								Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
+									Ext.getCmp("MinitalkAttachment").getStore().reload();
+								}});
+							}
+						});
+					}
+				}});
+			}
 		}
 	},
 	/**
