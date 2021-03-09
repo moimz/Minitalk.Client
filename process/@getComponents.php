@@ -137,14 +137,11 @@ while ($language = @readdir($languagesPath)) {
 	}
 }
 
-
 // 이모티콘
 $emoticonsPath = @opendir(__MINITALK_PATH__.'/emoticons');
 while ($emoticon = @readdir($emoticonsPath)) {
 	if ($emoticon != '.' && $emoticon != '..' && is_dir(__MINITALK_PATH__.'/emoticons/'.$emoticon) == true && is_file(__MINITALK_PATH__.'/emoticons/'.$emoticon.'/package.json') == true) {
 		$package = json_decode(file_get_contents(__MINITALK_PATH__.'/emoticons/'.$emoticon.'/package.json'));
-		
-		
 		
 		$item = new stdClass();
 		$item->type = '40';
