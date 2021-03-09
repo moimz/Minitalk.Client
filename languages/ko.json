@@ -123,6 +123,7 @@
 		"call_sound":"호출을 받았을 경우 알림음을 재생합니다."
 	},
 	"error":{
+		"DUPLICATED":"기존에 등록된 데이터와 중복됩니다.",
 		"NOT_SELECTED":"선택된 항목이 없습니다.",
 		"UNKNOWN":"알 수 없는 에러가 발생하였습니다.",
 		"MINITALK_ID_REQUIRED":"미니톡 채팅위젯 속성중 ID값 설정이 누락되었습니다.",
@@ -144,6 +145,7 @@
 		"INVALID_FORM_DATA":"잘못 입력된 항목이 있습니다.",
 		"SERVICE_API_FAIL":"채팅호스팅 API 요청이 실패하였습니다.",
 		"SERVICE_UNREGISTED_CLIENT_URL":"등록되지 않은 클라이언트주소입니다.",
+		"SERVICE_UNLINKED":"클라이언트 연결이 끊어졌습니다.",
 		"SERVICE_EXPIRED":"채팅호스팅서비스 이용기간이 만료되었습니다.",
 		"SERVICE_DISABLED":"채팅호스팅서비스를 잠시 이용할 수 없습니다.",
 		"SERVICE_ALREADY_LINKED":"이미 다른 미니톡클라이언트와 연결된 서비스입니다.",
