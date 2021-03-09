@@ -196,8 +196,8 @@
 		"menu":{
 			"server":"서버",
 			"channel":"채널",
-			"history":"대화기록",
 			"resource":"리소스",
+			"log":"로그",
 			"banip":"차단IP",
 			"broadcast":"브로드캐스트"
 		},
@@ -323,10 +323,17 @@
 				"user":"현재/최대접속자"
 			}
 		},
-		"history":{
-			"channel":"채널명",
-			"nickname":"닉네임/아이피",
-			"keyword":"대화내용"
+		"log":{
+			"history":{
+				"title":"대화기록",
+				"channel":"채널명",
+				"nickname":"닉네임/아이피",
+				"keyword":"대화내용"
+			},
+			"server":{
+				"title":"서버로그",
+				"keyword":"로그내용"
+			}
 		},
 		"resource":{
 			"attachment":{
