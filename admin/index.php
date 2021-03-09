@@ -61,7 +61,11 @@ if ($logged === null) {
 <header id="MinitalkHeader">
 	<h1>Minitalk <small>Administrator</small></h1>
 	
-	<ul>
+	<ul data-role="menu">
+		<li data-role="more">
+			<button type="button"><i class="mi mi-angle-down"></i></button>
+			<ul></ul>
+		</li>
 		<?php foreach ($MINITALK->getText('admin/menu') as $menu=>$title) { if (in_array($menu,array('log','broadcast')) == true && $hasServer == false) continue; ?>
 		<li<?php echo $menu == 'server' ? ' class="selected"' : ''; ?>><button data-tab="<?php echo $menu; ?>"><i class="xi <?php echo $menuIcons[$menu]; ?>"></i><?php echo $title; ?></button></li>
 		<?php } ?>
@@ -79,13 +83,15 @@ if ($logged === null) {
 <script>
 Ext.onReady(function () {
 	new Ext.Viewport({
+		id:"AdminViewport",
 		layout:{type:"border"},
 		items:[
 			new Ext.Panel({
 				region:"north",
 				height:52,
 				border:false,
-				contentEl:"MinitalkHeader"
+				contentEl:"MinitalkHeader",
+				cls:"x-visible-panel"
 			}),
 			new Ext.TabPanel({
 				id:"MinitalkTabPanel",
@@ -1487,8 +1493,64 @@ Ext.onReady(function () {
 				border:false,
 				contentEl:"MinitalkFooter"
 			})
-		]
+		],
+		listeners:{
+			afterRender:function() {
+				$(document).triggerHandler("MinitalkAdminReady");
+			},
+			resize:function() {
+				var $header = $("#MinitalkHeader");
+				var $menus = $("ul[data-role=menu]",$header);
+				var $items = $("> li",$menus);
+				var $lists = $("> li[data-role=more] > ul",$menus);
+				$lists.empty();
+				$items.show();
+				
+				var count = 0;
+				var limitWidth = $menus.innerWidth();
+				var currentWidth = 0;
+				var is_more = false;
+				$items.each(function() {
+					var width = $(this).outerWidth();
+					if (currentWidth + width + 40 > limitWidth) {
+						is_more = true;
+						return false;
+					}
+					
+					currentWidth+= width;
+					count++;
+				});
+				
+				if (is_more == true) {
+					for (var i=loop=$items.length - 1;i>=Math.max(1,count);i--) {
+						var $menu = $items.eq(i).clone(true);
+						
+						$lists.prepend($menu);
+						$items.eq(i).hide();
+					}
+				} else {
+					$items.eq(0).hide();
+				}
+			}
+		}
+	}).updateLayout();
+	
+	try {
+		document.fonts.ready.then(function() {
+			setTimeout(function() { Ext.getCmp("AdminViewport").updateLayout(); Ext.getCmp("AdminViewport").fireEvent("resize"); },1000);
+		});
+	} catch (e) {}
+});
+
+$(document).ready(function() {
+	$("#MinitalkHeader ul[data-role=menu] > li[data-role=more] > button").on("click",function(e) {
+		$(this).parent().toggleClass("on");
+		e.stopPropagation();
 	});
+});
+
+$(document).on("click",function() {
+	$("#MinitalkHeader ul[data-role=menu] > li[data-role=more]").removeClass("on");
 });
 </script>
 <?php } ?>
