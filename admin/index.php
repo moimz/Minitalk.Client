@@ -56,7 +56,7 @@ $hasServer = is_dir(__MINITALK_PATH__.'/server') == true;
 if ($logged === null) {
 	INCLUDE './login.php';
 } else {
-	$menuIcons = array('server'=>'xi-cloud-network','category'=>'xi-sitemap','channel'=>'xi-chat','history'=>'xi-time-back','attachment'=>'xi-archive','banip'=>'xi-slash-circle','broadcast'=>'xi-signal','admin'=>'xi-crown');
+	$menuIcons = array('server'=>'xi-cloud-network','channel'=>'xi-chat','history'=>'xi-time-back','attachment'=>'xi-archive','banip'=>'xi-slash-circle','broadcast'=>'xi-signal','admin'=>'xi-crown');
 ?>
 <header id="MinitalkHeader">
 	<h1>Minitalk <small>Administrator</small></h1>
@@ -302,247 +302,6 @@ Ext.onReady(function () {
 							}
 						}
 					}),
-					new Ext.Panel({
-						id:"MinitalkPanel-category",
-						border:false,
-						layout:{type:"hbox",align:"stretch"},
-						items:[
-							new Ext.grid.GridPanel({
-								id:"MinitalkCategory1",
-								title:Admin.getText("category/category1"),
-								border:true,
-								margin:"5 5 5 5",
-								flex:1,
-								tbar:[
-									new Ext.Button({
-										iconCls:"mi mi-plus",
-										text:Admin.getText("category/add"),
-										handler:function() {
-											Admin.category.add();
-										}
-									}),
-									new Ext.Button({
-										iconCls:"mi mi-trash",
-										text:Admin.getText("category/delete"),
-										handler:function() {
-											Admin.category.delete();
-										}
-									})
-								],
-								store:new Ext.data.JsonStore({
-									proxy:{
-										type:"ajax",
-										simpleSortMode:true,
-										url:Minitalk.getProcessUrl("@getCategories"),
-										extraParams:{parent:0},
-										reader:{type:"json"},
-									},
-									remoteSort:false,
-									sorters:[{property:"category",direction:"ASC"}],
-									autoLoad:true,
-									pageSize:0,
-									fields:["idx","category",{name:"children",type:"int"},{name:"channel",type:"int"},{name:"user",type:"int"}]
-								}),
-								columns:[{
-									header:Admin.getText("category/columns/category"),
-									dataIndex:"category",
-									flex:1
-								},{
-									header:Admin.getText("category/columns/children"),
-									dataIndex:"children",
-									width:90,
-									align:"right",
-									summaryType:"sum",
-									renderer:function(value) {
-										return Ext.util.Format.number(value,"0,000");
-									}
-								},{
-									header:Admin.getText("category/columns/channel"),
-									dataIndex:"channel",
-									width:70,
-									align:"right",
-									summaryType:"sum",
-									renderer:function(value) {
-										return Ext.util.Format.number(value,"0,000");
-									}
-								},{
-									header:Admin.getText("category/columns/user"),
-									dataIndex:"user",
-									width:80,
-									align:"right",
-									summaryType:"sum",
-									renderer:function(value) {
-										return Ext.util.Format.number(value,"0,000");
-									}
-								}],
-								selModel:new Ext.selection.CheckboxModel(),
-								features:[{ftype:"summary"}],
-								bbar:[
-									new Ext.Button({
-										iconCls:"x-tbar-loading",
-										handler:function() {
-											Ext.getCmp("MinitalkCategory1").getStore().reload();
-										}
-									}),
-									"->",
-									{xtype:"tbtext",text:Admin.getText("category/grid_help")}
-								],
-								listeners:{
-									itemdblclick:function(grid,record) {
-										Admin.category.add(record.data.idx);
-									},
-									selectionchange:function(grid,selected) {
-										var parent = selected.length == 1 ? selected[0].data.idx : 0;
-										if (parent == 0) {
-											Ext.getCmp("MinitalkCategory2").getStore().removeAll();
-											Ext.getCmp("MinitalkCategory2").disable();
-										} else {
-											Ext.getCmp("MinitalkCategory2").getStore().getProxy().setExtraParam("parent",parent);
-											Ext.getCmp("MinitalkCategory2").getStore().reload();
-										}
-									},
-									itemcontextmenu:function(grid,record,item,index,e) {
-										var menu = new Ext.menu.Menu();
-										
-										menu.addTitle(record.data.category);
-										
-										menu.add({
-											text:Admin.getText("category/modify"),
-											iconCls:"xi xi-form",
-											handler:function() {
-												Admin.category.add(record.data.idx);
-											}
-										});
-										
-										menu.add({
-											text:Admin.getText("category/delete"),
-											iconCls:"mi mi-trash",
-											handler:function() {
-												Admin.category.delete();
-											}
-										});
-										
-										e.stopEvent();
-										menu.showAt(e.getXY());
-									}
-								}
-							}),
-							new Ext.grid.GridPanel({
-								id:"MinitalkCategory2",
-								title:Admin.getText("category/category2") + " (" + Admin.getText("category/select_first")+")",
-								border:true,
-								margin:"5 5 5 0",
-								disabled:true,
-								flex:1,
-								tbar:[
-									new Ext.Button({
-										iconCls:"mi mi-plus",
-										text:Admin.getText("category/add"),
-										handler:function() {
-											var parent = Ext.getCmp("MinitalkCategory2").getStore().getProxy().extraParams.parent;
-											Admin.category.add(null,parent);
-										}
-									}),
-									new Ext.Button({
-										iconCls:"mi mi-trash",
-										text:Admin.getText("category/delete"),
-										handler:function() {
-											var parent = Ext.getCmp("MinitalkCategory2").getStore().getProxy().extraParams.parent;
-											Admin.category.delete(parent);
-										}
-									})
-								],
-								store:new Ext.data.JsonStore({
-									proxy:{
-										type:"ajax",
-										simpleSortMode:true,
-										url:Minitalk.getProcessUrl("@getCategories"),
-										extraParams:{parent:0},
-										reader:{type:"json"}
-									},
-									remoteSort:false,
-									sorters:[{property:"category",direction:"ASC"}],
-									autoLoad:false,
-									pageSize:50,
-									fields:["idx","category",{name:"channel",type:"int"},{name:"user",type:"int"}],
-									listeners:{
-										load:function(store) {
-											var title = Ext.getCmp("MinitalkCategory1").getSelectionModel().getSelection().shift().get("category");
-											Ext.getCmp("MinitalkCategory2").setTitle(title+" "+Admin.getText("category/category2"));
-											Ext.getCmp("MinitalkCategory2").enable();
-										}
-									}
-								}),
-								columns:[{
-									header:Admin.getText("category/columns/category"),
-									dataIndex:"category",
-									flex:1
-								},{
-									header:Admin.getText("category/columns/channel"),
-									dataIndex:"channel",
-									width:70,
-									align:"right",
-									summaryType:"sum",
-									renderer:function(value) {
-										return Ext.util.Format.number(value,"0,000");
-									}
-								},{
-									header:Admin.getText("category/columns/user"),
-									dataIndex:"user",
-									width:80,
-									align:"right",
-									summaryType:"sum",
-									renderer:function(value) {
-										return Ext.util.Format.number(value,"0,000");
-									}
-								}],
-								selModel:new Ext.selection.CheckboxModel(),
-								features:[{ftype:"summary"}],
-								bbar:[
-									new Ext.Button({
-										iconCls:"x-tbar-loading",
-										handler:function() {
-											Ext.getCmp("MinitalkCategory2").getStore().reload();
-										}
-									}),
-									"->",
-									{xtype:"tbtext",text:Admin.getText("category/grid_help")}
-								],
-								listeners:{
-									itemdblclick:function(grid,record) {
-										Admin.category.add(record.data.idx,record.data.parent);
-									},
-									itemcontextmenu:function(grid,record,item,index,e) {
-										var menu = new Ext.menu.Menu();
-										
-										menu.addTitle(record.data.category);
-										
-										menu.add({
-											text:Admin.getText("category/modify"),
-											iconCls:"xi xi-form",
-											handler:function() {
-												Admin.category.add(record.data.idx,record.data.parent);
-											}
-										});
-										
-										menu.add({
-											text:Admin.getText("category/delete"),
-											iconCls:"mi mi-trash",
-											handler:function() {
-												Admin.category.delete(record.data.parent);
-											}
-										});
-										
-										e.stopEvent();
-										menu.showAt(e.getXY());
-									},
-									disable:function() {
-										Ext.getCmp("MinitalkCategory2").setTitle(Admin.getText("category/category2") + " (" + Admin.getText("category/select_first")+")");
-									}
-								}
-							})
-						]
-					}),
 					new Ext.grid.Panel({
 						id:"MinitalkPanel-channel",
 						tbar:[
@@ -571,15 +330,13 @@ Ext.onReady(function () {
 								value:"",
 								listeners:{
 									change:function(form,value) {
-										if (value) {
-											Ext.getCmp("MinitalkChannelCategory2").setValue("");
-											Ext.getCmp("MinitalkChannelCategory2").getStore().getProxy().setExtraParam("parent",value);
-											Ext.getCmp("MinitalkChannelCategory2").getStore().reload();
-											
-											Ext.getCmp("MinitalkPanel-channel").getStore().getProxy().setExtraParam("category1",value);
-											Ext.getCmp("MinitalkPanel-channel").getStore().getProxy().setExtraParam("category2","");
-											Ext.getCmp("MinitalkPanel-channel").getStore().loadPage(1);
-										}
+										Ext.getCmp("MinitalkChannelCategory2").setValue("");
+										Ext.getCmp("MinitalkChannelCategory2").getStore().getProxy().setExtraParam("parent",value ? value : -1);
+										Ext.getCmp("MinitalkChannelCategory2").getStore().reload();
+										
+										Ext.getCmp("MinitalkPanel-channel").getStore().getProxy().setExtraParam("category1",value);
+										Ext.getCmp("MinitalkPanel-channel").getStore().getProxy().setExtraParam("category2","");
+										Ext.getCmp("MinitalkPanel-channel").getStore().loadPage(1);
 									}
 								}
 							}),
@@ -608,11 +365,18 @@ Ext.onReady(function () {
 								value:"",
 								listeners:{
 									change:function(form,value) {
-										Ext.getCmp("MinitalkPanel-channel").getStore().getProxy().setExtraParam("category2","");
+										Ext.getCmp("MinitalkPanel-channel").getStore().getProxy().setExtraParam("category2",value);
 										Ext.getCmp("MinitalkPanel-channel").getStore().loadPage(1);
 									}
 								}
 							}),
+							new Ext.Button({
+								iconCls:"mi mi-config",
+								handler:function() {
+									Admin.channel.category.panel();
+								}
+							}),
+							"-",
 							new Ext.form.TextField({
 								id:"MinitalkChannelKeyword",
 								width:150,

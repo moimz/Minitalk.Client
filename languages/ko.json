@@ -196,7 +196,6 @@
 		"unselected":"선택안함",
 		"menu":{
 			"server":"서버",
-			"category":"카테고리",
 			"channel":"채널",
 			"history":"대화기록",
 			"attachment":"파일",
@@ -244,26 +243,6 @@
 			"unlimited":"제한없음",
 			"unknown":"알수없음"
 		},
-		"category":{
-			"category1":"1차 카테고리",
-			"category2":"2차 카테고리",
-			"category3":"카테고리에 개설된 채널",
-			"add":"카테고리추가",
-			"modify":"카테고리수정",
-			"delete":"선택카테고리 삭제",
-			"grid_help":"더블클릭 : 카테고리수정 / 마우스우클릭 : 상세메뉴",
-			"select_first":"1차 카테고리를 선택하세요.",
-			"delete_confirm":"선택한 카테고리를 삭제하시겠습니까?<br>카테고리내의 하위 카테고리 및 채널이 모두 삭제됩니다.",
-			"form":{
-				"category":"카테고리명"
-			},
-			"columns":{
-				"category":"카테고리명",
-				"children":"하위분류",
-				"channel":"채널수",
-				"user":"접속자수"
-			}
-		},
 		"channel":{
 			"title":"채널관리",
 			"add":"채널추가",
@@ -274,6 +253,27 @@
 			"unknown":"채팅서버를 할당받지 않음",
 			"grid_help":"항목 더블클릭 : 상세정보 / 항목 우클릭 : 메뉴",
 			"delete_confirm":"선택한 채널을 삭제하시겠습니까?",
+			"category":{
+				"panel":"카테고리관리",
+				"category1":"1차 카테고리",
+				"category2":"2차 카테고리",
+				"add_category1":"1차 카테고리추가",
+				"add_category2":"2차 카테고리추가",
+				"modify":"카테고리수정",
+				"delete":"선택카테고리 삭제",
+				"grid_help":"더블클릭 : 카테고리수정 / 마우스우클릭 : 상세메뉴",
+				"select_first":"1차 카테고리를 선택하세요.",
+				"delete_confirm":"선택한 카테고리를 삭제하시겠습니까?<br>카테고리내의 하위 카테고리 및 채널이 모두 삭제됩니다.",
+				"form":{
+					"category":"카테고리명"
+				},
+				"columns":{
+					"category":"카테고리명",
+					"children":"하위분류",
+					"channel":"채널수",
+					"user":"접속자수"
+				}
+			},
 			"form":{
 				"default":"채널기본설정",
 				"category":"카테고리",

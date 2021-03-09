@@ -34,7 +34,7 @@ for ($i=0, $loop=count($lists);$i<$loop;$i++) {
 }
 
 if ($is_all == true) {
-	$lists[] = array('idx'=>'','category'=>$this->getText('admin/category/category'.($parent == 0 ? '1' : '2')),'sort'=>-1);
+	$lists[] = array('idx'=>'','category'=>$this->getText('admin/channel/category/category'.($parent == 0 ? '1' : '2')),'sort'=>-1);
 }
 
 if ($is_none == true) {
