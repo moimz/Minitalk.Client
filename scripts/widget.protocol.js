@@ -528,8 +528,7 @@ Minitalk.protocol = {
 		 * 접속을 해제한다.
 		 */
 		if (type == 10) {
-			Minitalk.socket.reconnectable = false;
-			Minitalk.socket.io.disconnect();
+			Minitalk.socket.disconnect();
 		}
 	}
 };
