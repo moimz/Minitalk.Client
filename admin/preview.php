@@ -7,8 +7,8 @@
  * @file /admin/preview.php
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
- * @version 7.0.0
- * @modified 2021. 1. 25.
+ * @version 7.0.1
+ * @modified 2021. 3. 10.
  */
 REQUIRE '../configs/init.config.php';
 if ($_CONFIGS->installed === false) {

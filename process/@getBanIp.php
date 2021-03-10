@@ -7,8 +7,8 @@
  * @file /process/@getBanIp.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 7.0.0
- * @modified 2020. 12. 4.
+ * @version 7.0.1
+ * @modified 2021. 3. 10.
  */
 if (defined('__MINITALK__') == false) exit;
 

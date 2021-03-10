@@ -8,8 +8,8 @@
  * @file /example.php
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
- * @version 7.0.0
- * @modified 2021. 1. 25.
+ * @version 7.0.1
+ * @modified 2021. 3. 10.
  */
 REQUIRE_ONCE './classes/widget.php';
 ?>
