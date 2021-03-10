@@ -17,7 +17,7 @@ REQUIRE_ONCE './classes/widget.php';
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-<title>Minitalk6 Client Setup Source Example</title>
+<title>Minitalk Client Setup Source Example</title>
 <style>
 HTML, BODY {padding:10px; margin:0px; overflow:hidden; width:100%; height:100%;}
 </style>
@@ -29,12 +29,11 @@ html, body {width:100%; height:100%; padding:0; margin:0;}
 	<script type="text/javascript" src="./scripts/minitalk.js" charset="UTF-8"></script>
 	<script type="text/javascript">
 	var m = new Minitalk({
-		id:"MinitalkExampleV6",
+		id:"MinitalkExample",
 		channel:"example",
 		width:"100%",
 		height:"100%",
 		templet:"default",
-		type:"auto",
 		usercode:"<?php echo MinitalkUserCode(null,0,null,null,array()); ?>"
 	});
 	</script>
