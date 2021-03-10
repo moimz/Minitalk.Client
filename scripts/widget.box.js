@@ -282,7 +282,7 @@ Minitalk.box = {
 					];
 					html = html.join("");
 					
-					Minitalk.ui.createWindow(html,400,function($dom) {
+					Minitalk.ui.createWindow(html,360,function($dom) {
 						for (var i=0, loop=result.boxes.length;i<loop;i++) {
 							$("select[name=id]",$dom).append($("<option>").attr("value",result.boxes[i].id).data("box",result.boxes[i]).html(result.boxes[i].title));
 						}
@@ -321,7 +321,7 @@ Minitalk.box = {
 									},
 									error:function(result) {
 										if (result.status == 403 || result.status == 404) {
-											Minitalk.ui.printError(Minitalk.getErrorCode(result.status));
+											Minitalk.ui.printError(result.responseJSON.error);
 										} else {
 											Minitalk.ui.printError("CONNECT_ERROR");
 										}
