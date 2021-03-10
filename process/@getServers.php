@@ -43,3 +43,4 @@ for ($i=0, $loop=count($lists);$i<$loop;$i++) {
 $results->success = true;
 $results->lists = $lists;
 $results->count = count($lists);
+?>
