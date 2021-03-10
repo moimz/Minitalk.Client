@@ -7,8 +7,8 @@
  * @file /api/log.get.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.4.0
- * @modified 2021. 1. 25.
+ * @version 6.4.1
+ * @modified 2021. 3. 10.
  */
 if (defined('__MINITALK__') == false) exit;
 

@@ -7,8 +7,8 @@
  * @file /scripts/box.css.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.4.0
- * @modified 2021. 1. 25.
+ * @version 6.4.1
+ * @modified 2021. 3. 10.
  */
 REQUIRE_ONCE str_replace('/styles/box.css.php','',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['SCRIPT_FILENAME'])).'/configs/init.config.php';
 header("Content-Type:text/css; charset=utf-8");
@@ -67,7 +67,7 @@ if (is_file(__MINITALK_PATH__.'/plugins/'.$type.'/box.css') == true) {
  * @file /scripts/box.css.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.4.0
- * @modified 2021. 1. 25.
+ * @version 6.4.1
+ * @modified 2021. 3. 10.
  */
 <?php echo $css->minify(__MINITALK_PATH__.'/styles'); ?>

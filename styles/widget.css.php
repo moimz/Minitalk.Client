@@ -7,8 +7,8 @@
  * @file /scripts/widget.css.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.4.0
- * @modified 2021. 1. 25.
+ * @version 6.4.1
+ * @modified 2021. 3. 10.
  */
 REQUIRE_ONCE str_replace('/styles/widget.css.php','',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['SCRIPT_FILENAME'])).'/configs/init.config.php';
 header("Content-Type:text/css; charset=utf-8");
@@ -61,7 +61,7 @@ while ($pluginName = @readdir($pluginsPath)) {
  * @file /scripts/widget.css.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.4.0
- * @modified 2021. 1. 25.
+ * @version 6.4.1
+ * @modified 2021. 3. 10.
  */
 <?php echo $css->minify(__MINITALK_PATH__.'/styles'); ?>
