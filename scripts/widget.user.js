@@ -175,6 +175,19 @@ Minitalk.user = {
 		var $lists = $("<ul>");
 		$users.append($lists);
 		
+		/**
+		 * 박스인경우 초대하기 버튼을 추가한다.
+		 */
+		if (Minitalk.box.isBox() == true) {
+			var $invite = $("<button>").attr("type","button").attr("data-action","invite");
+			$invite.append($("<i>").addClass("icon"));
+			$invite.append($("<label>").html(Minitalk.getText("box/invite")));
+			$invite.on("click",function() {
+				Minitalk.box.invite("");
+			});
+			$lists.append($("<li>").append($invite));
+		}
+		
 		for (var i=0, loop=users.length;i<loop;i++) {
 			var user = users[i];
 			var $item = $("<li>").attr("data-nickname",user.nickname);
@@ -200,6 +213,12 @@ Minitalk.user = {
 			var leftUser = $left.data("user");
 			var $right = $("label[data-role=user]",$(right));
 			var rightUser = $right.data("user");
+			
+			/**
+			 * 유저가 아닌 경우 항상 처음에 출력한다.
+			 */
+			if ($(left).attr("data-nickname") === undefined) return -1;
+			if ($(right).attr("data-nickname") === undefined) return 1;
 			
 			/**
 			 * 유저목록에서 나를 항상 처음에 출력한다.

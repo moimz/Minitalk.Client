@@ -238,110 +238,214 @@ Minitalk.box = {
 	 */
 	invite:function(nickname) {
 		if (Minitalk.socket.isConnected() === false) callback({success:false,error:"NOT_CONNECTED"});
-	
-		$.get({
-			url:Minitalk.socket.connection.domain+"/myboxes",
-			dataType:"json",
-			headers:{authorization:"TOKEN " + Minitalk.socket.token},
-			success:function(result) {
-				if (result.success == true) {
-					if (result.boxes.length == 0) {
-						Minitalk.ui.printError("NOT_FOUND_MYBOX");
-						return;
-					}
+		
+		/**
+		 * 박스에서 초대하는 경우
+		 */
+		if (Minitalk.box.isBox() == true) {
+			/**
+			 * 박스 초대 HTML 을 정의한다.
+			 */
+			var html = [
+				'<section data-role="invite">',
+					'<h2>' + Minitalk.getText("box/invite") + '</h2>',
+					'<button data-action="close"></button>',
+					'<div data-role="content">',
+						'<label>',
+							'<input type="text" name="nickname" placeholder="' + Minitalk.getText("box/invite_nickname") + '" value="' + nickname + '">',
+							'<p>' + Minitalk.getText("box/invite_nickname_help") + '</p>',
+						'</label>',
+						'<hr>',
+						'<label class="checkbox">',
+							'<input type="checkbox" name="password" value="TRUE">' + Minitalk.getText("box/invite_password"),
+							'<p>' + Minitalk.getText("box/invite_password_help") + '</p>',
+						'</label>',
+					'</div>',
+					'<div data-role="button">',
+						'<ul>',
+							'<li><button type="button" data-action="cancel">' + Minitalk.getText("button/cancel") + '</button></li>',
+							'<li><button type="button" data-action="confirm">' + Minitalk.getText("button/confirm") + '</button></li>',
+						'</ul>',
+					'</div>',
+				'</section>'
+			];
+			
+			if (Minitalk.box.connection.password == null) {
+				html.splice(8,5);
+			}
+			html = html.join("");
+			
+			Minitalk.ui.createWindow(html,360,function($dom) {
+				if (Minitalk.box.password == null) {
+					$("*[data-visible=password]",$dom).hide();
+				}
+				
+				$("button[data-action]",$dom).on("click",function() {
+					var $button = $(this);
+					var action = $button.attr("data-action");
 					
-					/**
-					 * 박스 초대 HTML 을 정의한다.
-					 */
-					var html = [
-						'<section data-role="invite">',
-							'<h2>' + Minitalk.getText("box/invite") + '</h2>',
-							'<button data-action="close"></button>',
-							'<div data-role="content">',
-								'<label>',
-									'<input type="text" name="nickname" placeholder="' + Minitalk.getText("box/invite_nickname") + '" value="' + nickname + '">',
-									'<p>' + Minitalk.getText("box/invite_nickname_help") + '</p>',
-								'</label>',
-								'<label data-role="select">',
-									'<select name="id"></select>',
-									'<p>' + Minitalk.getText("box/invite_id_help") + '</p>',
-								'</label>',
-								'<hr>',
-								'<label class="checkbox">',
-									'<input type="checkbox" name="password" value="TRUE">' + Minitalk.getText("box/invite_password"),
-									'<p>' + Minitalk.getText("box/invite_password_help") + '</p>',
-								'</label>',
-							'</div>',
-							'<div data-role="button">',
-								'<ul>',
-									'<li><button type="button" data-action="cancel">' + Minitalk.getText("button/cancel") + '</button></li>',
-									'<li><button type="button" data-action="confirm">' + Minitalk.getText("button/confirm") + '</button></li>',
-								'</ul>',
-							'</div>',
-						'</section>'
-					];
-					html = html.join("");
-					
-					Minitalk.ui.createWindow(html,400,function($dom) {
-						for (var i=0, loop=result.boxes.length;i<loop;i++) {
-							$("select[name=id]",$dom).append($("<option>").attr("value",result.boxes[i].id).data("box",result.boxes[i]).html(result.boxes[i].title));
+					if (action == "confirm") {
+						if (Minitalk.socket.isConnected() === false) {
+							Minitalk.ui.printError("NOT_CONNECTED");
+							return;
 						}
 						
-						$("button[data-action]",$dom).on("click",function() {
-							var $button = $(this);
-							var action = $button.attr("data-action");
-							
-							if (action == "confirm") {
-								if (Minitalk.socket.isConnected() === false) {
-									Minitalk.ui.printError("NOT_CONNECTED");
-									return;
+						$button.status("loading");
+						
+						var id = Minitalk.box.connection.id;
+						var nickname = $.trim($("input[name=nickname]",$dom).val());
+						var box = {
+							id:Minitalk.box.connection.id,
+							type:Minitalk.box.connection.type,
+							title:Minitalk.box.connection.title
+						};
+						box.password = $("input[name=password]",$dom).checked() == true ? Minitalk.box.connection.password : null;
+						
+						if (Minitalk.fireEvent("beforeInvite",[box,nickname,Minitalk.user.me]) === false) return;
+						
+						$.post({
+							url:Minitalk.socket.connection.domain+"/invite/" + id,
+							dataType:"json",
+							headers:{authorization:"TOKEN " + Minitalk.socket.token},
+							data:{nickname:nickname,box:JSON.stringify(box)},
+							success:function(result) {
+								if (result.success == true) {
+									Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/invite").replace("{NICKNAME}",nickname).replace("{BOX}",box.title));
+									Minitalk.ui.closeWindow(true);
+									
+									Minitalk.fireEvent("invite",[box,nickname,Minitalk.user.me]);
 								}
-								
-								$button.status("loading");
-								
-								var id = $("select[name=id]",$dom).val();
-								var nickname = $.trim($("input[name=nickname]",$dom).val());
-								var box = $("select[name=id] > option:selected",$dom).data("box");
-								box.password = $("input[name=password]",$dom).checked() == true ? box.password : null;
-								
-								if (Minitalk.fireEvent("beforeInvite",[box,nickname,Minitalk.user.me]) === false) return;
-								
-								$.post({
-									url:Minitalk.socket.connection.domain+"/invite/" + id,
-									dataType:"json",
-									headers:{authorization:"TOKEN " + Minitalk.socket.token},
-									data:{nickname:nickname,box:JSON.stringify(box)},
-									success:function(result) {
-										if (result.success == true) {
-											Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/invite").replace("{NICKNAME}",nickname).replace("{BOX}",box.title));
-											Minitalk.ui.closeWindow(true);
-											
-											Minitalk.fireEvent("invite",[box,nickname,Minitalk.user.me]);
-										}
-									},
-									error:function(result) {
-										if (result.status == 403 || result.status == 404) {
-											Minitalk.ui.printError(result.responseJSON.error);
-										} else {
-											Minitalk.ui.printError("CONNECT_ERROR");
-										}
-									}
-								});
-							} else {
-								Minitalk.ui.closeWindow();
+							},
+							error:function(result) {
+								if (result.status == 403 || result.status == 404) {
+									Minitalk.ui.printError(result.responseJSON.error);
+								} else {
+									Minitalk.ui.printError("CONNECT_ERROR");
+								}
 							}
 						});
-					});
+					} else {
+						Minitalk.ui.closeWindow();
+					}
+				});
+			});
+		} else {
+			$.get({
+				url:Minitalk.socket.connection.domain+"/myboxes",
+				dataType:"json",
+				headers:{authorization:"TOKEN " + Minitalk.socket.token},
+				success:function(result) {
+					if (result.success == true) {
+						if (result.boxes.length == 0) {
+							Minitalk.ui.printError("NOT_FOUND_MYBOX");
+							return;
+						}
+						
+						/**
+						 * 박스 초대 HTML 을 정의한다.
+						 */
+						var html = [
+							'<section data-role="invite">',
+								'<h2>' + Minitalk.getText("box/invite") + '</h2>',
+								'<button data-action="close"></button>',
+								'<div data-role="content">',
+									'<label>',
+										'<input type="text" name="nickname" placeholder="' + Minitalk.getText("box/invite_nickname") + '" value="' + nickname + '">',
+										'<p>' + Minitalk.getText("box/invite_nickname_help") + '</p>',
+									'</label>',
+									'<label data-role="select">',
+										'<select name="id"></select>',
+										'<p>' + Minitalk.getText("box/invite_id_help") + '</p>',
+									'</label>',
+									'<hr>',
+									'<label data-visible="password" class="checkbox">',
+										'<input type="checkbox" name="password" value="TRUE">' + Minitalk.getText("box/invite_password"),
+										'<p>' + Minitalk.getText("box/invite_password_help") + '</p>',
+									'</label>',
+								'</div>',
+								'<div data-role="button">',
+									'<ul>',
+										'<li><button type="button" data-action="cancel">' + Minitalk.getText("button/cancel") + '</button></li>',
+										'<li><button type="button" data-action="confirm">' + Minitalk.getText("button/confirm") + '</button></li>',
+									'</ul>',
+								'</div>',
+							'</section>'
+						];
+						html = html.join("");
+						
+						Minitalk.ui.createWindow(html,360,function($dom) {
+							for (var i=0, loop=result.boxes.length;i<loop;i++) {
+								$("select[name=id]",$dom).append($("<option>").attr("value",result.boxes[i].id).data("box",result.boxes[i]).html(result.boxes[i].title));
+							}
+							
+							$("select[name=id]",$dom).on("change",function() {
+								var selected = $("option:selected",$(this)).data("box");
+								if (selected.password == null) {
+									$("label[data-visible=password]",$dom).css("opacity",0.5).css("cursor","not-allowed");
+									$("input[name=password]",$dom).checked(false).disable();
+								} else {
+									$("label[data-visible=password]",$dom).css("opacity",1).css("cursor","pointer");
+									$("input[name=password]",$dom).checked(false).enable();
+								}
+							});
+							$("select[name=id]",$dom).triggerHandler("change");
+							
+							$("button[data-action]",$dom).on("click",function() {
+								var $button = $(this);
+								var action = $button.attr("data-action");
+								
+								if (action == "confirm") {
+									if (Minitalk.socket.isConnected() === false) {
+										Minitalk.ui.printError("NOT_CONNECTED");
+										return;
+									}
+									
+									$button.status("loading");
+									
+									var id = $("select[name=id]",$dom).val();
+									var nickname = $.trim($("input[name=nickname]",$dom).val());
+									var box = $("select[name=id] > option:selected",$dom).data("box");
+									box.password = $("input[name=password]",$dom).checked() == true ? box.password : null;
+									
+									if (Minitalk.fireEvent("beforeInvite",[box,nickname,Minitalk.user.me]) === false) return;
+									
+									$.post({
+										url:Minitalk.socket.connection.domain+"/invite/" + id,
+										dataType:"json",
+										headers:{authorization:"TOKEN " + Minitalk.socket.token},
+										data:{nickname:nickname,box:JSON.stringify(box)},
+										success:function(result) {
+											if (result.success == true) {
+												Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/invite").replace("{NICKNAME}",nickname).replace("{BOX}",box.title));
+												Minitalk.ui.closeWindow(true);
+												
+												Minitalk.fireEvent("invite",[box,nickname,Minitalk.user.me]);
+											}
+										},
+										error:function(result) {
+											if (result.status == 403 || result.status == 404) {
+												Minitalk.ui.printError(result.responseJSON.error);
+											} else {
+												Minitalk.ui.printError("CONNECT_ERROR");
+											}
+										}
+									});
+								} else {
+									Minitalk.ui.closeWindow();
+								}
+							});
+						});
+					}
+				},
+				error:function(result) {
+					if (result.status == 403 || result.status == 404) {
+						Minitalk.ui.printErrorCode(result.status);
+					} else {
+						callback({success:false,error:"CONNECT_ERROR"});
+					}
 				}
-			},
-			error:function(result) {
-				if (result.status == 403 || result.status == 404) {
-					Minitalk.ui.printErrorCode(result.status);
-				} else {
-					callback({success:false,error:"CONNECT_ERROR"});
-				}
-			}
-		});
+			});
+		}
 	},
 	/**
 	 * 개인박스에 초대받았을 경우
