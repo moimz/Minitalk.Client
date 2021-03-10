@@ -188,7 +188,16 @@ Minitalk.user = {
 			$lists.append($("<li>").append($invite));
 		}
 		
+		/**
+		 * 나를 추가한다.
+		 */
+		var $item = $("<li>").attr("data-nickname",Minitalk.user.me.nickname);
+		$item.append(Minitalk.user.getTag(Minitalk.user.me));
+		$lists.append($item);
+		
 		for (var i=0, loop=users.length;i<loop;i++) {
+			if (users[i].nickname == Minitalk.user.me.nickname) continue;
+			
 			var user = users[i];
 			var $item = $("<li>").attr("data-nickname",user.nickname);
 			
