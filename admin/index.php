@@ -575,7 +575,6 @@ Ext.onReady(function () {
 					new Ext.TabPanel({
 						id:"MinitalkPanel-resource",
 						tabPosition:"bottom",
-						activeTab:0,
 						items:[
 							new Ext.grid.Panel({
 								id:"MinitalkAttachment",
@@ -952,7 +951,6 @@ Ext.onReady(function () {
 					new Ext.TabPanel({
 						id:"MinitalkPanel-log",
 						tabPosition:"bottom",
-						activeTab:1,
 						items:[
 							new Ext.Panel({
 								id:"MinitalkHistory",
