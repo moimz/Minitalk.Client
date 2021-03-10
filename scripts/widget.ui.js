@@ -1422,12 +1422,12 @@ Minitalk.ui = {
 					if (password.length == 0) return;
 					
 					callback(password);
-					e.stopImmediatePropagation();
+					e.preventDefault();
 					Minitalk.ui.closeWindow();
 				}
 			});
 			
-			$("button[data-action]",$dom).on("click",function() {
+			$("button[data-action]",$dom).on("click",function(e) {
 				var $button = $(this);
 				var action = $button.attr("data-action");
 				
