@@ -1198,7 +1198,6 @@ Minitalk.ui = {
 	 */
 	printError:function(code,callback) {
 		Minitalk.ui.closeWindow();
-		Minitalk.socket.reconnectable = false;
 		
 		var $error = $("<div>").attr("data-role","error");
 		var $errorbox = $("<section>");
