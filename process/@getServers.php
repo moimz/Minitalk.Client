@@ -12,10 +12,13 @@
  */
 if (defined('__MINITALK__') == false) exit;
 
+$type = Request('type');
 $this->updateServer(null,true);
 
 $lists = $this->db()->select($this->table->server)->get();
 for ($i=0, $loop=count($lists);$i<$loop;$i++) {
+	if ($type != null && $lists[$i]->type != $type) continue;
+	
 	if ($lists[$i]->type == 'SERVER') {
 		$lists[$i]->status_message = $this->getServerStatus($lists[$i]->domain);
 		

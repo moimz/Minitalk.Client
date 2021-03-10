@@ -135,9 +135,9 @@ Ext.onReady(function () {
 								load:function(store,records,success,e) {
 									if (success == false) {
 										if (e.getError()) {
-											Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 										} else {
-											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 										}
 									}
 								}
@@ -412,9 +412,9 @@ Ext.onReady(function () {
 								load:function(store,records,success,e) {
 									if (success == false) {
 										if (e.getError()) {
-											Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 										} else {
-											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 										}
 									}
 								}
@@ -619,9 +619,9 @@ Ext.onReady(function () {
 										load:function(store,records,success,e) {
 											if (success == false) {
 												if (e.getError()) {
-													Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+													Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 												} else {
-													Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+													Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 												}
 											}
 										}
@@ -761,9 +761,9 @@ Ext.onReady(function () {
 										load:function(store,records,success,e) {
 											if (success == false) {
 												if (e.getError()) {
-													Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+													Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 												} else {
-													Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+													Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 												}
 											}
 										}
@@ -874,9 +874,9 @@ Ext.onReady(function () {
 								load:function(store,records,success,e) {
 									if (success == false) {
 										if (e.getError()) {
-											Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 										} else {
-											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 										}
 									}
 								}
@@ -1071,9 +1071,9 @@ Ext.onReady(function () {
 												}
 											} else {
 												if (e.getError()) {
-													Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+													Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 												} else {
-													Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+													Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 												}
 											}
 											
@@ -1085,10 +1085,6 @@ Ext.onReady(function () {
 								bbar:new Ext.PagingToolbar({
 									store:null,
 									displayInfo:false,
-									items:[
-										"->",
-										{xtype:"tbtext",text:'<span style="font-family:OpenSans;">Total <span id="MinitalkHistoryTotalRows" style="font-weight:bold;">0</span> History</span>'}
-									],
 									listeners:{
 										beforerender:function(tool) {
 											tool.bindStore(tool.ownerCt.store);
@@ -1128,7 +1124,7 @@ Ext.onReady(function () {
 												var current = moment(value);
 												if (current.isValid() == true) {
 													Ext.getCmp("MinitalkServerLog").store.getProxy().setExtraParam("date",current.format("YYYY-MM-DD"));
-													Ext.getCmp("MinitalkServerLog").store.loadPage(1);
+													if (Ext.getCmp("MinitalkServerLogDomain").getValue()) Ext.getCmp("MinitalkServerLog").store.reload();
 												}
 											}
 										}
@@ -1141,9 +1137,44 @@ Ext.onReady(function () {
 											Ext.getCmp("MinitalkServerLogDate").setValue(move.format("YYYY-MM-DD"));
 										}
 									}),
-									Admin.searchField("MinitalkServerLogKeyword",150,Admin.getText("log/server/keyword"),function(keyword) {
-										Ext.getCmp("MinitalkServerLog").store.getProxy().setExtraParam("keyword",keyword);
-										Ext.getCmp("MinitalkServerLog").store.loadPage(1);
+									new Ext.form.ComboBox({
+										id:"MinitalkServerLogDomain",
+										store:new Ext.data.JsonStore({
+											proxy:{
+												type:"ajax",
+												url:Minitalk.getProcessUrl("@getServers"),
+												extraParams:{type:"SERVER",is_all:"true"},
+												reader:{type:"json"}
+											},
+											autoLoad:false,
+											remoteSort:false,
+											sorters:[{property:"domain",direction:"ASC"}],
+											fields:["domain"],
+											listeners:{
+												load:function(store) {
+													if (!Ext.getCmp("MinitalkServerLogDomain").getValue() && store.getCount() > 0) {
+														Ext.getCmp("MinitalkServerLogDomain").setValue(store.getAt(0).get("domain"));
+													}
+												}
+											}
+										}),
+										width:240,
+										editable:false,
+										matchFieldWidth:false,
+										listConfig:{
+											minWidth:300
+										},
+										displayField:"domain",
+										valueField:"domain",
+										value:null,
+										listeners:{
+											change:function(form,value) {
+												if (value) {
+													Ext.getCmp("MinitalkServerLog").store.getProxy().setExtraParam("server",value);
+													Ext.getCmp("MinitalkServerLog").store.reload();
+												}
+											}
+										}
 									})
 								],
 								store:new Ext.data.JsonStore({
@@ -1156,13 +1187,11 @@ Ext.onReady(function () {
 									},
 									remoteSort:true,
 									sorters:[{property:"time",direction:"ASC"}],
-									pageSize:50,
+									pageSize:0,
 									fields:[],
 									listeners:{
 										load:function(store,records,success,e) {
 											if (success == true) {
-												$("#MinitalkServerLogTotalRows").html(Ext.util.Format.number(store.getTotalCount(),"0,000"));
-												
 												var $panel = $("#MinitalkServerLog-innerCt");
 												$panel.empty();
 												for (var i=0, loop=store.getCount();i<loop;i++) {
@@ -1173,9 +1202,9 @@ Ext.onReady(function () {
 												}
 											} else {
 												if (e.getError()) {
-													Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+													Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 												} else {
-													Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+													Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 												}
 											}
 											
@@ -1184,24 +1213,17 @@ Ext.onReady(function () {
 									}
 								}),
 								html:'',
-								bbar:new Ext.PagingToolbar({
-									store:null,
-									displayInfo:false,
-									items:[
-										"->",
-										{xtype:"tbtext",text:'<span style="font-family:OpenSans;">Total <span id="MinitalkServerLogTotalRows" style="font-weight:bold;">0</span> Log</span>'}
-									],
-									listeners:{
-										beforerender:function(tool) {
-											tool.bindStore(tool.ownerCt.store);
+								bbar:[
+									new Ext.Button({
+										iconCls:"x-tbar-loading",
+										handler:function() {
+											Ext.getCmp("MinitalkServerLog").store.reload();
 										}
-									}
-								}),
+									})
+								],
 								listeners:{
 									render:function() {
-										if (Ext.getCmp("MinitalkServerLog").store.isLoaded() == false && Ext.getCmp("MinitalkServerLog").store.isLoading() == false) {
-											Ext.getCmp("MinitalkServerLog").store.loadPage(1);
-										}
+										Ext.getCmp("MinitalkServerLogDomain").getStore().load();
 									}
 								}
 							})
@@ -1246,9 +1268,9 @@ Ext.onReady(function () {
 								load:function(store,records,success,e) {
 									if (success == false) {
 										if (e.getError()) {
-											Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 										} else {
-											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR})
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
 										}
 									}
 								}

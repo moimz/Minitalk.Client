@@ -12,6 +12,7 @@
  */
 if (defined('__MINITALK__') == false) exit;
 
+$server = Param('server');
 $date = Param('date');
 
 if ($date == date('Y-m-d')) {
@@ -20,19 +21,14 @@ if ($date == date('Y-m-d')) {
 	$file = 'minitalk-'.$date.'.log';
 }
 
-$start = Request('start');
-$limit = Request('limit');
-
-$lists = array();
-$total = 0;
-
-if (is_dir(__MINITALK_PATH__.'/logs') == true && is_dir(__MINITALK_PATH__.'/logs') == true && is_file(__MINITALK_PATH__.'/logs/'.$file) == true) {
-	$logs = explode("\n",file_get_contents(__MINITALK_PATH__.'/logs/'.$file));
-	$total = count($logs);
-	$lists = array_slice($logs,$start,$limit);
+$logs = $this->callServerApi('GET',$server,'log/'.$date);
+if ($logs->success == true) {
+	$lists = $logs->logs;
+} else {
+	$lists = array('NO LOGS');
 }
 
 $results->success = true;
 $results->lists = $lists;
-$results->total = $total;
+$results->total = count($lists);
 ?>
