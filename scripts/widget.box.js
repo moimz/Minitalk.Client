@@ -321,7 +321,7 @@ Minitalk.box = {
 									},
 									error:function(result) {
 										if (result.status == 403 || result.status == 404) {
-											Minitalk.ui.printError(Minitalk.getErrorCode(result.status));
+											Minitalk.ui.printError(result.responseJSON.error);
 										} else {
 											Minitalk.ui.printError("CONNECT_ERROR");
 										}
