@@ -1,4 +1,10 @@
 {
+	"title":"한국어 언어팩",
+	"author":{
+		"name":"Arzz",
+		"email":"arzz@arzz.com"
+	},
+	"version":"6.4.1",
 	"text":{
 		"unit":"{COUNT}명",
 		"me":"나",
