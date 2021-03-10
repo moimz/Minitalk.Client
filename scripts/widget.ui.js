@@ -1078,6 +1078,19 @@ Minitalk.ui = {
 				$lists.empty();
 				
 				/**
+				 * 박스인경우 초대하기 버튼을 추가한다.
+				 */
+				if (Minitalk.box.isBox() == true) {
+					var $invite = $("<button>").attr("type","button").attr("data-action","invite");
+					$invite.append($("<i>").addClass("icon"));
+					$invite.append($("<label>").html(Minitalk.getText("box/invite")));
+					$invite.on("click",function() {
+						Minitalk.box.invite("");
+					});
+					$lists.append($("<li>").append($invite));
+				}
+				
+				/**
 				 * 키워드가 없을 경우, 자기자신을 접속자목록 제일 처음에 위치하도록 한다.
 				 */
 				if (result.pagination.keyword == null) result.users.unshift(Minitalk.user.me);
