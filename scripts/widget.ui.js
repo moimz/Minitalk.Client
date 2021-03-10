@@ -69,7 +69,7 @@ Minitalk.ui = {
 			$("body").append(html);
 			var $frame = $("div[data-role=frame]");
 		}
-		$frame.attr("data-version","6");
+		$frame.attr("data-version",Math.floor(Minitalk.version / 10000));
 		
 		/**
 		 * 헤더 DOM 객체를 확인한다.
