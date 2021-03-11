@@ -35,7 +35,7 @@ $user_limit = Request('user_limit') && is_numeric(Request('user_limit')) == true
 $box_limit = Request('box_limit') && is_numeric(Request('box_limit')) == true ? Request('box_limit') : 0;
 $use_history = Request('use_history') && in_array(Request('use_history'),array('TRUE','FALSE')) == true ? Request('use_history') : 'TRUE';
 $password = Param('password');
-$guest_name = Request('guest_name') ? Request('guest_name') : $this->getText('text/guest');
+$guest_name = Request('guest_name') ? Request('guest_name') : 'Guest';
 $extras = Request('extras');
 
 if ($category1 !== 0) {
