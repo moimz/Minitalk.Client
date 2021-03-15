@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.1
- * @modified 2021. 3. 10.
+ * @modified 2021. 3. 15.
  */
 var Admin = {
 	/**
@@ -766,7 +766,7 @@ var Admin = {
 												displayField:"category",
 												valueField:"idx",
 												allowBlank:true,
-												emptyText:Admin.getText("category/category1"),
+												emptyText:Admin.getText("channel/category/category1"),
 												listeners:{
 													change:function(form,value) {
 														form.getForm().findField("category2").getStore().getProxy().setExtraParam("parent",value ? value : -1);
@@ -802,7 +802,7 @@ var Admin = {
 												valueField:"idx",
 												allowBlank:true,
 												style:{marginLeft:"5px"},
-												emptyText:Admin.getText("category/category2")
+												emptyText:Admin.getText("channel/category/category2")
 											})
 										]
 									}),
