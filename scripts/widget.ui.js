@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.1
- * @modified 2021. 3. 10.
+ * @modified 2021. 3. 16.
  */
 Minitalk.ui = {
 	domReady:false,
@@ -1209,6 +1209,7 @@ Minitalk.ui = {
 		
 		switch (code) {
 			case "NOT_FOUND_ONLINE_SERVER" :
+				Minitalk.socket.reconnectable = false;
 				var $button = $("<button>").html(Minitalk.getText("action/reconnect"));
 				$button.on("click",function() {
 					$("div[data-role=error]").remove();
@@ -1217,6 +1218,7 @@ Minitalk.ui = {
 				break;
 				
 			case "BANNED_IP" :
+				Minitalk.socket.reconnectable = false;
 				var $button = null;
 				$errorbox.addClass("textonly");
 				break;
