@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.1
- * @modified 2021. 3. 10.
+ * @modified 2021. 3. 17.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -30,8 +30,6 @@ $item->homepage = 'https://www.minitalk.io';
 $item->path = __MINITALK_PATH__;
 
 $lists[] = $item;
-
-define('__MINITALK_PATH__','/var/projects/Minitalk/commons');
 
 // 플러그인
 $pluginsPath = @opendir(__MINITALK_PATH__.'/plugins');
