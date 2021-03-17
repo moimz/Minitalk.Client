@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.1
- * @modified 2021. 3. 15.
+ * @modified 2021. 3. 17.
  */
 var Admin = {
 	/**
@@ -1173,6 +1173,36 @@ var Admin = {
 							if (result.success == true) {
 								Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
 									Ext.getCmp("MinitalkAttachment").getStore().reload();
+								}});
+							}
+						});
+					}
+				}});
+			}
+		},
+		/**
+		 * 캐시
+		 */
+		cache:{
+			delete:function() {
+				var selected = Ext.getCmp("MinitalkCache").getSelectionModel().getSelection();
+				if (selected.length == 0) {
+					Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("NOT_SELECTED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+					return;
+				}
+				
+				var names = [];
+				for (var i=0, loop=selected.length;i<loop;i++) {
+					names.push(selected[i].get("name"));
+				}
+				
+				Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("resource/cache/delete_confirm"),buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
+					if (button == "ok") {
+						Ext.Msg.wait(Admin.getText("action/working"),Admin.getText("action/wait"));
+						$.send(Minitalk.getProcessUrl("@deleteCache"),{names:JSON.stringify(names)},function(result) {
+							if (result.success == true) {
+								Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/worked"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
+									Ext.getCmp("MinitalkCache").getStore().reload();
 								}});
 							}
 						});

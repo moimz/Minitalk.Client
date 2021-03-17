@@ -9,7 +9,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
  * @version 7.0.1
- * @modified 2021. 3. 10.
+ * @modified 2021. 3. 17.
  */
 REQUIRE '../configs/init.config.php';
 if ($_CONFIGS->installed === false) {
@@ -719,6 +719,144 @@ Ext.onReady(function () {
 											iconCls:"mi mi-trash",
 											handler:function() {
 												Admin.resource.attachment.delete();
+											}
+										});
+										
+										e.stopEvent();
+										menu.showAt(e.getXY());
+									}
+								}
+							}),
+							new Ext.grid.Panel({
+								id:"MinitalkCache",
+								border:false,
+								iconCls:"xi xi-shipping",
+								title:Admin.getText("resource/cache/title"),
+								tbar:[
+									Admin.searchField("MinitalkCacheKeyword",200,Admin.getText("resource/cache/columns/name"),function(keyword) {
+										if (keyword.length > 0) {
+											Ext.getCmp("MinitalkCache").getStore().filter(function(record) {
+												return record.data.name.indexOf(keyword) > -1;
+											});
+										} else {
+											Ext.getCmp("MinitalkCache").getStore().clearFilter();
+										}
+									}),
+									"-",
+									new Ext.Button({
+										iconCls:"mi mi-trash",
+										text:Admin.getText("resource/cache/delete_selected"),
+										handler:function() {
+											Admin.resource.cache.delete();
+										}
+									})
+								],
+								store:new Ext.data.JsonStore({
+									proxy:{
+										type:"ajax",
+										simpleSortMode:true,
+										url:Minitalk.getProcessUrl("@getCaches"),
+										reader:{type:"json"}
+									},
+									remoteSort:true,
+									sorters:[{property:"create_date",direction:"DESC"}],
+									autoLoad:true,
+									pageSize:0,
+									fields:["name","type","language","capacity",{name:"size",type:"int"},"path",{name:"create_date",type:"int"}],
+									listeners:{
+										load:function(store,records,success,e) {
+											if (success == false) {
+												if (e.getError()) {
+													Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+												} else {
+													Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_LOAD_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+												}
+											}
+										}
+									}
+								}),
+								columns:[{
+									text:Admin.getText("resource/cache/columns/name"),
+									dataIndex:"name",
+									width:250,
+									sortable:true
+								},{
+									text:Admin.getText("resource/cache/columns/type"),
+									dataIndex:"type",
+									width:120,
+									align:"center",
+									sortable:true,
+									renderer:function(value) {
+										return Admin.getText("resource/cache/type/" + value);
+									}
+								},{
+									text:Admin.getText("resource/cache/columns/language"),
+									dataIndex:"language",
+									width:80,
+									align:"center",
+									sortable:true
+								},{
+									text:Admin.getText("resource/cache/columns/capacity"),
+									dataIndex:"capacity",
+									width:120,
+									sortable:true,
+									renderer:function(value) {
+										if (value.indexOf("channel.box.") === 0) {
+											return Admin.getText("resource/cache/capacity/channel.box") + "("+value.split(".").pop()+")";
+										} else {
+											return Admin.getText("resource/cache/capacity/" + value);
+										}
+										
+									}
+								},{
+									text:Admin.getText("resource/cache/columns/size"),
+									dataIndex:"size",
+									width:100,
+									sortable:true,
+									align:"right",
+									renderer:function(value) {
+										return Minitalk.getFileSize(value);
+									}
+								},{
+									text:Admin.getText("resource/cache/columns/path"),
+									dataIndex:"path",
+									minWidth:200,
+									flex:1,
+									sortable:true
+								},{
+									text:Admin.getText("resource/cache/columns/create_date"),
+									dataIndex:"create_date",
+									width:145,
+									sortable:true,
+									align:"center",
+									renderer:function(value) {
+										return moment(value * 1000).locale($("html").attr("lang")).format("YYYY.MM.DD(dd) HH:mm");
+									}
+								}],
+								selModel:new Ext.selection.CheckboxModel(),
+								bbar:[
+									new Ext.Button({
+										iconCls:"x-tbar-loading",
+										handler:function() {
+											Ext.getCmp("MinitalkCache").getStore().reload();
+										}
+									}),
+									"->",
+									{xtype:"tbtext",text:Admin.getText("resource/attachment/grid_help")}
+								],
+								listeners:{
+									itemdblclick:function(grid,record) {
+									},
+									itemcontextmenu:function(grid,record,item,index,e) {
+										var menu = new Ext.menu.Menu();
+										
+										menu.addTitle(record.data.name);
+										
+										menu.add({
+											text:Admin.getText("resource/cache/delete"),
+											iconCls:"mi mi-trash",
+											handler:function() {
+												Admin.resource.cache.delete();
 											}
 										});
 										

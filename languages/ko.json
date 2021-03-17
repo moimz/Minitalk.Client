@@ -366,6 +366,31 @@
 					"exp_date":"만료일시"
 				}
 			},
+			"cache":{
+				"title":"캐시",
+				"grid_help":"마우스우클릭 : 상세메뉴",
+				"delete_selected":"선택된 캐시파일삭제",
+				"delete":"캐시파일삭제",
+				"delete_confirm":"선택된 캐시파일을 삭제하시겠습니까?<br>캐시파일 삭제시 최신 캐시파일로 갱신되어 생성됩니다.",
+				"columns":{
+					"name":"캐시파일명",
+					"type":"종류",
+					"language":"언어",
+					"capacity":"적용범위",
+					"size":"크기",
+					"path":"실제경로",
+					"create_date":"캐시생성일시"
+				},
+				"type":{
+					"js":"자바스크립트",
+					"css":"스타일시트"
+				},
+				"capacity":{
+					"global":"위젯전역",
+					"channel":"채널",
+					"channel.box":"개인박스"
+				}
+			},
 			"component":{
 				"title":"미니톡 구성요소",
 				"type":{
