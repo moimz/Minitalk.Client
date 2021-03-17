@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.1
- * @modified 2021. 3. 10.
+ * @modified 2021. 3. 17.
  */
 REQUIRE_ONCE str_replace('/styles/box.css.php','',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['SCRIPT_FILENAME'])).'/configs/init.config.php';
 header("Content-Type:text/css; charset=utf-8");
@@ -21,42 +21,56 @@ foreach ($languages as $language) {
 	if (is_file(__MINITALK_PATH__.'/languages/'.$language.'.json') == true) break;
 }
 
-$minifier = new Minifier();
-$css = $minifier->css();
+$MINITALK = new Minitalk();
 
-$css->add(__MINITALK_PATH__.'/styles/fonts/moimz.css');
-
-/**
- * 언어별 기본 웹폰트를 불러온다.
- */
-if ($language == 'ko') {
-	$css->add(__MINITALK_PATH__.'/styles/fonts/NanumSquare.css');
-	$css->add('html, body {font-family:NanumSquare;}');
-}
-
-$css->add(__MINITALK_PATH__.'/styles/widget.css');
-
-/**
- * 플러그인의 스타일시트를 불러온다.
- */
-$pluginsPath = @opendir(__MINITALK_PATH__.'/plugins');
-while ($pluginName = @readdir($pluginsPath)) {
-	if ($pluginName != '.' && $pluginName != '..' && is_dir(__MINITALK_PATH__.'/plugins/'.$pluginName) == true && is_file(__MINITALK_PATH__.'/plugins/'.$pluginName.'/package.json') == true) {
-		$package = json_decode(file_get_contents(__MINITALK_PATH__.'/plugins/'.$pluginName.'/package.json'));
-		if (is_file(__MINITALK_PATH__.'/plugins/'.$pluginName.'/style.css') == true) {
-			$css->add(__MINITALK_PATH__.'/plugins/'.$pluginName.'/style.css');
+$cacheFile = $MINITALK->getAttachmentPath().'/temp/'.$language.'.'.($templet == null ? 'common' : $templet).'.'.($channel == null ? 'global' : 'channel').'.box.'.$type.'.css.cache';
+if (is_file($cacheFile) == true && filemtime($cacheFile) > time() - 3600) {
+	$content = file_get_contents($cacheFile);
+} else {
+	$minifier = new Minifier();
+	$css = $minifier->css();
+	
+	$css->add(__MINITALK_PATH__.'/styles/fonts/moimz.css');
+	
+	/**
+	 * 언어별 기본 웹폰트를 불러온다.
+	 */
+	if ($language == 'ko') {
+		$css->add(__MINITALK_PATH__.'/styles/fonts/NanumSquare.css');
+		$css->add('html, body {font-family:NanumSquare;}');
+	}
+	
+	$css->add(__MINITALK_PATH__.'/styles/widget.css');
+	
+	/**
+	 * 플러그인의 스타일시트를 불러온다.
+	 */
+	$pluginsPath = @opendir(__MINITALK_PATH__.'/plugins');
+	while ($pluginName = @readdir($pluginsPath)) {
+		if ($pluginName != '.' && $pluginName != '..' && is_dir(__MINITALK_PATH__.'/plugins/'.$pluginName) == true && is_file(__MINITALK_PATH__.'/plugins/'.$pluginName.'/package.json') == true) {
+			$package = json_decode(file_get_contents(__MINITALK_PATH__.'/plugins/'.$pluginName.'/package.json'));
+			if (is_file(__MINITALK_PATH__.'/plugins/'.$pluginName.'/style.css') == true) {
+				$css->add(__MINITALK_PATH__.'/plugins/'.$pluginName.'/style.css');
+			}
 		}
 	}
-}
-@closedir($pluginsPath);
-
-/**
- * 박스 DOM 객체의 스타일을 정의한 스타일시트가 있다면 불러오고 없다면, 기본 템플릿의 스타일시트를 불러온다.
- */
-if (is_file(__MINITALK_PATH__.'/plugins/'.$type.'/box.css') == true) {
-	$css->add(__MINITALK_PATH__.'/plugins/'.$type.'/box.css');
-} elseif ($templet !== null && is_file(__MINITALK_PATH__.'/templets/'.$templet.'/style.css') == true) {
-	$css->add(__MINITALK_PATH__.'/templets/'.$templet.'/style.css');
+	@closedir($pluginsPath);
+	
+	/**
+	 * 박스 DOM 객체의 스타일을 정의한 스타일시트가 있다면 불러오고 없다면, 기본 템플릿의 스타일시트를 불러온다.
+	 */
+	if (is_file(__MINITALK_PATH__.'/plugins/'.$type.'/box.css') == true) {
+		$css->add(__MINITALK_PATH__.'/plugins/'.$type.'/box.css');
+	} elseif ($templet !== null && is_file(__MINITALK_PATH__.'/templets/'.$templet.'/style.css') == true) {
+		$css->add(__MINITALK_PATH__.'/templets/'.$templet.'/style.css');
+	}
+	
+	$content = $css->minify(__MINITALK_PATH__.'/styles');
+	
+	if (is_file($cacheFile) == true) {
+		unlink($cacheFile);
+	}
+	file_put_contents($cacheFile,$content);
 }
 ?>
 /**
@@ -68,6 +82,6 @@ if (is_file(__MINITALK_PATH__.'/plugins/'.$type.'/box.css') == true) {
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.1
- * @modified 2021. 3. 10.
+ * @modified 2021. 3. 17.
  */
-<?php echo $css->minify(__MINITALK_PATH__.'/styles'); ?>
+<?php echo $content; ?>
