@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.1
- * @modified 2021. 3. 17.
+ * @modified 2021. 3. 25.
  */
 REQUIRE_ONCE str_replace('/styles/box.css.php','',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['SCRIPT_FILENAME'])).'/configs/init.config.php';
 header("Content-Type:text/css; charset=utf-8");
@@ -24,7 +24,7 @@ foreach ($languages as $language) {
 $MINITALK = new Minitalk();
 
 $cacheFile = $MINITALK->getAttachmentPath().'/temp/'.$language.'.'.($templet == null ? 'common' : $templet).'.'.($channel == null ? 'global' : 'channel').'.box.'.$type.'.css.cache';
-if (is_file($cacheFile) == true && filemtime($cacheFile) > time() - 3600) {
+if (is_file($cacheFile) == true && filemtime($cacheFile) >= $MINITALK->getLastModified()) {
 	$content = file_get_contents($cacheFile);
 } else {
 	$minifier = new Minifier();
