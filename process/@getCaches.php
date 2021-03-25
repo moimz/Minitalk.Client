@@ -16,7 +16,7 @@ $lists = array();
 
 foreach (GetDirectoryItems($this->getAttachmentPath().'/temp','file') as $file) {
 	if (preg_match('/\.cache$/',$file) == true) {
-		$temp = explode('.',preg_replace('/\.cache$/','',$file));
+		$temp = explode('.',preg_replace('/\.cache$/','',basename($file)));
 		
 		$item = new stdClass();
 		$item->name = basename($file);
@@ -24,9 +24,9 @@ foreach (GetDirectoryItems($this->getAttachmentPath().'/temp','file') as $file) 
 		$item->language = array_shift($temp);
 		$item->templet = array_shift($temp);
 		$item->capacity = implode('.',$temp);
-		$item->size = filesize($this->getAttachmentPath().'/temp/'.$file);
-		$item->create_date = filectime($this->getAttachmentPath().'/temp/'.$file);
-		$item->path = $this->getAttachmentPath().'/temp/'.$file;
+		$item->size = filesize($file);
+		$item->create_date = filectime($file);
+		$item->path = $file;
 		
 		$lists[] = $item;
 	}
