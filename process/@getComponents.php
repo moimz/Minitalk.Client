@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.1
- * @modified 2021. 3. 17.
+ * @modified 2021. 3. 25.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -32,10 +32,9 @@ $item->path = __MINITALK_PATH__;
 $lists[] = $item;
 
 // 플러그인
-$pluginsPath = @opendir(__MINITALK_PATH__.'/plugins');
-while ($plugin = @readdir($pluginsPath)) {
-	if ($plugin != '.' && $plugin != '..' && is_dir(__MINITALK_PATH__.'/plugins/'.$plugin) == true && is_file(__MINITALK_PATH__.'/plugins/'.$plugin.'/package.json') == true) {
-		$package = json_decode(file_get_contents(__MINITALK_PATH__.'/plugins/'.$plugin.'/package.json'));
+foreach (GetDirectoryItems(__MINITALK_PATH__.'/plugins','directory') as $plugin) {
+	if (is_file($plugin.'/package.json') == true) {
+		$package = json_decode(file_get_contents($plugin.'/package.json'));
 		
 		$item = new stdClass();
 		$item->type = '10';
@@ -64,17 +63,16 @@ while ($plugin = @readdir($pluginsPath)) {
 		}
 		
 		$item->homepage = isset($package->homepage) == true ? $package->homepage : '';
-		$item->path = '/plugins/'.$plugin;
+		$item->path = $plugin;
 		
 		$lists[] = $item;
 	}
 }
 
 // 템플릿
-$templetsPath = @opendir(__MINITALK_PATH__.'/templets');
-while ($templet = @readdir($templetsPath)) {
-	if ($templet != '.' && $templet != '..' && is_dir(__MINITALK_PATH__.'/templets/'.$templet) == true && is_file(__MINITALK_PATH__.'/templets/'.$templet.'/package.json') == true) {
-		$package = json_decode(file_get_contents(__MINITALK_PATH__.'/templets/'.$templet.'/package.json'));
+foreach (GetDirectoryItems(__MINITALK_PATH__.'/templets','directory') as $templet) {
+	if (is_file($templet.'/package.json') == true) {
+		$package = json_decode(file_get_contents($templet.'/package.json'));
 		
 		$item = new stdClass();
 		$item->type = '20';
@@ -103,17 +101,16 @@ while ($templet = @readdir($templetsPath)) {
 		}
 		
 		$item->homepage = isset($package->homepage) == true ? $package->homepage : '';
-		$item->path = '/templets/'.$templet;
+		$item->path = $templet;
 		
 		$lists[] = $item;
 	}
 }
 
 // 언어팩
-$languagesPath = @opendir(__MINITALK_PATH__.'/languages');
-while ($language = @readdir($languagesPath)) {
-	if ($language != '.' && $language != '..' && is_file(__MINITALK_PATH__.'/languages/'.$language) == true) {
-		$package = json_decode(file_get_contents(__MINITALK_PATH__.'/languages/'.$language));
+foreach (GetDirectoryItems(__MINITALK_PATH__.'/languages','file') as $language) {
+	if (is_file($language) == true) {
+		$package = json_decode(file_get_contents($language));
 		
 		$item = new stdClass();
 		$item->type = '30';
@@ -122,41 +119,40 @@ while ($language = @readdir($languagesPath)) {
 		$item->title = $package->title;
 		$item->version = $package->version;
 		
-		$item->id = 'com.moimz.minitalk.languages.'.substr($language,0,2);
+		$item->id = 'com.moimz.minitalk.languages.'.substr(array_pop(explode('/',$language)),0,2);
 		
 		if (isset($package->author) == true) {
 			$item->author = $package->author->name;
 			$item->email = isset($package->author->email) == true ? $package->author->email : '';
 		}
 		
-		$item->path = '/languages/'.$language;
+		$item->path = $language;
 		
 		$lists[] = $item;
 	}
 }
 
 // 이모티콘
-$emoticonsPath = @opendir(__MINITALK_PATH__.'/emoticons');
-while ($emoticon = @readdir($emoticonsPath)) {
-	if ($emoticon != '.' && $emoticon != '..' && is_dir(__MINITALK_PATH__.'/emoticons/'.$emoticon) == true && is_file(__MINITALK_PATH__.'/emoticons/'.$emoticon.'/package.json') == true) {
-		$package = json_decode(file_get_contents(__MINITALK_PATH__.'/emoticons/'.$emoticon.'/package.json'));
+foreach (GetDirectoryItems(__MINITALK_PATH__.'/emoticons','directory') as $emoticon) {
+	if (is_file($emoticon.'/package.json') == true) {
+		$package = json_decode(file_get_contents($emoticon.'/package.json'));
 		
 		$item = new stdClass();
 		$item->type = '40';
 		$item->type_name = $this->getText('admin/resource/component/type/'.$item->type);
 		$item->icon = 'xi xi-smiley-face';
 		$item->title = $package->title;
-		$item->description = $package->width.'px * '.$package->height.'px, '.(count(scandir(__MINITALK_PATH__.'/emoticons/'.$emoticon.'/items')) - 2).' emoticons';
+		$item->description = $package->width.'px * '.$package->height.'px, '.count(GetDirectoryItems($emoticon.'/items','file')).' emoticons';
 		$item->version = '-';
 		
-		$item->id = 'com.moimz.minitalk.emoticons.'.$emoticon;
+		$item->id = 'com.moimz.minitalk.emoticons.'.array_pop(explode('/',$emoticon));
 		
 		if (isset($package->author) == true) {
 			$item->author = $package->author->name;
 			$item->email = isset($package->author->email) == true ? $package->author->email : '';
 		}
 		
-		$item->path = '/emoticons/'.$emoticon;
+		$item->path = $emoticon;
 		
 		$lists[] = $item;
 	}
