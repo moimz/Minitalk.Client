@@ -71,8 +71,7 @@ if (is_file($cacheFile) == true && filemtime($cacheFile) >= $MINITALK->getLastMo
 	 * 플러그인을 불러온다.
 	 */
 	foreach (GetDirectoryItems(__MINITALK_PATH__.'/plugins','directory') as $plugin) {
-		$name = array_pop(explode('/',$plugin));
-		$js->add('Minitalk.plugins.'.$name.' = function() {');
+		$js->add('Minitalk.plugins.'.basename($plugin).' = function() {');
 		$js->add('
 			var me = this;
 			me.getText = function(code,replacement) {
@@ -109,7 +108,7 @@ if (is_file($cacheFile) == true && filemtime($cacheFile) >= $MINITALK->getLastMo
 			$js->add($plugin.'/script.js');
 		}
 		$js->add('};');
-		$js->add('new Minitalk.plugins.'.$name.'();');
+		$js->add('new Minitalk.plugins.'.basename($plugin).'();');
 	}
 	
 	$content = $js->minify(__MINITALK_PATH__.'/scripts');

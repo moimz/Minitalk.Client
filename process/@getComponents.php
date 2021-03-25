@@ -119,7 +119,7 @@ foreach (GetDirectoryItems(__MINITALK_PATH__.'/languages','file') as $language) 
 		$item->title = $package->title;
 		$item->version = $package->version;
 		
-		$item->id = 'com.moimz.minitalk.languages.'.substr(array_pop(explode('/',$language)),0,2);
+		$item->id = 'com.moimz.minitalk.languages.'.substr(basename($language),0,2);
 		
 		if (isset($package->author) == true) {
 			$item->author = $package->author->name;
@@ -145,7 +145,7 @@ foreach (GetDirectoryItems(__MINITALK_PATH__.'/emoticons','directory') as $emoti
 		$item->description = $package->width.'px * '.$package->height.'px, '.count(GetDirectoryItems($emoticon.'/items','file')).' emoticons';
 		$item->version = '-';
 		
-		$item->id = 'com.moimz.minitalk.emoticons.'.array_pop(explode('/',$emoticon));
+		$item->id = 'com.moimz.minitalk.emoticons.'.basename($emoticon);
 		
 		if (isset($package->author) == true) {
 			$item->author = $package->author->name;
