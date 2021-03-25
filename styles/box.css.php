@@ -78,5 +78,6 @@ if (is_file($cacheFile) == true && filemtime($cacheFile) >= $MINITALK->getLastMo
  * @license MIT License
  * @version 6.4.1
  * @modified 2021. 3. 25.
+ * @cached <?php echo date('Y. n. j. H:i:s',filemtime($cacheFile))."\n"; ?>
  */
 <?php echo $content; ?>
