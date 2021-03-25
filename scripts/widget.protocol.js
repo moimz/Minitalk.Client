@@ -6,8 +6,8 @@
  * @file /scripts/widget.protocol.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.4.1
- * @modified 2021. 3. 10.
+ * @version 6.4.2
+ * @modified 2021. 3. 25.
  */
 Minitalk.protocol = {
 	/**

@@ -8,8 +8,8 @@
  * @file /admin/index.php
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
- * @version 6.4.1
- * @modified 2021. 3. 10.
+ * @version 6.4.2
+ * @modified 2021. 3. 25.
  */
 if (defined('__MINITALK__') == false) exit;
 ?>
