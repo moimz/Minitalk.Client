@@ -70,50 +70,47 @@ if (is_file($cacheFile) == true && filemtime($cacheFile) >= $MINITALK->getLastMo
 	/**
 	 * 플러그인을 불러온다.
 	 */
-	$pluginsPath = @opendir(__MINITALK_PATH__.'/plugins');
-	while ($plugin = @readdir($pluginsPath)) {
-		if ($plugin != '.' && $plugin != '..' && is_dir(__MINITALK_PATH__.'/plugins/'.$plugin) == true) {
-			$js->add('Minitalk.plugins.'.$plugin.' = function() {');
-			$js->add('
-				var me = this;
-				me.getText = function(code,replacement) {
-					var replacement = replacement ? replacement : null;
-					var temp = code.split("/");
-					var string = me.LANG;
-					for (var i=0, loop=temp.length;i<loop;i++) {
-						if (string[temp[i]]) {
-							string = string[temp[i]];
-						} else {
-							string = null;
-							break;
-						}
+	foreach (GetDirectoryItems(__MINITALK_PATH__.'/plugins','directory') as $plugin) {
+		$name = array_pop(explode('/',$plugin));
+		$js->add('Minitalk.plugins.'.$name.' = function() {');
+		$js->add('
+			var me = this;
+			me.getText = function(code,replacement) {
+				var replacement = replacement ? replacement : null;
+				var temp = code.split("/");
+				var string = me.LANG;
+				for (var i=0, loop=temp.length;i<loop;i++) {
+					if (string[temp[i]]) {
+						string = string[temp[i]];
+					} else {
+						string = null;
+						break;
 					}
-					if (string != null) return string;
-					return replacement == null ? code : replacement;
-				};
-			');
-			
-			/**
-			 * 플러그인에 언어팩이 존재할 경우
-			 */
-			if (is_dir(__MINITALK_PATH__.'/plugins/'.$plugin.'/languages') == true) {
-				if (is_file(__MINITALK_PATH__.'/plugins/'.$plugin.'/languages/'.$language.'.json') == false) {
-					$language = $package->language;
 				}
-				$lang = file_get_contents(__MINITALK_PATH__.'/plugins/'.$plugin.'/languages/'.$language.'.json');
-			} else {
-				$lang = 'null';
+				if (string != null) return string;
+				return replacement == null ? code : replacement;
+			};
+		');
+		
+		/**
+		 * 플러그인에 언어팩이 존재할 경우
+		 */
+		if (is_dir($plugin.'/languages') == true) {
+			if (is_file($plugin.'/languages/'.$language.'.json') == false) {
+				$language = $package->language;
 			}
-			$js->add('me.LANG = '.$lang.';');
-			
-			if (is_file(__MINITALK_PATH__.'/plugins/'.$plugin.'/script.js') == true) {
-				$js->add(__MINITALK_PATH__.'/plugins/'.$plugin.'/script.js');
-			}
-			$js->add('};');
-			$js->add('new Minitalk.plugins.'.$plugin.'();');
+			$lang = file_get_contents($plugin.'/languages/'.$language.'.json');
+		} else {
+			$lang = 'null';
 		}
+		$js->add('me.LANG = '.$lang.';');
+		
+		if (is_file($plugin.'/script.js') == true) {
+			$js->add($plugin.'/script.js');
+		}
+		$js->add('};');
+		$js->add('new Minitalk.plugins.'.$name.'();');
 	}
-	@closedir($pluginsPath);
 	
 	$content = $js->minify(__MINITALK_PATH__.'/scripts');
 	
@@ -132,6 +129,6 @@ if (is_file($cacheFile) == true && filemtime($cacheFile) >= $MINITALK->getLastMo
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.1
- * @modified 2021. 3. 17.
+ * @modified 2021. 3. 25.
  */
 <?php echo $content; ?>
