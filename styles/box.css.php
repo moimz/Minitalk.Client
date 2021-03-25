@@ -43,18 +43,13 @@ if (is_file($cacheFile) == true && filemtime($cacheFile) >= $MINITALK->getLastMo
 	$css->add(__MINITALK_PATH__.'/styles/widget.css');
 	
 	/**
-	 * 플러그인의 스타일시트를 불러온다.
+	 * 플러그인을 불러온다.
 	 */
-	$pluginsPath = @opendir(__MINITALK_PATH__.'/plugins');
-	while ($pluginName = @readdir($pluginsPath)) {
-		if ($pluginName != '.' && $pluginName != '..' && is_dir(__MINITALK_PATH__.'/plugins/'.$pluginName) == true && is_file(__MINITALK_PATH__.'/plugins/'.$pluginName.'/package.json') == true) {
-			$package = json_decode(file_get_contents(__MINITALK_PATH__.'/plugins/'.$pluginName.'/package.json'));
-			if (is_file(__MINITALK_PATH__.'/plugins/'.$pluginName.'/style.css') == true) {
-				$css->add(__MINITALK_PATH__.'/plugins/'.$pluginName.'/style.css');
-			}
+	foreach (GetDirectoryItems(__MINITALK_PATH__.'/plugins','directory') as $plugin) {
+		if (is_file($plugin.'/style.css') == true) {
+			$css->add($plugin.'/style.css');
 		}
 	}
-	@closedir($pluginsPath);
 	
 	/**
 	 * 박스 DOM 객체의 스타일을 정의한 스타일시트가 있다면 불러오고 없다면, 기본 템플릿의 스타일시트를 불러온다.
@@ -82,6 +77,6 @@ if (is_file($cacheFile) == true && filemtime($cacheFile) >= $MINITALK->getLastMo
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.1
- * @modified 2021. 3. 17.
+ * @modified 2021. 3. 25.
  */
 <?php echo $content; ?>

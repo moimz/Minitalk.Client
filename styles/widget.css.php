@@ -46,18 +46,13 @@ if (is_file($cacheFile) == true && filemtime($cacheFile) >= $MINITALK->getLastMo
 	}
 	
 	/**
-	 * 플러그인의 스타일시트를 불러온다.
+	 * 플러그인을 불러온다.
 	 */
-	$pluginsPath = @opendir(__MINITALK_PATH__.'/plugins');
-	while ($pluginName = @readdir($pluginsPath)) {
-		if ($pluginName != '.' && $pluginName != '..' && is_dir(__MINITALK_PATH__.'/plugins/'.$pluginName) == true && is_file(__MINITALK_PATH__.'/plugins/'.$pluginName.'/package.json') == true) {
-			$package = json_decode(file_get_contents(__MINITALK_PATH__.'/plugins/'.$pluginName.'/package.json'));
-			if (is_file(__MINITALK_PATH__.'/plugins/'.$pluginName.'/style.css') == true) {
-				$css->add(__MINITALK_PATH__.'/plugins/'.$pluginName.'/style.css');
-			}
+	foreach (GetDirectoryItems(__MINITALK_PATH__.'/plugins','directory') as $plugin) {
+		if (is_file($plugin.'/style.css') == true) {
+			$css->add($plugin.'/style.css');
 		}
 	}
-	@closedir($pluginsPath);
 	
 	$content = $css->minify(__MINITALK_PATH__.'/styles');
 	
@@ -76,6 +71,6 @@ if (is_file($cacheFile) == true && filemtime($cacheFile) >= $MINITALK->getLastMo
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.1
- * @modified 2021. 3. 17.
+ * @modified 2021. 3. 25.
  */
 <?php echo $content; ?>
