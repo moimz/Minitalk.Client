@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.1
- * @modified 2021. 3. 10.
+ * @modified 2021. 3. 25.
  */
 class Minitalk {
 	/**
@@ -725,6 +725,20 @@ class Minitalk {
 	 */
 	function getFileExtension($filename,$filepath='') {
 		return strtolower(pathinfo($filename,PATHINFO_EXTENSION));
+	}
+	
+	/**
+	 * 미니톡 구성요소의 마지막 수정일을 가져온다.
+	 *
+	 * @return int $unixtime
+	 */
+	function getLastModified() {
+		return max(
+			GetDirectoryLastModified(__MINITALK_PATH__.'/languages'),
+			GetDirectoryLastModified(__MINITALK_PATH__.'/scripts'),
+			GetDirectoryLastModified(__MINITALK_PATH__.'/plugins'),
+			GetDirectoryLastModified(__MINITALK_PATH__.'/templets')
+		);
 	}
 	
 	/**
