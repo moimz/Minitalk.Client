@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.1
- * @modified 2021. 3. 10.
+ * @modified 2021. 3. 25.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -20,11 +20,8 @@ if (!$category || is_dir(__MINITALK_PATH__.'/emoticons/'.$category) == false || 
 }
 
 $items = array();
-$emoticonsPath = @opendir(__MINITALK_PATH__.'/emoticons/'.$category.'/items');
-while ($emoticonName = @readdir($emoticonsPath)) {
-	if ($emoticonName != '.' && $emoticonName != '..' && is_file(__MINITALK_PATH__.'/emoticons/'.$category.'/items/'.$emoticonName) == true) {
-		$items[] = $category.'/'.$emoticonName;
-	}
+foreach (GetDirectoryItems(__MINITALK_PATH__.'/emoticons/'.$category.'/items','file') as $emoticon) {
+	$items[] = $category.'/'.basename($emoticon);
 }
 sort($items);
 

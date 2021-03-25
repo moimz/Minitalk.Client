@@ -8,18 +8,17 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.1
- * @modified 2021. 3. 10.
+ * @modified 2021. 3. 25.
  */
 if (defined('__MINITALK__') == false) exit;
 
 $emoticons = array();
-$emoticonsPath = @opendir(__MINITALK_PATH__.'/emoticons');
-while ($emoticonName = @readdir($emoticonsPath)) {
-	if ($emoticonName != '.' && $emoticonName != '..' && is_dir(__MINITALK_PATH__.'/emoticons/'.$emoticonName) == true && is_file(__MINITALK_PATH__.'/emoticons/'.$emoticonName.'/package.json') == true) {
-		$package = json_decode(file_get_contents(__MINITALK_PATH__.'/emoticons/'.$emoticonName.'/package.json'));
+foreach (GetDirectoryItems(__MINITALK_PATH__.'/emoticons','directory') as $emoticon) {
+	if (is_file($emoticon.'/package.json') == true) {
+		$package = json_decode(file_get_contents($emoticon.'/package.json'));
 		if ($package == null) continue;
 		
-		$package->category = $emoticonName;
+		$package->category = array_pop(explode('/',$emoticon));
 		$emoticons[] = $package;
 	}
 }
