@@ -9,7 +9,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
  * @version 7.0.1
- * @modified 2021. 3. 17.
+ * @modified 2021. 3. 25.
  */
 REQUIRE '../configs/init.config.php';
 if ($_CONFIGS->installed === false) {
@@ -1531,7 +1531,7 @@ Ext.onReady(function () {
 						$("#MinitalkHeader button[data-tab="+panel+"]").parent().addClass("selected");
 						
 						var title = $("#MinitalkHeader button[data-tab="+panel+"]").text() + " - " + $("title").text().split(" - ").pop();
-						history.pushState({panel:panel},title,"<?php echo __MINITALK_DIR__; ?>/admin/" + panel);
+						history.pushState({panel:panel},title,location.href.split("/admin").shift() + "/admin/" + panel);
 						document.title = title;
 					}
 				}
