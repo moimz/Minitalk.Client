@@ -8,19 +8,18 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.1
- * @modified 2021. 3. 17.
+ * @modified 2021. 3. 25.
  */
 if (defined('__MINITALK__') == false) exit;
 
 $lists = array();
 
-$tempPath = @opendir($this->getAttachmentPath().'/temp');
-while ($file = @readdir($tempPath)) {
-	if ($file != '.' && $file != '..' && is_file($this->getAttachmentPath().'/temp/'.$file) == true && preg_match('/\.cache$/',$file) == true) {
+foreach (GetDirectoryItems($this->getAttachmentPath().'/temp','file') as $file) {
+	if (preg_match('/\.cache$/',$file) == true) {
 		$temp = explode('.',preg_replace('/\.cache$/','',$file));
 		
 		$item = new stdClass();
-		$item->name = $file;
+		$item->name = basename($file);
 		$item->type = array_pop($temp);
 		$item->language = array_shift($temp);
 		$item->templet = array_shift($temp);
