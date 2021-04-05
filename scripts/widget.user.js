@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.2
- * @modified 2021. 3. 25.
+ * @modified 2021. 4. 5.
  */
 Minitalk.user = {
 	latestRefreshTime:0, // 접속자목록을 마지막으로 갱신한 시각
@@ -259,12 +259,22 @@ Minitalk.user = {
 			return;
 		}
 		
+		/**
+		 * beforeCall 이벤트를 발생시킨다.
+		 */
+		if (Minitalk.fireEvent("beforeCall",[nickname]) === false) return;
+		
 		$.post({
 			url:Minitalk.socket.connection.domain+"/call/" + nickname,
 			dataType:"json",
 			headers:{authorization:"TOKEN " + Minitalk.socket.token},
 			success:function(result) {
 				callback(result);
+				
+				/**
+				 * call 이벤트를 발생시킨다.
+				 */
+				if (Minitalk.fireEvent("call",[nickname]) === false) return;
 			},
 			error:function(result) {
 				if (result.status == 403 || result.status == 404) {
