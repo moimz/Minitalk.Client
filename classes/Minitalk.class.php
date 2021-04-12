@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.2
- * @modified 2021. 3. 25.
+ * @modified 2021. 4. 12.
  */
 class Minitalk {
 	/**
@@ -736,6 +736,7 @@ class Minitalk {
 		return max(
 			GetDirectoryLastModified(__MINITALK_PATH__.'/languages'),
 			GetDirectoryLastModified(__MINITALK_PATH__.'/scripts'),
+			GetDirectoryLastModified(__MINITALK_PATH__.'/styles'),
 			GetDirectoryLastModified(__MINITALK_PATH__.'/plugins'),
 			GetDirectoryLastModified(__MINITALK_PATH__.'/templets')
 		);
