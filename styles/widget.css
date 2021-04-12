@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.2
- * @modified 2021. 3. 25.
+ * @modified 2021. 4. 12.
  */
 * {padding:0; margin:0;}
 html, body {width:100%; height:100%; overflow:hidden; width:100%; height:100%; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; user-select:none; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none;}
@@ -228,9 +228,15 @@ div[data-role=error] > div {display:table-cell; width:100%; height:100%; text-al
 div[data-role=error] > div > section {display:inline-block; width:90%; max-width:300px; background:#fff; box-shadow:1px 1px 2px rgba(0,0,0,0.1); background:#fff url(../images/minitalk.png) no-repeat 10px 10px; background-size:50px 50px; box-sizing:border-box; padding:10px 15px 60px 65px; text-align:left; position:relative;}
 div[data-role=error] > div > section > h2 {display:block; font-size:16px; margin:0; padding:10px 0px; line-height:20px; color:#222; font-weight:normal;}
 div[data-role=error] > div > section > p {color:#666; font-size:12px; line-height:18px; margin:0; padding:0; font-weight:normal;}
+div[data-role=error] > div > section > ul {list-style:none; width:calc(100% + 80px); height:40px; display:table; table-layout:fixed; position:absolute; left:0; bottom:0;}
+div[data-role=error] > div > section > ul > li {display:table-cell; width:100%; height:40px;}
+div[data-role=error] > div > section > ul > li > button {display:block; width:100%; height:40px; line-height:40px; font-size:12px; text-align:center; text-decoration:none; cursor:pointer; border:0;}
+div[data-role=error] > div > section > ul > li > button.confirm {background:#10b8c3; color:#fff;}
+div[data-role=error] > div > section > ul > li > button.confirm:hover {background:#15a9b4;}
+div[data-role=error] > div > section > ul > li > button.cancel {background:#d5d5d5; color:#222;}
+div[data-role=error] > div > section > ul > li > button.cancel:hover {background:#c0c0c0;}
 div[data-role=error] > div > section > a, div[data-role=error] > div > section > button {display:block; width:100%; height:40px; line-height:40px; font-size:12px; background:#10b8c3; color:#fff; text-align:center; position:absolute; left:0; bottom:0; text-decoration:none; cursor:pointer; border:0;}
-div[data-role=error] > div > section > a:hover, div[data-role=error] > div > section > button:hover {background:#15a9b4;}
-div[data-role=error] > div > section.textonly {padding-bottom:15px;}
+div[data-role=error] > div > section.textonly {padding-bottom:18px;}
 
 
 /**
