@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.2
- * @modified 2021. 3. 25.
+ * @modified 2021. 4. 12.
  */
 Minitalk.ui = {
 	domReady:false,
@@ -1191,62 +1191,102 @@ Minitalk.ui = {
 		}
 	},
 	/**
+	 * 경고창을 출력한다.
+	 *
+	 * @param string title 제목
+	 * @param string message 메시지
+	 * @param object buttons[] 경고창 버튼 객체
+	 */
+	showAlert:function(title,message,buttons) {
+		var buttons = buttons !== undefined && typeof buttons == "object" && buttons.length > 0 ? buttons : [];
+		Minitalk.ui.closeWindow();
+		
+		var $error = $("<div>").attr("data-role","error");
+		var $errorbox = $("<section>");
+		$errorbox.append($("<h2>").html(title));
+		$errorbox.append($("<p>").html(message));
+		
+		if (buttons.length > 0) {
+			var $buttons = $("<ul>");
+			
+			for (var i=0, loop=buttons.length;i<loop;i++) {
+				var $button = $("<button>").html(buttons[i].text);
+				$button.data("index",i);
+				$button.addClass(buttons[i].class ? buttons[i].class : "confirm");
+				$button.on("click",function() {
+					if (typeof buttons[$(this).data("index")].handler === "function") {
+						buttons[$(this).data("index")].handler();
+					}
+				});
+				$buttons.append($("<li>").append($button));
+			}
+			
+			$errorbox.append($buttons);
+		} else {
+			$errorbox.addClass("textonly");
+		}
+		
+		$error.append($("<div>").append($errorbox));
+		$("body").append($error);
+	},
+	/**
+	 * 경고창을 닫는다.
+	 */
+	closeAlert:function() {
+		$("div[data-role=error]").remove();
+	},
+	/**
 	 * 에러메시지를 출력한다.
 	 *
 	 * @param string code 에러코드
 	 * @param function callback
 	 */
 	printError:function(code,callback) {
-		Minitalk.ui.closeWindow();
-		
-		var $error = $("<div>").attr("data-role","error");
-		var $errorbox = $("<section>");
-		$errorbox.append($("<h2>").html(Minitalk.getText("text/error")));
-		
+		var title = Minitalk.getText("text/error");
 		var message = Minitalk.getText("error/"+code);
-		if (message == "error/"+code) message = code;
-		$errorbox.append($("<p>").html(message));
+		if (message == "error/"+code) {
+			message = code;
+		}
+		
+		var buttons = [];
 		
 		switch (code) {
 			case "NOT_FOUND_ONLINE_SERVER" :
 				Minitalk.socket.reconnectable = false;
-				var $button = $("<button>").html(Minitalk.getText("action/reconnect"));
-				$button.on("click",function() {
-					$("div[data-role=error]").remove();
-					Minitalk.socket.connect();
+				
+				buttons.push({
+					text:Minitalk.getText("action/reconnect"),
+					handler:function() {
+						Minitalk.socket.connect();
+						Minitalk.ui.closeAlert();
+					}
 				});
 				break;
 				
 			case "BANNED_IP" :
 				Minitalk.socket.reconnectable = false;
-				var $button = null;
-				$errorbox.addClass("textonly");
 				break;
 				
 			default :
-				var $button = $("<button>").html(Minitalk.getText("button/confirm"));
+				var button = {};
+				button.text = Minitalk.getText("button/confirm");
 			
 				if (typeof callback == "function") {
-					$button.on("click",function() {
-						callback();
-					});
+					button.handler = callback;
 				} else if (typeof callback == "undefined") {
-					$button.on("click",function() {
-						$("div[data-role=error]").remove();
-					});
+					button.handler = function() {
+						Minitalk.ui.closeAlert();
+					};
 				} else {
-					$errorbox.addClass("textonly");
 					if (typeof callback == "string") {
-						$("p",$errorbox).append("<br>" + callback);
+						message+= "<br>" + callback;
 					}
-					$button = null;
 				}
+				buttons.push(button);
 				break;
 		}
 		
-		if ($button !== null) $errorbox.append($button);
-		$error.append($("<div>").append($errorbox));
-		$("body").append($error);
+		Minitalk.ui.showAlert(title,message,buttons);
 	},
 	/**
 	 * 에러코드를 출력한다.
@@ -1260,23 +1300,18 @@ Minitalk.ui = {
 		 */
 		var message = Minitalk.getText("error/code/"+code) + " (code : " + code + ")";
 		if (Minitalk.socket.reconnectable == false) {
-			var $error = $("<div>").attr("data-role","error");
-			var $errorbox = $("<section>");
-			$errorbox.append($("<h2>").html(Minitalk.getText("text/error")));
-			$errorbox.append($("<p>").html(message));
+			var buttons = [];
 			
 			if (Minitalk.box.isBox() == true) {
-				var $button = $("<button>").html(Minitalk.getText("button/close"));
-				$button.on("click",function() {
-					self.close();
+				buttons.push({
+					text:Minitalk.getText("button/close"),
+					handler:function() {
+						self.close();
+					}
 				});
-				
-				$errorbox.append($button);
-			} else {
-				$errorbox.addClass("textonly");
 			}
-			$error.append($("<div>").append($errorbox));
-			$("body").append($error);
+			
+			Minitalk.ui.showAlert(Minitalk.getText("text/error"),message,buttons);
 		} else if (Minitalk.socket.isConnected() == false) {
 			Minitalk.ui.notify("error","error",message,false,false);
 		} else {
