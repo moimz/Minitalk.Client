@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.2
- * @modified 2021. 4. 12.
+ * @modified 2021. 4. 13.
  */
 Minitalk.ui = {
 	domReady:false,
@@ -1274,9 +1274,9 @@ Minitalk.ui = {
 			$("input[name=browser_notification]",$dom).checked(configs.browser_notification);
 			$("input[name=mute]",$dom).checked(configs.mute);
 			$("input[name=whisper]",$dom).checked(configs.whisper);
-			$("input[name=whisper_sound]",$dom).checked(configs.whisper);
-			$("input[name=call]",$dom).checked(configs.whisper);
-			$("input[name=call_sound]",$dom).checked(configs.whisper);
+			$("input[name=whisper_sound]",$dom).checked(configs.whisper_sound);
+			$("input[name=call]",$dom).checked(configs.call);
+			$("input[name=call_sound]",$dom).checked(configs.call_sound);
 			
 			/**
 			 * 브라우저 푸시알림 권한을 요청한다.
