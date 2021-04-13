@@ -9,7 +9,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
  * @version 6.4.2
- * @modified 2021. 3. 25.
+ * @modified 2021. 4. 13.
  */
 REQUIRE '../configs/init.config.php';
 if ($_CONFIGS->installed === false) {
@@ -1215,7 +1215,7 @@ Ext.onReady(function () {
 												}
 											}
 											
-											Ext.getCmp("MinitalkHistory").scrollTo(0,0);
+											setTimeout(function() { Ext.getCmp("MinitalkHistory").scrollTo(0,0); },100);
 										}
 									}
 								}),
