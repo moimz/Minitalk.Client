@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.2
- * @modified 2021. 3. 25.
+ * @modified 2021. 4. 15.
  */
 Minitalk.protocol = {
 	/**
@@ -166,7 +166,7 @@ Minitalk.protocol = {
 			var $main = $("main",$("div[data-role=frame]"));
 			$("section[data-role=chat]",$main).append($("<div>").attr("data-role","line").append($("<div>").html("NEW MESSAGE START")));
 		}
-		Minitalk.ui.autoScroll();
+		Minitalk.ui.autoScroll(true);
 		
 		Minitalk.socket.joined = true;
 		
