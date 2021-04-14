@@ -164,7 +164,8 @@ Minitalk.protocol = {
 		
 		if (logs.length > 0) {
 			var $main = $("main",$("div[data-role=frame]"));
-			$("section[data-role=chat]",$main).append($("<div>").attr("data-role","line").append($("<div>").html("NEW MESSAGE START")));
+			$("div[data-role=line]",$("section[data-role=chat]",$main)).remove();
+			$("section[data-role=chat]",$main).append($("<div>").attr("data-role","line").append($("<div>").html("NEW MESSAGES START")));
 		}
 		Minitalk.ui.autoScroll(true);
 		
