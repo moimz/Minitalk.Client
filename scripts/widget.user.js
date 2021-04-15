@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.2
- * @modified 2021. 4. 5.
+ * @modified 2021. 4. 15.
  */
 Minitalk.user = {
 	latestRefreshTime:0, // 접속자목록을 마지막으로 갱신한 시각
@@ -387,7 +387,7 @@ Minitalk.user = {
 	 * @param string nickname 호출할 대상 닉네임
 	 * @param function callback
 	 */
-	call:function(nickname,callback) {
+	sendCall:function(nickname,callback) {
 		if (Minitalk.socket.isConnected() === false) callback({success:false,error:"NOT_CONNECTED"});
 		
 		/**
@@ -401,7 +401,7 @@ Minitalk.user = {
 		/**
 		 * beforeCall 이벤트를 발생시킨다.
 		 */
-		if (Minitalk.fireEvent("beforeCall",[nickname]) === false) return;
+		if (Minitalk.fireEvent("beforeSendCall",[nickname]) === false) return;
 		
 		$.post({
 			url:Minitalk.socket.connection.domain+"/call/" + nickname,
@@ -413,7 +413,7 @@ Minitalk.user = {
 				/**
 				 * call 이벤트를 발생시킨다.
 				 */
-				if (Minitalk.fireEvent("call",[nickname]) === false) return;
+				if (Minitalk.fireEvent("sendCall",[nickname]) === false) return;
 			},
 			error:function(result) {
 				if (result.status == 403 || result.status == 404) {
@@ -661,7 +661,7 @@ Minitalk.user = {
 					
 				case "call" :
 					var $icon = $("i",$menu).removeClass().addClass("mi mi-loading");
-					Minitalk.user.call(user.nickname,function(result) {
+					Minitalk.user.sendCall(user.nickname,function(result) {
 						if (result.success == true) {
 							Minitalk.ui.notify("call","action",Minitalk.getText("action/call").replace("{NICKNAME}",user.nickname));
 						}
