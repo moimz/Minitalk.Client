@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.2
- * @modified 2021. 4. 13.
+ * @modified 2021. 4. 15.
  */
 Minitalk.ui = {
 	domReady:false,
@@ -1648,7 +1648,7 @@ Minitalk.ui = {
 				$buttons.append($("<li>").append($button));
 			}
 			
-			$errorbox.append($buttons);
+			$errorbox.append($("<div>").append($buttons));
 		} else {
 			$errorbox.addClass("textonly");
 		}
