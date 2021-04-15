@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.2
- * @modified 2021. 3. 25.
+ * @modified 2021. 4. 14.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -22,15 +22,23 @@ if (strlen($key) == 0 || $key != $_CONFIGS->key|| $history == null || count($his
 }
 
 foreach ($history as $message) {
-	$insert = (array)$message;
-	unset($insert['client_id']);
-	
-	$insert['user'] = json_encode($message->user,JSON_UNESCAPED_UNICODE);
-	$insert['to'] = json_encode($message->to,JSON_UNESCAPED_UNICODE);
-	$insert['nickname'] = $message->user->nickname;
-	$insert['data'] = json_encode($message->data);
-	
-	$this->db()->replace($this->table->history,$insert)->execute();
+	if ($message->deleted == true) {
+		$this->db()->delete($this->table->history)->where('id',$message->id)->execute();
+	} elseif ($message->edited == true && isset($message->room) == false) {
+		$this->db()->update($this->table->history,array('message'=>$message->message,'data'=>json_encode($message->data),'edited'=>'TRUE'))->where('id',$message->id)->execute();
+	} else {
+		$insert = (array)$message;
+		unset($insert['client_id']);
+		unset($insert['deleted']);
+		
+		$insert['user'] = json_encode($message->user,JSON_UNESCAPED_UNICODE);
+		$insert['to'] = json_encode($message->to,JSON_UNESCAPED_UNICODE);
+		$insert['nickname'] = $message->user->nickname;
+		$insert['data'] = json_encode($message->data);
+		$insert['edited'] = $message->edited == true ? 'TRUE' : 'FALSE';
+		
+		$this->db()->replace($this->table->history,$insert)->execute();
+	}
 }
 
 $data->success = true;

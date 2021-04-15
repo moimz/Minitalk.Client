@@ -244,6 +244,41 @@ div[data-role=error] > div > section.textonly {padding-bottom:18px;}
  * 채팅섹션 내부 요소 기본속성을 정의한다.
  */
 section[data-role=chat] > div[data-role=message] {user-select:auto; -webkit-user-select:auto; -moz-user-select:auto; -ms-user-select:auto;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div {position:relative; width:calc(100% + 8px); padding:4px; margin:-2px -4px; box-sizing:border-box; border-radius:3px;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div + div {margin-top:-4px;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] {position:absolute; border:1px solid #ccc; background:#fff; border-radius:3px; right:5px; top:-20px; height:30px; padding:0px; display:none;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button {width:30px; height:30px; border:0; background:transparent; cursor:pointer; color:#999; position:relative; box-sizing:content-box;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button:first-child {padding-left:3px;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button:last-child {padding-right:3px;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button > i {display:block; width:30px; height:30px; line-height:30px; font-size:14px; font-family:moimz; font-style:normal;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button > label {position:absolute; padding:0px 8px; height:20px; line-height:20px; z-index:100; font-size:12px; white-space:nowrap; display:none; background:rgba(0,0,0,0.8); color:#fff; top:100%; left:50%; transform:translateX(-50%);}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button > label:before {position:absolute; content:" "; border-bottom:5px solid rgba(0,0,0,0.8); border-left:5px solid transparent; border-right:5px solid transparent; bottom:100%; left:50%; margin-left:-5px;}
+
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button[data-action=edit] > i:before {content:"\EC24";}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button[data-action=delete] > i:before {content:"\EC16";}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button:hover {color:#444;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button:hover > label {display:block;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.action:hover {background:#f4f4f4;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.action:hover > div[data-role=action] {display:block;}
+
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing {background:#f4f4f4;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] {padding:5px;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > textarea {width:100%; height:50px; line-height:20px; padding:5px; box-sizing:border-box; border:1px solid #ccc; display:block; margin-bottom:5px; border-radius:3px; font-size:12px;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button {height:30px; padding:0px 10px; border:1px solid #ccc; background:#fff; border-radius:3px; font-size:12px; cursor:pointer;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button > i {width:20px; height:28px; vertical-align:middle; font-size:12px; font-family:moimz; line-height:28px; font-style:normal; display:inline-block; text-align:center; margin-right:4px;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button > i:before {content:"\ef16";}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button[data-action=confirm] {background:#10b8c3; color:#fff; border-color:#10b8c3; margin-left:5px;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button:focus {box-shadow:0 0 0 1px #2196f3;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button[data-action=confirm]:focus {border-color:#fff;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button[data-action=confirm][disabled] {opacity:0.6; cursor:not-allowed;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button[data-action=confirm][disabled] > i:before {content:"\ed00";}
+
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.deleting {background:#f4f4f4;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.deleting > div[data-role=action] {display:block;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.deleting > div[data-role=action] > button {cursor:not-allowed; color:#666;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.deleting > div[data-role=action] > button > label {display:none !important;}
+section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.deleting > div[data-role=action] > button[data-action=delete] > i:before {content:"\ed00";}
+
 section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=file] > a {display:block;}
 section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=file] > a > div[data-role=image] > div {width:100%; height:0; overflow:hidden; background-image:no-repeat; background-size:cover; background-position:50% 50%; background-color:#f8f8f8;}
 section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > a {display:block;}

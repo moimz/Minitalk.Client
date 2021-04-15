@@ -13,7 +13,8 @@
 		"whisper_to":"{nickname}님에게 귓속말",
 		"whisper_from":"{nickname}님의 귓속말",
 		"document":"미니톡 매뉴얼 보기",
-		"admin":"관리자"
+		"admin":"관리자",
+		"info":"안내"
 	},
 	"level":{
 		"0":"손님 (유저설정이 없는 손님)",
@@ -58,7 +59,8 @@
 		"op":"{FROM}님이 {TO}님에게 관리자권한을 부여하였습니다.",
 		"deop":"{FROM}님이 {TO}님에게 관리자권한을 해제하였습니다.",
 		"refresh":"새로고침",
-		"reconnect":"재접속"
+		"reconnect":"재접속",
+		"delete_confirm":"해당 메시지를 삭제하시겠습니까?"
 	},
 	"tab":{
 		"chat":"채팅",
@@ -90,6 +92,8 @@
 		"send":"전송",
 		"confirm":"확인",
 		"modify":"수정",
+		"edit":"편집",
+		"delete":"삭제",
 		"cancel":"취소",
 		"search":"검색",
 		"refresh":"새로고침",

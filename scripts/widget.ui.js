@@ -1925,7 +1925,7 @@ Minitalk.ui = {
 		/**
 		 * 컨텐츠 객체를 정의한다.
 		 */
-		var $content = $("<div>").attr("data-message-id",message.id);
+		var $content = $("<div>").attr("data-message-id",message.id).data("message",message);
 		if (message.time) $content.attr("data-time",message.time);
 		
 		/**
@@ -2088,6 +2088,42 @@ Minitalk.ui = {
 		}
 		
 		/**
+		 * 메시지 액션버튼을 추가한다.
+		 */
+		var actions = [];
+		
+		/**
+		 * 자기자신의 메시지이고, 일반 메시지인 경우, 수정버튼을 추가한다.
+		 */
+		if (message.type == "message" && Minitalk.user.me.uuid == message.user.uuid) {
+			actions.push("edit");
+		}
+		
+		/**
+		 * 관리자이거나, 자기 자신의 메시지인 경우 삭제버튼을 추가한다.
+		 */
+		if (Minitalk.user.me.level == 9 || Minitalk.user.me.uuid == message.user.uuid) {
+			actions.push("delete");
+		}
+		
+		/**
+		 * 사용가능한 액션버튼이 1개 이상인 경우, 메시지에 액션바를 추가한다.
+		 */
+		if (actions.length > 0) {
+			$content.addClass("action");
+			var $actions = $("<div>").attr("data-role","action");
+			for (var i=0, loop=actions.length;i<loop;i++) {
+				var $action = $("<button>").attr("data-action",actions[i]).data("id",message.id);
+				$action.append($("<i>").addClass("icon"));
+				$action.append($("<label>").html(Minitalk.getText("button/" + actions[i])));
+				$action.on("click",function() { Minitalk.ui.activeMessageAction($(this)); });
+				$actions.append($action);
+			}
+			
+			$content.append($actions);
+		}
+		
+		/**
 		 * 기존 메시지가 대치된 경우 갱신된 내용에 따라 스크롤을 조절하고, 신규 메시지인 경우 해당 메시지 위치로 스크롤 한다.
 		 */
 		if (message.from === undefined) {
@@ -2100,8 +2136,28 @@ Minitalk.ui = {
 			var oHeight = $message.outerHeight(true);
 			$message.replaceWith($content);
 			
-			Minitalk.ui.scrollBy($content.outerHeight(true) - oHeight)
+			if (type != "reset") Minitalk.ui.scrollBy($content.outerHeight(true) - oHeight);
 		}
+	},
+	/**
+	 * 특정 메시지를 초기화한다.
+	 *
+	 * @param string id 초기화할 메시지
+	 */
+	resetMessage:function(id) {
+		var $frame = $("div[data-role=frame]");
+		var $main = $("main",$frame);
+		var $chat = $("section[data-role=chat]",$main);
+		if ($chat.length == 0) return;
+		
+		var $item = $("div[data-message-id="+id+"]",$chat);
+		if ($item.length == 0) return;
+		
+		var message = $item.data("message");
+		message.from = message.id;
+		Minitalk.ui.printMessage(message,"reset");
+		
+		$chat.removeClass("fixed");
 	},
 	/**
 	 * 특정 메시지를 제거한다.
@@ -2114,7 +2170,7 @@ Minitalk.ui = {
 		var $chat = $("section[data-role=chat]",$main);
 		if ($chat.length == 0) return;
 		
-		var $item = $("div[data-message-id="+id+"]",$main);
+		var $item = $("div[data-message-id="+id+"]",$chat);
 		if ($item.length == 0) return;
 		
 		var $context = $item.parent();
@@ -2128,6 +2184,108 @@ Minitalk.ui = {
 		 * 로그에서 제거한다.
 		 */
 		var logs = Minitalk.logs(id,true);
+	},
+	/**
+	 * 메시지 액션을 처리한다.
+	 *
+	 * @param object $button 액션버튼
+	 */
+	activeMessageAction:function($button) {
+		var action = $button.attr("data-action");
+		var $frame = $("div[data-role=frame]");
+		var $main = $("main",$frame);
+		var $chat = $("section[data-role=chat]",$main);
+		var $item = $("div[data-message-id=" + $button.data("id") + "]",$chat);
+		if ($item.length == 0) return;
+		
+		var message = JSON.parse(JSON.stringify($item.data("message")));
+		
+		if (action == "edit") {
+			$chat.addClass("fixed");
+			$item.addClass("editing");
+			
+			var $balloon = $("div[data-role=balloon]",$item);
+			$balloon.empty();
+			
+			var $textarea = $("<textarea>");
+			if (message.message.search(/<b>/) > -1) {
+				$textarea.data("bold",true);
+				$textarea.css("fontWeight","bold");
+			}
+			
+			if (message.message.search(/<u>/) > -1) {
+				$textarea.data("underline",true);
+				$textarea.css("textDecoration","underline");
+			}
+			
+			if (message.message.search(/<i>/) > -1) {
+				$textarea.data("italic",true);
+				$textarea.css("fontStyle","italic");
+			}
+			
+			if (message.message.match(/<span style="color:(.*?);">/) != null) {
+				$textarea.data("color",message.message.match(/<span style="color:(.*?);">/).pop());
+				$textarea.css("color",$textarea.data("color"));
+			}
+			
+			message.message = message.message.replace(/<br[^>]?>/g,"\n");
+			message.message = message.message.replace(/<\/?(b|i|u|span|a)>/g,"");
+			message.message = message.message.replace(/<(span|a) [^>]+>/g,"");
+			
+			$textarea.val(message.message);
+			$balloon.append($textarea);
+			
+			var $cancel = $("<button>").attr("data-action","cancel").data("id",message.id).html(Minitalk.getText("button/cancel"));
+			$cancel.on("click",function() {
+				Minitalk.ui.resetMessage($(this).data("id"));
+			});
+			$balloon.append($cancel);
+			
+			var $confirm = $("<button>").attr("data-action","confirm").data("id",message.id).append($("<i>").addClass("icon")).append(Minitalk.getText("button/send"));
+			$confirm.on("click",function() {
+				$(this).disable();
+				$("i",$(this)).addClass("mi mi-loading");
+				return;
+				message.message = $.trim($textarea.val());
+				if (message.message.length == 0) return;
+				
+				if ($textarea.data("bold") == true) message.message = "[B]" + message.message + "[/B]";
+				if ($textarea.data("italic") == true) message.message = "[I]" + message.message + "[/I]";
+				if ($textarea.data("underline") == true) message.message = "[U]" + message.message + "[/U]";
+				if ($textarea.data("color") !== undefined) message.message = "[COLOR=" + $textarea.data("color") + "]" + message.message + "[/COLOR]";
+				
+				message.data = null;
+				
+				if (Minitalk.socket.updateMessage(action,message) === false) {
+					Minitalk.ui.resetMessage(message.id);
+				}
+			});
+			$balloon.append($confirm);
+		}
+		
+		if (action == "delete") {
+			$chat.addClass("fixed");
+			$item.addClass("deleting");
+			$("i",$button).addClass("mi-loading");
+			$button.disable();
+			
+			Minitalk.ui.showAlert(Minitalk.getText("text/info"),Minitalk.getText("action/delete_confirm"),[{
+				text:Minitalk.getText("button/cancel"),
+				class:"cancel",
+				handler:function() {
+					Minitalk.ui.resetMessage(message.id);
+					Minitalk.ui.closeAlert();
+				}
+			},{
+				text:Minitalk.getText("button/confirm"),
+				handler:function() {
+					if (Minitalk.socket.updateMessage(action,message) === false) {
+						Minitalk.ui.resetMessage(message.id);
+					}
+					Minitalk.ui.closeAlert();
+				}
+			}]);
+		}
 	},
 	/**
 	 * 파일을 업로드한다.

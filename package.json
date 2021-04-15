@@ -434,6 +434,12 @@
 					"type":"varchar",
 					"length":15,
 					"comment":"아이피"
+				},
+				"edited":{
+					"type":"enum",
+					"length":"'TRUE','FALSE'",
+					"default":"FALSE",
+					"comment":"수정여부"
 				}
 			},
 			"indexes":{

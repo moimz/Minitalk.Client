@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.2
- * @modified 2021. 3. 25.
+ * @modified 2021. 4. 14.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -82,7 +82,7 @@ if ($server->type == 'SERVER') {
 	$data->latest = $latest;
 	$data->time = $time;
 	
-	$selector = array('id','type','message','data','user','uuid','to','target','time','room');
+	$selector = array('id','type','message','data','user','uuid','to','target','time','room','edited');
 	$selector = array_map(function($column) { return '`'.$column.'`'; },$selector);
 	
 	/**
@@ -97,6 +97,7 @@ if ($server->type == 'SERVER') {
 			$history[$i]->user->uuid = $history[$i]->uuid;
 			$history[$i]->data = json_decode($history[$i]->data);
 			$history[$i]->to = json_decode($history[$i]->to);
+			$history[$i]->edited = $history[$i]->edited == 'TRUE';
 			
 			if ($history[$i]->target != '*') {
 				$history[$i]->to->uuid = $history[$i]->target;
@@ -116,6 +117,7 @@ if ($server->type == 'SERVER') {
 			$history[$i]->user->uuid = $history[$i]->uuid;
 			$history[$i]->data = json_decode($history[$i]->data);
 			$history[$i]->to = json_decode($history[$i]->to);
+			$history[$i]->edited = $history[$i]->edited == 'TRUE';
 			
 			if ($history[$i]->target != '*') {
 				$history[$i]->to->uuid = $history[$i]->target;

@@ -237,10 +237,22 @@ Minitalk.protocol = {
 			if (data.success === true) {
 				Minitalk.ui.printMessage(data);
 			} else {
-				Minitalk.ui.removeMessage(data.from);
+				if (data.action == "send") {
+					Minitalk.ui.removeMessage(data.from);
+				} else {
+					Minitalk.ui.resetMessage(data.from);
+				}
 				return;
 			}
 		} else {
+			/**
+			 * 메시지가 삭제된 경우
+			 */
+			if (data.deleted === true) {
+				Minitalk.ui.removeMessage(data.id);
+				return;
+			}
+			
 			/**
 			 * 이벤트를 발생시킨다.
 			 */

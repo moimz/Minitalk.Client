@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.0.2
- * @modified 2021. 3. 25.
+ * @modified 2021. 4. 14.
  */
 Minitalk.socket = {
 	io:null,
@@ -274,6 +274,37 @@ Minitalk.socket = {
 		}
 		
 		Minitalk.ui.disable(true);
+	},
+	/**
+	 * 메시지를 업데이트한다.
+	 *
+	 * @param string action 수정/삭제 여부
+	 * @param object message 수정/삭제할 메시지객체
+	 */
+	updateMessage:function(action,message) {
+		/**
+		 * 메시지를 업데이트할 수 있는 권한이 있는지 확인한다.
+		 */
+		if (Minitalk.socket.getPermission("send") === false) {
+			Minitalk.ui.printErrorCode(403);
+			return false;
+		}
+		
+		/**
+		 * 메시지객체를 정리한다.
+		 */
+		message.action = action;
+		
+		if (message.to != null) {
+			message.to = message.to.nickname;
+		}
+		
+		/**
+		 * 변경사항을 전송한다.
+		 */
+		Minitalk.socket.send("message",message);
+		
+		return true;
 	},
 	/**
 	 * 사용자정의 프로토콜을 정의한다.
