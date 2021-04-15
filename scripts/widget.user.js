@@ -425,7 +425,7 @@ Minitalk.user = {
 						/**
 						 * 개인박스에서 숨겨야하는 메뉴를 표시하지 않는다.
 						 */
-						if ($.inArray(menu,["banip","op","deop"]) !== -1 && Minitalk.box.isBox() == true) continue;
+						if ($.inArray(menu,["create","invite","banip","op","deop"]) !== -1 && Minitalk.box.isBox() == true) continue;
 						
 						/**
 						 * 박스생성권한이 없을경우 숨겨야하는 메뉴를 표시하지 않는다.
