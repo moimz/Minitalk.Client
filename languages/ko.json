@@ -8,6 +8,7 @@
 	"text":{
 		"unit":"{COUNT}명",
 		"me":"나",
+		"info":"안내",
 		"error":"에러가 발생하였습니다.",
 		"password":"패스워드",
 		"whisper_to":"{nickname}님에게 귓속말",
