@@ -306,9 +306,19 @@ Minitalk.protocol = {
 		Minitalk.ui.notify("invite-" + data.box.id,"action",Minitalk.getText("action/invited").replace("{FROM}",data.from.nickname).replace("{BOX}",data.box.title),false,false,data.box,function($notification) {
 			var box = $notification.data("data");
 			
-			if (confirm(Minitalk.getText("action/invited_confirm")) == true) {
-				Minitalk.box.join(box);
-			}
+			Minitalk.ui.showAlert(Minitalk.getText("text/info"),Minitalk.getText("action/invited_confirm"),[{
+				text:Minitalk.getText("button/cancel"),
+				class:"cancel",
+				handler:function() {
+					Minitalk.ui.closeAlert();
+				}
+			},{
+				text:Minitalk.getText("button/confirm"),
+				handler:function() {
+					Minitalk.box.join(box);
+					Minitalk.ui.closeAlert();
+				}
+			}]);
 			
 			Minitalk.ui.unnotify("invite-" + box.id,0);
 		});
