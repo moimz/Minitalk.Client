@@ -278,9 +278,19 @@ Minitalk.protocol = {
 	 * @param object from 호출한사람의 유저객체
 	 */
 	call:function(from) {
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		if (Minitalk.fireEvent("beforeCall",[data]) === false) return;
+		
 		Minitalk.ui.playSound("call");
-		Minitalk.ui.push(Minitalk.getText("action/called").replace("{NICKNAME}",from.nickname));
-		Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/called").replace("{NICKNAME}",from.nickname));
+		Minitalk.ui.push(Minitalk.getText("action/called").replace("{NICKNAME}",data.nickname));
+		Minitalk.ui.printSystemMessage("action",Minitalk.getText("action/called").replace("{NICKNAME}",data.nickname));
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("call",[data]);
 	},
 	/**
 	 * 개인박스에 초대받았을 경우
