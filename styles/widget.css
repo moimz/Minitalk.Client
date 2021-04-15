@@ -86,6 +86,12 @@ div[data-role=frame] > footer > ul[data-role=tools] {display:block; width:100%; 
 
 
 /**
+ * 입력폼 기본속성을 정의한다.
+ */
+div[data-role=frame] > footer > div[data-role=input] > textarea {overflow:auto;}
+
+
+/**
  * 기본툴 버튼 아이콘을 정의한다.
  */
 div[data-role=frame] > footer > ul[data-role] > li > button > i.icon {font-family:moimz; font-style:normal;}
