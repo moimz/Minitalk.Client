@@ -296,8 +296,27 @@ Minitalk.protocol = {
 	 * @param object data.box 박스정보
 	 * @param object data.from 초대한 유저객체
 	 */
-	invited:function(data) {
-		Minitalk.box.invited(data.box,data.from);
+	invite:function(data) {
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		if (Minitalk.fireEvent("beforeInvite",[data.box,data.from]) === false) return;
+		
+		Minitalk.ui.playSound("query");
+		Minitalk.ui.notify("invite-" + data.box.id,"action",Minitalk.getText("action/invited").replace("{FROM}",data.from.nickname).replace("{BOX}",data.box.title),false,false,data.box,function($notification) {
+			var box = $notification.data("data");
+			
+			if (confirm(Minitalk.getText("action/invited_confirm")) == true) {
+				Minitalk.box.join(box);
+			}
+			
+			Minitalk.ui.unnotify("invite-" + box.id,0);
+		});
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("invite",[data.box,data.from]);
 	},
 	/**
 	 * 인증코드를 수신하였을 경우

@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.2
- * @modified 2021. 3. 25.
+ * @modified 2021. 4. 15.
  */
 Minitalk.box = {
 	connection:null,
@@ -301,7 +301,10 @@ Minitalk.box = {
 						};
 						box.password = $("input[name=password]",$dom).checked() == true ? Minitalk.box.connection.password : null;
 						
-						if (Minitalk.fireEvent("beforeInvite",[box,nickname,Minitalk.user.me]) === false) return;
+						/**
+						 * 이벤트를 발생시킨다.
+						 */
+						if (Minitalk.fireEvent("beforeSendInvite",[box,nickname]) === false) return;
 						
 						$.post({
 							url:Minitalk.socket.connection.domain+"/invite/" + id,
@@ -313,7 +316,10 @@ Minitalk.box = {
 									Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/invite").replace("{NICKNAME}",nickname).replace("{BOX}",box.title));
 									Minitalk.ui.closeWindow(true);
 									
-									Minitalk.fireEvent("invite",[box,nickname,Minitalk.user.me]);
+									/**
+									 * 이벤트를 발생시킨다.
+									 */
+									Minitalk.fireEvent("sendInvite",[box,nickname]);
 								}
 							},
 							error:function(result) {
@@ -407,7 +413,10 @@ Minitalk.box = {
 									var box = $("select[name=id] > option:selected",$dom).data("box");
 									box.password = $("input[name=password]",$dom).checked() == true ? box.password : null;
 									
-									if (Minitalk.fireEvent("beforeInvite",[box,nickname,Minitalk.user.me]) === false) return;
+									/**
+									 * 이벤트를 발생시킨다.
+									 */
+									if (Minitalk.fireEvent("beforeSendInvite",[box,nickname]) === false) return;
 									
 									$.post({
 										url:Minitalk.socket.connection.domain+"/invite/" + id,
@@ -419,7 +428,10 @@ Minitalk.box = {
 												Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/invite").replace("{NICKNAME}",nickname).replace("{BOX}",box.title));
 												Minitalk.ui.closeWindow(true);
 												
-												Minitalk.fireEvent("invite",[box,nickname,Minitalk.user.me]);
+												/**
+												 * 이벤트를 발생시킨다.
+												 */
+												Minitalk.fireEvent("sendInvite",[box,nickname]);
 											}
 										},
 										error:function(result) {
@@ -446,28 +458,6 @@ Minitalk.box = {
 				}
 			});
 		}
-	},
-	/**
-	 * 개인박스에 초대받았을 경우
-	 *
-	 * @param object box 박스정보
-	 * @param object from 초대자정보
-	 */
-	invited:function(box,from) {
-		if (Minitalk.fireEvent("beforeInvited",[box,from,Minitalk.user.me]) === false) return;
-		
-		Minitalk.ui.notify("invite-" + box.id,"action",Minitalk.getText("action/invited").replace("{FROM}",from.nickname).replace("{BOX}",box.title),false,false,box,function($notification) {
-			var box = $notification.data("data");
-			
-			if (confirm(Minitalk.getText("action/invited_confirm")) == true) {
-				Minitalk.box.join(box);
-			}
-			
-			Minitalk.ui.unnotify("invite-" + box.id,0);
-		});
-		
-		Minitalk.ui.playSound("query");
-		Minitalk.fireEvent("invited",[box,from,Minitalk.user.me]);
 	},
 	/**
 	 * 박스의 형태를 추가한다.
