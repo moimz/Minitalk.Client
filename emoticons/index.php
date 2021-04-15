@@ -7,8 +7,8 @@
  * @file /emoticons/index.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 7.0.2
- * @modified 2021. 3. 25.
+ * @version 7.1.0
+ * @modified 2021. 4. 15.
  */
 header("HTTP/1.1 403 Forbidden");
 header('location:../');

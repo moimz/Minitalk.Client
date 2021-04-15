@@ -7,8 +7,8 @@
  * @file /classes/Minifier.class.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 7.0.2
- * @modified 2021. 3. 25.
+ * @version 7.1.0
+ * @modified 2021. 4. 15.
  */
 REQUIRE_ONCE __MINITALK_PATH__.'/classes/minify/src/Minify.php';
 REQUIRE_ONCE __MINITALK_PATH__.'/classes/minify/src/CSS.php';

@@ -7,8 +7,8 @@
  * @file /scripts/widget.js.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 7.0.2
- * @modified 2021. 3. 25.
+ * @version 7.1.0
+ * @modified 2021. 4. 15.
  */
 REQUIRE_ONCE str_replace('/scripts/widget.js.php','',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['SCRIPT_FILENAME'])).'/configs/init.config.php';
 header('Content-Type: application/x-javascript; charset=utf-8');
@@ -128,8 +128,8 @@ if (is_file($cacheFile) == true && filemtime($cacheFile) >= $MINITALK->getLastMo
  * @file /scripts/widget.js.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 7.0.2
- * @modified 2021. 3. 25.
+ * @version 7.1.0
+ * @modified 2021. 4. 15.
  * @cached <?php echo date('Y. n. j. H:i:s',filemtime($cacheFile))."\n"; ?>
  */
 <?php echo $content; ?>

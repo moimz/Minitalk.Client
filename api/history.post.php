@@ -7,8 +7,8 @@
  * @file /api/history.post.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 7.0.2
- * @modified 2021. 4. 14.
+ * @version 7.1.0
+ * @modified 2021. 4. 15.
  */
 if (defined('__MINITALK__') == false) exit;
 
