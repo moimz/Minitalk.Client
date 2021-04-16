@@ -248,7 +248,7 @@ Minitalk.user = {
 	 * @param string nickname 호출할 대상 닉네임
 	 * @param function callback
 	 */
-	sendCall:function(nickname,callback) {
+	call:function(nickname,callback) {
 		if (Minitalk.socket.isConnected() === false) callback({success:false,error:"NOT_CONNECTED"});
 		
 		/**
@@ -260,7 +260,7 @@ Minitalk.user = {
 		}
 		
 		/**
-		 * beforeCall 이벤트를 발생시킨다.
+		 * 이벤트를 발생시킨다.
 		 */
 		if (Minitalk.fireEvent("beforeSendCall",[nickname]) === false) return;
 		
@@ -272,9 +272,9 @@ Minitalk.user = {
 				callback(result);
 				
 				/**
-				 * call 이벤트를 발생시킨다.
+				 * 이벤트를 발생시킨다.
 				 */
-				if (Minitalk.fireEvent("sendCall",[nickname]) === false) return;
+				Minitalk.fireEvent("afterSendCall",[result.success,nickname]);
 			},
 			error:function(result) {
 				if (result.status == 403 || result.status == 404) {
@@ -282,8 +282,18 @@ Minitalk.user = {
 				} else {
 					callback({success:false,error:"CONNECT_ERROR"});
 				}
+				
+				/**
+				 * 이벤트를 발생시킨다.
+				 */
+				Minitalk.fireEvent("afterSendCall",[false,nickname]);
 			}
 		});
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("sendCall",[nickname]);
 	},
 	/**
 	 * 유저메뉴를 추가한다.
@@ -522,7 +532,7 @@ Minitalk.user = {
 					
 				case "call" :
 					var $icon = $("i",$menu).removeClass().addClass("mi mi-loading");
-					Minitalk.user.sendCall(user.nickname,function(result) {
+					Minitalk.user.call(user.nickname,function(result) {
 						if (result.success == true) {
 							Minitalk.ui.notify("call","action",Minitalk.getText("action/call").replace("{NICKNAME}",user.nickname));
 						}
