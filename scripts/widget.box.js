@@ -315,12 +315,12 @@ Minitalk.box = {
 								if (result.success == true) {
 									Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/invite").replace("{NICKNAME}",nickname).replace("{BOX}",box.title));
 									Minitalk.ui.closeWindow(true);
-									
-									/**
-									 * 이벤트를 발생시킨다.
-									 */
-									Minitalk.fireEvent("sendInvite",[box,nickname]);
 								}
+								
+								/**
+								 * 이벤트를 발생시킨다.
+								 */
+								Minitalk.fireEvent("afterSendInvite",[result.success,box,nickname]);
 							},
 							error:function(result) {
 								if (result.status == 403 || result.status == 404) {
@@ -328,8 +328,18 @@ Minitalk.box = {
 								} else {
 									Minitalk.ui.printError("CONNECT_ERROR");
 								}
+								
+								/**
+								 * 이벤트를 발생시킨다.
+								 */
+								Minitalk.fireEvent("afterSendInvite",[false,box,nickname]);
 							}
 						});
+						
+						/**
+						 * 이벤트를 발생시킨다.
+						 */
+						Minitalk.fireEvent("sendInvite",[box,nickname]);
 					} else {
 						Minitalk.ui.closeWindow();
 					}
@@ -427,12 +437,12 @@ Minitalk.box = {
 											if (result.success == true) {
 												Minitalk.ui.printSystemMessage("info",Minitalk.getText("action/invite").replace("{NICKNAME}",nickname).replace("{BOX}",box.title));
 												Minitalk.ui.closeWindow(true);
-												
-												/**
-												 * 이벤트를 발생시킨다.
-												 */
-												Minitalk.fireEvent("sendInvite",[box,nickname]);
 											}
+											
+											/**
+											 * 이벤트를 발생시킨다.
+											 */
+											Minitalk.fireEvent("afterSendInvite",[result.success,box,nickname]);
 										},
 										error:function(result) {
 											if (result.status == 403 || result.status == 404) {
@@ -440,8 +450,18 @@ Minitalk.box = {
 											} else {
 												Minitalk.ui.printError("CONNECT_ERROR");
 											}
+											
+											/**
+											 * 이벤트를 발생시킨다.
+											 */
+											Minitalk.fireEvent("afterSendInvite",[false,box,nickname]);
 										}
 									});
+									
+									/**
+									 * 이벤트를 발생시킨다.
+									 */
+									Minitalk.fireEvent("sendInvite",[box,nickname]);
 								} else {
 									Minitalk.ui.closeWindow();
 								}
