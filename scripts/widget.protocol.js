@@ -236,12 +236,22 @@ Minitalk.protocol = {
 			 */
 			if (data.success === true) {
 				Minitalk.ui.printMessage(data);
+				
+				/**
+				 * 이벤트를 발생시킨다.
+				 */
+				Minitalk.fireEvent("afterSendMessage",[true,data]);
 			} else {
 				if (data.action == "send") {
 					Minitalk.ui.removeMessage(data.from);
 				} else {
 					Minitalk.ui.resetMessage(data.from);
 				}
+				
+				/**
+				 * 이벤트를 발생시킨다.
+				 */
+				Minitalk.fireEvent("afterSendMessage",[false,data]);
 				return;
 			}
 		} else {
