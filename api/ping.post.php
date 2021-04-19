@@ -37,7 +37,8 @@ if ($client_secret != null && $this->db()->select($this->table->server)->where('
 
 $user = Request('user') ? Request('user') : 0;
 $channel = Request('channel') ? Request('channel') : 0;
-$this->db()->update($this->table->server,array('status'=>'ONLINE','user'=>$user,'channel'=>$channel,'latest_update'=>time()))->where('domain',$domain)->execute();
+$this->db()->update($this->table->server,array('status'=>'ONLINE','user'=>$user,'channel'=>$channel,'latest_update'=>time()))->where('domain',$domain)->where('type','SERVER')->execute();
+$this->db()->update($this->table->server,array('status'=>'ONLINE','user'=>$user,'channel'=>$channel))->where('domain',$domain)->where('type','SERVICE')->execute();
 $this->db()->update($this->table->channel,array('user'=>0))->where('server',$domain)->execute();
 
 $users = json_decode(Request('users')) ? json_decode(Request('users')) : array();
