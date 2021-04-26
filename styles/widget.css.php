@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.3
- * @modified 2021. 4. 15.
+ * @modified 2021. 4. 26.
  */
 REQUIRE_ONCE str_replace('/styles/widget.css.php','',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['SCRIPT_FILENAME'])).'/configs/init.config.php';
 header("Content-Type:text/css; charset=utf-8");
@@ -22,7 +22,8 @@ foreach ($languages as $language) {
 
 $MINITALK = new Minitalk();
 
-$cacheFile = $MINITALK->getAttachmentPath().'/temp/'.$language.'.'.($templet == null ? 'common' : $templet).'.'.($channel == null ? 'global' : 'channel').'.css.cache';
+$checksum = substr(md5(json_encode(GetDirectoryItems(__MINITALK_PATH__.'/plugins','directory',false))),0,6);
+$cacheFile = $MINITALK->getAttachmentPath().'/temp/'.$language.'.'.($templet == null ? 'common' : $templet).'.'.($channel == null ? 'global' : 'channel').'.'.$checksum.'.css.cache';
 if (is_file($cacheFile) == true && filemtime($cacheFile) >= $MINITALK->getLastModified()) {
 	$content = file_get_contents($cacheFile);
 } else {
@@ -71,7 +72,7 @@ if (is_file($cacheFile) == true && filemtime($cacheFile) >= $MINITALK->getLastMo
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.3
- * @modified 2021. 4. 15.
+ * @modified 2021. 4. 26.
  * @cached <?php echo date('Y. n. j. H:i:s',filemtime($cacheFile))."\n"; ?>
  */
 <?php echo $content; ?>

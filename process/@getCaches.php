@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.3
- * @modified 2021. 4. 15.
+ * @modified 2021. 4. 26.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -21,8 +21,16 @@ foreach (GetDirectoryItems($this->getAttachmentPath().'/temp','file') as $file) 
 		$item = new stdClass();
 		$item->name = basename($file);
 		$item->type = array_pop($temp);
+		
+		$item->checksum = array_pop($temp);
 		$item->language = array_shift($temp);
 		$item->templet = array_shift($temp);
+		
+		if (count($temp) == 0 || strlen($item->checksum) != 6) {
+			unlink($file);
+			continue;
+		}
+		
 		$item->capacity = implode('.',$temp);
 		$item->size = filesize($file);
 		$item->create_date = filectime($file);
