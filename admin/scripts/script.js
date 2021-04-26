@@ -1104,6 +1104,186 @@ var Admin = {
 			}).show();
 		},
 		/**
+		 * 위젯코드를 생성한다.
+		 *
+		 * @param object channel 채널정보
+		 */
+		code:function(channel) {
+			new Ext.Window({
+				title:Admin.getText("channel/code"),
+				width:1000,
+				height:600,
+				modal:true,
+				border:false,
+				layout:"fit",
+				items:[
+					new Ext.Panel({
+						layout:"border",
+						border:false,
+						items:[
+							new Ext.Panel({
+								region:"west",
+								width:500,
+								autoScroll:true,
+								border:false,
+								items:[
+									new Ext.form.Panel({
+										id:"MinitalkWidgetCodeForm",
+										padding:"10 10 5 10",
+										border:false,
+										fieldDefaults:{allowBlank:true,anchor:"100%",labelWidth:80,labelAlign:"right"},
+										items:[
+											new Ext.form.FieldSet({
+												title:Admin.getText("channel/form/widget_default_configs"),
+												items:[
+													new Ext.form.TextField({
+														fieldLabel:Admin.getText("channel/form/channel"),
+														name:"channel",
+														value:channel.channel
+													}),
+													new Ext.form.ComboBox({
+														fieldLabel:Admin.getText("channel/form/widget_templet"),
+														name:"templet",
+														store:new Ext.data.JsonStore({
+															proxy:{
+																type:"ajax",
+																url:Minitalk.getProcessUrl("@getTemplets"),
+																reader:{type:"json"}
+															},
+															autoLoad:false,
+															remoteSort:false,
+															sorters:[{property:"title",direction:"ASC"}],
+															fields:["title","templet"]
+														}),
+														editable:false,
+														displayField:"title",
+														valueField:"templet",
+														value:"default"
+													}),
+													new Ext.form.FieldContainer({
+														fieldLabel:Admin.getText("channel/form/widget_width"),
+														layout:"hbox",
+														items:[
+															new Ext.form.NumberField({
+																name:"width",
+																width:100,
+																value:400
+															}),
+															new Ext.form.ComboBox({
+																name:"width_unit",
+																width:60,
+																store:new Ext.data.ArrayStore({
+																	fields:["value"],
+																	data:[["px"],["%"]]
+																}),
+																displayField:"value",
+																valueField:"value",
+																value:"px",
+																margin:"0 0 0 5"
+															})
+														]
+													}),
+													new Ext.form.FieldContainer({
+														fieldLabel:Admin.getText("channel/form/widget_height"),
+														layout:"hbox",
+														items:[
+															new Ext.form.NumberField({
+																name:"height",
+																width:100,
+																value:500
+															}),
+															new Ext.form.ComboBox({
+																name:"height_unit",
+																width:60,
+																store:new Ext.data.ArrayStore({
+																	fields:["value"],
+																	data:[["px"],["%"]]
+																}),
+																displayField:"value",
+																valueField:"value",
+																value:"px",
+																margin:"0 0 0 5"
+															})
+														]
+													})
+												]
+											}),
+											new Ext.form.FieldSet({
+												title:Admin.getText("channel/form/widget_use_usercode"),
+												checkboxName:"use_usercode",
+												checkboxToggle:true,
+												collapsed:false,
+												items:[
+													new Ext.form.TextField({
+														fieldLabel:Admin.getText("channel/form/widget_nickname"),
+														name:"nickname",
+														value:"$member['mb_name']",
+														afterBodyEl:'<div class="x-form-help">' + Admin.getText("channel/form/widget_nickname_help") + '</div>'
+													}),
+													new Ext.form.TextField({
+														fieldLabel:Admin.getText("channel/form/widget_nickcon"),
+														name:"nickcon",
+														value:"'" + location.href.split("admin").shift() + "'.$member['mb_level'].'.gif,{NICKNAME}'",
+														afterBodyEl:'<div class="x-form-help">' + Admin.getText("channel/form/widget_nickcon_help") + '</div>'
+													}),
+													new Ext.form.TextField({
+														fieldLabel:Admin.getText("channel/form/widget_photo"),
+														name:"photo",
+														value:"'" + location.href.split("admin").shift() + "'.$member['mb_photo'].'.jpg'",
+														afterBodyEl:'<div class="x-form-help">' + Admin.getText("channel/form/widget_photo_help") + '</div>'
+													}),
+													new Ext.form.TextField({
+														fieldLabel:Admin.getText("channel/form/widget_level"),
+														name:"level",
+														value:"$member['mb_level']",
+														afterBodyEl:'<div class="x-form-help">' + Admin.getText("channel/form/widget_level_help") + '</div>'
+													})
+												]
+											})
+										]
+									})
+								]
+							}),
+							new Ext.Panel({
+								region:"center",
+								html:'<iframe id="MinitalkWidgetCodeFrame" src="./code.php" style="width:100%; height:100%; border:0;" frameborder="0"></iframe>'
+							})
+						]
+					})
+				],
+				buttons:[
+					new Ext.Button({
+						id:"MinitalkWidgetCodeCreateButton",
+						text:Admin.getText("channel/form/widget_create_code"),
+						handler:function() {
+							Ext.getCmp("MinitalkWidgetCodeForm").getForm().submit({
+								url:Minitalk.getProcessUrl("@getWidgetCode"),
+								submitEmptyText:false,
+								waitTitle:Admin.getText("action/wait"),
+								waitMsg:Admin.getText("action/saving"),
+								success:function(form,action) {
+									var $frame = $(document.getElementById("MinitalkWidgetCodeFrame").contentDocument.body);
+									$("pre > code",$frame).text(action.result.code);
+									document.getElementById("MinitalkWidgetCodeFrame").contentWindow.hljs.highlightAll();
+								},
+								failure:function(form,action) {
+									if (action.result) {
+										if (action.result.message) {
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:action.result.message,buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+										} else {
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_SAVE_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+										}
+									} else {
+										Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("INVALID_FORM_DATA"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+									}
+								}
+							});
+						}
+					})
+				]
+			}).show();
+		},
+		/**
 		 * 채널을 삭제한다.
 		 */
 		delete:function() {
