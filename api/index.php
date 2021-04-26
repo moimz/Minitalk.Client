@@ -7,8 +7,8 @@
  * @file /api/index.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.4.3
- * @modified 2021. 4. 15.
+ * @version 6.4.4
+ * @modified 2021. 4. 26.
  */
 header('Cache-Control:no-store, no-cache, must-revalidate, max-age=0');
 header('Cache-Control:post-check=0, pre-check=0', false);

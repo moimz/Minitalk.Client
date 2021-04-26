@@ -8,8 +8,8 @@
  * @file /admin/index.php
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
- * @version 6.4.3
- * @modified 2021. 4. 15.
+ * @version 6.4.4
+ * @modified 2021. 4. 26.
  */
 REQUIRE '../configs/init.config.php';
 if ($_CONFIGS->installed === false) {

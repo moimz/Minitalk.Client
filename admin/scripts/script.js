@@ -6,7 +6,7 @@
  * @file /admin/scripts/script.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.4.3
+ * @version 6.4.4
  * @modified 2021. 4. 26.
  */
 var Admin = {

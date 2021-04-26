@@ -6,8 +6,8 @@
  * @file /scripts/widget.socket.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.4.3
- * @modified 2021. 4. 15.
+ * @version 6.4.4
+ * @modified 2021. 4. 26.
  */
 Minitalk.socket = {
 	io:null,
