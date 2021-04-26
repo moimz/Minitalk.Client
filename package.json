@@ -6,7 +6,8 @@
 		"php":"5.3.3",
 		"mysql":"5.0.0",
 		"curl":"*",
-		"encrypt":"*"
+		"encrypt":"*",
+		"rewrite":"/process/check"
 	},
 	"requirements":{
 	},
