@@ -2247,7 +2247,7 @@ Minitalk.ui = {
 			$confirm.on("click",function() {
 				$(this).disable();
 				$("i",$(this)).addClass("mi mi-loading");
-				return;
+				
 				message.message = $.trim($textarea.val());
 				if (message.message.length == 0) return;
 				
