@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.1.1
- * @modified 2021. 4. 26.
+ * @modified 2021. 4. 28.
  */
 Minitalk.protocol = {
 	/**
@@ -297,9 +297,9 @@ Minitalk.protocol = {
 	/**
 	 * 누군가가 호출하였을 경우
 	 *
-	 * @param object from 호출한사람의 유저객체
+	 * @param object data 호출한사람의 유저객체
 	 */
-	call:function(from) {
+	call:function(data) {
 		/**
 		 * 이벤트를 발생시킨다.
 		 */
