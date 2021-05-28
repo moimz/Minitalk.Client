@@ -6,8 +6,8 @@
  * @file /scripts/widget.user.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.4.4
- * @modified 2021. 4. 26.
+ * @version 6.4.5
+ * @modified 2021. 5. 28.
  */
 Minitalk.user = {
 	latestRefreshTime:0, // 접속자목록을 마지막으로 갱신한 시각

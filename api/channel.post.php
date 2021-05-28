@@ -7,7 +7,7 @@
  * @file /api/channel.post.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.4.4
+ * @version 6.4.5
  * @modified 2021. 5. 28.
  */
 if (defined('__MINITALK__') == false) exit;

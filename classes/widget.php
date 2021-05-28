@@ -8,8 +8,8 @@
  * @file /classes/widget.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.4.4
- * @modified 2021. 4. 26.
+ * @version 6.4.5
+ * @modified 2021. 5. 28.
  */
 if (defined('__MINITALK_PATH__') == false) define('__MINITALK_PATH__',str_replace('/classes','',str_replace(DIRECTORY_SEPARATOR,'/',__DIR__)));
 if (defined('__MINITALK_DIR__') == false) define('__MINITALK_DIR__',str_replace(str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['DOCUMENT_ROOT']),'',__MINITALK_PATH__));

@@ -6,8 +6,8 @@
  * @file /scripts/box.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.4.4
- * @modified 2021. 4. 26.
+ * @version 6.4.5
+ * @modified 2021. 5. 28.
  */
 var MinitalkComponent = opener.MinitalkComponent.clone();
 var Minitalk = MinitalkComponent.get($("html").attr("data-id"),true);
