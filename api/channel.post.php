@@ -8,12 +8,11 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.4
- * @modified 2021. 4. 26.
+ * @modified 2021. 5. 28.
  */
 if (defined('__MINITALK__') == false) exit;
 
-$key = isset($headers['SECRET_KEY']) == true ? $headers['SECRET_KEY'] : null;
-if ($key == null || $key != $_CONFIGS->key) {
+if ($secret_key == null || $secret_key != $_CONFIGS->key) {
 	$data->success = false;
 	$data->message = 'INVALID_SECRET_KEY';
 	return;
