@@ -6,13 +6,13 @@
  * @file /scripts/extjs.extend.js
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
- * @version 1.0.0
- * @modified 2021. 5. 12.
+ * @version 1.1.0
+ * @modified 2021. 5. 28.
  */
 Ext.Ajax.setTimeout(600000);
 Ext.define("Ext.moimz.data.reader.Json",{override:"Ext.data.reader.Json",rootProperty:"lists",totalProperty:"total",messageProperty:"message"});
 Ext.define("Ext.moimz.data.JsonStore",{override:"Ext.data.JsonStore",pageSize:0});
-Ext.define("Ext.moimz.toolbar.Toolbar",{override:"Ext.toolbar.Toolbar",scrollable:"x"});
+Ext.define("Ext.moimz.toolbar.Toolbar",{override:"Ext.toolbar.Toolbar",scrollable:"x",enableFocusableContainer:false});
 Ext.define("Ext.moimz.data.proxy.Ajax",{override:"Ext.data.proxy.Ajax",timeout:60000});
 Ext.define("Ext.moimz.PagingToolbar",{override:"Ext.PagingToolbar",inputItemWidth:60});
 Ext.define("Ext.moimz.grid.column.Column",{override:"Ext.grid.column.Column",sortable:false,hideable:false,lockable:false,usermenu:false,
@@ -67,17 +67,6 @@ Ext.define("Ext.moimz.grid.Panel",{override:"Ext.grid.Panel",columnLines:true,en
 Ext.define("Ext.moimz.selection.CheckboxModel",{override:"Ext.selection.CheckboxModel",headerWidth:30,checkOnly:false});
 Ext.define("Ext.moimz.menu.Menu",{override:"Ext.menu.Menu",addTitle:function(title) {
 	this.add('<div class="x-menu-title"><div>'+title+'</div></div>');
-}});
-Ext.define("Ext.moimz.selection.Model",{override:"Ext.selection.Model",vetoSelection:function(e) {
-	if (e.stopSelection) {
-		return true;
-	} else if (e.type !== 'keydown' && e.button !== 0) {
-		if (this.ignoreRightMouseSelection) {
-			return true;
-		}
-	} else {
-		return e.type === 'mousedown';
-	}
 }});
 Ext.define("Ext.moimz.form.Basic",{override:"Ext.form.Basic",scrollToFirstErrorField:function(form) {
 	var form = form ? form : this;
