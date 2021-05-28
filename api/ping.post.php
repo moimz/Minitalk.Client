@@ -7,7 +7,7 @@
  * @file /api/ping.post.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 7.1.1
+ * @version 7.1.2
  * @modified 2021. 5. 28.
  */
 if (defined('__MINITALK__') == false) exit;

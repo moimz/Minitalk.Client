@@ -7,8 +7,8 @@
  * @file /admin/code.php
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
- * @version 7.1.1
- * @modified 2021. 4. 26.
+ * @version 7.1.2
+ * @modified 2021. 5. 28.
  */
 ?>
 <!DOCTYPE HTML>
