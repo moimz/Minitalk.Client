@@ -8,14 +8,13 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.1.1
- * @modified 2021. 4. 26.
+ * @modified 2021. 5. 28.
  */
 if (defined('__MINITALK__') == false) exit;
 
-$key = isset($headers['SECRET_KEY']) == true ? $headers['SECRET_KEY'] : null;
 $history = Request('history') ? json_decode(Request('history')) : null;
 
-if (strlen($key) == 0 || $key != $_CONFIGS->key|| $history == null || count($history) == 0) {
+if ($secret_key == null || $secret_key != $_CONFIGS->key || $history == null || count($history) == 0) {
 	$data->success = false;
 	$data->message = 'MISSING PARAMTERS : SECRET_KEY OR HISTORY';
 	return;

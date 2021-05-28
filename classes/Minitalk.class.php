@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.1.1
- * @modified 2021. 4. 26.
+ * @modified 2021. 5. 28.
  */
 class Minitalk {
 	/**
@@ -133,6 +133,8 @@ class Minitalk {
 		
 		$headers = getallheaders();
 		$token = null;
+		$client_secret = null;
+		$secret_key = null;
 		
 		if (isset($headers['Authorization']) == true || isset($headers['authorization']) == true) {
 			$authorization = explode(' ',isset($headers['Authorization']) == true ? $headers['Authorization'] : $headers['authorization']);
@@ -141,7 +143,19 @@ class Minitalk {
 				$token = Decoder(implode(' ',$authorization));
 				if ($token !== false) $token = json_decode($token);
 				else $token = null;
+			} elseif ($type == 'CLIENT_SECRET') {
+				$client_secret = implode(' ',$authorization);
+			} elseif ($type == 'SECRET_KEY') {
+				$secret_key = implode(' ',$authorization);
 			}
+		}
+		
+		// @todo 7.2.0 버전에서 제거
+		if ($client_secret == null && isset($headers['CLIENT_SECRET']) == true) {
+			$client_secret = $headers['CLIENT_SECRET'];
+		}
+		if ($secret_key == null && isset($headers['SECRET_KEY']) == true) {
+			$secret_key = $headers['SECRET_KEY'];
 		}
 		
 		$data = new stdClass();

@@ -8,22 +8,20 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.1.1
- * @modified 2021. 4. 26.
+ * @modified 2021. 5. 28.
  */
 if (defined('__MINITALK__') == false) exit;
 
-$key = isset($headers['SECRET_KEY']) == true && strlen($headers['SECRET_KEY']) > 0 ? $headers['SECRET_KEY'] : null;
-$client_secret = isset($headers['CLIENT_SECRET']) == true && strlen($headers['CLIENT_SECRET']) > 0 ? $headers['CLIENT_SECRET'] : null;
 $domain = Request('domain');
 $time = Request('time');
 
-if (($key == null && $client_secret == null) || strlen($domain) == 0) {
+if (($secret_key == null && $client_secret == null) || strlen($domain) == 0) {
 	$data->success = false;
 	$data->message = 'MISSING PARAMTERS : SECRET_KEY OR CLIENT_SECRET OR DOMAIN';
 	return;
 }
 
-if ($key != null && $key != $_CONFIGS->key) {
+if ($secret_key != null && $secret_key != $_CONFIGS->key) {
 	$data->success = false;
 	$data->message = 'INVALID PARAMETER : SECRET_KEY';
 	return;
