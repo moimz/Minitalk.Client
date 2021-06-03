@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.1.2
- * @modified 2021. 5. 28.
+ * @modified 2021. 6. 3.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -16,7 +16,7 @@ $names = Request('names') ? json_decode(Request('names')) : null;
 for ($i=0, $loop=count($names);$i<$loop;$i++) {
 	if (preg_match('/\.cache$/',$names[$i]) == false) continue;
 	
-	@unlink($this->getAttachmentPath().'/temp/'.$names[$i]);
+	@unlink($this->getAttachmentPath().'/cache/'.$names[$i]);
 }
 
 $results->success = true;

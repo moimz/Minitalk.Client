@@ -400,10 +400,12 @@
 					"create_date":"캐시생성일시"
 				},
 				"type":{
+					"json":"JSON",
 					"js":"자바스크립트",
 					"css":"스타일시트"
 				},
 				"capacity":{
+					"client":"클리이언트",
 					"global":"위젯전역",
 					"channel":"채널",
 					"channel.box":"개인박스"
