@@ -13,6 +13,7 @@
 		"password":"패스워드",
 		"whisper_to":"{nickname}님에게 귓속말",
 		"whisper_from":"{nickname}님의 귓속말",
+		"placeholder":"SHIFT + ENTER 줄바꿈",
 		"document":"미니톡 매뉴얼 보기",
 		"admin":"관리자"
 	},

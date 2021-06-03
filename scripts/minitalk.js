@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.5
- * @modified 2021. 5. 28.
+ * @modified 2021. 6. 3.
  */
 if (isMinitalkIncluded === undefined) {
 	var isMinitalkIncluded = true;
@@ -138,6 +138,7 @@ if (isMinitalkIncluded === undefined) {
 		 *
 		 * @public int logCount 이전 대화내역을 몇개까지 보일지 설정한다. (기본값 : 15, 최대 : 50, 0 일 경우 이전 대화내역을 사용하지 않는다.)
 		 * @public string dateFormat 미니톡 채팅위젯내에서 표시되는 날짜/시각의 표시형태
+		 * @public string placeholder 미니톡 채팅입력폼에 기본적으로 표시될 내용
 		 *
 		 * @public string toolType 툴바 형식을 정의한다. (기본값 : icon, icon : 툴바아이콘만 표시, text : 툴바명칭만 표시, icontext : 툴바 아이콘 및 명칭표시)
 		 * @public object[] tools 툴바의 버튼을 정의한다.
@@ -165,6 +166,7 @@ if (isMinitalkIncluded === undefined) {
 		
 		this.logCount = opt.logCount !== undefined ? opt.logCount : 15;
 		this.dateFormat = opt.dateFormat !== undefined ? opt.dateFormat : "A HH:mm";
+		this.placeholder = opt.placeholder !== undefined ? opt.placeholder : null;
 		
 		this.toolType = opt.toolType ? opt.toolType : "icon";
 		this.tools = opt.tools ? opt.tools : ["bold","underline","italic","color","-","emoticon","file"];
