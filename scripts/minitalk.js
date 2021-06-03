@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.1.2
- * @modified 2021. 5. 28.
+ * @modified 2021. 6. 3.
  */
 if (isMinitalkIncluded === undefined) {
 	var isMinitalkIncluded = true;
@@ -137,6 +137,7 @@ if (isMinitalkIncluded === undefined) {
 		 *
 		 * @public int logCount 이전 대화내역을 몇개까지 보일지 설정한다. (기본값 : 15, 최대 : 50, 0 일 경우 이전 대화내역을 사용하지 않는다.)
 		 * @public string dateFormat 미니톡 채팅위젯내에서 표시되는 날짜/시각의 표시형태
+		 * @public string placeholder 미니톡 채팅입력폼에 기본적으로 표시될 내용
 		 *
 		 * @public string tabType 탭바 형식을 정의한다.  (기본값 : auto, auto : 채팅위젯 가로크기(400px 기준)에 따라 가로/세로 자동변환, horizontal : 가로형태, vertical : 세로형태)
 		 * @public string/object[] tabs 탭바의 탭을 설정한다.
@@ -165,7 +166,7 @@ if (isMinitalkIncluded === undefined) {
 		
 		this.logCount = opt.logCount !== undefined ? opt.logCount : 15;
 		this.dateFormat = opt.dateFormat !== undefined ? opt.dateFormat : "A HH:mm";
-		
+		this.placeholder = opt.placeholder !== undefined ? opt.placeholder : null;
 		this.tabs = opt.tabs ? opt.tabs : ["users","boxes","configs"];
 		this.tabType = opt.tabType ? opt.tabType : "auto";
 		this.toolType = opt.toolType ? opt.toolType : "icon";

@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.1.2
- * @modified 2021. 5. 28.
+ * @modified 2021. 6. 3.
  */
 Minitalk.ui = {
 	domReady:false,
@@ -122,6 +122,11 @@ Minitalk.ui = {
 		$frame.append('<audio data-type="call"><source src="' + Minitalk.getUrl() + '/sounds/call.mp3" type="audio/mpeg"></audio>');
 		$frame.append('<audio data-type="message"><source src="' + Minitalk.getUrl() + '/sounds/message.mp3" type="audio/mpeg"></audio>');
 		$frame.append('<audio data-type="query"><source src="' + Minitalk.getUrl() + '/sounds/query.mp3" type="audio/mpeg"></audio>');
+		
+		/**
+		 * placeholder 를 적용한다.
+		 */
+		Minitalk.ui.setPlaceholder(Minitalk.placeholder);
 		
 		/**
 		 * 미니톡 UI DOM 출력완료 이벤트를 발생시킨다.
@@ -2481,6 +2486,19 @@ Minitalk.ui = {
 		var $input = $("div[data-role=input] > textarea");
 		$input.focus().val(value);
 		Minitalk.ui.updateInputHeight();
+	},
+	/**
+	 * 메시지 입력창의 placeholder 를 적용한다.
+	 *
+	 * @param string placeholder
+	 */
+	setPlaceholder:function(placeholder) {
+		var $input = $("div[data-role=input] > textarea");
+		if (placeholder === null) {
+			$input.attr("placeholder",Minitalk.getText("text/placeholder"));
+		} else {
+			$input.attr("placeholder",placeholder);
+		}
 	},
 	/**
 	 * 입력폼의 내용에 따라 입력폼의 높이를 조절한다.
