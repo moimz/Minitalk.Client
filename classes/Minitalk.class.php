@@ -914,6 +914,42 @@ class Minitalk {
 	}
 	
 	/**
+	 * 캐시파일 생성시각을 가져온다.
+	 *
+	 * @param string $name
+	 * @return string $path
+	 */
+	function getCacheTime($name) {
+		return is_file($this->getAttachmentPath().'/cache/'.$name.'.cache') == true ? filemtime($this->getAttachmentPath().'/cache/'.$name.'.cache') : 0;
+	}
+	
+	/**
+	 * 캐시파일 내용을 가져온다.
+	 *
+	 * @param string $name
+	 * @return string $content
+	 */
+	function getCacheContent($name) {
+		return is_file($this->getAttachmentPath().'/cache/'.$name.'.cache') == true ? file_get_contents($this->getAttachmentPath().'/cache/'.$name.'.cache') : null;
+	}
+	
+	/**
+	 * 캐시파일을 저장한다.
+	 *
+	 * @param string $name
+	 * @param string $content
+	 */
+	function saveCacheContent($name,$content) {
+		if (is_dir($this->getAttachmentPath().'/cache') == false) {
+			mkdir($this->getAttachmentPath().'/cache');
+			chmod($this->getAttachmentPath().'/cache',0707);
+		}
+		
+		file_put_contents($this->getAttachmentPath().'/cache/'.$name.'.cache',$content);
+		chmod($this->getAttachmentPath().'/cache/'.$name.'.cache',0707);
+	}
+	
+	/**
 	 * 미니톡 클라이언트에서 처리해야하는 요청이 들어왔을 경우 처리하여 결과를 반환한다.
 	 * 소스코드 관리를 편하게 하기 위해 각 요쳥별로 별도의 PHP 파일로 관리한다.
 	 * 작업코드가 '@' 로 시작할 경우 미니톡 클라이언트 관리자를 위한 작업으로 관리자 권한이 필요하다.
