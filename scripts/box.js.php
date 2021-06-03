@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.1.2
- * @modified 2021. 5. 28.
+ * @modified 2021. 6. 3.
  */
 REQUIRE_ONCE str_replace('/scripts/box.js.php','',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['SCRIPT_FILENAME'])).'/configs/init.config.php';
 header('Content-Type: application/x-javascript; charset=utf-8');
@@ -23,9 +23,9 @@ foreach ($languages as $language) {
 $MINITALK = new Minitalk();
 
 $checksum = substr(md5(json_encode(GetDirectoryItems(__MINITALK_PATH__.'/plugins','directory',false))),0,6);
-$cacheFile = $MINITALK->getAttachmentPath().'/temp/'.$language.'.'.($templet == null ? 'common' : $templet).'.'.($channel == null ? 'global' : 'channel').'.box.'.$checksum.'.js.cache';
-if (is_file($cacheFile) == true && filemtime($cacheFile) >= $MINITALK->getLastModified()) {
-	$content = file_get_contents($cacheFile);
+$cacheFile = $language.'.'.($templet == null ? 'common' : $templet).'.'.($channel == null ? 'global' : 'channel').'.box.'.$checksum.'.js';
+if ($MINITALK->getCacheTime($cacheFile) >= $MINITALK->getLastModified()) {
+	$content = $MINITALK->getCacheContent($cacheFile);
 } else {
 	$minifier = new Minifier();
 	$js = $minifier->js();
@@ -114,11 +114,7 @@ if (is_file($cacheFile) == true && filemtime($cacheFile) >= $MINITALK->getLastMo
 	}
 	
 	$content = $js->minify(__MINITALK_PATH__.'/scripts');
-	
-	if (is_file($cacheFile) == true) {
-		unlink($cacheFile);
-	}
-	file_put_contents($cacheFile,$content);
+	$MINITALK->saveCacheContent($cacheFile,$content);
 }
 ?>
 /**
@@ -130,7 +126,7 @@ if (is_file($cacheFile) == true && filemtime($cacheFile) >= $MINITALK->getLastMo
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.1.2
- * @modified 2021. 5. 28.
- * @cached <?php echo date('Y. n. j. H:i:s',filemtime($cacheFile))."\n"; ?>
+ * @modified 2021. 6. 3.
+ * @cached <?php echo date('Y. n. j. H:i:s',$MINITALK->getCacheTime($cacheFile))."\n"; ?>
  */
 <?php echo $content; ?>
