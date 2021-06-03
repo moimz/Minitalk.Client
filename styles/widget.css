@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.5
- * @modified 2021. 5. 28.
+ * @modified 2021. 6. 3.
  */
 * {padding:0; margin:0;}
 html, body {width:100%; height:100%; overflow:hidden; width:100%; height:100%; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; user-select:none; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none;}
@@ -44,6 +44,12 @@ div[data-role=notifications] > div > div.success {background:#2196F3; color:#fff
 div[data-role=notifications] > div > div.error {background:#F44336; color:#fff;}
 div[data-role=notifications] > div > div.warning {background:#FFC107; color:#fff;}
 
+
+/**
+ * 헤더 영역의 기본속성을 정의한다.
+ */
+div[data-role=frame] > header > div[data-role=tabs] {font-size:0;}
+div[data-role=frame] > header > div[data-role=tabs] > button[data-action] {vertical-align:middle;}
 
 /**
  * 메인컨텐츠 영역의 기본속성을 정의한다.
@@ -144,13 +150,18 @@ section[data-role] > button[data-action=close] {display:none; position:fixed; to
 section[data-role] > button[data-action=close]:before {content:"\eb03";}
 section[data-role] > div[data-role=content] {padding:10px; height:calc(100% - 34px); box-sizing:border-box; overflow-y:auto;}
 section[data-role] > div[data-role=content] > h4 {font-size:14px; margin:5px 0px; height:20px; line-height:20px;}
+section[data-role] > div[data-role=content] > div[data-role=help] {padding:0px; font-size:12px; line-height:1.6; color:#666;}
+section[data-role] > div[data-role=content] > div[data-role=help]:empty {display:none;}
 section[data-role] > div[data-role=content] > label {display:block; min-height:18px; line-height:18px; font-size:12px; margin:5px 0px;}
 section[data-role] > div[data-role=content] > label.checkbox {cursor:pointer; padding-left:20px;}
 section[data-role] > div[data-role=content] > label > input {display:block; width:100%; height:30px; box-sizing:border-box; border:1px solid #ccc; padding:5px; line-height:18px; font-size:12px;}
+section[data-role] > div[data-role=content] > label > input:focus {border-color:#2196F3;}
+section[data-role] > div[data-role=content] > label > input:disabled {opacity:0.6; cursor:not-allowed; background:#f4f4f4;}
 section[data-role] > div[data-role=content] > label > select {display:block; width:100%; height:30px; box-sizing:border-box; border:1px solid #ccc; padding:5px; line-height:18px; font-size:12px;}
 section[data-role] > div[data-role=content] > label > input[type=checkbox] {width:14px; height:14px; position:relative; vertical-align:middle; margin:2px 0px 2px -18px; float:left; font-size:12px; border:0;}
 section[data-role] > div[data-role=content] > label > input[type=checkbox]:after {width:14px; height:14px; display:block; content:" "; position:absolute; top:0; left:0; box-sizing:border-box; border:1px solid #ccc; z-index:10; background:#fff;}
 section[data-role] > div[data-role=content] > label > input[type=checkbox]:checked:after {font-family:moimz; content:"\EB10"; text-align:center; line-height:12px; border-color:#2196F3; background:#2196F3; color:#fff;} 
+section[data-role] > div[data-role=content] > label > input[type=checkbox]:focus {outline:1px dotted #2196F3;}
 section[data-role] > div[data-role=content] > label > p {color:#666; font-size:12px; padding-top:5px;}
 section[data-role] > div[data-role=content] > hr {margin:10px 0px; border:0; border-top:1px solid #ccc;}
 section[data-role] > div[data-role=button] {width:100%; height:34px; position:absolute; left:0; bottom:0; background:#fff;}

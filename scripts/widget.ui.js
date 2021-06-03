@@ -813,6 +813,10 @@ Minitalk.ui = {
 				'<h2>' + Minitalk.getText("tab/configs") + '</h2>',
 				'<button data-action="close"></button>',
 				'<div data-role="content">',
+					'<h4>' + Minitalk.getText("config/title/nickname") + '</h4>',
+					'<label><input type="text" name="nickname"></label>',
+					'<div data-role="help" data-name="nickname"></div>',
+					'<hr>',
 					'<h4>' + Minitalk.getText("config/title/default") + '</h4>',
 					'<label class="checkbox"><input type="checkbox" name="active_scroll">' + Minitalk.getText("config/active_scroll") + '</label>',
 					'<label class="checkbox"><input type="checkbox" name="browser_notification">' + Minitalk.getText("config/browser_notification") + '</label>',
@@ -841,6 +845,19 @@ Minitalk.ui = {
 			html = '<section data-role="configs">' + html + '</section>';
 			Minitalk.ui.createWindow(html,400,Minitalk.ui.createConfigs);
 		} else {
+			$("input, select, textarea",$dom).on("keydown",function(e) {
+				if (e.keyCode == 13) {
+					$("button[data-action=confirm]",$dom).trigger("click");
+					e.stopImmediatePropagation();
+				}
+			});
+			
+			$("input[name=nickname]",$dom).val(Minitalk.user.me.nickname);
+			if (Minitalk.socket.getPermission("nickname") === false) {
+				$("input[name=nickname]",$dom).disable();
+				$("div[data-role=help][data-name=nickname]",$dom).html(Minitalk.getErrorText("NOT_ALLOWED_NICKNAME_UPDATED"));
+			}
+			
 			var configs = Minitalk.configs();
 			$("input[name=active_scroll]",$dom).checked(configs.active_scroll);
 			$("input[name=browser_notification]",$dom).checked(configs.browser_notification);
@@ -887,6 +904,10 @@ Minitalk.ui = {
 					Minitalk.configs("whisper_sound",$("input[name=whisper_sound]",$dom).checked());
 					Minitalk.configs("call",$("input[name=call]",$dom).checked());
 					Minitalk.configs("call_sound",$("input[name=call_sound]",$dom).checked());
+					
+					if (Minitalk.socket.getPermission("nickname") === true && Minitalk.user.me.nickname != $("input[name=nickname]",$dom).val()) {
+						Minitalk.user.updateMe({nickname:$("input[name=nickname]",$dom).val()});
+					}
 				}
 				
 				if ($dom.is("body") === true) {
