@@ -951,6 +951,72 @@ class Minitalk {
 		file_put_contents($this->getAttachmentPath().'/cache/'.$name.'.cache',$content);
 		chmod($this->getAttachmentPath().'/cache/'.$name.'.cache',0707);
 	}
+	
+	/**
+	 * 업데이트를 확인한다.
+	 *
+	 * @return boolean/string $hasUpdate
+	 */
+	function checkUpdate() {
+		$cacheFile = 'core.latest';
+		if ($this->getCacheTime($cacheFile) >= time() - 60 * 60 * 24) {
+			$latest = json_decode($this->getCacheContent($cacheFile));
+			if ($latest->version != __MINITALK_VERSION__) {
+				unlink($this->getAttachmentPath().'/cache/'.$cacheFile.'.cache');
+				return $this->checkUpdate();
+			}
+		} else {
+			$latest = new stdClass();
+			$latest->is_latest = true;
+			$latest->latest = __MINITALK_VERSION__;
+			$latest->version = __MINITALK_VERSION__;
+			
+			if (is_file(__MINITALK_PATH__.'/package.json') == true) {
+				$package = json_decode(file_get_contents(__MINITALK_PATH__.'/package.json'));
+				
+				$ch = curl_init();
+				curl_setopt($ch,CURLOPT_URL,'https://api.moimz.com/tools/'.$package->id.'/latest/'.$package->version);
+				curl_setopt($ch,CURLOPT_POST,false);
+				curl_setopt($ch,CURLOPT_TIMEOUT,10);
+				curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+				$data = curl_exec($ch);
+				$http_code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+				curl_close($ch);
+				
+				if ($http_code == 200) {
+					$results = json_decode($data);
+					if ($results->success == true) {
+						$latest->is_latest = $results->is_latest;
+						$latest->latest = $results->latest;
+					}
+				}
+			}
+			
+			$this->saveCacheContent($cacheFile,json_encode($latest));
+		}
+		
+		return $latest->is_latest == true ? true : str_replace(array('{version}','{latest}'),array(__MINITALK_VERSION__,$latest->latest),$this->getText('error/AVAILABLE_UPDATE'));
+	}
+	
+	/**
+	 * 데이터베이스 구조가 변경된 경우 최신 데이터베이스 구조로 자동 업데이트한다.
+	 *
+	 * @return boolean/string $result
+	 */
+	function checkInstall() {
+		if (is_file(__MINITALK_PATH__.'/package.json') == true) {
+			$cacheFile = 'core.package';
+			if ($this->getCacheContent($cacheFile) != md5_file(__MINITALK_PATH__.'/package.json')) {
+				$package = json_decode(file_get_contents(__MINITALK_PATH__.'/package.json'));
+				if (CreateDatabase($this->db(),$package->databases) !== true) return $this->getText('error/DATABASE_AUTO_UPDATE_FAIL');
+				
+				$this->saveCacheContent($cacheFile,md5_file(__MINITALK_PATH__.'/package.json'));
+			}
+		}
+		
+		return true;
+	}
+	
 	/**
 	 * 미니톡 클라이언트에서 처리해야하는 요청이 들어왔을 경우 처리하여 결과를 반환한다.
 	 * 소스코드 관리를 편하게 하기 위해 각 요쳥별로 별도의 PHP 파일로 관리한다.

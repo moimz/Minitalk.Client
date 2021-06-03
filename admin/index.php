@@ -9,7 +9,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
  * @version 7.1.2
- * @modified 2021. 5. 28.
+ * @modified 2021. 6. 3.
  */
 REQUIRE '../configs/init.config.php';
 if ($_CONFIGS->installed === false) {
@@ -28,11 +28,15 @@ if ($logged !== null && $logged->language == 'ko') {
 
 $current = Request('menu') ? Request('menu') : 'server';
 $hasServer = is_dir(__MINITALK_PATH__.'/server') == true;
+
+$checkUpdate = $MINITALK->checkUpdate();
+$checkInstall = $MINITALK->checkInstall();
 ?>
 <!DOCTYPE HTML>
 <html lang="<?php echo $logged == null ? 'en' : $logged->language; ?>">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=1200, maximum-scale=10, user-scalable=yes">
 <title>Minitalk Administrator</title>
 <script src="../scripts/jquery.js?t=<?php echo filemtime('../scripts/jquery.js'); ?>"></script>
 <script src="../scripts/jquery.extend.js?t=<?php echo filemtime('../scripts/jquery.extend.js'); ?>"></script>
@@ -59,6 +63,12 @@ if ($logged === null) {
 	$menuIcons = array('server'=>'xi-cloud-network','channel'=>'xi-chat','log'=>'xi-time-back','resource'=>'xi-archive','banip'=>'xi-slash-circle','broadcast'=>'xi-signal','admin'=>'xi-crown');
 ?>
 <header id="MinitalkHeader">
+	<?php if ($checkUpdate !== true) { ?>
+	<a href="https://www.minitalk.io/ko/download/current" target="_blank" data-role="update"><?php echo $checkUpdate; ?></a>
+	<?php } ?>
+	<?php if ($checkInstall !== true) { ?>
+	<a href="<?php echo __MINITALK_DIR__; ?>/install" target="_blank" data-role="install"><?php echo $checkInstall; ?></a>
+	<?php } ?>
 	<h1>Minitalk <small>Administrator</small></h1>
 	
 	<ul data-role="menu">
@@ -77,7 +87,7 @@ if ($logged === null) {
 </header>
 
 <footer id="MinitalkFooter">
-	Copyright (c) <?php echo date('Y'); ?> Minitalk <?php echo __MINITALK_VERSION__; ?>, MIT License / <?php echo $_SERVER['SERVER_ADDR']; ?>
+	Copyright(c) <?php echo date('Y'); ?> Minitalk v<?php echo __MINITALK_VERSION__; ?> / MIT License / <?php echo $_SERVER['SERVER_ADDR']; ?>
 </footer>
 
 <script>
@@ -87,8 +97,8 @@ Ext.onReady(function () {
 		layout:{type:"border"},
 		items:[
 			new Ext.Panel({
+				id:"MinitalkHeaderPanel",
 				region:"north",
-				height:52,
 				border:false,
 				contentEl:"MinitalkHeader",
 				cls:"x-visible-panel"
@@ -1537,6 +1547,7 @@ Ext.onReady(function () {
 				}
 			}),
 			new Ext.Panel({
+				id:"MinitalkFooterPanel",
 				region:"south",
 				height:25,
 				border:false,
