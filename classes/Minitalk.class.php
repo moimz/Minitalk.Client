@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.1.2
- * @modified 2021. 5. 28.
+ * @modified 2021. 6. 3.
  */
 class Minitalk {
 	/**
@@ -784,7 +784,7 @@ class Minitalk {
 			}
 			
 			if ($server->type == 'SERVICE') {
-				$service = $this->callServiceApi('GET','service/'.$server->domain);
+				$service = $this->callServiceApi('GET','service/'.$server->domain,array(),array('MINITALK_CLIENT_SECRET'=>$server->client_secret));
 				if ($service->success == true) {
 					$service = $service->service;
 					if ($service->server != null && $service->server->status == 'ONLINE') {
