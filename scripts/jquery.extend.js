@@ -6,8 +6,8 @@
  * @file /scripts/jquery.extend.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 7.1.2
- * @modified 2021. 5. 28.
+ * @version 7.2.0
+ * @modified 2021. 6. 3.
  */
 (function($) {
 	$.propHooks.disabled = {

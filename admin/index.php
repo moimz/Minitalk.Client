@@ -8,7 +8,7 @@
  * @file /admin/index.php
  * @author Arzz (arzz@arzz.com)
  * @license GPLv3
- * @version 7.1.2
+ * @version 7.2.0
  * @modified 2021. 6. 3.
  */
 REQUIRE '../configs/init.config.php';
