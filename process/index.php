@@ -7,8 +7,8 @@
  * @file /process/index.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.4.5
- * @modified 2021. 5. 28.
+ * @version 6.5.0
+ * @modified 2021. 6. 3.
  */
 REQUIRE_ONCE str_replace('/process','',str_replace(DIRECTORY_SEPARATOR,'/',__DIR__)).'/configs/init.config.php';
 

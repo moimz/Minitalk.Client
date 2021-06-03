@@ -6,7 +6,7 @@
  * @file /scripts/minitalk.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.4.5
+ * @version 6.5.0
  * @modified 2021. 6. 3.
  */
 if (isMinitalkIncluded === undefined) {
