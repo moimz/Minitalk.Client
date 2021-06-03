@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.1.2
- * @modified 2021. 5. 28.
+ * @modified 2021. 6. 3.
  */
 Minitalk.protocol = {
 	/**
@@ -209,6 +209,17 @@ Minitalk.protocol = {
 	 */
 	update:function(data) {
 		Minitalk.user.update(data.before,data.after);
+	},
+	/**
+	 * 나의정보가 변경된 경우
+	 *
+	 * @param object data.me 변경된 정보
+	 * @param string data.authorization 변경된 인증정보
+	 */
+	me:function(data) {
+		Minitalk.user.update(Minitalk.user.me,data.me);
+		Minitalk.user.me = data.me;
+		Minitalk.storage("authorization",data.authorization);
 	},
 	/**
 	 * 메시지를 수신하였을 때

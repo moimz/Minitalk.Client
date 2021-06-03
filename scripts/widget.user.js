@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.1.2
- * @modified 2021. 5. 28.
+ * @modified 2021. 6. 3.
  */
 Minitalk.user = {
 	latestRefreshTime:0, // 접속자목록을 마지막으로 갱신한 시각
@@ -88,6 +88,14 @@ Minitalk.user = {
 		 * 유저목록을 새로고침한다.
 		 */
 		Minitalk.user.reload();
+	},
+	/**
+	 * 나의정보를 수정한다.
+	 *
+	 * @param object me
+	 */
+	updateMe:function(me) {
+		Minitalk.socket.send("me",me);
 	},
 	/**
 	 * 유저목록을 새로고침한다.
