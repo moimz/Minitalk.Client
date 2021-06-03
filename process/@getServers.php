@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.4.5
- * @modified 2021. 5. 28.
+ * @modified 2021. 6. 3.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -25,7 +25,7 @@ for ($i=0, $loop=count($lists);$i<$loop;$i++) {
 		$lists[$i]->exp_date = 0;
 		$lists[$i]->max_user = 0;
 	} else {
-		$service = $this->callServiceApi('GET','service/'.$lists[$i]->domain);
+		$service = $this->callServiceApi('GET','service/'.$lists[$i]->domain,array(),array('MINITALK_CLIENT_SECRET'=>$lists[$i]->client_secret));
 		
 		if ($service->success == true) {
 			$service = $service->service;
