@@ -55,7 +55,6 @@ Minitalk.socket = {
 				}
 			} else {
 				Minitalk.ui.printError(result.error);
-				Minitalk.socket.reconnect(60);
 			}
 		});
 	},
