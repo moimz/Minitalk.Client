@@ -955,6 +955,8 @@ class Minitalk {
 	 * @return boolean/string $hasUpdate
 	 */
 	function checkUpdate() {
+		global $_CONFIGS;
+		
 		$cacheFile = 'core.latest';
 		if ($this->getCacheTime($cacheFile) >= time() - 60 * 60 * 24) {
 			$latest = json_decode($this->getCacheContent($cacheFile));
@@ -968,7 +970,7 @@ class Minitalk {
 			$latest->latest = __MINITALK_VERSION__;
 			$latest->version = __MINITALK_VERSION__;
 			
-			if (is_file(__MINITALK_PATH__.'/package.json') == true) {
+			if ($_CONFIGS->installed === true && is_file(__MINITALK_PATH__.'/package.json') == true) {
 				$package = json_decode(file_get_contents(__MINITALK_PATH__.'/package.json'));
 				
 				$ch = curl_init();
@@ -1001,7 +1003,9 @@ class Minitalk {
 	 * @return boolean/string $result
 	 */
 	function checkInstall() {
-		if (is_file(__MINITALK_PATH__.'/package.json') == true) {
+		global $_CONFIGS;
+		
+		if ($_CONFIGS->installed === true && is_file(__MINITALK_PATH__.'/package.json') == true) {
 			$cacheFile = 'core.package';
 			if ($this->getCacheContent($cacheFile) != md5_file(__MINITALK_PATH__.'/package.json')) {
 				$package = json_decode(file_get_contents(__MINITALK_PATH__.'/package.json'));
