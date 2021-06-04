@@ -21,6 +21,9 @@ $MINITALK = new Minitalk();
 $logged = $MINITALK->getAdminLogged();
 
 if ($logged !== null && $logged->language == 'ko') {
+	$checkUpdate = $MINITALK->checkUpdate();
+	$checkInstall = $MINITALK->checkInstall();
+	
 	$fontStyle = '../styles/font.css.php?font=moimz,XEIcon,FontAwesome,NanumBarunGothic,OpenSans&default=NanumBarunGothic';
 } else {
 	$fontStyle = '../styles/font.css.php?font=moimz,XEIcon,FontAwesome,OpenSans&default=OpenSans';
@@ -28,9 +31,6 @@ if ($logged !== null && $logged->language == 'ko') {
 
 $current = Request('menu') ? Request('menu') : 'server';
 $hasServer = is_dir(__MINITALK_PATH__.'/server') == true;
-
-$checkUpdate = $MINITALK->checkUpdate();
-$checkInstall = $MINITALK->checkInstall();
 ?>
 <!DOCTYPE HTML>
 <html lang="<?php echo $logged == null ? 'en' : $logged->language; ?>">
