@@ -9,3 +9,4 @@ RewriteRule ^api/([^\/]+)$ api/index.php?api=$1&idx=$2&%{QUERY_STRING} [L]
 RewriteRule ^api/([^\/]+)/?([^\/]+)?$ api/index.php?api=$1&idx=$2&%{QUERY_STRING} [L]
 
 RewriteRule ^process/([^\/]+)$ process/index.php?action=$1&%{QUERY_STRING} [L]
+RewriteRule ^process/attachment/(.*)$ process/index.php?action=attachment&extras=$1%{QUERY_STRING} [L]
