@@ -6,8 +6,8 @@
  * @file /scripts/widget.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 7.2.0
- * @modified 2021. 6. 3.
+ * @version 7.2.1
+ * @modified 2021. 7. 7.
  */
 var MinitalkComponent = parent.MinitalkComponent;
 var Minitalk = MinitalkComponent.get($("html").attr("data-id"));

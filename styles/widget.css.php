@@ -7,8 +7,8 @@
  * @file /scripts/widget.css.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 7.2.0
- * @modified 2021. 6. 3.
+ * @version 7.2.1
+ * @modified 2021. 7. 7.
  */
 REQUIRE_ONCE str_replace('/styles/widget.css.php','',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['SCRIPT_FILENAME'])).'/configs/init.config.php';
 header("Content-Type:text/css; charset=utf-8");
@@ -67,8 +67,8 @@ if ($MINITALK->getCacheTime($cacheFile) >= $MINITALK->getLastModified()) {
  * @file /scripts/widget.css.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 7.2.0
- * @modified 2021. 6. 3.
+ * @version 7.2.1
+ * @modified 2021. 7. 7.
  * @cached <?php echo date('Y. n. j. H:i:s',$MINITALK->getCacheTime($cacheFile))."\n"; ?>
  */
 <?php echo $content; ?>

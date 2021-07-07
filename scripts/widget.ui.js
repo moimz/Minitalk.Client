@@ -6,7 +6,7 @@
  * @file /scripts/widget.ui.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 7.2.0
+ * @version 7.2.1
  * @modified 2021. 7. 7.
  */
 Minitalk.ui = {
