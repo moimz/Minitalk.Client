@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.5.0
- * @modified 2021. 6. 3.
+ * @modified 2021. 7. 7.
  */
 Minitalk.ui = {
 	domReady:false,
@@ -1587,7 +1587,7 @@ Minitalk.ui = {
 							if (message.data.image != null) {
 								var $link = $("<a>").attr("href",message.data.url).attr("target","_blank");
 								var $image = $("<div>").attr("data-role","image");
-								var $innerimage = $("<div>").css("backgroundImage","url(" + message.data.image.url + ")");
+								var $innerimage = $("<div>").css("backgroundImage","url(" + encodeURI(message.data.image.url) + ")");
 								/**
 								 * 가로 세로 크기 데이터가 있을 경우, 세로 % 를 계산하고, 그렇지 않은 경우 16:10 비율로 표시한다.
 								 */
@@ -1632,10 +1632,10 @@ Minitalk.ui = {
 			case "file" :
 				var $data = $("<div>").attr("data-role","file");
 				
-				var $link = $("<a>").attr("href",message.data.download).attr("target","_blank");
+				var $link = $("<a>").attr("href",encodeURI(message.data.download)).attr("target","_blank");
 				if (message.data.type == "image") {
 					var $image = $("<div>").attr("data-role","image");
-					var $background = $("<div>").css("backgroundImage","url(" + message.data.view + ")");
+					var $background = $("<div>").css("backgroundImage","url(" + encodeURI(message.data.view) + ")");
 					
 					/**
 					 * 가로 세로 크기 데이터가 있을 경우, 세로 % 를 계산하고, 그렇지 않은 경우 16:10 비율로 표시한다.
