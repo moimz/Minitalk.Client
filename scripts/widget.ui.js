@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.5.1
- * @modified 2021. 7. 7.
+ * @modified 2021. 7. 9.
  */
 Minitalk.ui = {
 	domReady:false,
@@ -179,7 +179,10 @@ Minitalk.ui = {
 				Minitalk.ui.resizeTimer = null;
 			}
 			
-			Minitalk.ui.resizeTimer = setTimeout(Minitalk.ui.initFrame,200);
+			Minitalk.ui.resizeTimer = setTimeout(function() {
+				Minitalk.fireEvent("resize",[$frame]);
+				Minitalk.ui.initFrame();
+			},200);
 		});
 		
 		/**
@@ -191,7 +194,11 @@ Minitalk.ui = {
 				Minitalk.ui.resizeTimer = null;
 			}
 			
-			Minitalk.ui.resizeTimer = setTimeout(Minitalk.ui.initFrame,200);
+			Minitalk.ui.resizeTimer = setTimeout(function() {
+				Minitalk.fireEvent("orientationchange",[$frame]);
+				Minitalk.fireEvent("resize",[$frame]);
+				Minitalk.ui.initFrame();
+			},200);
 		});
 		
 		/**
@@ -228,7 +235,6 @@ Minitalk.ui = {
 		$(window).on("beforeunload",function() {
 			Minitalk.ui.closeWindow(true);
 		});
-		
 		
 		/**
 		 * 웹폰트 로드가 완료되면, UI 를 재정의한다.
