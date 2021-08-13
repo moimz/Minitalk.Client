@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.2.1
- * @modified 2021. 7. 7.
+ * @modified 2021. 8. 13.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -38,8 +38,10 @@ if ($use_usercode == true) {
 		'	);',
 		'',
 		'	// 유저코드를 암호화키로 암호화한다.',
-		'	$value = json_encode($user,JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);',
 		'	$key = \''.FileReadLine(__MINITALK_PATH__.'/configs/key.config.php',1).'\';',
+		'	$padSize = 16 - (strlen($value) % 16);',
+		'	$value = json_encode($user,JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);',
+		'	$value = $value.str_repeat(chr($padSize),$padSize);',
 		'	$usercode = openssl_encrypt($value,\'AES-256-CBC\',$key,OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING,str_repeat(chr(0),16));',
 		'	return $usercode;',
 		'}',
