@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.5.1
- * @modified 2021. 7. 7.
+ * @modified 2021. 8. 27.
  */
 if (isMinitalkIncluded === undefined) {
 	var isMinitalkIncluded = true;
@@ -184,6 +184,13 @@ if (isMinitalkIncluded === undefined) {
 		 */
 		this.printError = function(code) {
 			/**
+			 * 미니톡 id 값이 중복되는 경우, 해당 객체를 제거한다.
+			 */
+			if (document.querySelector("#" + this.id) != null) {
+				document.querySelector("#" + this.id).parentNode.removeChild(document.querySelector("#" + this.id));
+			}
+			
+			/**
 			 * 미니톡 채팅위젯을 iframe 으로 위젯설정에 정의되어 있는 위치에 표시한다.
 			 */
 			document.write('<iframe id="'+this.id+'" style="width:'+this.width+'; height:'+this.height+';" frameborder="0" data-channel="'+this.channel+'"></iframe>');
@@ -262,9 +269,20 @@ if (isMinitalkIncluded === undefined) {
 			this.printError("CHANNEL_DUPLICATED");
 		} else {
 			/**
-			 * 미니톡 채팅위젯을 iframe 으로 위젯설정에 정의되어 있는 위치에 표시한다.
+			 * 미니톡 채팅위젯을 출력한다.
 			 */
-			document.write('<iframe id="'+this.id+'" style="width:'+this.width+'; height:'+this.height+';" frameborder="0" data-channel="'+this.channel+'"></iframe>');
+			if (document.querySelector("#" + this.id) == null) {
+				document.write('<iframe id="'+this.id+'" style="width:'+this.width+'; height:'+this.height+';" frameborder="0" data-channel="'+this.channel+'"></iframe>');
+			} else {
+				var frame = document.createElement("iframe");
+				frame.setAttribute("id",this.id);
+				frame.setAttribute("style","width:"+this.width+"; height:"+this.height+";");
+				frame.setAttribute("frameborder",0);
+				frame.setAttribute("data-channel",this.channel);
+				
+				document.querySelector("#" + this.id).parentNode.replaceChild(frame,document.querySelector("#" + this.id));
+			}
+			
 			var frame = document.getElementById(this.id).contentWindow;
 			MinitalkComponent.set(this);
 			
