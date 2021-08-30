@@ -7,7 +7,7 @@
  * @file /process/@sendBroadcast.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.5.1
+ * @version 6.5.2
  * @modified 2021. 8. 30.
  */
 if (defined('__MINITALK__') == false) exit;

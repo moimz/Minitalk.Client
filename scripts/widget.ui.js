@@ -6,8 +6,8 @@
  * @file /scripts/widget.ui.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.5.1
- * @modified 2021. 7. 9.
+ * @version 6.5.2
+ * @modified 2021. 8. 30.
  */
 Minitalk.ui = {
 	domReady:false,
