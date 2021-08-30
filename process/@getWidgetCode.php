@@ -38,11 +38,11 @@ if ($use_usercode == true) {
 		'	);',
 		'',
 		'	// 유저코드를 암호화키로 암호화한다.',
-		'	$key = \''.FileReadLine(__MINITALK_PATH__.'/configs/key.config.php',1).'\';',
+		'	$key = md5(\''.FileReadLine(__MINITALK_PATH__.'/configs/key.config.php',1).'\');',
 		'	$value = json_encode($user,JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);',
 		'	$padSize = 16 - (strlen($value) % 16);',
 		'	$value = $value.str_repeat(chr($padSize),$padSize);',
-		'	$usercode = openssl_encrypt($value,\'AES-256-CBC\',$key,OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING,str_repeat(chr(0),16));',
+		'	$usercode = base64_encode(openssl_encrypt($value,\'AES-256-CBC\',$key,OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING,str_repeat(chr(0),16)));',
 		'	return $usercode;',
 		'}',
 		'?>'
