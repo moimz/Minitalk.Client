@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.5.1
- * @modified 2021. 7. 7.
+ * @modified 2021. 8. 30.
  */
 class Minitalk {
 	/**
@@ -533,6 +533,7 @@ class Minitalk {
 	 * @param string $api
 	 * @param object[] $data
 	 * @param object[] $headers
+	 * @return object $results
 	 */
 	function callServerApi($protocol,$server,$api,$data=array(),$headers=array()) {
 		global $_CONFIGS;
@@ -562,10 +563,13 @@ class Minitalk {
 		$http_code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
 		curl_close($ch);
 		
-		if ($http_code == 200) {
+		if ($data && json_decode($data) != null) {
 			return json_decode($data);
 		} else {
-			return null;
+			$results = new stdClass();
+			$results->success = false;
+			$results->message = 'SERVER CONNECT ERROR.';
+			return $results;
 		}
 	}
 	
@@ -877,18 +881,30 @@ class Minitalk {
 	 *
 	 * @param string $message 전송할 메시지
 	 * @param string $url 링크주소 (옵션)
+	 * @return object $results 전송결과
 	 */
 	function sendBroadcast($message,$url='') {
 		$receiver = 0;
 		$servers = $this->db()->select($this->table->server)->where('type','SERVER')->get();
-		foreach ($servers as $server) {
-			$api = $this->callServerApi('POST',$server->domain,'broadcast/'.md5($server->domain),array('message'=>$message,'url'=>$url));
-			if ($api->success == true) {
-				$receiver+= $api->receiver;
+		
+		$results = new stdClass();
+		
+		if (count($servers) > 0) {
+			foreach ($servers as $server) {
+				$api = $this->callServerApi('POST',$server->domain,'broadcast/'.md5($server->domain),array('message'=>$message,'url'=>$url));
+				if ($api->success == true) {
+					$receiver+= $api->receiver;
+				}
 			}
+			
+			$results->success = true;
+			$results->receiver = $receiver;
+		} else {
+			$results->success = false;
+			$results->message = 'SERVER HOSTING OR SERVER LICENSE REQUIRED.';
 		}
 	
-		return $receiver;
+		return $results;
 	}
 	
 	/**
@@ -899,7 +915,7 @@ class Minitalk {
 	 * @param string $message 메시지
 	 * @param user $user 유저객체 array('nickname'=>'','nickcon'=>'','photo'=>'','extras'=>null,'level'=>0)
 	 * @param object $data 추가 데이터
-	 * @return object $message 전송한 메시지객체
+	 * @return object $results 전송결과
 	 */
 	function sendMessage($channel,$type,$message,$user=array(),$data=null) {
 		$channel = $this->getChannel($channel);
@@ -907,10 +923,13 @@ class Minitalk {
 		
 		if ($server == null) return null;
 		if ($server->type == 'SERVER') {
-			$api = $this->callServerApi('POST',$server->domain,'message/'.md5($server->domain).'/'.$channel->channel,array('type'=>$type,'message'=>$message,'user'=>json_encode($user),'data'=>json_encode($data)));
+			return $this->callServerApi('POST',$server->domain,'message/'.md5($server->domain).'/'.$channel->channel,array('type'=>$type,'message'=>$message,'user'=>json_encode($user),'data'=>json_encode($data)));
+		} else {
+			$results = new stdClass();
+			$results->success = false;
+			$results->message = 'SERVER HOSTING OR SERVER LICENSE REQUIRED.';
+			return $results;
 		}
-		
-		return $api;
 	}
 	
 	/**

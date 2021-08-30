@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.5.1
- * @modified 2021. 7. 7.
+ * @modified 2021. 8. 30.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -20,19 +20,22 @@ if ($type == 'NOTICE') {
 	$url = Request('url') ? Request('url') : '';
 	
 	if (count($errors) == 0) {
-		$receiver = $this->sendBroadcast($message,$url);
+		$api = $this->sendBroadcast($message,$url);
+		if ($api->success == true) {
+			$insert = array();
+			$insert['id'] = md5($nickname.time());
+			$insert['type'] = 'NOTICE';
+			$insert['message'] = $message;
+			$insert['url'] = $url;
+			$insert['receiver'] = $api->receiver;
+			$insert['reg_date'] = time();
 		
-		$insert = array();
-		$insert['id'] = md5($nickname.time());
-		$insert['type'] = 'NOTICE';
-		$insert['message'] = $message;
-		$insert['url'] = $url;
-		$insert['receiver'] = $receiver;
-		$insert['reg_date'] = time();
-	
-		$this->db()->replace($this->table->broadcast,$insert)->execute();
-		
-		$results->success = true;
+			$this->db()->replace($this->table->broadcast,$insert)->execute();
+			
+			$results->success = true;
+		} else {
+			return $api;
+		}
 	} else {
 		$results->success = false;
 		$results->errors = $errors;
@@ -62,8 +65,7 @@ if ($type == 'NOTICE') {
 			
 			$results->success = true;
 		} else {
-			$results->success = false;
-			$results->message = $this->getErrorText('CONNECT_ERROR');
+			return $api;
 		}
 	} else {
 		$results->success = false;
