@@ -933,6 +933,30 @@ class Minitalk {
 	}
 	
 	/**
+	 * 서버에 사용자정의 프로토콜을 전송한다.
+	 *
+	 * @param string $channel 메시지를 전송할 채널
+	 * @param string $protocol 사용자정의 프로토콜명
+	 * @param string $data 데이터
+	 * @param string $to 프로토콜을 받을 사람의 닉네임 (기본값 : *, * 인 경우 전체유저에게 전송한다.)
+	 * @return object $results 전송결과
+	 */
+	function sendProtocol($channel,$protocol,$data=array(),$to='*') {
+		$channel = $this->getChannel($channel);
+		$server = $this->getServer($channel->server);
+		
+		if ($server == null) return null;
+		if ($server->type == 'SERVER') {
+			return $this->callServerApi('POST',$server->domain,'protocol/'.md5($server->domain).'/'.$channel->channel,array('protocol'=>$protocol,'data'=>json_encode($data),'to'=>$to));
+		} else {
+			$results = new stdClass();
+			$results->success = false;
+			$results->message = 'SERVER HOSTING OR SERVER LICENSE REQUIRED.';
+			return $results;
+		}
+	}
+	
+	/**
 	 * 캐시파일 생성시각을 가져온다.
 	 *
 	 * @param string $name
