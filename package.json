@@ -1,7 +1,7 @@
 {
 	"id":"com.moimz.minitalk.client",
 	"title":"Minitalk",
-	"version":"7.2.1",
+	"version":"7.2.2",
 	"dependencies":{
 		"php":"5.5.0",
 		"mysql":"5.0.0",

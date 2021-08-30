@@ -7,8 +7,8 @@
  * @file /scripts/language.js.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 7.2.1
- * @modified 2021. 7. 7.
+ * @version 7.2.2
+ * @modified 2021. 8. 30.
  */
 REQUIRE_ONCE str_replace('/scripts/language.js.php','',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['SCRIPT_FILENAME'])).'/configs/init.config.php';
 header('Content-Type: application/x-javascript; charset=utf-8');

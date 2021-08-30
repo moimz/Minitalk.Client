@@ -7,7 +7,7 @@
  * @file /classes/Minitalk.class.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 7.2.1
+ * @version 7.2.2
  * @modified 2021. 8. 30.
  */
 class Minitalk {
