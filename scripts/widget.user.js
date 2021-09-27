@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.5.2
- * @modified 2021. 8. 30.
+ * @modified 2021. 9. 27.
  */
 Minitalk.user = {
 	latestRefreshTime:0, // 접속자목록을 마지막으로 갱신한 시각
@@ -107,7 +107,7 @@ Minitalk.user = {
 		if (Minitalk.user.isVisibleUsers === true) {
 			var $frame = $("div[data-role=frame]");
 			var $main = $("main",$frame);
-			var $section = $("section[data-role=users]",$main);
+			var $section = $("section[data-section=users]",$main);
 			var $users = $("ul",$section);
 			var $item = $("li[data-nickname=" + before.nickname + "]",$users);
 			if ($item.length == 1) {
@@ -145,7 +145,7 @@ Minitalk.user = {
 	appendUser:function(user) {
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $users = $("section[data-role=users]",$main);
+		var $users = $("section[data-section=users]",$main);
 		var $lists = $("ul",$users);
 		var $item = $("li[data-nickname=" + user.nickname + "]",$lists);
 		if ($item.length == 0) {
@@ -164,7 +164,7 @@ Minitalk.user = {
 	removeUser:function(user) {
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $users = $("section[data-role=users]",$main);
+		var $users = $("section[data-section=users]",$main);
 		var $lists = $("ul",$users);
 		var $item = $("li[data-nickname=" + user.nickname + "]",$lists);
 		if ($item.length == 1) $item.remove();
@@ -177,7 +177,7 @@ Minitalk.user = {
 	updateUsers:function(users) {
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $users = $("section[data-role=users]",$main);
+		var $users = $("section[data-section=users]",$main);
 		$users.empty();
 		
 		var $lists = $("<ul>");
@@ -221,7 +221,7 @@ Minitalk.user = {
 	sortUsers:function() {
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $users = $("section[data-role=users]",$main);
+		var $users = $("section[data-section=users]",$main);
 		var $lists = $("ul",$users);
 		var $items = $("li",$lists);
 		

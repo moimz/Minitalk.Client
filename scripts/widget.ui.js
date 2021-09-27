@@ -288,8 +288,8 @@ Minitalk.ui = {
 		var $main = $("main",$frame);
 		if ($("section",$main).length > 0) return;
 		
-		$main.append('<section data-role="chat"></section>');
-		$main.append('<section data-role="users"></section>');
+		$main.append('<section data-section="chat"></section>');
+		$main.append('<section data-section="users"></section>');
 	},
 	/**
 	 * 툴바를 초기화한다.
@@ -796,7 +796,7 @@ Minitalk.ui = {
 		if (is_visible === undefined) {
 			var is_visible = $frame.attr("data-users") == "TRUE" ? false : true;
 		}
-		$("section[data-role=users]",$main).empty();
+		$("section[data-section=users]",$main).empty();
 		
 		if (is_visible == true) {
 			Minitalk.socket.send("users");
@@ -859,7 +859,7 @@ Minitalk.ui = {
 			/**
 			 * 환경설정탭 DOM 을 추가한다.
 			 */
-			html = '<section data-role="configs">' + html + '</section>';
+			html = '<section data-section="configs">' + html + '</section>';
 			Minitalk.ui.createWindow(html,400,Minitalk.ui.createConfigs);
 		} else {
 			$("input, select, textarea",$dom).on("keydown",function(e) {
@@ -1018,7 +1018,7 @@ Minitalk.ui = {
 	 */
 	createPasswordInput:function(message,callback) {
 		var html = [
-			'<section data-role="password">',
+			'<section data-section="password">',
 				'<h2>' + Minitalk.getText("text/password") + '</h2>',
 				'<button data-action="close"></button>',
 				'<div data-role="content">',
@@ -1373,7 +1373,7 @@ Minitalk.ui = {
 	printSystemMessage:function(type,message) {
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $chat = $("section[data-role=chat]",$main);
+		var $chat = $("section[data-section=chat]",$main);
 		if ($chat.length == 0) return;
 		
 		var $item = $("<div>").attr("data-role","item").addClass("system").addClass(type).html(message);
@@ -1392,7 +1392,7 @@ Minitalk.ui = {
 		
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $chat = $("section[data-role=chat]",$main);
+		var $chat = $("section[data-section=chat]",$main);
 		if ($chat.length == 0) return;
 		
 		var $item = $("<div>").attr("data-role","user").addClass(type);
@@ -1433,7 +1433,7 @@ Minitalk.ui = {
 	printMessage:function(message,type) {
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $chat = $("section[data-role=chat]",$main);
+		var $chat = $("section[data-section=chat]",$main);
 		if ($chat.length == 0) return;
 		
 		var type = type === undefined ? "realtime" : type;
@@ -1730,7 +1730,7 @@ Minitalk.ui = {
 	removeMessage:function(id) {
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $chat = $("section[data-role=chat]",$main);
+		var $chat = $("section[data-section=chat]",$main);
 		if ($chat.length == 0) return;
 		
 		var $item = $("div[data-message-id="+id+"]",$main);
@@ -1908,7 +1908,7 @@ Minitalk.ui = {
 	autoScroll:function($item) {
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $chat = $("section[data-role=chat]",$main);
+		var $chat = $("section[data-section=chat]",$main);
 		if ($chat.length == 0) return;
 		
 		var $item = $item ? $item : $("div[data-role]:last",$chat);
@@ -1924,7 +1924,7 @@ Minitalk.ui = {
 	scrollBy:function(scroll) {
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $chat = $("section[data-role=chat]",$main);
+		var $chat = $("section[data-section=chat]",$main);
 		if ($chat.length == 0) return;
 		
 		$chat.scrollTop($chat.scrollTop() + scroll);
@@ -1967,7 +1967,7 @@ Minitalk.ui = {
 			$input.outerHeight(maxHeight);
 		}
 		
-		var $chat = $("section[data-role=chat]");
+		var $chat = $("section[data-section=chat]");
 		$chat.css("top",oHeight - maxHeight);
 	},
 	/**
