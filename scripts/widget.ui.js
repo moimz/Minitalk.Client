@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.2.2
- * @modified 2021. 8. 30.
+ * @modified 2021. 9. 27.
  */
 Minitalk.ui = {
 	domReady:false,
@@ -496,6 +496,12 @@ Minitalk.ui = {
 					
 					var $tool = $("<li>");
 					var $button = $("<button>").attr("type","button").attr("data-tool",tool);
+					
+					/**
+					 * 툴 레이어가 존재하는 경우
+					 */
+					if ($.inArray(tool,["color","emoticon"]) > -1) $button.attr("data-tool-layer","TRUE");
+					
 					$button.append($("<i>").addClass("icon"));
 					$button.append($("<span>").html(Minitalk.getText("tool/" + tool)));
 					$button.data("tool",tool);
@@ -521,6 +527,11 @@ Minitalk.ui = {
 				 */
 				var $tool = $("<li>");
 				var $button = $("<button>").attr("type","button").attr("data-tool",tool.name);
+				
+				/**
+				 * 툴 레이어가 존재하는 경우
+				 */
+				if (tool.layer === true) $button.attr("data-tool-layer","TRUE");
 				
 				var $icon = $("<i>");
 				if (tool.icon) $icon.css("backgroundImage","url(" + tool.icon + ")");
