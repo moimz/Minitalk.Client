@@ -7,8 +7,8 @@
  * @file /templets/index.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 7.2.2
- * @modified 2021. 8. 30.
+ * @version 7.3.0
+ * @modified 2021. 9. 27.
  */
 header("HTTP/1.1 403 Forbidden");
 header("location:../");
