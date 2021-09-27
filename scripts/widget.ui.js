@@ -370,7 +370,7 @@ Minitalk.ui = {
 				split++;
 			});
 			
-			for (var i=loop=$("li",$tabs).length - 1;i>=Math.max(1,split);i--) {
+			for (var i=loop=$("li",$tabs).length - 1;i>=Math.max(1,split-1);i--) {
 				var $tab = $("li",$tabs).eq(i).clone(true);
 				
 				$lists.prepend($tab);
