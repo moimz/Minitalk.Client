@@ -7,8 +7,8 @@
  * @file /scripts/box.css.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.5.2
- * @modified 2021. 8. 30.
+ * @version 6.6.0
+ * @modified 2021. 9. 27.
  */
 REQUIRE_ONCE str_replace('/styles/box.css.php','',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['SCRIPT_FILENAME'])).'/configs/init.config.php';
 header("Content-Type:text/css; charset=utf-8");
@@ -73,8 +73,8 @@ if ($MINITALK->getCacheTime($cacheFile) >= $MINITALK->getLastModified()) {
  * @file /scripts/box.css.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.5.2
- * @modified 2021. 8. 30.
+ * @version 6.6.0
+ * @modified 2021. 9. 27.
  * @cached <?php echo date('Y. n. j. H:i:s',$MINITALK->getCacheTime($cacheFile))."\n"; ?>
  */
 <?php echo $content; ?>

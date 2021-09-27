@@ -6,7 +6,7 @@
  * @file /scripts/widget.box.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.5.2
+ * @version 6.6.0
  * @modified 2021. 9. 27.
  */
 Minitalk.box = {

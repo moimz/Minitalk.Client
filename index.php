@@ -7,8 +7,8 @@
  * @file /index.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.5.2
- * @modified 2021. 8. 30.
+ * @version 6.6.0
+ * @modified 2021. 9. 27.
  */
 define('__IM_SITE__',true);
 
