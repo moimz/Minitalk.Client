@@ -361,6 +361,16 @@ Minitalk.protocol = {
 		 * 서버에 인증코드를 전송하여 권한변경요청을 한다.
 		 */
 		Minitalk.socket.send("authorization",authorization);
+		
+		/**
+		 * 유저목록을 갱신한다.
+		 */
+		Minitalk.user.reload();
+		
+		/**
+		 * 권한변경에 따라, 툴바를 초기화한다.
+		 */
+		Minitalk.ui.initTools();
 	},
 	/**
 	 * 권한을 수신하였을 경우
@@ -390,6 +400,11 @@ Minitalk.protocol = {
 		 * 유저목록을 갱신한다.
 		 */
 		Minitalk.user.reload();
+		
+		/**
+		 * 권한변경에 따라, 툴바를 초기화한다.
+		 */
+		Minitalk.ui.initTools();
 	},
 	/**
 	 * 채널관리자에서 로그아웃한 경우
@@ -411,6 +426,11 @@ Minitalk.protocol = {
 		 * 유저목록을 갱신한다.
 		 */
 		Minitalk.user.reload();
+		
+		/**
+		 * 권한변경에 따라, 툴바를 초기화한다.
+		 */
+		Minitalk.ui.initTools();
 	},
 	/**
 	 * 아이피를 확인한다.
