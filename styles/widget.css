@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.2.2
- * @modified 2021. 8. 30.
+ * @modified 2021. 9. 27.
  */
 * {padding:0; margin:0;}
 html, body {width:100%; height:100%; overflow:hidden; width:100%; height:100%; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; user-select:none; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none;}
@@ -51,16 +51,17 @@ div[data-role=notifications] > div > div.warning {background:#FFC107; color:#fff
 div[data-role=frame] > aside > ul[data-role=tabs] {width:100%; height:100%; display:block; white-space:nowrap; list-style:none; background:#f4f4f4; font-size:0;}
 div[data-role=frame] > aside > ul[data-role=tabs] > li {position:relative; vertical-align:middle; width:100%; height:100%;}
 div[data-role=frame] > aside > ul[data-role=tabs] > li > button {position:relative; top:0; left:0; width:100%; height:100%; font-size:0; background:transparent; border:0; vertical-align:middle; box-sizing:border-box; cursor:pointer;}
-div[data-role=frame] > aside > ul[data-role=tabs] > li > button > i {display:block; width:100%; height:100%; font-style:normal; text-align:center; color:#222; line-height:40px;}
+div[data-role=frame] > aside > ul[data-role=tabs] > li > button > i {display:block; width:100%; height:24px; line-height:22px;}
 div[data-role=frame] > aside > ul[data-role=tabs] > li > button > label {position:absolute; padding:0px 8px; height:20px; line-height:20px; z-index:100; font-size:12px; white-space:nowrap; display:none; background:rgba(0,0,0,0.8); color:#fff;}
 div[data-role=frame] > aside > ul[data-role=tabs] > li > button > label:before {position:absolute; content:" ";}
 div[data-role=frame] > aside > ul[data-role=tabs] > li > button:hover > label {display:block;}
-div[data-role=frame] > aside > ul[data-role] > li > button > i.icon {font-family:moimz; font-style:normal; font-size:16px;}
-div[data-role=frame] > aside > ul[data-role] > li > button[data-role=chat] > i.icon:before {content:"\ef07";}
-div[data-role=frame] > aside > ul[data-role] > li > button[data-role=users] > i.icon:before {content:"\ec02";}
-div[data-role=frame] > aside > ul[data-role] > li > button[data-role=boxes] > i.icon:before {content:"\ec34";}
-div[data-role=frame] > aside > ul[data-role] > li > button[data-role=configs] > i.icon:before {content:"\ec35";}
-div[data-role=frame] > aside > ul[data-role] > li > button[data-role=more] > i.icon:before {content:"\efff"; font-size:14px;}
+div[data-role=frame] > aside > ul[data-role] > li > button > i {font-size:16px; background-repeat:no-repeat; background-size:contain; background-position:50% 50%; text-align:center;}
+div[data-role=frame] > aside > ul[data-role] > li > button > i.icon {font-family:moimz; font-style:normal;}
+div[data-role=frame] > aside > ul[data-role] > li > button[data-tab=chat] > i.icon:before {content:"\ef07";}
+div[data-role=frame] > aside > ul[data-role] > li > button[data-tab=users] > i.icon:before {content:"\ec02";}
+div[data-role=frame] > aside > ul[data-role] > li > button[data-tab=boxes] > i.icon:before {content:"\ec34";}
+div[data-role=frame] > aside > ul[data-role] > li > button[data-tab=configs] > i.icon:before {content:"\ec35";}
+div[data-role=frame] > aside > ul[data-role] > li > button[data-tab=more] > i.icon:before {content:"\efff"; font-size:14px;}
 div[data-role=frame] > aside > ul[data-role] > li > button[disabled] > i {cursor:not-allowed;}
 
 
@@ -104,10 +105,10 @@ div[data-role=frame][data-tab-type=none] > aside {display:none;}
  * 메인컨텐츠 영역의 기본속성을 정의한다.
  */
 div[data-role=frame] > main {position:relative; display:block; overflow:hidden;}
-div[data-role=frame] > main > section[data-role] {position:absolute; z-index:0; top:0; left:0; width:100%; height:100%; overflow:hidden; display:none;}
-div[data-role=frame] > main > section[data-role].open {display:block;}
-div[data-role=frame] > main > section[data-role=chat] {overflow-y:auto;}
-div[data-role=frame][data-tab-type=vertical] > main > section[data-role=chat] {display:block;} /* 세로형태의 탭바의 경우 채팅영역은 항상 표시한다. */
+div[data-role=frame] > main > section[data-section] {position:absolute; z-index:0; top:0; left:0; width:100%; height:100%; overflow:hidden; display:none;}
+div[data-role=frame] > main > section[data-section].open {display:block;}
+div[data-role=frame] > main > section[data-section=chat] {overflow-y:auto;}
+div[data-role=frame][data-tab-type=vertical] > main > section[data-section=chat] {display:block;} /* 세로형태의 탭바의 경우 채팅영역은 항상 표시한다. */
 
 
 /**
@@ -118,7 +119,7 @@ div[data-role=frame][data-tab-type=vertical] > main > section[data-role=chat] {d
 div[data-role=frame] > footer {position:absolute; z-index:3; width:100%; display:none; font-size:0;}
 div[data-role=frame] > footer > div[data-role=progress] {display:none;}
 div[data-role=frame] > footer > div[data-role=progress] > div {width:0;}
-div[data-role=frame] > footer > ul[data-role=tools] {list-style:none; white-space:nowrap; overflow:hidden; font-size:0; display:block;}
+div[data-role=frame] > footer > ul[data-role=tools] {list-style:none; white-space:nowrap; font-size:0; display:block;}
 div[data-role=frame] > footer > ul[data-role=tools] > li {display:inline-block; font-size:1rem; vertical-align:middle;}
 div[data-role=frame] > footer > ul[data-role=tools] > li > button > i {display:inline-block; vertical-align:middle; font-size:1rem;}
 div[data-role=frame] > footer > ul[data-role=tools] > li > button > span {display:inline-block; vertical-align:middle; font-size:1rem;}
@@ -150,6 +151,7 @@ div[data-role=frame] > footer > div[data-role=input] > textarea {overflow:auto;}
 /**
  * 기본툴 버튼 아이콘을 정의한다.
  */
+div[data-role=frame] > footer > ul[data-role] > li > button > i {background-repeat:no-repeat; background-size:contain; background-position:50% 50%; font-size:14px; text-align:center;}
 div[data-role=frame] > footer > ul[data-role] > li > button > i.icon {font-family:moimz; font-style:normal;}
 div[data-role=frame] > footer > ul[data-role] > li > button[data-tool=bold] > i.icon:before {content:"\ef13";}
 div[data-role=frame] > footer > ul[data-role] > li > button[data-tool=underline] > i.icon:before {content:"\ef14";}
@@ -193,42 +195,42 @@ div[data-role=frame] > footer > div[data-role=layers] > div[data-tool=emoticon] 
 /**
  * 섹션 공통
  */
-section[data-role] > h2 {display:none;}
-section[data-role] > button[data-action=close] {display:none;}
-section[data-role] > h2 {display:none; background:#10b8c3; color:#fff; font-size:14px; width:100%; height:40px; line-height:40px; padding:0px 10px; position:fixed; top:0; left:0; box-sizing:border-box;}
-section[data-role] > button[data-action=close] {display:none; position:fixed; top:0; right:0; width:40px; height:40px; font-family:moimz; color:#fff; background:transparent; cursor:pointer; line-height:36px; text-align:center; border:0; font-size:20px;}
-section[data-role] > button[data-action=close]:before {content:"\eb03";}
-section[data-role] > div[data-role=content] {padding:10px; height:calc(100% - 34px); box-sizing:border-box; overflow-y:auto;}
-section[data-role] > div[data-role=content] > h4 {font-size:14px; margin:5px 0px; height:20px; line-height:20px;}
-section[data-role] > div[data-role=content] > div[data-role=help] {padding:0px; font-size:12px; line-height:1.6; color:#666;}
-section[data-role] > div[data-role=content] > div[data-role=help]:empty {display:none;}
-section[data-role] > div[data-role=content] > label {display:block; min-height:18px; line-height:18px; font-size:12px; margin:5px 0px;}
-section[data-role] > div[data-role=content] > label.checkbox {cursor:pointer; padding-left:20px;}
-section[data-role] > div[data-role=content] > label > input {display:block; width:100%; height:30px; box-sizing:border-box; border:1px solid #ccc; padding:5px; line-height:18px; font-size:12px;}
-section[data-role] > div[data-role=content] > label > input:focus {border-color:#2196F3;}
-section[data-role] > div[data-role=content] > label > input:disabled {opacity:0.6; cursor:not-allowed; background:#f4f4f4;}
-section[data-role] > div[data-role=content] > label > select {display:block; width:100%; height:30px; box-sizing:border-box; border:1px solid #ccc; padding:5px; line-height:18px; font-size:12px;}
-section[data-role] > div[data-role=content] > label > input[type=checkbox] {width:14px; height:14px; position:relative; vertical-align:middle; margin:2px 0px 2px -18px; float:left; font-size:12px; border:0;}
-section[data-role] > div[data-role=content] > label > input[type=checkbox]:after {width:14px; height:14px; display:block; content:" "; position:absolute; top:0; left:0; box-sizing:border-box; border:1px solid #ccc; z-index:10; background:#fff;}
-section[data-role] > div[data-role=content] > label > input[type=checkbox]:checked:after {font-family:moimz; content:"\EB10"; text-align:center; line-height:12px; border-color:#2196F3; background:#2196F3; color:#fff;} 
-section[data-role] > div[data-role=content] > label > input[type=checkbox]:focus {outline:1px dotted #2196F3;}
-section[data-role] > div[data-role=content] > label > p {color:#666; font-size:12px; padding-top:5px;}
-section[data-role] > div[data-role=content] > hr {margin:10px 0px; border:0; border-top:1px solid #ccc;}
-section[data-role] > div[data-role=button] {width:100%; height:34px; position:absolute; left:0; bottom:0; background:#fff;}
-section[data-role] > div[data-role=button] > ul {display:block; list-style:none; width:100%; height:34px;}
-section[data-role] > div[data-role=button] > ul > li {display:inline-block; width:50%; height:34px; vertical-align:middle;}
-section[data-role] > div[data-role=button] > ul > li > button {width:100%; height:34px; border:0; background:#F5F5F5; color:#666; font-size:12px; border-top:1px solid #d8d8d9; line-height:33px; cursor:pointer;}
-section[data-role] > div[data-role=button] > ul > li > button[data-action=confirm] {background:#2196F3; color:#fff; border-top-color:#2196F3;}
+section[data-section] > h2 {display:none;}
+section[data-section] > button[data-action=close] {display:none;}
+section[data-section] > h2 {display:none; background:#10b8c3; color:#fff; font-size:14px; width:100%; height:40px; line-height:40px; padding:0px 10px; position:fixed; top:0; left:0; box-sizing:border-box;}
+section[data-section] > button[data-action=close] {display:none; position:fixed; top:0; right:0; width:40px; height:40px; font-family:moimz; color:#fff; background:transparent; cursor:pointer; line-height:36px; text-align:center; border:0; font-size:20px;}
+section[data-section] > button[data-action=close]:before {content:"\eb03";}
+section[data-section] > div[data-role=content] {padding:10px; height:calc(100% - 34px); box-sizing:border-box; overflow-y:auto;}
+section[data-section] > div[data-role=content] > h4 {font-size:14px; margin:5px 0px; height:20px; line-height:20px;}
+section[data-section] > div[data-role=content] > div[data-role=help] {padding:0px; font-size:12px; line-height:1.6; color:#666;}
+section[data-section] > div[data-role=content] > div[data-role=help]:empty {display:none;}
+section[data-section] > div[data-role=content] > label {display:block; min-height:18px; line-height:18px; font-size:12px; margin:5px 0px;}
+section[data-section] > div[data-role=content] > label.checkbox {cursor:pointer; padding-left:20px;}
+section[data-section] > div[data-role=content] > label > input {display:block; width:100%; height:30px; box-sizing:border-box; border:1px solid #ccc; padding:5px; line-height:18px; font-size:12px;}
+section[data-section] > div[data-role=content] > label > input:focus {border-color:#2196F3;}
+section[data-section] > div[data-role=content] > label > input:disabled {opacity:0.6; cursor:not-allowed; background:#f4f4f4;}
+section[data-section] > div[data-role=content] > label > select {display:block; width:100%; height:30px; box-sizing:border-box; border:1px solid #ccc; padding:5px; line-height:18px; font-size:12px;}
+section[data-section] > div[data-role=content] > label > input[type=checkbox] {width:14px; height:14px; position:relative; vertical-align:middle; margin:2px 0px 2px -18px; float:left; font-size:12px; border:0;}
+section[data-section] > div[data-role=content] > label > input[type=checkbox]:after {width:14px; height:14px; display:block; content:" "; position:absolute; top:0; left:0; box-sizing:border-box; border:1px solid #ccc; z-index:10; background:#fff;}
+section[data-section] > div[data-role=content] > label > input[type=checkbox]:checked:after {font-family:moimz; content:"\EB10"; text-align:center; line-height:12px; border-color:#2196F3; background:#2196F3; color:#fff;} 
+section[data-section] > div[data-role=content] > label > input[type=checkbox]:focus {outline:1px dotted #2196F3;}
+section[data-section] > div[data-role=content] > label > p {color:#666; font-size:12px; padding-top:5px;}
+section[data-section] > div[data-role=content] > hr {margin:10px 0px; border:0; border-top:1px solid #ccc;}
+section[data-section] > div[data-role=button] {width:100%; height:34px; position:absolute; left:0; bottom:0; background:#fff;}
+section[data-section] > div[data-role=button] > ul {display:block; list-style:none; width:100%; height:34px;}
+section[data-section] > div[data-role=button] > ul > li {display:inline-block; width:50%; height:34px; vertical-align:middle;}
+section[data-section] > div[data-role=button] > ul > li > button {width:100%; height:34px; border:0; background:#F5F5F5; color:#666; font-size:12px; border-top:1px solid #d8d8d9; line-height:33px; cursor:pointer;}
+section[data-section] > div[data-role=button] > ul > li > button[data-action=confirm] {background:#2196F3; color:#fff; border-top-color:#2196F3;}
 
 
 /**
  * 윈도우
  */
 div[data-role=window] {width:100%; height:calc(100% - 74px); overflow-y:auto; margin:40px 0px 34px 0px; box-sizing:border-box;}
-div[data-role=window] section[data-role] > h2 {display:block;}
-div[data-role=window] section[data-role] > button[data-action=close] {display:block;}
-div[data-role=window] section[data-role] > div[data-role=content] {padding:10px; height:auto; box-sizing:border-box;}
-div[data-role=window] section[data-role] > div[data-role=button] {position:fixed; left:0; bottom:0px;}
+div[data-role=window] section[data-section] > h2 {display:block;}
+div[data-role=window] section[data-section] > button[data-action=close] {display:block;}
+div[data-role=window] section[data-section] > div[data-role=content] {padding:10px; height:auto; box-sizing:border-box;}
+div[data-role=window] section[data-section] > div[data-role=button] {position:fixed; left:0; bottom:0px;}
 
 
 /**
@@ -254,50 +256,50 @@ div[data-role=error] > div > section.textonly {padding-bottom:18px;}
 /**
  * 채팅섹션 내부 요소 기본속성을 정의한다.
  */
-section[data-role=chat] > div[data-role=message] {user-select:auto; -webkit-user-select:auto; -moz-user-select:auto; -ms-user-select:auto;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div {position:relative; width:calc(100% + 8px); padding:4px; margin:-2px -4px; box-sizing:border-box; border-radius:3px;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div + div {margin-top:-4px;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] {position:absolute; border:1px solid #ccc; background:#fff; border-radius:3px; right:5px; top:-20px; height:30px; padding:0px; display:none;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button {width:30px; height:30px; border:0; background:transparent; cursor:pointer; color:#999; position:relative; box-sizing:content-box;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button:first-child {padding-left:3px;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button:last-child {padding-right:3px;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button > i {display:block; width:30px; height:30px; line-height:30px; font-size:14px; font-family:moimz; font-style:normal;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button > label {position:absolute; padding:0px 8px; height:20px; line-height:20px; z-index:100; font-size:12px; white-space:nowrap; display:none; background:rgba(0,0,0,0.8); color:#fff; top:100%; left:50%; transform:translateX(-50%);}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button > label:before {position:absolute; content:" "; border-bottom:5px solid rgba(0,0,0,0.8); border-left:5px solid transparent; border-right:5px solid transparent; bottom:100%; left:50%; margin-left:-5px;}
+section[data-section=chat] > div[data-role=message] {user-select:auto; -webkit-user-select:auto; -moz-user-select:auto; -ms-user-select:auto;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div {position:relative; width:calc(100% + 8px); padding:4px; margin:-2px -4px; box-sizing:border-box; border-radius:3px;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div + div {margin-top:-4px;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] {position:absolute; border:1px solid #ccc; background:#fff; border-radius:3px; right:5px; top:-20px; height:30px; padding:0px; display:none;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button {width:30px; height:30px; border:0; background:transparent; cursor:pointer; color:#999; position:relative; box-sizing:content-box;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button:first-child {padding-left:3px;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button:last-child {padding-right:3px;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button > i {display:block; width:30px; height:30px; line-height:30px; font-size:14px; font-family:moimz; font-style:normal;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button > label {position:absolute; padding:0px 8px; height:20px; line-height:20px; z-index:100; font-size:12px; white-space:nowrap; display:none; background:rgba(0,0,0,0.8); color:#fff; top:100%; left:50%; transform:translateX(-50%);}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button > label:before {position:absolute; content:" "; border-bottom:5px solid rgba(0,0,0,0.8); border-left:5px solid transparent; border-right:5px solid transparent; bottom:100%; left:50%; margin-left:-5px;}
 
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button[data-action=edit] > i:before {content:"\EC24";}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button[data-action=delete] > i:before {content:"\EC16";}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button:hover {color:#444;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button:hover > label {display:block;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.action:hover {background:#f4f4f4;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.action:hover > div[data-role=action] {display:block;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button[data-action=edit] > i:before {content:"\EC24";}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button[data-action=delete] > i:before {content:"\EC16";}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button:hover {color:#444;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] > button:hover > label {display:block;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div.action:hover {background:#f4f4f4;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div.action:hover > div[data-role=action] {display:block;}
 
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing {background:#f4f4f4;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] {padding:5px;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > textarea {width:100%; height:50px; line-height:20px; padding:5px; box-sizing:border-box; border:1px solid #ccc; display:block; margin-bottom:5px; border-radius:3px; font-size:12px;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button {height:30px; padding:0px 10px; border:1px solid #ccc; background:#fff; border-radius:3px; font-size:12px; cursor:pointer;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button > i {width:20px; height:28px; vertical-align:middle; font-size:12px; font-family:moimz; line-height:28px; font-style:normal; display:inline-block; text-align:center; margin-right:4px;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button > i:before {content:"\ef16";}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button[data-action=confirm] {background:#10b8c3; color:#fff; border-color:#10b8c3; margin-left:5px;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button:focus {box-shadow:0 0 0 1px #2196f3;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button[data-action=confirm]:focus {border-color:#fff;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button[data-action=confirm][disabled] {opacity:0.6; cursor:not-allowed;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button[data-action=confirm][disabled] > i:before {content:"\ed00";}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div.editing {background:#f4f4f4;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] {padding:5px;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > textarea {width:100%; height:50px; line-height:20px; padding:5px; box-sizing:border-box; border:1px solid #ccc; display:block; margin-bottom:5px; border-radius:3px; font-size:12px;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button {height:30px; padding:0px 10px; border:1px solid #ccc; background:#fff; border-radius:3px; font-size:12px; cursor:pointer;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button > i {width:20px; height:28px; vertical-align:middle; font-size:12px; font-family:moimz; line-height:28px; font-style:normal; display:inline-block; text-align:center; margin-right:4px;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button > i:before {content:"\ef16";}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button[data-action=confirm] {background:#10b8c3; color:#fff; border-color:#10b8c3; margin-left:5px;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button:focus {box-shadow:0 0 0 1px #2196f3;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button[data-action=confirm]:focus {border-color:#fff;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button[data-action=confirm][disabled] {opacity:0.6; cursor:not-allowed;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div.editing > div[data-role=balloon] > button[data-action=confirm][disabled] > i:before {content:"\ed00";}
 
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.deleting {background:#f4f4f4;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.deleting > div[data-role=action] {display:block;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.deleting > div[data-role=action] > button {cursor:not-allowed; color:#666;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.deleting > div[data-role=action] > button > label {display:none !important;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div.deleting > div[data-role=action] > button[data-action=delete] > i:before {content:"\ed00";}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div.deleting {background:#f4f4f4;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div.deleting > div[data-role=action] {display:block;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div.deleting > div[data-role=action] > button {cursor:not-allowed; color:#666;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div.deleting > div[data-role=action] > button > label {display:none !important;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div.deleting > div[data-role=action] > button[data-action=delete] > i:before {content:"\ed00";}
 
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=file] > a {display:block;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=file] > a > div[data-role=image] > div {width:100%; height:0; overflow:hidden; background-image:no-repeat; background-size:cover; background-position:50% 50%; background-color:#f8f8f8;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > a {display:block;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > div[data-role=video] > div {position:relative; width:100%; height:0; overflow:hidden;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > div[data-role=video] > div > div {position:absolute; top:0; left:0; border:0; width:100%; height:100%;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > div[data-role=video] > div > div > iframe {width:100%; height:100%; border:0;}
-section[data-role=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > a > div[data-role=image] > div {width:100%; height:0; overflow:hidden; background-image:no-repeat; background-size:cover; background-position:50% 50%;}
-section[data-role=chat] > div[data-role=line] + div[data-role=line] {display:none;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=file] > a {display:block;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=file] > a > div[data-role=image] > div {width:100%; height:0; overflow:hidden; background-image:no-repeat; background-size:cover; background-position:50% 50%; background-color:#f8f8f8;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > a {display:block;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > div[data-role=video] > div {position:relative; width:100%; height:0; overflow:hidden;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > div[data-role=video] > div > div {position:absolute; top:0; left:0; border:0; width:100%; height:100%;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > div[data-role=video] > div > div > iframe {width:100%; height:100%; border:0;}
+section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=website] > a > div[data-role=image] > div {width:100%; height:0; overflow:hidden; background-image:no-repeat; background-size:cover; background-position:50% 50%;}
+section[data-section=chat] > div[data-role=line] + div[data-role=line] {display:none;}
 
 
 /**
@@ -369,6 +371,6 @@ ul[data-role=usermenus] > li > button[data-menu=deop] > i.icon:before {content:"
 /**
  * 박스아이콘 정의한다.
  */
-section[data-role=boxes] > ul > li > label[data-role=box] > i.icon {font-style:normal; font-size:16px; background-repeat:no-repeat; background-size:cover; background-position:50% 50%;}
-section[data-role=boxes] > ul > li > label[data-role=box] > i.icon.talk {font-family:moimz; font-size:16px; background:#10b8c3; color:#fff; text-align:center;}
-section[data-role=boxes] > ul > li > label[data-role=box] > i.icon.talk:before {content:"\ef07";}
+section[data-section=boxes] > ul > li > label[data-role=box] > i.icon {font-style:normal; font-size:16px; background-repeat:no-repeat; background-size:cover; background-position:50% 50%;}
+section[data-section=boxes] > ul > li > label[data-role=box] > i.icon.talk {font-family:moimz; font-size:16px; background:#10b8c3; color:#fff; text-align:center;}
+section[data-section=boxes] > ul > li > label[data-role=box] > i.icon.talk:before {content:"\ef07";}

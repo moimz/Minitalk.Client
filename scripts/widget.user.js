@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.2.2
- * @modified 2021. 8. 30.
+ * @modified 2021. 9. 27.
  */
 Minitalk.user = {
 	latestRefreshTime:0, // 접속자목록을 마지막으로 갱신한 시각
@@ -108,7 +108,7 @@ Minitalk.user = {
 		if ($frame.attr("data-current-tab") != "users") return;
 		
 		var $main = $("main");
-		var $section = $("section[data-role=users]",$main);
+		var $section = $("section[data-section=users]",$main);
 		var $refresh = $("button[data-action=refresh]",$section);
 		
 		Minitalk.ui.createUsers($refresh);

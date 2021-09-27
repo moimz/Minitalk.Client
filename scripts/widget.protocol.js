@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.2.2
- * @modified 2021. 8. 30.
+ * @modified 2021. 9. 27.
  */
 Minitalk.protocol = {
 	/**
@@ -164,8 +164,8 @@ Minitalk.protocol = {
 		
 		if (logs.length > 0) {
 			var $main = $("main",$("div[data-role=frame]"));
-			$("div[data-role=line]",$("section[data-role=chat]",$main)).remove();
-			$("section[data-role=chat]",$main).append($("<div>").attr("data-role","line").append($("<div>").html("NEW MESSAGES START")));
+			$("div[data-role=line]",$("section[data-section=chat]",$main)).remove();
+			$("section[data-section=chat]",$main).append($("<div>").attr("data-role","line").append($("<div>").html("NEW MESSAGES START")));
 		}
 		Minitalk.ui.autoScroll(true);
 		

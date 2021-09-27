@@ -311,7 +311,7 @@ Minitalk.ui = {
 				if (Minitalk.box.isBox() == true && tab == "boxes") continue;
 				
 				var $tab = $("<li>");
-				var $button = $("<button>").attr("type","button").attr("data-role",tab);
+				var $button = $("<button>").attr("type","button").attr("data-tab",tab);
 				$button.append($("<i>").addClass("icon"));
 				$button.append($("<label>").html(Minitalk.getText("tab/" + tab)));
 				$button.data("tab",tab);
@@ -330,7 +330,7 @@ Minitalk.ui = {
 				 * 사용자정의 탭을 추가한다.
 				 */
 				var $tab = $("<li>");
-				var $button = $("<button>").attr("type","button").attr("data-role","custom");
+				var $button = $("<button>").attr("type","button").attr("data-tab","custom");
 				$button.append($("<i>").addClass(tab.iconCls));
 				$button.append($("<label>").html(tab.text));
 				$button.data("tab",tab);
@@ -378,7 +378,7 @@ Minitalk.ui = {
 			}
 			
 			var $more = $("<li>");
-			var $button = $("<button>").attr("type","button").attr("data-role","more");
+			var $button = $("<button>").attr("type","button").attr("data-tab","more");
 			$button.append($("<i>").addClass("icon"));
 			$button.append($("<span>").html(Minitalk.getText("tab/more")));
 			$button.on("click",function(e) {
@@ -420,7 +420,7 @@ Minitalk.ui = {
 				 * 기본탭을 추가한다.
 				 */
 				if ($.inArray(tab,["chat","users","files","boxes","configs"]) === -1) continue;
-				$main.append($("<section>").attr("data-role",tab));
+				$main.append($("<section>").attr("data-section",tab));
 				
 				firstTab = firstTab === null ? tab : firstTab;
 			} else {
@@ -428,7 +428,7 @@ Minitalk.ui = {
 				 * 사용자정의 탭을 추가한다.
 				 */
 				if (tab.name === undefined || typeof tab.handler === "function") continue;
-				$main.append($("<section>").attr("data-role",tab.name));
+				$main.append($("<section>").attr("data-section",tab.name));
 				
 				firstTab = firstTab === null ? tab.name : firstTab;
 			}
@@ -673,7 +673,7 @@ Minitalk.ui = {
 	 * 이전대화 불러오기 버튼을 초기화한다.
 	 */
 	initHistory:function() {
-		var $chat = $("section[data-role=chat]");
+		var $chat = $("section[data-section=chat]");
 		var $history = $("button[data-action=history]",$chat);
 		if ($history.length > 0) return;
 		
@@ -964,6 +964,7 @@ Minitalk.ui = {
 		var $aside = $("aside");
 		var $main = $("main");
 		var $tabs = $("ul[data-role]",$aside);
+		
 		if ($frame.attr("data-current-tab") == tab) {
 			/**
 			 * 세로형태의 탭바의 경우, 같은 탭을 클릭할 경우 채팅탭으로 돌아간다.
@@ -975,17 +976,17 @@ Minitalk.ui = {
 			return;
 		}
 		if (Minitalk.fireEvent("beforeActiveTab",[tab,e]) === false) return;
-		
+	
 		$frame.attr("data-previous-tab",$frame.attr("data-current-tab") ? $frame.attr("data-current-tab") : "chat");
 		$frame.attr("data-current-tab",tab);
 		
-		$("button[data-role]",$tabs).removeClass("open");
-		$("button[data-role="+tab+"]",$tabs).addClass("open");
-		$("section[data-role]",$main).removeClass("open");
-		$("section[data-role="+tab+"]",$main).addClass("open");
+		$("button[data-tab]",$tabs).removeClass("open");
+		$("button[data-tab="+tab+"]",$tabs).addClass("open");
+		$("section[data-section]",$main).removeClass("open");
+		$("section[data-section="+tab+"]",$main).addClass("open");
 		
 		if ($("ul[data-role=lists] > li > button.open",$aside).length > 0) {
-			$("button[data-role=more]",$tabs).addClass("open");
+			$("button[data-tab=more]",$tabs).addClass("open");
 		}
 		
 		if (tab == "chat") {
@@ -1030,7 +1031,7 @@ Minitalk.ui = {
 	 */
 	createUsers:function($button) {
 		var $frame = $("div[data-role=frame]");
-		var $section = $("section[data-role=users]",$frame);
+		var $section = $("section[data-section=users]",$frame);
 		
 		if ($button === undefined) {
 			$section.empty();
@@ -1142,7 +1143,7 @@ Minitalk.ui = {
 	 */
 	createBoxes:function($button) {
 		var $frame = $("div[data-role=frame]");
-		var $section = $("section[data-role=boxes]",$frame);
+		var $section = $("section[data-section=boxes]",$frame);
 		
 		if ($button === undefined) {
 			$section.empty();
@@ -1285,13 +1286,13 @@ Minitalk.ui = {
 				/**
 				 * 환경설정탭 DOM 을 추가한다.
 				 */
-				html = '<section data-role="configs">' + html + '</section>';
+				html = '<section data-section="configs">' + html + '</section>';
 				Minitalk.ui.createWindow(html,400,Minitalk.ui.createConfigs);
 				
 				// 새로운 윈도우를 생성한뒤, 이전에 선택한 탭으로 복귀한다.
 				setTimeout(Minitalk.ui.activeTab,100,$frame.attr("data-previous-tab"));
 			} else {
-				var $section = $("section[data-role=configs]");
+				var $section = $("section[data-section=configs]");
 				$section.empty();
 				$section.append(html);
 				
@@ -1454,7 +1455,7 @@ Minitalk.ui = {
 	 */
 	createPasswordInput:function(message,callback) {
 		var html = [
-			'<section data-role="password">',
+			'<section data-section="password">',
 				'<h2>' + Minitalk.getText("text/password") + '</h2>',
 				'<button data-action="close"></button>',
 				'<div data-role="content">',
@@ -1800,7 +1801,7 @@ Minitalk.ui = {
 	printSystemMessage:function(type,message) {
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $chat = $("section[data-role=chat]",$main);
+		var $chat = $("section[data-section=chat]",$main);
 		if ($chat.length == 0) return;
 		
 		var $item = $("<div>").attr("data-role","item").addClass("system").addClass(type).html(message);
@@ -1819,7 +1820,7 @@ Minitalk.ui = {
 		
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $chat = $("section[data-role=chat]",$main);
+		var $chat = $("section[data-section=chat]",$main);
 		if ($chat.length == 0) return;
 		
 		var $item = $("<div>").attr("data-role","user").addClass(type);
@@ -1860,7 +1861,7 @@ Minitalk.ui = {
 	printMessage:function(message,type) {
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $chat = $("section[data-role=chat]",$main);
+		var $chat = $("section[data-section=chat]",$main);
 		if ($chat.length == 0) return;
 		
 		var type = type === undefined ? "realtime" : type;
@@ -2193,7 +2194,7 @@ Minitalk.ui = {
 	resetMessage:function(id) {
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $chat = $("section[data-role=chat]",$main);
+		var $chat = $("section[data-section=chat]",$main);
 		if ($chat.length == 0) return;
 		
 		var $item = $("div[data-message-id="+id+"]",$chat);
@@ -2213,7 +2214,7 @@ Minitalk.ui = {
 	removeMessage:function(id) {
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $chat = $("section[data-role=chat]",$main);
+		var $chat = $("section[data-section=chat]",$main);
 		if ($chat.length == 0) return;
 		
 		var $item = $("div[data-message-id="+id+"]",$chat);
@@ -2240,7 +2241,7 @@ Minitalk.ui = {
 		var action = $button.attr("data-action");
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $chat = $("section[data-role=chat]",$main);
+		var $chat = $("section[data-section=chat]",$main);
 		var $item = $("div[data-message-id=" + $button.data("id") + "]",$chat);
 		if ($item.length == 0) return;
 		
@@ -2495,7 +2496,7 @@ Minitalk.ui = {
 	autoScroll:function($item) {
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $chat = $("section[data-role=chat]",$main);
+		var $chat = $("section[data-section=chat]",$main);
 		if ($chat.length == 0) return;
 		
 		var $item = $item ? $item : $("div[data-role]:last",$chat);
@@ -2511,7 +2512,7 @@ Minitalk.ui = {
 	scrollBy:function(scroll) {
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $chat = $("section[data-role=chat]",$main);
+		var $chat = $("section[data-section=chat]",$main);
 		if ($chat.length == 0) return;
 		
 		$chat.scrollTop($chat.scrollTop() + scroll);
@@ -2554,7 +2555,7 @@ Minitalk.ui = {
 			$input.outerHeight(maxHeight);
 		}
 		
-		var $chat = $("section[data-role=chat]");
+		var $chat = $("section[data-section=chat]");
 		$chat.css("top",oHeight - maxHeight);
 	},
 	/**
@@ -2883,7 +2884,7 @@ Minitalk.ui = {
 		
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
-		var $chat = $("section[data-role=chat]",$main);
+		var $chat = $("section[data-section=chat]",$main);
 		var $button = $("button[data-action=history]",$chat);
 		var $messages = $("div[data-message-id]",$chat);
 		if ($messages.length > 0) {

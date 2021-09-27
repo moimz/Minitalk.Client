@@ -7,7 +7,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 7.2.2
- * @modified 2021. 8. 30.
+ * @modified 2021. 9. 27.
  */
 Minitalk.box = {
 	connection:null,
@@ -47,7 +47,7 @@ Minitalk.box = {
 			 * 박스 개설 HTML 을 정의한다.
 			 */
 			var html = [
-				'<section data-role="create">',
+				'<section data-section="create">',
 					'<h2>' + Minitalk.getText("box/create") + '</h2>',
 					'<button data-action="close"></button>',
 					'<div data-role="content">',
@@ -247,7 +247,7 @@ Minitalk.box = {
 			 * 박스 초대 HTML 을 정의한다.
 			 */
 			var html = [
-				'<section data-role="invite">',
+				'<section data-section="invite">',
 					'<h2>' + Minitalk.getText("box/invite") + '</h2>',
 					'<button data-action="close"></button>',
 					'<div data-role="content">',
@@ -361,7 +361,7 @@ Minitalk.box = {
 						 * 박스 초대 HTML 을 정의한다.
 						 */
 						var html = [
-							'<section data-role="invite">',
+							'<section data-section="invite">',
 								'<h2>' + Minitalk.getText("box/invite") + '</h2>',
 								'<button data-action="close"></button>',
 								'<div data-role="content">',
