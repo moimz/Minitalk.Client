@@ -8,7 +8,7 @@
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
  * @version 6.5.2
- * @modified 2021. 8. 30.
+ * @modified 2021. 9. 27.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -22,7 +22,7 @@ if ($data == null) {
 		$server = parse_url($data->domain);
 		$data->ip = $server['host'];
 		$data->port = $server['port'];
-		$data->is_ssl = isset($server['scheme']) == 'https';
+		$data->is_ssl = $server['scheme'] == 'https';
 	} else {
 		$data->client_id = $data->domain;
 	}
