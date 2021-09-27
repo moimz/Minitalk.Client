@@ -327,18 +327,30 @@ Minitalk.ui = {
 				$tabs.append($tab);
 			} else {
 				/**
+				 * 툴바가 보여야하는 조건함수가 있는 경우, 조건에 만족하지 못하면 추가하지 않는다.
+				 */
+				if (typeof tab.visible == "function") {
+					if (tab.visible(Minitalk,Minitalk.user.me) === false) continue;
+				}
+				
+				/**
 				 * 사용자정의 탭을 추가한다.
 				 */
 				var $tab = $("<li>");
-				var $button = $("<button>").attr("type","button").attr("data-tab","custom");
-				$button.append($("<i>").addClass(tab.iconCls));
+				var $button = $("<button>").attr("type","button").attr("data-tab",tab.name);
+				
+				var $icon = $("<i>");
+				if (tab.icon) $icon.css("backgroundImage","url(" + tab.icon + ")");
+				if (tab.iconClass) $icon.addClass(tab.iconClass);
+				$button.append($icon);
+				
 				$button.append($("<label>").html(tab.text));
 				$button.data("tab",tab);
 				$button.on("click",function(e) {
 					Minitalk.ui.activeTab($(this),e);
 				});
 				
-				if ($frame.attr("data-current-tab") == tab) {
+				if ($frame.attr("data-current-tab") == tab.name) {
 					$button.addClass("open");
 				}
 				
@@ -965,48 +977,92 @@ Minitalk.ui = {
 		var $main = $("main");
 		var $tabs = $("ul[data-role]",$aside);
 		
-		if ($frame.attr("data-current-tab") == tab) {
-			/**
-			 * 세로형태의 탭바의 경우, 같은 탭을 클릭할 경우 채팅탭으로 돌아간다.
-			 */
-			if (type == "vertical") {
-				if (tab == "chat") return;
-				Minitalk.ui.activeTab("chat");
+		if (typeof tab == "string") {
+			if ($frame.attr("data-current-tab") == tab) {
+				/**
+				 * 세로형태의 탭바의 경우, 같은 탭을 클릭할 경우 채팅탭으로 돌아간다.
+				 */
+				if (type == "vertical") {
+					if (tab == "chat") return;
+					Minitalk.ui.activeTab("chat");
+				}
+				return;
 			}
-			return;
+			if (Minitalk.fireEvent("beforeActiveTab",[tab,e]) === false) return;
+		
+			$frame.attr("data-previous-tab",$frame.attr("data-current-tab") ? $frame.attr("data-current-tab") : "chat");
+			$frame.attr("data-current-tab",tab);
+			
+			$("button[data-tab]",$tabs).removeClass("open");
+			$("button[data-tab="+tab+"]",$tabs).addClass("open");
+			$("section[data-section]",$main).removeClass("open");
+			$("section[data-section="+tab+"]",$main).addClass("open");
+			
+			if ($("ul[data-role=lists] > li > button.open",$aside).length > 0) {
+				$("button[data-tab=more]",$tabs).addClass("open");
+			}
+			
+			if (tab == "chat") {
+				Minitalk.ui.createChat();
+			}
+			
+			if (tab == "users") {
+				Minitalk.ui.createUsers();
+			}
+			
+			if (tab == "boxes") {
+				Minitalk.ui.createBoxes();
+			}
+			
+			if (tab == "configs") {
+				Minitalk.ui.createConfigs();
+			}
+			
+			$aside.removeClass("open");
+			Minitalk.fireEvent("afterActiveTab",[tab,e]);
+		} else {
+			if ($frame.attr("data-current-tab") == tab.name) {
+				/**
+				 * 세로형태의 탭바의 경우, 같은 탭을 클릭할 경우 채팅탭으로 돌아간다.
+				 */
+				if (type == "vertical") {
+					Minitalk.ui.activeTab("chat");
+				}
+				return;
+			}
+			if (Minitalk.fireEvent("beforeActiveTab",[tab.name,e]) === false) return;
+			
+			if (typeof tab.handler == "function") {
+				tab.handler(Minitalk,tab);
+			} else {
+				$frame.attr("data-previous-tab",$frame.attr("data-current-tab") ? $frame.attr("data-current-tab") : "chat");
+				$frame.attr("data-current-tab",tab.name);
+				
+				$("button[data-tab]",$tabs).removeClass("open");
+				$("button[data-tab="+tab.name+"]",$tabs).addClass("open");
+				$("section[data-section]",$main).removeClass("open");
+				
+				var $section = $("section[data-section="+tab.name+"]",$main);
+				$section.empty();
+				if (tab.url) {
+					var $iframe = $("<iframe>");
+					$iframe.attr("src",tab.url);
+					$iframe.attr("frameborder",0);
+					$iframe.css("width","100%");
+					$iframe.css("height","100%");
+					$section.append($iframe);
+				}
+				
+				$("section[data-section="+tab.name+"]",$main).addClass("open");
+				
+				if ($("ul[data-role=lists] > li > button.open",$aside).length > 0) {
+					$("button[data-tab=more]",$tabs).addClass("open");
+				}
+				
+				$aside.removeClass("open");
+			}
+			Minitalk.fireEvent("afterActiveTab",[tab.name,e]);
 		}
-		if (Minitalk.fireEvent("beforeActiveTab",[tab,e]) === false) return;
-	
-		$frame.attr("data-previous-tab",$frame.attr("data-current-tab") ? $frame.attr("data-current-tab") : "chat");
-		$frame.attr("data-current-tab",tab);
-		
-		$("button[data-tab]",$tabs).removeClass("open");
-		$("button[data-tab="+tab+"]",$tabs).addClass("open");
-		$("section[data-section]",$main).removeClass("open");
-		$("section[data-section="+tab+"]",$main).addClass("open");
-		
-		if ($("ul[data-role=lists] > li > button.open",$aside).length > 0) {
-			$("button[data-tab=more]",$tabs).addClass("open");
-		}
-		
-		if (tab == "chat") {
-			Minitalk.ui.createChat();
-		}
-		
-		if (tab == "users") {
-			Minitalk.ui.createUsers();
-		}
-		
-		if (tab == "boxes") {
-			Minitalk.ui.createBoxes();
-		}
-		
-		if (tab == "configs") {
-			Minitalk.ui.createConfigs();
-		}
-		
-		$aside.removeClass("open");
-		Minitalk.fireEvent("afterActiveTab",[tab,e]);
 		
 		if (e) e.stopImmediatePropagation();
 	},
