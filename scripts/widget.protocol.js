@@ -554,6 +554,14 @@ Minitalk.protocol = {
 		 */
 		if (type == 1) {
 			/**
+			 * 닉네임이 자동으로 변경되었을 때 사용자에게 알려준다.
+			 */
+			if (code == 100) {
+				Minitalk.ui.printSystemMessage("info",Minitalk.getText("error/code/"+code));
+				return;
+			}
+			
+			/**
 			 * 닉네임이 중복되었을 경우, 기존접속이 해제될때까지 대기 후 다시 재접속한다.
 			 */
 			if (code == 101) {
