@@ -7,8 +7,7 @@
  * @file /process/@getTemplets.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.6.0
- * @modified 2021. 9. 27.
+ * @modified 2021. 10. 5.
  */
 if (defined('__MINITALK__') == false) exit;
 

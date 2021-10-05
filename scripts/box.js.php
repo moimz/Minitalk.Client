@@ -7,8 +7,7 @@
  * @file /scripts/box.js.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.6.0
- * @modified 2021. 9. 27.
+ * @modified 2021. 10. 5.
  */
 REQUIRE_ONCE str_replace('/scripts/box.js.php','',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['SCRIPT_FILENAME'])).'/configs/init.config.php';
 header('Content-Type: application/x-javascript; charset=utf-8');
@@ -125,8 +124,7 @@ if ($MINITALK->getCacheTime($cacheFile) >= $MINITALK->getLastModified()) {
  * @file /scripts/box.js.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 6.6.0
- * @modified 2021. 9. 27.
+ * @modified 2021. 10. 5.
  * @cached <?php echo date('Y. n. j. H:i:s',$MINITALK->getCacheTime($cacheFile))."\n"; ?>
  */
 <?php echo $content; ?>
