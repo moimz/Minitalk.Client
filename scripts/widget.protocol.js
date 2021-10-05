@@ -104,6 +104,11 @@ Minitalk.protocol = {
 			Minitalk.socket.joined = true;
 			
 			/**
+			 * 출력되지 못한 시스템 메시지를 출력한다.
+			 */
+			Minitalk.ui.printStackedSystemMessages();
+			
+			/**
 			 * 이벤트를 발생시킨다.
 			 */
 			Minitalk.fireEvent("connect",[data.channel,data.me,data.count]);
@@ -126,6 +131,11 @@ Minitalk.protocol = {
 	 * 서버접속이 종료되었을 경우
 	 */
 	disconnect:function() {
+		/**
+		 * 출력되지 못한 시스템 메시지를 출력한다.
+		 */
+		Minitalk.ui.printStackedSystemMessages();
+		
 		Minitalk.socket.disconnected();
 		Minitalk.ui.unnotify("connecting");
 		
@@ -160,6 +170,11 @@ Minitalk.protocol = {
 		Minitalk.ui.autoScroll(true);
 		
 		Minitalk.socket.joined = true;
+		
+		/**
+		 * 출력되지 못한 시스템 메시지를 출력한다.
+		 */
+		Minitalk.ui.printStackedSystemMessages();
 		
 		/**
 		 * 이벤트를 발생시킨다.
