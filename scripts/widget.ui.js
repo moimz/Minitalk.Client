@@ -1849,11 +1849,19 @@ Minitalk.ui = {
 	},
 	/**
 	 * 시스템 메시지를 출력한다.
+	 * 서버에 접속되기전에 출력요청을 받은 메시지는 접속이 완료된 후에 출력되도록 한다.
 	 *
 	 * @param string type 메시지타입 (system, error, notice, info, plugin)
 	 * @param string message 메시지
+	 * @param boolean is_direct 접속여부와 관계없이 메시지를 출력할지 여부(기본값 false)
 	 */
-	printSystemMessage:function(type,message) {
+	stackedSystemMessages:[],
+	printSystemMessage:function(type,message,is_direct) {
+		if (is_direct !== true && Minitalk.socket.isJoined() == false) {
+			Minitalk.ui.stackedSystemMessages.push({type:type,message:message});
+			return;
+		}
+		
 		var $frame = $("div[data-role=frame]");
 		var $main = $("main",$frame);
 		var $chat = $("section[data-section=chat]",$main);
@@ -1862,6 +1870,15 @@ Minitalk.ui = {
 		var $item = $("<div>").attr("data-role","item").addClass("system").addClass(type).html(message);
 		$chat.append($item);
 		Minitalk.ui.autoScroll($item);
+	},
+	/**
+	 * 서버에 접속되기전에 요청된 시스템 메시지를 출력한다.
+	 */
+	printStackedSystemMessages:function() {
+		while (Minitalk.ui.stackedSystemMessages.length > 0) {
+			message = Minitalk.ui.stackedSystemMessages.shift();
+			Minitalk.ui.printSystemMessage(message.type,message.message,true);
+		}
 	},
 	/**
 	 * 유저 이벤트 메시지를 출력한다.

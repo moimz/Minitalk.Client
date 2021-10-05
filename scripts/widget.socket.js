@@ -122,6 +122,14 @@ Minitalk.socket = {
 		return Minitalk.socket.connecting !== true && Minitalk.socket.connected === true;
 	},
 	/**
+	 * 채널에 참여중인지 확인한다.
+	 *
+	 * @return boolean isJoined
+	 */
+	isJoined:function() {
+		return Minitalk.socket.isConnected() === true && Minitalk.socket.joined === true;
+	},
+	/**
 	 * 권한정보를 가져온다.
 	 *
 	 * @param string name 변수명
