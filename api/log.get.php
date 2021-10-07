@@ -7,7 +7,7 @@
  * @file /api/log.get.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2021. 10. 7.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -45,8 +45,10 @@ if ($channel == null) {
 $start_time = Request('start_time') && is_numeric(Request('start_time')) == true ? Request('start_time') * 1000 : 0;
 $end_time = Request('end_time') && is_numeric(Request('end_time')) == true ? Request('end_time') * 1000 : 0;
 $count = Request('count') ? Request('count') : 100;
+$whisper = Request('whisper') == 'TRUE';
 
 $messages = $this->db()->select($this->table->history)->where('room',$room);
+if ($whisper !== true) $messages->where('target','*');
 if ($start_time) $messages->where('time',$start_time,'>=');
 if ($end_time) $messages->where('time',$end_time,'<');
 $messages = $messages->limit(0,$count)->orderBy('time','asc')->get();
