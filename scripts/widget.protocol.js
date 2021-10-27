@@ -6,7 +6,7 @@
  * @file /scripts/widget.protocol.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2021. 10. 27.
  */
 Minitalk.protocol = {
 	/**
@@ -294,18 +294,23 @@ Minitalk.protocol = {
 			if (Minitalk.fireEvent("beforeMessage",[data]) === false) return;
 			
 			/**
+			 * 귓속말을 수신하였을 경우 알림음과 브라우저 알림을 전송한다.
+			 */
+			if (data.to !== null && data.to.nickname == Minitalk.user.me.nickname) {
+				/**
+				 * 귓속말 수신거부 상태인 경우
+				 */
+				if (Minitalk.configs("whisper") === false) return;
+				
+				Minitalk.ui.playSound("message");
+				Minitalk.ui.push(data.user.nickname + " : " + data.message);
+			}
+			
+			/**
 			 * 메시지를 출력한다.
 			 */
 			if (Minitalk.socket.joined == true) {
 				Minitalk.ui.printMessage(data);
-			}
-			
-			/**
-			 * 귓속말을 수신하였을 경우 알림음과 브라우저 알림을 전송한다.
-			 */
-			if (data.to !== null && data.to.nickname == Minitalk.user.me.nickname) {
-				Minitalk.ui.playSound("message");
-				Minitalk.ui.push(data.user.nickname + " : " + data.message);
 			}
 			
 			/**
@@ -329,6 +334,11 @@ Minitalk.protocol = {
 		 * 이벤트를 발생시킨다.
 		 */
 		if (Minitalk.fireEvent("beforeCall",[data]) === false) return;
+		
+		/**
+		 * 호출 수신거부 상태인 경우
+		 */
+		if (Minitalk.configs("call") === false) return;
 		
 		Minitalk.ui.playSound("call");
 		Minitalk.ui.push(Minitalk.getText("action/called").replace("{NICKNAME}",data.nickname));

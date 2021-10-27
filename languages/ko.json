@@ -4,7 +4,7 @@
 		"name":"Arzz",
 		"email":"arzz@arzz.com"
 	},
-	"version":"7.3.1",
+	"version":"7.3.2",
 	"text":{
 		"unit":"{COUNT}명",
 		"me":"나",
@@ -131,8 +131,8 @@
 		"active_scroll":"이전 채팅메시지 기록을 보는동안 자동스크롤기능을 비활성화합니다.",
 		"browser_notification":"브라우저 알림기능을 사용합니다.",
 		"mute":"모든 알림음을 재생하지 않습니다.",
-		"whisper":"귓속말을 사용합니다.",
-		"whisper_sound":"귓속말을 받았을 경우 알림음을 재생합니다.",
+		"whisper":"다른사람의 귓속말을 수신합니다.",
+		"whisper_sound":"귓속말을 수신하였을 경우 알림음을 재생합니다.",
 		"call":"다른사람이 나를 호출할 수 있도록 설정합니다.",
 		"call_sound":"호출을 받았을 경우 알림음을 재생합니다."
 	},
