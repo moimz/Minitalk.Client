@@ -6,7 +6,7 @@
  * @file /scripts/widget.ui.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2021. 11. 11.
  */
 Minitalk.ui = {
 	domReady:false,
@@ -1886,7 +1886,7 @@ Minitalk.ui = {
 						Minitalk.ui.uploadFiles();
 					}
 				} else {
-					Minitalk.ui.printErrorCode(500);
+					Minitalk.ui.printSystemMessage("error",result.message);
 					Minitalk.ui.enable(true);
 				}
 			}).fail(function() {
