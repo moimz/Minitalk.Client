@@ -7,7 +7,7 @@
  * @file /process/uploadFiles.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2021. 11. 11.
  */
 if (defined('__MINITALK__') == false) exit;
 
