@@ -130,6 +130,11 @@ if ($code != null) {
 		}
 	}
 	
+	if (is_dir($this->getAttachmentPath().'/temp') == false) {
+		mkdir($this->getAttachmentPath().'/temp');
+		chmod($this->getAttachmentPath().'/temp',0707);
+	}
+	
 	for ($i=0, $loop=count($drafts);$i<$loop;$i++) {
 		$mNormalizer = new UnicodeNormalizer();
 		$drafts[$i]->name = $mNormalizer->normalize($drafts[$i]->name);
