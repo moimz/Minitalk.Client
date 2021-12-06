@@ -7,7 +7,7 @@
  * @file /classes/Minitalk.class.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2021. 12. 6.
  */
 class Minitalk {
 	/**
@@ -558,6 +558,8 @@ class Minitalk {
 		
 		curl_setopt($ch,CURLOPT_TIMEOUT,5);
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+		curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
+		
 		$data = curl_exec($ch);
 		$http_code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
 		curl_close($ch);
@@ -605,6 +607,8 @@ class Minitalk {
 		}
 		curl_setopt($ch,CURLOPT_TIMEOUT,10);
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+		curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
+		
 		$data = curl_exec($ch);
 		$http_code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
 		curl_close($ch);
@@ -1023,6 +1027,8 @@ class Minitalk {
 				curl_setopt($ch,CURLOPT_POST,false);
 				curl_setopt($ch,CURLOPT_TIMEOUT,10);
 				curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+				curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
+				
 				$data = curl_exec($ch);
 				$http_code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
 				curl_close($ch);
