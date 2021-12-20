@@ -7,8 +7,8 @@
  * @file /classes/functions.php
  * @author Arzz
  * @license MIT License
- * @version 1.8.1
- * @modified 2021. 4. 26.
+ * @version 1.8.2
+ * @modified 2021. 12. 20.
  */
 
 /**
@@ -715,6 +715,7 @@ function CheckDependency($dependency,$version) {
 		curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
 		curl_setopt($ch,CURLOPT_URL,$request);
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+		curl_setopt($ch,CURLOPT_USERAGENT,$_SERVER['HTTP_USER_AGENT']);
 		$data = curl_exec($ch);
 		$http_code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
 		curl_close($ch);
