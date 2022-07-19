@@ -7,10 +7,13 @@
  * @file /styles/font.css.php
  * @author Arzz
  * @license MIT License
- * @version 1.0.0
- * @modified 2019. 6. 26.
+ * @modified 2022. 7. 19.
  */
-header("Content-Type:text/css");
+session_write_close();
+header("Content-Type:text/css; charset=utf-8");
+header('Expires: '.gmdate('D, d M Y H:i:s',time() + 3600).' GMT');
+header('Cache-Control: max-age=3600');
+header('Pragma: public');
 
 $language = isset($_GET['language']) == true ? $_GET['language'] : 'ko';
 $font = isset($_GET['font']) == true ? explode(',',$_GET['font']) : array();

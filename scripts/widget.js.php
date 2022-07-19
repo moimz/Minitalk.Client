@@ -7,10 +7,15 @@
  * @file /scripts/widget.js.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2022. 7. 19.
  */
 REQUIRE_ONCE str_replace('/scripts/widget.js.php','',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['SCRIPT_FILENAME'])).'/configs/init.config.php';
+
+session_write_close();
 header('Content-Type: application/x-javascript; charset=utf-8');
+header('Expires: '.gmdate('D, d M Y H:i:s',time() + 3600).' GMT');
+header('Cache-Control: max-age=3600');
+header('Pragma: public');
 
 $channel = isset($_GET['channel']) == true ? $_GET['channel'] : null;
 $templet = isset($_GET['templet']) == true ? $_GET['templet'] : null;
