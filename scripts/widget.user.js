@@ -6,7 +6,7 @@
  * @file /scripts/widget.user.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2022. 10. 8.
  */
 Minitalk.user = {
 	latestRefreshTime:0, // 접속자목록을 마지막으로 갱신한 시각
@@ -151,7 +151,7 @@ Minitalk.user = {
 		if (typeof user == "string") {
 			var user = {nickname:user,nickcon:null,photo:null,level:0,extras:null};
 		}
-		var $user = $("<label>").attr("data-role","user").data("user",user);
+		var $user = $("<label>").attr("data-role","user").attr("data-nickname",user.nickname).data("user",user);
 		
 		if (user.nickname == Minitalk.user.me.nickname) $user.addClass("me");
 		if (user.level == 9) $user.addClass("admin");
@@ -180,6 +180,11 @@ Minitalk.user = {
 			e.preventDefault();
 			e.stopImmediatePropagation();
 		});
+		
+		/**
+		 * 이벤트를 발생시킨다.
+		 */
+		Minitalk.fireEvent("userTag",[$user,user]);
 		
 		return $user;
 	},
