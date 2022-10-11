@@ -6,7 +6,7 @@
  * @file /scripts/widget.protocol.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 27.
+ * @modified 2022. 10. 8.
  */
 Minitalk.protocol = {
 	/**
@@ -168,7 +168,12 @@ Minitalk.protocol = {
 		
 		var logs = Minitalk.logs().messages;
 		for (var i=0, loop=logs.length;i<loop;i++) {
-			Minitalk.ui.printMessage(logs[i],"log");
+			/**
+			 * 이벤트를 발생시킨다.
+			 */
+			if (Minitalk.fireEvent("beforeMessage",[logs[i]]) !== false) {
+				Minitalk.ui.printMessage(logs[i],"log");
+			}
 		}
 		
 		if (logs.length > 0) {
