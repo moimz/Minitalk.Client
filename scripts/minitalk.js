@@ -6,7 +6,7 @@
  * @file /scripts/minitalk.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2022. 10. 12.
  */
 if (isMinitalkIncluded === undefined) {
 	var isMinitalkIncluded = true;
@@ -23,7 +23,9 @@ if (isMinitalkIncluded === undefined) {
 			/**
 			 * 초기설정값을 복제하여 저장한다.
 			 */
-			this.inits[minitalk.id] = this.clone(minitalk);
+			if (this.inits[minitalk.id] === undefined) {
+				this.inits[minitalk.id] = this.clone(minitalk);
+			}
 		},
 		get:function(id,isBox) {
 			var isBox = isBox === true ? true : false;
@@ -33,6 +35,11 @@ if (isMinitalkIncluded === undefined) {
 			} else {
 				if (this.inits[id] !== undefined) return this.inits[id];
 				return null;
+			}
+		},
+		reset:function(id) {
+			if (this.minitalks[id]) {
+				delete this.minitalks[id];
 			}
 		},
 		is:function(id) {
@@ -237,6 +244,68 @@ if (isMinitalkIncluded === undefined) {
 			}
 		};
 		
+		/**
+		 * 미니톡 채팅위젯 위치를 이동한다.
+		 *
+		 * @param string target 위치를 이동할 DOM 의 querySelector
+		 */
+		this.moveTo = function(target) {
+			this.reset();
+			this.renderTo(target);
+		};
+		
+		/**
+		 * 미니톡 채팅위젯을 출력한다.
+		 *
+		 * @param string target 채팅위젯을 출력할 DOM 의 querySelector (NULL 인 경우 미니톡 채팅위젯 스크립트가 위치한 곳에 출력한다.)
+		 */
+		this.renderTo = function(target) {
+			if (target == null || document.querySelector(target) == null) {
+				document.write('<iframe id="'+this.id+'" style="width:'+this.width+'; height:'+this.height+';" frameborder="0" data-channel="'+this.channel+'"></iframe>');
+			} else {
+				var frame = document.createElement("iframe");
+				frame.setAttribute("id",this.id);
+				frame.setAttribute("style","width:"+this.width+"; height:"+this.height+";");
+				frame.setAttribute("frameborder",0);
+				frame.setAttribute("data-channel",this.channel);
+				
+				document.querySelector(target).append(frame);
+			}
+			
+			var frame = document.getElementById(this.id).contentWindow;
+			MinitalkComponent.set(this);
+			
+			/**
+			 * 미니톡 채팅위젯의 DOM 객체를 정의한다.
+			 */
+			frame.document.removeChild(frame.document.documentElement);
+			
+			frame.document.open();
+			frame.document.write('<!DOCTYPE HTML>');
+			frame.document.write('<html data-id="'+this.id+'">');
+			frame.document.write('<head>');
+			frame.document.write('<meta charset="utf-8">');
+			frame.document.write('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">');
+			frame.document.write('<title>MiniTalk Widget</title>');
+			frame.document.write('<script src="'+MinitalkComponent.getUrl()+'/scripts/widget.js.php?channel='+this.channel+'&templet='+this.templet+'"></script>');
+			frame.document.write('<link rel="stylesheet" href="'+MinitalkComponent.getUrl()+'/styles/widget.css.php?channel='+this.channel+'&templet='+this.templet+'" type="text/css">');
+			frame.document.write('</head>');
+			frame.document.write('<body>'+MinitalkComponent.getLoaderHtml(this.background)+'</body>');
+			frame.document.write('</html>');
+			frame.document.close();
+		};
+		
+		/**
+		 * 미니톡 채팅위젯을 초기화하고 화면상에서 제거한다.
+		 */
+		this.reset = function() {
+			if (document.getElementById(this.id)) {
+				document.getElementById(this.id).remove();
+			}
+			
+			MinitalkComponent.reset(this.id);
+		};
+		
 		if (this.id === null) {
 			/**
 			 * 미니톡 채팅위젯 설정중 ID 값이 누락되었을 경우, 에러메시지 출력
@@ -266,39 +335,7 @@ if (isMinitalkIncluded === undefined) {
 			/**
 			 * 미니톡 채팅위젯을 출력한다.
 			 */
-			if (document.querySelector("#" + this.id) == null) {
-				document.write('<iframe id="'+this.id+'" style="width:'+this.width+'; height:'+this.height+';" frameborder="0" data-channel="'+this.channel+'"></iframe>');
-			} else {
-				var frame = document.createElement("iframe");
-				frame.setAttribute("id",this.id);
-				frame.setAttribute("style","width:"+this.width+"; height:"+this.height+";");
-				frame.setAttribute("frameborder",0);
-				frame.setAttribute("data-channel",this.channel);
-				
-				document.querySelector("#" + this.id).parentNode.replaceChild(frame,document.querySelector("#" + this.id));
-			}
-			
-			var frame = document.getElementById(this.id).contentWindow;
-			MinitalkComponent.set(this);
-			
-			/**
-			 * 미니톡 채팅위젯의 DOM 객체를 정의한다.
-			 */
-			frame.document.removeChild(frame.document.documentElement);
-			
-			frame.document.open();
-			frame.document.write('<!DOCTYPE HTML>');
-			frame.document.write('<html data-id="'+this.id+'">');
-			frame.document.write('<head>');
-			frame.document.write('<meta charset="utf-8">');
-			frame.document.write('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">');
-			frame.document.write('<title>MiniTalk Widget</title>');
-			frame.document.write('<script src="'+MinitalkComponent.getUrl()+'/scripts/widget.js.php?channel='+this.channel+'&templet='+this.templet+'"></script>');
-			frame.document.write('<link rel="stylesheet" href="'+MinitalkComponent.getUrl()+'/styles/widget.css.php?channel='+this.channel+'&templet='+this.templet+'" type="text/css">');
-			frame.document.write('</head>');
-			frame.document.write('<body>'+MinitalkComponent.getLoaderHtml(this.background)+'</body>');
-			frame.document.write('</html>');
-			frame.document.close();
+			this.renderTo(opt.renderTo ? opt.renderTo : null);
 		}
 	};
 	
