@@ -1,4 +1,5 @@
 @font-face {
 	font-family:"NanumSquare";
-	src:url(../../fonts/NanumSquare.woff) format("woff"), url(../../fonts/NanumSquare.ttf) format("truetype");
+	src:url(../../fonts/NanumSquare.woff) format("woff"), url(../../fonts/NanumSquare.ttf) format("truetype"), url('./woff2/NanumSquare.woff2') format('woff2-variations');
+	font-weight: 100 900;
 }
