@@ -6,7 +6,7 @@
  * @file /scripts/minitalk.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2022. 10. 12.
+ * @modified 2023. 3. 4.
  */
 if (isMinitalkIncluded === undefined) {
 	var isMinitalkIncluded = true;
@@ -155,6 +155,9 @@ if (isMinitalkIncluded === undefined) {
 		 *
 		 * @public object[] listeners 이벤트리스너를 정의한다.
 		 * @public object[] protocols 사용자정의 프로토콜을 정의한다.
+		 *
+		 * @public boolean autoReconnect 자동재접속여부
+		 * @public int autoReconnectDelay 자동재접속 딜레이 시간(초)
 		 */
 		this.id = opt.id ? opt.id : null;
 		this.channel = opt.channel && opt.channel.length > 0 ? opt.channel : null;
@@ -183,6 +186,9 @@ if (isMinitalkIncluded === undefined) {
 		
 		this.listeners = opt.listeners ? opt.listeners : {};
 		this.protocols = opt.protocols ? opt.protocols : {};
+		
+		this.autoReconnect = opt.autoReconnect !== false;
+		this.autoReconnectDelay = opt.autoReconnectDelay ? Math.max(opt.autoReconnectDelay, 5) : 5;
 		
 		/**
 		 * 에러메시지를 출력한다.

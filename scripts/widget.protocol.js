@@ -6,7 +6,7 @@
  * @file /scripts/widget.protocol.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2022. 10. 8.
+ * @modified 2023. 3. 4.
  */
 Minitalk.protocol = {
 	/**
@@ -134,7 +134,9 @@ Minitalk.protocol = {
 	connect_error:function() {
 		Minitalk.socket.connecting = false;
 		Minitalk.ui.notify("disconnect","error",Minitalk.getErrorText("CONNECT_ERROR"),false,false);
-		Minitalk.socket.reconnect(60);
+		if (Minitalk.autoReconnect == true) {
+			Minitalk.socket.reconnect(Minitalk.autoReconnectDelay);
+		}
 	},
 	/**
 	 * 서버접속이 종료되었을 경우
@@ -153,7 +155,9 @@ Minitalk.protocol = {
 		 */
 		if (Minitalk.socket.reconnectable === true) {
 			Minitalk.ui.notify("disconnect","error",Minitalk.getErrorText("DISCONNECTED"),false,false);
-			Minitalk.socket.reconnect(60);
+			if (Minitalk.autoReconnect == true) {
+				Minitalk.socket.reconnect(Minitalk.autoReconnectDelay);
+			}
 		}
 	},
 	/**
@@ -179,7 +183,7 @@ Minitalk.protocol = {
 		if (logs.length > 0) {
 			var $main = $("main",$("div[data-role=frame]"));
 			$("div[data-role=line]",$("section[data-section=chat]",$main)).remove();
-			$("section[data-section=chat]",$main).append($("<div>").attr("data-role","line").append($("<div>").html("NEW MESSAGES START")));
+			$("section[data-section=chat]",$main).append($("<div>").attr("data-role","line").append($("<div>").html("NEW MESSAGES")));
 		}
 		Minitalk.ui.autoScroll(true);
 		
