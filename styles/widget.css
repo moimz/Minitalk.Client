@@ -6,7 +6,7 @@
  * @file /scripts/widget.css
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2023. 3. 4.
  */
 * {padding:0; margin:0;}
 html, body {width:100%; height:100%; overflow:hidden; width:100%; height:100%; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; user-select:none; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none;}
@@ -47,8 +47,10 @@ div[data-role=notifications] > div > div.warning {background:#FFC107; color:#fff
 /**
  * 헤더 영역의 기본속성을 정의한다.
  */
+div[data-role=frame] > header > h1::before {font-weight: normal !important;}
 div[data-role=frame] > header > div[data-role=tabs] {font-size:0;}
 div[data-role=frame] > header > div[data-role=tabs] > button[data-action] {vertical-align:middle;}
+
 
 /**
  * 메인컨텐츠 영역의 기본속성을 정의한다.
