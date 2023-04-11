@@ -21,7 +21,7 @@
  * __MINITALK_DIR__ : $_SERVER['DOCUMENT_ROOT'] 을 포함하지 않는 미니톡 클라이언트가 설치되어 있는 웹브라우저상의 경로
  */
 define('__MINITALK__',true);
-define('__MINITALK_VERSION__','6.7.0');
+define('__MINITALK_VERSION__','6.7.1');
 define('__MINITALK_DB_PREFIX__','minitalk_');
 if (defined('__MINITALK_PATH__') == false) define('__MINITALK_PATH__',str_replace('/configs','',str_replace(DIRECTORY_SEPARATOR,'/',__DIR__)));
 if (defined('__MINITALK_DIR__') == false) define('__MINITALK_DIR__',str_replace(str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['DOCUMENT_ROOT']),'',__MINITALK_PATH__));
