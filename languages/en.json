@@ -1,0 +1,514 @@
+{
+	"title":"한국어 언어팩",
+	"author": {
+		"name":"Arzz",
+		"email":"arzz@arzz.com",
+		"translation":"ymcha"
+	},
+	"version":"7.5.1",
+	"text": {
+		"unit":"{COUNT}Users ",
+		"me":"me",
+		"info":"information",
+		"error":"An error has occurred.",
+		"password":"password",
+		"whisper_to":"Whisper to {nickname}",
+		"whisper_from":"Whisper from {nickname}",
+		"placeholder":"SHIFT + ENTER line break",
+		"document":"View MiniTalk manual",
+		"admin":"administrator"
+	},
+	"level": {
+		"0":"Guest (Guest without user settings)",
+		"1":"Level 1 (Minimum level for users with settings)",
+		"2":"Level 2",
+		"3":"Level 3",
+		"4":"Level 4",
+		"5":"Level 5",
+		"6":"Level 6",
+		"7":"Level 7",
+		"8":"Level 8",
+		"9":"Level 9 (Channel administrator)"
+	},
+	"alert": {
+		"info":"information",
+		"error":"error"
+	},
+	"action": {
+		"wait":"Please wait a moment.",
+		"loading":"Loading data.",
+		"saving":"Saving data.",
+		"saved":"Data saved successfully.",
+		"working":"Processing the request.",
+		"worked":"Processed successfully.",
+		"connecting":"Connecting to the MiniTalk server.",
+		"reconnecting":"Attempting to reconnect to the MiniTalk server in {SECOND} seconds.",
+		"connected":"{NICKNAME}, you have connected to the {CHANNEL} channel.",
+		"join":"{NICKNAME} has joined the channel.",
+		"leave":"{NICKNAME} has left the channel.",
+		"call":"Calling {NICKNAME}.",
+		"called":"{NICKNAME} has called you.",
+		"invite":"Invited {NICKNAME} to {BOX}.",
+		"invited":"{FROM} has invited you to {BOX}. You can click here to join or decline.",
+		"invited_confirm":"Would you like to join the invited box?",
+		"login":"Logged in as a channel administrator.",
+		"logout":"Logged out from the channel administrator.",
+		"updated_op":"{NICKNAME} has logged in as a channel administrator.",
+		"updated_nickname":"{BEFORE} has changed their nickname to {AFTER}.",
+		"showip":"{NICKNAME}'s IP address is {IP}.",
+		"banip":"Blocked IP {IP} for {NICKNAME}.",
+		"banned":"{FROM} has banned the IP address of {TO}.",
+		"op":"{FROM} has granted administrator permission to {TO}.",
+		"deop":"{FROM} has revoked administrator permission from {TO}.",
+		"refresh":"Refresh",
+		"reconnect":"Reconnect",
+		"delete_confirm":"Are you sure you want to delete this message?"
+	},
+	"tab": {
+		"chat":"Chat",
+		"users":"Users",
+		"boxes":"Private Boxes",
+		"configs":"Settings",
+		"more":"More"
+	},
+	"tool": {
+		"bold":"Bold",
+		"underline":"Underline",
+		"italic":"Italic",
+		"color":"Text Color",
+		"emoticon":"Emoticon",
+		"file":"File Attachment"
+	},
+	"usermenu": {
+		"configs":"Settings",
+		"create":"Create Private Box",
+		"whisper":"Send Whisper",
+		"call":"Call",
+		"invite":"Invite to Private Box",
+		"showip":"Check IP",
+		"banip":"Ban IP",
+		"op":"Grant Administrator",
+		"deop":"Revoke Administrator"
+	},
+	"button": {
+		"send":"Send",
+		"confirm":"Confirm",
+		"modify":"Modify",
+		"edit":"Edit",
+		"delete":"Delete",
+		"cancel":"Cancel",
+		"search":"Search",
+		"refresh":"Refresh",
+		"box":"Create Box",
+		"close":"Close",
+		"history":"View Previous Conversations"
+	},
+	"user": {
+		"keyword":"Nickname Search"
+	},
+	"box": {
+		"talk":"Talk Box",
+		"create":"Create Box",
+		"keyword":"Box Name/Creator Search",
+		"title":"Box Name",
+		"password":"Password",
+		"password_help":"If a password is entered, the box will be created as a private box that only those who know the password can join.",
+		"closemode":"Automatically close the box when the creator disconnects.",
+		"closemode_help":"If unchecked, the box will remain active until all participants exit, regardless of the creator's disconnection.",
+		"invite":"Invite",
+		"invite_nickname":"User Nickname to Invite",
+		"invite_nickname_help":"Please enter the user nickname you want to invite.",
+		"invite_id_help":"Please select the private box to invite the user.",
+		"invite_password":"Send the password of the private box to the invitee.",
+		"invite_password_help":"By sending the password of the private box to the invitee, they can join the box without entering the password."
+	},
+	"config": {
+		"title": {
+			"nickname":"Nickname Settings",
+			"default":"Default Settings",
+			"whisper":"Whisper Settings",
+			"call":"Call Settings"
+		},
+		"active_scroll":"Disable auto-scrolling while viewing previous chat messages.",
+		"browser_notification":"Use browser notifications.",
+		"mute":"Do not play any notification sounds.",
+		"whisper":"Receive whispers from others.",
+		"whisper_sound":"Play a notification sound when receiving a whisper.",
+		"call":"Allow others to call me.",
+		"call_sound":"Play a notification sound when receiving a call."
+	},
+	"error": {
+		"DUPLICATED":"Duplicate data already exists.",
+		"NOT_SELECTED":"No item selected.",
+		"NOT_FOUND":"Requested data not found.",
+		"UNKNOWN":"An unknown error occurred.",
+		"MINITALK_ID_REQUIRED":"The ID value is missing in the MiniTalk chat widget attributes.",
+		"MINITALK_ID_DUPLICATED":"You cannot use multiple MiniTalk chat widgets with the same ID on the same web page simultaneously.",
+		"MISSING_DOM":"The following required DOM object is missing.",
+		"FORBIDDEN":"You do not have permission.",
+		"REQUIRED":"Required field is missing.",
+		"DATA_LOAD_FAILED":"Failed to load data.",
+		"DATA_SAVE_FAILED":"Failed to save data.",
+		"DISCONNECTED":"Disconnected from the MiniTalk server.",
+		"CONNECT_ERROR":"Cannot connect to the MiniTalk server.",
+		"NOT_FOUND_ONLINE_SERVER":"No available server found. Please try again later.",
+		"NOT_FOUND_COMMAND":"Command not found.",
+		"NOT_FOUND_CHANNEL":"No channel found.",
+		"NOT_FOUND_MYBOX":"No private box found. Please create a private box first and then use it.",
+		"NOT_FOUND_USER":"User not found.",
+		"NOT_CONNECTED":"Not connected to the MiniTalk server.",
+		"ALREADY_LOGGED":"Already logged in as a channel administrator.",
+		"CHANNEL_DUPLICATED":"You cannot use multiple MiniTalk chat widgets with the same channel on the same web page simultaneously.",
+		"INVALID_FORM_DATA":"Invalid input for some fields.",
+		"SERVICE_API_FAIL":"Failed to request the chat hosting API.",
+		"SERVICE_UNREGISTED_CLIENT_URL":"Unregistered client URL.",
+		"SERVICE_UNLINKED":"Client connection is disconnected.",
+		"SERVICE_EXPIRED":"Chat hosting service subscription has expired.",
+		"SERVICE_DISABLED":"Chat hosting service is temporarily unavailable.",
+		"SERVICE_ALREADY_LINKED":"The service is already linked with another MiniTalk client.",
+		"SERVICE_NOT_FOUND":"Service details not found. Please check the Client ID and Client Secret on the MiniTalk website.",
+		"REQUIRED_PASSWORD":"Password is required.",
+		"INVALID_PASSWORD":"Invalid password.",
+		"MISSING_PARAMETER":"Required parameter is missing.",
+		"INVALID_SERVICE_VERSION":"MiniTalk service version does not match the MiniTalk client version.",
+		"BANNED_IP":"Cannot connect to the server with a blocked IP.",
+		"DUPLICATED_PROTOCOL":"{PROTOCOL} is already a defined custom protocol.",
+		"UNDEFINED_PROTOCOL":"{PROTOCOL} is an undefined custom protocol.",
+		"NOT_ALLOWED_FILE_SIZE":"File attachment is only allowed up to {MAXSIZE}MB.",
+		"NOT_ALLOWED_NICKNAME_UPDATED":"Nickname update is not allowed in the current channel.",
+		"FILE_EXPIRED":"File download period has expired or the file has been deleted from the server.",
+		"BLOCKED_POPUP":"Pop-ups are blocked.",
+		"AVAILABLE_UPDATE":"A new version v.{latest} is available. Click here to download the latest version. (Current version: v.{version})",
+		"DATABASE_AUTO_UPDATE_FAIL":"An error occurred while updating the database structure. Click here to reinstall the client.",
+		"INVALID_FILE_SIZE":"The uploaded file size does not match.",
+		"INVALID_CHUNK_SIZE":"Some data is missing during file upload.",
+		"INVALID_UPLOADED_SIZE":"The uploaded file size does not match.",
+		"INVALID_HTTP_CONTENT_RANGE":"Invalid HTTP header value for file upload.",
+
+		"code": {
+			"100":"The nickname contains invalid characters or exceeds the maximum allowed length. The nickname has been modified.",
+			"101":"There are users with duplicate nicknames, and their existing connections are being terminated. Please wait a moment.",
+			"102":"A user with a duplicate nickname has connected, and your current connection has been terminated.",
+			"103":"Nickname changes are not allowed in the current channel.",
+			"104":"There is already a user using the same nickname, so the nickname cannot be changed.",
+			"403":"Access denied. You do not have permission.",
+			"404":"The requested target was not found.",
+			"410":"You are already logged in as a channel administrator.",
+			"411":"Channel administrator password does not match.",
+			"412":"You acquired administrator permission through a user code, so you cannot log out.",
+			"420":"The user already has administrator permission.",
+			"422":"Users who have acquired administrator permission through a user code cannot revoke the administrator permission.",
+			"500":"A server error has occurred. Please try again later.",
+			"800":"An error occurred while creating or joining a box. Please try again later.",
+			"801":"The box is a private box and requires a password.",
+			"802":"Box password is incorrect.",
+			"803":"You do not have permission to create a box.",
+			"804":"The box cannot be found.",
+			"899":"The box has been closed as the box creator disconnected.",
+			"900":"Required essential data for server connection cannot be determined.",
+			"901":"In addition to the required essential data for server connection, undefined data exists.",
+			"902":"Server connection code cannot be determined.",
+			"903":"Server connection code has expired.",
+			"904":"Channel connection code cannot be determined.",
+			"910":"User connection code cannot be determined.",
+			"911":"User IP cannot be determined.",
+			"912":"Required essential data for user data cannot be determined.",
+			"913":"Undefined data exists in user data.",
+			"914":"User nickname is incorrectly defined.",
+			"915":"Users without a defined nickname cannot have a level higher than 0.",
+			"916":"Users with a defined nickname cannot have level 0 permission.",
+			"917":"User level must be a number between 0 and 9.",
+			"918":"Nickname image path and member profile picture path must be string values.",
+			"919":"Visitor information must be structured as an object (array).",
+			"920":"The maximum number of simultaneous chat service connections has been exceeded.",
+			"921":"The maximum number of simultaneous connections for the current channel has been exceeded.",
+			"990":"Temporary inability to connect to the server."
+		}
+	},
+	"admin": {
+		"unselected":"Not selected",
+		"menu": {
+			"server":"Server",
+			"channel":"Channel",
+			"resource":"Resource",
+			"log":"Log",
+			"banip":"Banned IP",
+			"broadcast":"Broadcast"
+		},
+		"server": {
+			"title":"Server Management",
+			"add":"Add Server",
+			"modify":"Modify Server",
+			"delete":"Delete Selected Servers",
+			"delete_confirm":"Are you sure you want to delete the selected servers?<br>Deleting a server will terminate the connections of all channels using that server.",
+			"grid_help":"Double-click: Modify Server / Right-click: Context Menu",
+			"form": {
+				"type_help":"Please select the type of server to add.",
+				"server":"Server Address",
+				"port":"Server Port",
+				"server_help":"To connect to the chat server, you need to set the server address and port that can connect to the chat server.<br>The address can be a domain name or the IP address of the server, and the port can be any number between 3121 and 65535.<br>If the configured server address and port are blocked by firewall settings or are already in use by another program, the connection may not be possible.<br>For more information on ports and firewall settings, please search on Google or other search engines.",
+				"ssl":"Use SSL",
+				"ssl_help":"If the SSL setting is enabled in the server program's configuration, use SSL when connecting to the server.",
+				"hosting_client_id":"Client ID",
+				"hosting_client_id_help":"Enter the client ID of your chat hosting service application.",
+				"hosting_client_secret":"Client Secret",
+				"hosting_client_secret_help":"Enter the client secret key of your chat hosting service application.",
+				"hosting_help":"You can find the client ID and client secret in the 'Manage My Services' menu on the MiniTalk website."
+			},
+			"columns": {
+				"domain":"Server Address / Client ID",
+				"status":"Status",
+				"status_message":"Server Details",
+				"channel":"Number of Channels",
+				"user":"Number of Users",
+				"max_user":"Maximum User Capacity",
+				"latest_update":"Last Checked",
+				"exp_date":"Service Expiration Date"
+			},
+			"type": {
+				"SERVER":"Self-Hosted Server (Set up a MiniTalk chat server on the current server.)",
+				"SERVICE":"Chat Hosting (Set up a chat server using the MiniTalk chat hosting service.)"
+			},
+			"status": {
+				"ONLINE":"Online",
+				"OFFLINE":"Offline"
+			},
+			"unlimited":"Unlimited",
+			"unknown":"Unknown"
+		},
+		"channel": {
+			"title":"Channel Management",
+			"add":"Add Channel",
+			"modify":"Modify Channel",
+			"preview":"Preview",
+			"code":"View Widget Code",
+			"delete":"Delete Selected Channels",
+			"unknown":"No assigned chat server",
+			"grid_help":"Double-click on an item: Detailed information / Right-click on an item: Menu",
+			"delete_confirm":"Are you sure you want to delete the selected channels?",
+			"category": {
+				"panel":"Category Management",
+				"category1":"1st Category",
+				"category2":"2nd Category",
+				"add_category1":"Add 1st Category",
+				"add_category2":"Add 2nd Category",
+				"modify":"Modify Category",
+				"delete":"Delete Selected Categories",
+				"grid_help":"Double-click on an item: Modify category / Right-click on an item: Menu",
+				"select_first":"Please select a 1st category.",
+				"delete_confirm":"Are you sure you want to delete the selected categories? All sub-categories and channels within the categories will be deleted.",
+				"form": {
+					"category":"Category Name"
+				},
+				"columns": {
+					"category":"Category Name",
+					"children":"Subcategories",
+					"channel":"Number of Channels",
+					"user":"Number of Users"
+				}
+			},
+			"form": {
+				"default":"Default Channel Settings",
+				"category":"Category",
+				"channel":"Channel Name",
+				"channel_help":"Enter the channel name to be used in the MiniTalk chat widget in lowercase letters and numbers only. (Maximum 32 characters)",
+				"title":"Channel Title",
+				"title_help":"Enter the channel title to be displayed at the top of the MiniTalk chat widget.",
+				"password":"Password",
+				"password_help":"Setting a password allows users to acquire administrator privileges by using the /login [password] command in the MiniTalk chat widget.",
+				"option":"Option Settings",
+				"allow_nickname_edit":"Allow Nickname Edit",
+				"allow_nickname_edit_help":"Users can freely change their nicknames.",
+				"use_user_tab":"User List",
+				"use_user_tab_help":"Enable user list and user search functionality.",
+				"use_box_tab":"Personal Boxes",
+				"use_box_tab_help":"Users can create personal boxes (talk boxes/plugin boxes).",
+				"use_history":"View Chat History",
+				"use_history_help":"Allow viewing of chat history prior to joining the channel.",
+				"max_user":"Max Users",
+				"max_user_help":"(Up to 2,000 users can be set)",
+				"guest_name":"Guest Nickname",
+				"guest_name_help":"(Fixed name to be added before the nickname of random visitors if user settings are not available)",
+				"file_maxsize":"File Size",
+				"file_maxsize_unit":"MB (Set to 0 for unlimited)",
+				"file_maxsize_help":"Set the maximum file size that can be attached to chat messages.",
+				"file_lifetime":"File Expiration",
+				"file_lifetime_unit":"Days (Set to 0 for unlimited)",
+				"file_lifetime_help":"Set the duration in which files attached to chat messages can be downloaded.",
+				"permission":"Permission Settings",
+				"send_limit":"Data Sending",
+				"send_limit_help":"Select the minimum level required to send data (chat messages, etc.) to the server.",
+				"file_limit":"File Sending",
+				"file_limit_help":"Select the minimum level required to send files.",
+				"font_limit":"Font Option",
+				"font_limit_help":"Select the minimum level required to use font options in chat messages.",
+				"user_limit":"User List Display",
+				"user_limit_help":"Set the minimum level of users that will be shown in the user list and the minimum level of users that can be searched.<br>Users below the set level will not be displayed or searchable in the user list.",
+				"box_limit":"Personal Box Creation",
+				"box_limit_help":"Select the minimum level required to create personal boxes (talk boxes/plugin boxes).",
+				"widget_default_configs":"Widget Default Settings",
+				"widget_templet":"Template",
+				"widget_width":"Width",
+				"widget_height":"Height",
+				"widget_use_usercode":"Member Information Integration",
+				"widget_nickname":"Nickname",
+				"widget_nickname_help":"Enter the string to be used as the member nickname.<br>You can use PHP variables or other member information.",
+				"widget_nickcon":"Nickname Image",
+				"widget_nickcon_help":"Enter the full address of the member nickname image.<br>You can set multiple nickname images using commas (,).<br>Instead of the nickname image address, use {NICKNAME} to replace it with the nickname.",
+				"widget_photo":"Member Photo",
+				"widget_photo_help":"Enter the full address of the member photo.<br>You can use PHP variables or other member information.",
+				"widget_level":"Level",
+				"widget_level_help":"Set the visitor level. (0: Guest ~ 9: Administrator)",
+				"widget_create_code":"Generate Widget Code"
+			},
+			"columns": {
+				"channel":"Channel Name",
+				"category1":"1st Category",
+				"category2":"2nd Category",
+				"title":"Channel Title",
+				"password":"Channel Password",
+				"server":"Server Information",
+				"send_limit":"Data Sending Permission",
+				"options":"Channel Options",
+				"user":"Current/Max Users"
+			}
+		},
+		"log": {
+			"history": {
+				"title":"Chat History",
+				"channel":"Channel Name",
+				"nickname":"Nickname/IP",
+				"keyword":"Conversation Content"
+			},
+			"server": {
+				"title":"Server Logs",
+				"keyword":"Log Content"
+			}
+		},
+		"resource": {
+			"attachment": {
+				"title":"Attached Files",
+				"grid_help":"Double-click: Download File / Right-click: Menu",
+				"delete_selected":"Delete Selected Files",
+				"delete":"Delete File",
+				"delete_expired":"Delete Expired Files",
+				"delete_confirm":"Are you sure you want to delete the selected files?",
+				"delete_expired_confirm":"Are you sure you want to delete all expired files?",
+
+				"columns": {
+					"name":"File Name",
+					"channel":"Attached Channel",
+					"nickname":"User Nickname",
+					"ip":"IP Address",
+					"size":"File Size",
+					"path":"File Path",
+					"reg_date":"Attachment Date",
+					"exp_date":"Expiration Date"
+				}
+			},
+			"cache": {
+				"title":"Cache",
+				"grid_help":"Right-click: Detailed Menu",
+				"delete_selected":"Delete Selected Cache Files",
+				"delete":"Delete Cache File",
+				"delete_confirm":"Are you sure you want to delete the selected cache files? Deleting cache files will regenerate them with the latest version.",
+
+				"columns": {
+					"name":"Cache File Name",
+					"type":"Type",
+					"language":"Language",
+					"capacity":"Applicable Scope",
+					"size":"Size",
+					"path":"File Path",
+					"create_date":"Cache Creation Date"
+				},
+				"type": {
+					"json":"JSON",
+					"js":"JavaScript",
+					"css":"Stylesheet"
+				},
+				"capacity": {
+					"client":"Client",
+					"global":"Global",
+					"channel":"Channel",
+					"channel.box":"Private Box"
+				}
+			},
+			"component": {
+				"title":"Components of MiniTalk",
+				"type": {
+					"0":"MiniTalk Core",
+					"10":"Plugin",
+					"20":"Template",
+					"30":"Language Pack",
+					"40":"Emoticon"
+				},
+				"columns": {
+					"title":"Component Name",
+					"version":"Version",
+					"id":"Unique ID",
+					"description":"Description",
+					"author":"Author",
+					"path":"Path"
+				}
+			}
+		},
+		"banip": {
+			"add":"Add Blocked IP",
+			"modify":"Modify Blocked IP",
+			"delete":"Delete Selected IP",
+			"delete_confirm":"Are you sure you want to delete the selected IP?",
+			"grid_help":"Double-click: Modify Blocked IP / Right-click: Context Menu",
+			"form": {
+				"ip":"Blocked IP",
+				"nickname":"Nickname",
+				"memo":"Memo"
+			},
+			"columns": {
+				"ip":"IP",
+				"nickname":"Nickname",
+				"memo":"Memo",
+				"reg_date":"Blocked Date"
+			}
+		},
+		"broadcast": {
+			"send":"Send Broadcast Message",
+			"resend":"Resend Message",
+			"delete":"Delete Selected Entries",
+			"send_confirm":"The broadcast message has been successfully sent.",
+			"delete_confirm":"Are you sure you want to delete the selected entries?",
+			"grid_help":"Double-click: Resend Message / Right-click: Context Menu",
+			"type": {
+				"NOTICE":"Notice Message",
+				"MESSAGE":"General Message"
+			},
+			"type_help": {
+				"NOTICE":"Send a notice message to all users",
+				"MESSAGE":"Send a general chat message to a specific channel"
+			},
+			"form": {
+				"type":"Type",
+				"channel":"Channel to Send",
+				"channel_help":"General messages can only be sent to a specific channel.",
+				"message":"Message to Send",
+				"url":"URL Address",
+				"url_help":"You can enter a URL address that will be opened when the message is clicked. (Optional)",
+				"url_error":"The URL address must start with http(s)://.",
+				"user":"User Information",
+				"user_help":"Set the user information that will be displayed as the sender of the general message.",
+				"nickname":"Nickname",
+				"nickcon":"Nickname Image Full URL (Optional)",
+				"photo":"Profile Image Full URL (Optional)",
+				"level":"Level"
+			},
+			"columns": {
+				"type":"Type",
+				"channel":"Channel",
+				"message":"Message Content",
+				"url":"URL Address",
+				"receiver":"Number of Recipients",
+				"reg_date":"Date of Transmission"
+			}
+		}
+	}
+}
