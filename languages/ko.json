@@ -4,7 +4,7 @@
 		"name":"Arzz",
 		"email":"arzz@arzz.com"
 	},
-	"version":"7.5.1",
+	"version":"7.5.2",
 	"text":{
 		"unit":"{COUNT}명",
 		"me":"나",
@@ -352,7 +352,7 @@
 				"widget_nickname":"닉네임",
 				"widget_nickname_help":"회원닉네임에 사용할 문자열을 입력합니다.<br>회원정보가 있는 PHP 변수 등을 활용할 수 있습니다.",
 				"widget_nickcon":"닉이미지",
-				"widget_nickcon_help":"회원 닉네임 이미지의 전체주소를 입력합니다.<br>콤마(,)를 이용하여, 한개 이상의 닉이미지를 설정할 수 있습니다.<br>닉이미지 주소대신 {NIKNAME}을 입력하면 닉네임으로 대치됩니다.",
+				"widget_nickcon_help":"회원 닉네임 이미지의 전체주소를 입력합니다.<br>콤마(,)를 이용하여, 한개 이상의 닉이미지를 설정할 수 있습니다.<br>닉이미지 주소대신 {NICKNAME}을 입력하면 닉네임으로 대치됩니다.",
 				"widget_photo":"회원사진",
 				"widget_photo_help":"회원사진의 전체주소를 입력합니다.<br>회원정보가 있는 PHP 변수 등을 활용할 수 있습니다.",
 				"widget_level":"레벨",
