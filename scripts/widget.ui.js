@@ -6,7 +6,7 @@
  * @file /scripts/widget.ui.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 11. 11.
+ * @modified 2023. 7. 11.
  */
 Minitalk.ui = {
 	domReady:false,
@@ -1997,10 +1997,10 @@ Minitalk.ui = {
 					$item.append($nickname);
 				} else {
 					if (message.user.uuid == Minitalk.socket.uuid) {
-						var $nickname = $("<div>").attr("data-role","nickname").html(Minitalk.getText("text/whisper_to").replace("{nickname}","<b>" + to + "</b>"));
+						var $nickname = $("<div>").attr("data-role","nickname").html(Minitalk.getText("text/whisper_to").replace("{NICKNAME}","<b>" + to + "</b>"));
 						$("b",$nickname).replaceWith(Minitalk.user.getTag(message.to));
 					} else {
-						var $nickname = $("<div>").attr("data-role","nickname").html(Minitalk.getText("text/whisper_from").replace("{nickname}","<b>" + message.user.nickname + "</b>"));
+						var $nickname = $("<div>").attr("data-role","nickname").html(Minitalk.getText("text/whisper_from").replace("{NICKNAME}","<b>" + message.user.nickname + "</b>"));
 						$("b",$nickname).replaceWith(Minitalk.user.getTag(message.user));
 					}
 					$item.append($nickname);

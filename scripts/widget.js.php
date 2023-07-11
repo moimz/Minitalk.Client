@@ -7,7 +7,7 @@
  * @file /scripts/widget.js.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2022. 7. 19.
+ * @modified 2023. 7. 11.
  */
 REQUIRE_ONCE str_replace('/scripts/widget.js.php','',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['SCRIPT_FILENAME'])).'/configs/init.config.php';
 
@@ -19,9 +19,14 @@ header('Pragma: public');
 
 $channel = isset($_GET['channel']) == true ? $_GET['channel'] : null;
 $templet = isset($_GET['templet']) == true ? $_GET['templet'] : null;
+$language = isset($_GET['language']) == true ? $_GET['language'] : null;
 $languages = GetDefaultLanguages();
-foreach ($languages as $language) {
-	if (is_file(__MINITALK_PATH__.'/languages/'.$language.'.json') == true) break;
+if ($language == null) {
+	foreach ($languages as $language) {
+		if (is_file(__MINITALK_PATH__.'/languages/'.$language.'.json') == true) {
+			break;
+		}
+	}
 }
 
 $MINITALK = new Minitalk();

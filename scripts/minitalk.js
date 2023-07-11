@@ -6,7 +6,7 @@
  * @file /scripts/minitalk.js
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2023. 3. 4.
+ * @modified 2023. 7. 11.
  */
 if (isMinitalkIncluded === undefined) {
 	var isMinitalkIncluded = true;
@@ -131,6 +131,7 @@ if (isMinitalkIncluded === undefined) {
 		 *
 		 * @public string id 미니톡 채팅위젯의 고유 ID (없을 경우 랜덤생성)
 		 * @public string channel 미니톡 채팅위젯의 채널명 (필수)
+		 * @public string language 미니톡 언어코드 (정의되지 않은 경우 브라우저 기본 언어코드)
 		 * @public string usercode 암호화된 접속자정보(닉네임, 레벨, 닉이미지, 사진)
 		 *
 		 * @public string templet 미니톡 채팅위젯의 템플릿 (기본값 : default)
@@ -161,6 +162,7 @@ if (isMinitalkIncluded === undefined) {
 		 */
 		this.id = opt.id ? opt.id : null;
 		this.channel = opt.channel && opt.channel.length > 0 ? opt.channel : null;
+		this.language = opt.language && opt.language.length == 2 ? opt.language : null;
 		this.usercode = opt.usercode && opt.usercode.length > 0 ? opt.usercode : null;
 		
 		this.templet = opt.templet  && opt.templet.length > 0 ? opt.templet : "default";
@@ -222,7 +224,7 @@ if (isMinitalkIncluded === undefined) {
 			frame.document.write('<meta charset="utf-8">');
 			frame.document.write('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">');
 			frame.document.write('<title>MiniTalk Widget</title>');
-			frame.document.write('<script src="'+MinitalkComponent.getUrl()+'/scripts/widget.js.php"></script>');
+			frame.document.write('<script src="'+MinitalkComponent.getUrl()+'/scripts/widget.js.php'+(this.language !== null ? '?language='+this.language : '')+'"></script>');
 			frame.document.write('<link rel="stylesheet" href="'+MinitalkComponent.getUrl()+'/styles/widget.css.php" type="text/css">');
 			frame.document.write('</head>');
 			frame.document.write('<body data-error="'+code+'">'+MinitalkComponent.getLoaderHtml(this.background)+'</body>');
@@ -293,7 +295,7 @@ if (isMinitalkIncluded === undefined) {
 			frame.document.write('<meta charset="utf-8">');
 			frame.document.write('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">');
 			frame.document.write('<title>MiniTalk Widget</title>');
-			frame.document.write('<script src="'+MinitalkComponent.getUrl()+'/scripts/widget.js.php?channel='+this.channel+'&templet='+this.templet+'"></script>');
+			frame.document.write('<script src="'+MinitalkComponent.getUrl()+'/scripts/widget.js.php?channel='+this.channel+'&templet='+this.templet+(this.language !== null ? '&language='+this.language : '')+'"></script>');
 			frame.document.write('<link rel="stylesheet" href="'+MinitalkComponent.getUrl()+'/styles/widget.css.php?channel='+this.channel+'&templet='+this.templet+'" type="text/css">');
 			frame.document.write('</head>');
 			frame.document.write('<body>'+MinitalkComponent.getLoaderHtml(this.background)+'</body>');
