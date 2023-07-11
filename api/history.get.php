@@ -7,7 +7,7 @@
  * @file /api/history.get.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2023. 7. 11.
  */
 if (defined('__MINITALK__') == false) exit;
 
@@ -140,7 +140,16 @@ if ($server->type == 'SERVICE') {
 	$connection = $server->connection ? $server->connection->connection : '';
 	$api = $this->callServiceApi('GET','history/'.$server->domain.'/'.$room,array('time'=>$time),array('MINITALK_CLIENT_SECRET'=>$server->client_secret,'MINITALK_CONNECTION'=>$connection));
 	if ($api->success == true) {
-		$history = $api->history;
+		$history = array();
+		foreach ($api->history as $message) {
+			if ($message->to === null) {
+				$history[] = $message;
+			} else {
+				if ($message->to->uuid == $uuid || $message->user->uuid == $uuid) {
+					$history[] = $message;
+				}
+			}
+		}
 	}
 }
 
