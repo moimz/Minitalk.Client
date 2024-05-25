@@ -6,7 +6,7 @@
  * @file /styles/widget.css
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2023. 3. 4.
+ * @modified 2024. 5. 25.
  */
 * {padding:0; margin:0;}
 html, body {width:100%; height:100%; overflow:hidden; width:100%; height:100%; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; user-select:none; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none;}
@@ -261,7 +261,7 @@ div[data-role=error] > div > section.textonly {padding-bottom:18px;}
 /**
  * 채팅섹션 내부 요소 기본속성을 정의한다.
  */
-section[data-section=chat] > div[data-role=message] {user-select:auto; -webkit-user-select:auto; -moz-user-select:auto; -ms-user-select:auto;}
+section[data-section=chat] > div[data-role=message] {user-select:text; -webkit-user-select:text; -moz-user-select:text; -ms-user-select:text;}
 section[data-section=chat] > div[data-role=message] > div[data-role=context] > div {position:relative; width:calc(100% + 8px); padding:4px; margin:-2px -4px; box-sizing:border-box; border-radius:3px;}
 section[data-section=chat] > div[data-role=message] > div[data-role=context] > div + div {margin-top:-4px;}
 section[data-section=chat] > div[data-role=message] > div[data-role=context] > div > div[data-role=action] {position:absolute; border:1px solid #ccc; background:#fff; border-radius:3px; right:5px; top:-20px; height:30px; padding:0px; display:none;}
