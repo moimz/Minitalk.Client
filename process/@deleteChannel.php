@@ -7,13 +7,15 @@
  * @file /process/@deleteChannel.php
  * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2024. 5. 25.
  */
 if (defined('__MINITALK__') == false) exit;
 
 $channels = Param('channels') ? json_decode(Request('channels')) : array();
 if (is_array($channels) == true && count($channels) > 0) {
-	$this->db()->delete($this->table->channel)->where('channel',$channels,'IN')->execute();
+    foreach ($channels as $channel) {
+        $this->db()->delete($this->table->channel)->where('channel',(string)$channel)->execute();
+    }
 }
 
 $results->success = true;
