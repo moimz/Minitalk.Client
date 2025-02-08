@@ -4,9 +4,8 @@
  * 미니톡 서버프로그램과 소켓통신을 위한 프로토콜을 정의한다.
  * 
  * @file /scripts/widget.protocol.js
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2023. 3. 4.
+ * @modified 2025. 2. 7.
  */
 Minitalk.protocol = {
 	/**

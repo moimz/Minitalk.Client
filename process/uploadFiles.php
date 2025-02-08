@@ -5,9 +5,8 @@
  * 미니톡 클라이언트의 파일 업로드를 처리한다.
  * 
  * @file /process/uploadFiles.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 11. 11.
+ * @modified 2025. 2. 7.
  */
 if (defined('__MINITALK__') == false) exit;
 

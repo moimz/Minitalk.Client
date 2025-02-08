@@ -1,14 +1,12 @@
 <?php
 /**
- * 이 파일은 MoimzTools 의 일부입니다. (https://www.moimz.com)
+ * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
  *
- * MoimzTools 설치화면을 구성한다.
+ * 미니톡 설치화면을 구성한다.
  * 
  * @file /install/index.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 1.2.0
- * @modified 2019. 9. 22.
+ * @modified 2025. 2. 7.
  */
 REQUIRE_ONCE str_replace('/install','',str_replace(DIRECTORY_SEPARATOR,'/',__DIR__)).'/configs/init.config.php';
 
@@ -21,14 +19,14 @@ $acceptLanguage = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'],0,2);
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=800">
-<title>MoimzTools Install - <?php echo $package->title; ?></title>
-<link rel="stylesheet" href="//www.moimz.com/modules/moimz/styles/install.css" type="text/css">
-<link rel="shortcut icon" type="image/x-icon" href="//www.moimz.com/modules/moimz/images/favicon.ico">
+<title>Minitalk Install - <?php echo $package->title; ?></title>
+<link rel="stylesheet" href="//www.minitalk.io/modules/moimz/styles/install.css" type="text/css">
+<link rel="shortcut icon" type="image/x-icon" href="//www.minitalk.io/modules/moimz/images/favicon.ico">
 <?php if ($language != 'en') { ?>
-<link rel="stylesheet" href="//www.moimz.com/modules/moimz/styles/install.<?php echo $language; ?>.css" type="text/css">
+<link rel="stylesheet" href="//www.minitalk.io/modules/moimz/styles/install.<?php echo $language; ?>.css" type="text/css">
 <?php } ?>
-<script src="//www.moimz.com/modules/moimz/scripts/jquery.js"></script>
-<script src="//www.moimz.com/modules/moimz/scripts/install.js"></script>
+<script src="//www.minitalk.io/modules/moimz/scripts/jquery.js"></script>
+<script src="//www.minitalk.io/modules/moimz/scripts/install.js"></script>
 </head>
 <body>
 
@@ -38,13 +36,13 @@ $acceptLanguage = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'],0,2);
 </div>
 
 <header>
-	<h1>MoimzTools Install <small>From moimz.com</small></h1>
+	<h1>Minitalk Install <small>From minitalk.io</small></h1>
 </header>
 
 <main data-start="license" data-id="<?php echo $package->id; ?>" data-version="<?php echo $package->version; ?>">
 	<section>
 		<article>
-			<h2 style="background-image:url(//www.moimz.com/modules/moimz/images/<?php echo $package->title; ?>.png);"><?php echo $package->title; ?> <small>v.<?php echo $package->version; ?></small></h2>
+			<h2 style="background-image:url(//www.minitalk.io/modules/moimz/images/<?php echo $package->title; ?>.png);"><?php echo $package->title; ?> <small>v.<?php echo $package->version; ?></small></h2>
 			
 			<article data-step="license">
 				<p></p>

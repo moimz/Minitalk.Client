@@ -5,9 +5,8 @@
  * 폴더 접근 제한을 위한 Header 설정
  * 
  * @file /attachments/index.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 header('HTTP/1.1 404 Not Found');
 ?>

@@ -1,13 +1,11 @@
 /**
- * 이 파일은 MoimzTools 의 일부입니다. (https://www.moimz.com)
+ * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
  *
  * 자주 사용되는 아이콘을 웹폰트 형태로 제공한다.
  *
  * @file /styles/fonts/moimz.css
- * @author Arzz
  * @license MIT License
- * @version 2.0.0
- * @modified 2023. 3. 4.
+ * @modified 2025. 2. 7.
  */
 @font-face {font-family:"moimz"; src:url("../../fonts/moimz.woff2") format("woff2"), url("../../fonts/moimz.woff") format("woff"), url("../../fonts/moimz.ttf") format("truetype"), url("../../fonts/moimz.svg") format("svg"); font-weight:normal; font-style:normal}
 

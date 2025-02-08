@@ -5,9 +5,8 @@
  * 자바스크립트내에서 언어셋을 사용하기 위한 함수를 정의한다.
  * 
  * @file /scripts/language.js.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2022. 7. 19.
+ * @modified 2025. 2. 7.
  */
 REQUIRE_ONCE str_replace('/scripts/language.js.php','',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['SCRIPT_FILENAME'])).'/configs/init.config.php';
 

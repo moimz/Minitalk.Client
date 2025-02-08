@@ -4,9 +4,8 @@
  * 미니톡 개인박스 내부 클래스를 정의한다.
  * 
  * @file /scripts/box.js
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 var MinitalkComponent = opener.MinitalkComponent.clone();
 var Minitalk = MinitalkComponent.get($("html").attr("data-id"),true);

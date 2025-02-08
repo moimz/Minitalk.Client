@@ -6,9 +6,8 @@
  * 관리자페이지와 관련된 파일은 ExtJS 라이센스정책에 따라 GPLv3 라이센스로 배포됩니다.
  * 
  * @file /admin/index.php
- * @author Arzz (arzz@arzz.com)
  * @license GPLv3
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 REQUIRE '../configs/init.config.php';
 if ($_CONFIGS->installed === false) {
@@ -52,7 +51,7 @@ $hasServer = is_dir(__MINITALK_PATH__.'/server') == true;
 <link rel="stylesheet" href="<?php echo $fontStyle; ?>" type="text/css">
 <script src="./scripts/script.js?t=<?php echo filemtime('./scripts/script.js'); ?>"></script>
 <script src="../scripts/language.js.php?language=<?php echo $logged == null ? 'en' : $logged->language; ?>"></script>
-<link rel="shortcut icon" type="image/x-icon" href="//www.moimz.com/modules/moimz/images/Minitalk.ico">
+<link rel="shortcut icon" type="image/x-icon" href="//www.minitalk.io/modules/moimz/images/Minitalk.ico">
 </head>
 <body<?php echo $logged === null ? ' class="login"' : ''; ?>>
 <?php

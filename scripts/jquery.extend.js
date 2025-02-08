@@ -4,9 +4,8 @@
  * jQuery 의 기능을 확장하기 위한 클래스
  * 
  * @file /scripts/jquery.extend.js
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 (function($) {
 	$.propHooks.disabled = {

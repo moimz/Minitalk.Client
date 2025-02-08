@@ -1,14 +1,12 @@
 <?php
 /**
- * 이 파일은 MoimzTools 의 일부입니다. (https://www.moimz.com)
+ * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
  *
- * MoimzTools 설치작업을 처리한다.
+ * 미니톡 설치작업을 처리한다.
  * 
  * @file /install/process/index.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @version 1.2.0
- * @modified 2021. 1. 24.
+ * @modified 2025. 2. 7.
  */
 REQUIRE_ONCE str_replace('/install/process','',str_replace(DIRECTORY_SEPARATOR,'/',__DIR__)).'/configs/init.config.php';
 header("Content-type: text/json; charset=utf-8",true);

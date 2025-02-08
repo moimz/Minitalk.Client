@@ -5,9 +5,8 @@
  * 미니톡 클라이언트의 버전을 반환한다.
  * 
  * @file /api/version.get.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 if (defined('__MINITALK__') == false) exit;
 

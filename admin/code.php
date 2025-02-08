@@ -5,9 +5,8 @@
  * 미니톡 채팅위젯 코드를 출력한다.
  * 
  * @file /admin/code.php
- * @author Arzz (arzz@arzz.com)
  * @license GPLv3
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 ?>
 <!DOCTYPE HTML>

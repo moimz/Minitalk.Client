@@ -4,9 +4,8 @@
  * 미니톡 채팅위젯 공통함술르 정의한다.
  * 
  * @file /scripts/common.js
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 
 /**

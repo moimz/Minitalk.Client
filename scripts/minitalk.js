@@ -4,9 +4,8 @@
  * 미니톡 채팅위젯을 정의한다.
  * 
  * @file /scripts/minitalk.js
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2023. 7. 11.
+ * @modified 2025. 2. 7.
  */
 if (isMinitalkIncluded === undefined) {
 	var isMinitalkIncluded = true;

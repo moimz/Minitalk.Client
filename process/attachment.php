@@ -5,9 +5,8 @@
  * 첨부파일을 열람하거나 다운로드한다.
  * 
  * @file /process/attachment.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 if (defined('__MINITALK__') == false) exit;
 

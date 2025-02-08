@@ -1,14 +1,12 @@
 <?php
 /**
- * 이 파일은 MoimzTools 의 일부입니다. (https://www.moimz.com)
+ * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
  *
  * 패스워드를 저장하기 위한 SALT 기반 해시를 생성하거나, 패스워드를 검증한다.
  *
  * @file /classes/Hash.class.php
- * @author Arzz
  * @license MIT License
- * @version 1.0.1
- * @modified 2021. 5. 18.
+ * @modified 2025. 2. 7.
  */
 define('PBKDF2_COMPAT_HASH_ALGORITHM','SHA256');
 define('PBKDF2_COMPAT_ITERATIONS',12000);

@@ -5,9 +5,8 @@
  * 미니톡 대화기록을 불러온다.
  * 
  * @file /api/history.get.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2023. 7. 11.
+ * @modified 2025. 2. 7.
  */
 if (defined('__MINITALK__') == false) exit;
 

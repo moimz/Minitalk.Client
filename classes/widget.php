@@ -6,9 +6,8 @@
  * 미니톡 클라이언트 클래스를 이용하지 않고, 이 파일에 정의된 함수만을 이용하여 미니톡 채팅위젯을 사용할 수 있다.
  * 
  * @file /classes/widget.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 if (defined('__MINITALK_PATH__') == false) define('__MINITALK_PATH__',str_replace('/classes','',str_replace(DIRECTORY_SEPARATOR,'/',__DIR__)));
 if (defined('__MINITALK_DIR__') == false) define('__MINITALK_DIR__',str_replace(str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['DOCUMENT_ROOT']),'',__MINITALK_PATH__));

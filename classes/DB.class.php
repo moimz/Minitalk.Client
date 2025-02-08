@@ -1,14 +1,12 @@
 <?php
 /**
- * 이 파일은 MoimzTools 의 일부입니다. (https://www.moimz.com)
+ * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
  *
  * 데이터베이스 클래스를 정의한다.
  *
  * @file /classes/DB.class.php
- * @author Arzz
- * @version 1.5.0
  * @license MIT License
- * @modified 2018. 8. 23.
+ * @modified 2025. 2. 7.
  */
 class DB {
 	/**

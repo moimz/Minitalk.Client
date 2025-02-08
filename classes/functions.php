@@ -1,14 +1,12 @@
 <?php
 /**
- * 이 파일은 MoimzTools 의 일부입니다. (https://www.moimz.com)
+ * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
  *
  * 자주 사용되는 공통함수를 정의한다.
  *
  * @file /classes/functions.php
- * @author Arzz
  * @license MIT License
- * @version 1.8.2
- * @modified 2021. 12. 20.
+ * @modified 2025. 2. 7.
  */
 
 /**
