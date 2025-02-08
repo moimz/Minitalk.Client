@@ -5,9 +5,8 @@
  * 플러그인 폴더 접근을 막기 위한 인덱스파일
  * 
  * @file /plugins/index.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 header("HTTP/1.1 403 Forbidden");
 header('location:../');

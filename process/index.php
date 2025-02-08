@@ -5,9 +5,8 @@
  * 미니톡 클라이언트에서 작업을 처리하기 위해 모든 작업요청을 받는다.
  * 
  * @file /process/index.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 REQUIRE_ONCE str_replace('/process','',str_replace(DIRECTORY_SEPARATOR,'/',__DIR__)).'/configs/init.config.php';
 

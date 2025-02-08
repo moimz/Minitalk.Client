@@ -4,9 +4,8 @@
  * 미니톡 채팅위젯 내부 클래스를 정의한다.
  * 
  * @file /scripts/widget.js
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 var MinitalkComponent = parent.MinitalkComponent;
 var Minitalk = MinitalkComponent.get($("html").attr("data-id"));

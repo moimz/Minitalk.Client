@@ -4,9 +4,8 @@
  * 미니톡 서버프로그램과 소켓통신을 위한 함수를 정의한다.
  * 
  * @file /scripts/widget.socket.js
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 Minitalk.socket = {
 	io:null,

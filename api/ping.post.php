@@ -5,9 +5,8 @@
  * 미니톡 서버의 핑퐁메시지를 처리한다.
  * 
  * @file /api/ping.post.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 if (defined('__MINITALK__') == false) exit;
 

@@ -5,9 +5,8 @@
  * 미니톡 클라이언트 클래스를 정의한다.
  * 
  * @file /classes/Minitalk.class.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 12. 6.
+ * @modified 2025. 2. 7.
  */
 class Minitalk {
 	/**
@@ -1020,7 +1019,7 @@ class Minitalk {
 				$package = json_decode(file_get_contents(__MINITALK_PATH__.'/package.json'));
 				
 				$ch = curl_init();
-				curl_setopt($ch,CURLOPT_URL,'https://api.moimz.com/tools/'.$package->id.'/latest/'.$package->version);
+				curl_setopt($ch,CURLOPT_URL,'https://moimz.minitalk.io/tools/'.$package->id.'/latest/'.$package->version);
 				curl_setopt($ch,CURLOPT_POST,false);
 				curl_setopt($ch,CURLOPT_TIMEOUT,10);
 				curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);

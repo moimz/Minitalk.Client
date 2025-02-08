@@ -1,13 +1,11 @@
 /**
- * 이 파일은 MoimzTools 의 일부입니다. (https://www.moimz.com)
+ * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
  *
- * MoimzTools 에 포함된 ExtJS 라이브러리 스타일시트를 확장하고 MoimzTools 에 맞게 재정의한다.
+ * ExtJS 라이브러리 스타일시트를 확장한다.
  * 
  * @file /styles/extjs.extend.css
- * @author Arzz (arzz@arzz.com)
  * @license GPLv3
- * @version 1.1.0
- * @modified 2021. 5. 28.
+ * @modified 2025. 2. 7.
  */
 .x-btn-danger {background-color:#F44336; border-color:#E53935;}
 .x-btn-danger.x-btn-over {background-color:#E53935; border-color:#E53935;}

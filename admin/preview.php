@@ -5,9 +5,8 @@
  * 미니톡채널을 미리본다.
  * 
  * @file /admin/preview.php
- * @author Arzz (arzz@arzz.com)
  * @license GPLv3
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 REQUIRE '../configs/init.config.php';
 if ($_CONFIGS->installed === false) {
@@ -42,7 +41,7 @@ if ($channel == null) {
 <script src="../scripts/jquery.extend.js?t=<?php echo filemtime('../scripts/jquery.extend.js'); ?>"></script>
 <script src="./scripts/script.js?t=<?php echo filemtime('./scripts/script.js'); ?>"></script>
 <script src="../scripts/language.js.php?language=<?php echo $logged == null ? 'en' : $logged->language; ?>"></script>
-<link rel="shortcut icon" type="image/x-icon" href="//www.moimz.com/modules/moimz/images/Minitalk.ico">
+<link rel="shortcut icon" type="image/x-icon" href="//www.minitalk.io/modules/moimz/images/Minitalk.ico">
 </head>
 <body<?php echo $logged === null ? ' class="login"' : ' style="background:#fff !important; overflow:hidden;"'; ?>>
 <?php

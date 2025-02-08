@@ -5,9 +5,8 @@
  * 미니톡 클라이언트가 설치되어 있는 경우 관리자페이지로, 설치되어 있지 않은 경우 설치페이지로 이동한다.
  *
  * @file /index.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 define('__IM_SITE__',true);
 

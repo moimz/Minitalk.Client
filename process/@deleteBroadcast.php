@@ -5,9 +5,8 @@
  * 브로드캐스트 전송기록을 삭제한다.
  * 
  * @file /process/@deleteBroadcast.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 if (defined('__MINITALK__') == false) exit;
 

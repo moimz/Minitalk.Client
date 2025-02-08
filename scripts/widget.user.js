@@ -4,9 +4,8 @@
  * 미니톡 채팅위젯 접속자 및 나의 정보와 관련된 부분을 처리한다.
  * 
  * @file /scripts/widget.user.js
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 Minitalk.user = {
 	latestRefreshTime:0, // 접속자목록을 마지막으로 갱신한 시각

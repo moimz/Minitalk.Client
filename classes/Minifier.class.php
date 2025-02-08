@@ -1,13 +1,12 @@
 <?php
 /**
- * 이 파일은 MoimzTools 의 일부입니다. (https://www.moimz.com)
+ * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
  *
- * MoimzTools에서 사용되는 자바스크립트 및 스타일시트 파일을 압축하기 위한 클래스를 정의한다.
+ * 자바스크립트 및 스타일시트 파일을 압축하기 위한 클래스를 정의한다.
  * 
  * @file /classes/Minifier.class.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 REQUIRE_ONCE __MINITALK_PATH__.'/classes/minify/src/Minify.php';
 REQUIRE_ONCE __MINITALK_PATH__.'/classes/minify/src/CSS.php';

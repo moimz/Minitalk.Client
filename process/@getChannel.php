@@ -5,9 +5,8 @@
  * 채널 정보를 불러온다.
  * 
  * @file /process/@getChannel.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 if (defined('__MINITALK__') == false) exit;
 

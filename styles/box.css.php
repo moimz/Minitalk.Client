@@ -5,9 +5,8 @@
  * 미니톡 개인박스에서 사용되는 모든 스타일시트를 불러온다.
  * 
  * @file /scripts/box.css.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2022. 7. 19.
+ * @modified 2025. 2. 7.
  */
 REQUIRE_ONCE str_replace('/styles/box.css.php','',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER['SCRIPT_FILENAME'])).'/configs/init.config.php';
 
@@ -75,9 +74,8 @@ if ($MINITALK->getCacheTime($cacheFile) >= $MINITALK->getLastModified()) {
  * 미니톡 채팅위젯에서 사용될 모든 스타일시트를 불러온다.
  * 
  * @file /scripts/box.css.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  * @cached <?php echo date('Y. n. j. H:i:s',$MINITALK->getCacheTime($cacheFile))."\n"; ?>
  */
 <?php echo $content; ?>

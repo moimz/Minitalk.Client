@@ -5,9 +5,8 @@
  * 미니톡 서버 로그를 불러온다.
  * 
  * @file /process/@getLogs.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 if (defined('__MINITALK__') == false) exit;
 

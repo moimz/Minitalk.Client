@@ -4,9 +4,8 @@
  * 미니톡 클라이언트 관리자 UI를 정의한다.
  * 
  * @file /admin/scripts/script.js
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 var Admin = {
 	/**

@@ -1,13 +1,12 @@
 <?php
 /**
- * 이 파일은 MoimzTools 의 일부입니다. (https://www.moimz.com)
+ * 이 파일은 미니톡 클라이언트의 일부입니다. (https://www.minitalk.io)
  *
  * 사용하려고 하는 웹폰트명을 받아, 웹폰트파일 및 폰트스타일시트를 불러온다.
  *
  * @file /styles/font.css.php
- * @author Arzz
  * @license MIT License
- * @modified 2022. 7. 19.
+ * @modified 2025. 2. 7.
  */
 session_write_close();
 header("Content-Type:text/css; charset=utf-8");

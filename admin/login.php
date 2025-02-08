@@ -6,9 +6,8 @@
  * 관리자페이지와 관련된 파일은 ExtJS 라이센스정책에 따라 GPLv3 라이센스로 배포됩니다.
  * 
  * @file /admin/index.php
- * @author Arzz (arzz@arzz.com)
  * @license GPLv3
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 if (defined('__MINITALK__') == false) exit;
 ?>

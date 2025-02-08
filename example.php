@@ -6,9 +6,8 @@
  * @see https://www.minitalk.io/ko/manual/api
  * 
  * @file /example.php
- * @author Arzz (arzz@arzz.com)
  * @license GPLv3
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 REQUIRE_ONCE './classes/widget.php';
 ?>

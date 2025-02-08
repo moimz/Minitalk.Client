@@ -5,9 +5,8 @@
  * 특정 이모티콘 그룹의 폴더를 읽어, 이모티콘을 가져온다.
  * 
  * @file /process/getEmoticon.php
- * @author Arzz (arzz@arzz.com)
  * @license MIT License
- * @modified 2021. 10. 5.
+ * @modified 2025. 2. 7.
  */
 if (defined('__MINITALK__') == false) exit;
 
